@@ -39,11 +39,11 @@ namespace Parser {
          bool parseFile(QString const& path);
 
       private:
-         bool parseLogFile(TextStream& path);
-         bool parseSpectrumFile(TextStream& path);
+         bool parseLogFile(TextStream&);
+         bool parseDatFile(TextStream&);
+         bool parseSpectrumFile(TextStream&, QString const& title);
 
-         Data::VibronicData m_vibronicData;
-         Data::VibronicSpectrumList m_spectra;
+         Data::Vibronic* m_vibronic;
    };
 
 
