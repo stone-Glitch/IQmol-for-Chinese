@@ -2,11 +2,11 @@ build
 .*.swp
 .DS_Store
 
-# LaTeX 中间文件
-*.aux
-*.bbl
-*.blg
-*.log
-*.out
-*.toc
-*.synctex.gz
+# LaTeX 中间文件（仅限 doc 目录，避免误伤 samples/*.out 等样本数据）
+/doc/*.aux
+/doc/*.bbl
+/doc/*.blg
+/doc/*.log
+/doc/*.out
+/doc/*.toc
+/doc/*.synctex.gz

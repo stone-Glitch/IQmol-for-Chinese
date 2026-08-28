@@ -194,11 +194,18 @@ set(IQMOL_TS_FILE ${CMAKE_CURRENT_SOURCE_DIR}/translations/zh_CN.ts)
 set(IQMOL_QM_DIR  $<TARGET_FILE_DIR:${targetName}>/translations)
 set(IQMOL_QM_FILE ${IQMOL_QM_DIR}/zh_CN.qm)
 
-add_custom_command(TARGET ${targetName} POST_BUILD
-   COMMAND ${CMAKE_COMMAND} -E make_directory ${IQMOL_QM_DIR}
-   COMMAND ${LRELEASE_EXECUTABLE} ${IQMOL_TS_FILE} -qm ${IQMOL_QM_FILE}
-   COMMENT "Generating ${IQMOL_QM_FILE} from ${IQMOL_TS_FILE}"
-)
+if(LRELEASE_EXECUTABLE)
+   add_custom_command(TARGET ${targetName} POST_BUILD
+      COMMAND ${CMAKE_COMMAND} -E make_directory ${IQMOL_QM_DIR}
+      COMMAND ${LRELEASE_EXECUTABLE} ${IQMOL_TS_FILE} -qm ${IQMOL_QM_FILE}
+      COMMENT "Generating ${IQMOL_QM_FILE} from ${IQMOL_TS_FILE}"
+   )
+else()
+   message(WARNING
+      "未找到 lrelease/lrelease-qt5，跳过 .qm 生成步骤。"
+      "缺少 zh_CN.qm 时界面将回退为英文；"
+      "可安装 Qt5 Linguist 工具（如 qtbase5-dev-tools / qttools5-dev-tools）后重新配置。")
+endif()
 
 
 target_link_libraries (${targetName}
