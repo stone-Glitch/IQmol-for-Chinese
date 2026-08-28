@@ -56,3 +56,34 @@ make
 - **界面截图**：`dialog_screenshots/` 保存了中文界面下各对话框的运行时截图，
   可用于文档配图与翻译效果验证。
 
+## 子模块离线包（国内网络适用）
+
+`modules/` 下的 9 个第三方库是 Git 子模块，上游仓库体积较大，国内网络克隆时常断连、
+卡在 6% 或直接 `Failed to connect to github.com:443`。为此本仓库在
+**`submodules-package` 分支**提供了打包好的完整子模块源码（108 MB，分 3 卷），
+版本与 `.gitmodules` 记录的 commit 完全一致。
+
+**下载**（3 个分片均需下载）：
+
+| 分片 | 大小 |
+|---|---|
+| [`part_00`](https://github.com/stone-Glitch/IQmol-for-Chinese/raw/refs/heads/submodules-package/submodules-package/part_00) | 45 MB |
+| [`part_01`](https://github.com/stone-Glitch/IQmol-for-Chinese/raw/refs/heads/submodules-package/submodules-package/part_01) | 45 MB |
+| [`part_02`](https://github.com/stone-Glitch/IQmol-for-Chinese/raw/refs/heads/submodules-package/submodules-package/part_02) | 18 MB |
+
+下载慢时，把链接中的 `https://github.com/` 换成 `https://ghfast.top/https://github.com/` 走国内镜像。
+
+**合并并解压到仓库根目录**：
+
+```bash
+cat part_00 part_01 part_02 > IQmol-submodules.zip   # Linux/macOS/MSYS2
+# Windows cmd: copy /b part_00 + part_01 + part_02 IQmol-submodules.zip
+unzip -o IQmol-submodules.zip                        # 必须在仓库根目录执行
+```
+
+合并后校验：大小 `112,618,126` 字节，MD5 `787d6023c5ec715ec0334427da4baa75`。
+完整步骤（含 Windows PowerShell 写法、校验命令、常见问题）见该分支下的
+`submodules-package/使用说明.md`。
+
+> 解压后**不要**再运行 `git submodule update --init --recursive`，否则会重新联网克隆覆盖。
+
