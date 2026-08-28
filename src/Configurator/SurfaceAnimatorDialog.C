@@ -352,7 +352,7 @@ void SurfaceAnimatorDialog::computeMultiGridAnimation()
        dAB.combine(-1.0, 1.0, *B);
 
        surface = calculateSurface(dAB, isovalue);
-       surface->setText("Difference Surface");
+       surface->setText(tr("Difference Surface"));
        cube->appendLayer(surface);
 
        dAB *= delta;

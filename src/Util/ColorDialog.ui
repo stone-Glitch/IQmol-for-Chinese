@@ -358,7 +358,7 @@ QToolButton:checked
         <item row="3" column="0">
          <widget class="QLabel" name="label_4">
           <property name="text">
-           <string>Alpha</string>
+           <string>不透明度 (α)</string>
           </property>
          </widget>
         </item>

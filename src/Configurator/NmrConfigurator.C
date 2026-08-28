@@ -48,7 +48,7 @@ Nmr::Nmr(Layer::Nmr& layer, Data::Nmr& data) : m_layer(layer), m_data(data), m_u
    m_ui->setupUi(this);
    m_ui->widthSlider->setEnabled(false);
    m_ui->widthLabel->setEnabled(false);
-   m_ui->widthLabel->setText("Resolution");
+   m_ui->widthLabel->setText(tr("Resolution"));
 
    QTableWidget* table(m_ui->shieldingsTable);
    table->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);

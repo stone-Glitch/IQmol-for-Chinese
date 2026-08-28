@@ -54,7 +54,7 @@ System::System(QString const& label, QObject* parent) : Component(label, parent)
             | Qt::ItemIsUserCheckable );
    setCheckState(Qt::Checked);
 
-   m_surfaceList.setText("Ribbons");
+   m_surfaceList.setText(tr("Ribbons"));
 
    connect(newAction("Box System"), SIGNAL(triggered()), this, SLOT(boxSystem()));
    connect(newAction("Export PDB"), SIGNAL(triggered()), this, SLOT(exportPdb()));
@@ -87,7 +87,7 @@ void System::appendData(Data::Bank& bank)
           case Data::Type::Geometry: {
              molecule = new Molecule(this);
              Data::Geometry* geom = dynamic_cast<Data::Geometry*>(*iter);
-             molecule->setText("Molecule");
+             molecule->setText(tr("Molecule"));
              if (geom)  molecule->setText(geom->name());
              molecule->appendData(list);
              appendLayer(molecule);
@@ -100,7 +100,7 @@ void System::appendData(Data::Bank& bank)
           default:
              if (!molecule) {
                  molecule = new Molecule(this);
-                 molecule->setText("Molecule");
+                 molecule->setText(tr("Molecule"));
                  appendLayer(molecule);
              }
              molecule->appendData(list);

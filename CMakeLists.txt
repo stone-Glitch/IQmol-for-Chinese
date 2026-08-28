@@ -31,6 +31,7 @@ include_directories(${CMAKE_CURRENT_BINARY_DIR}/src)
 
 
 find_package(Qt5 COMPONENTS Core Gui Xml PrintSupport Widgets OpenGL Sql REQUIRED)
+find_package(Qt5LinguistTools REQUIRED)
 find_package(Threads REQUIRED)
 find_package(OpenGL  REQUIRED)
 find_package(OpenMP QUIET)
@@ -133,7 +134,9 @@ set(CMAKE_AUTOMOC ON)
 add_subdirectory(src)
 
 enable_testing()
-add_subdirectory(tests)
+if (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/tests)
+   add_subdirectory(tests)
+endif()
 
 if (${Qt5Core_VERSION_STRING} VERSION_GREATER_EQUAL 5.15 )
    qt_add_resources(IQmol_RESOURCES_RCC resources/IQmol.qrc)
@@ -183,6 +186,19 @@ if (WIN32)
    )
    set_target_properties(${targetName} PROPERTIES WIN32_EXECUTABLE ON)
 endif (WIN32)
+
+
+# ---- 中文本地化：构建时用 lrelease 生成 .qm 并放到可执行文件同级的 translations/ 目录 ----
+find_program(LRELEASE_EXECUTABLE NAMES lrelease lrelease-qt5)
+set(IQMOL_TS_FILE ${CMAKE_CURRENT_SOURCE_DIR}/translations/zh_CN.ts)
+set(IQMOL_QM_DIR  $<TARGET_FILE_DIR:${targetName}>/translations)
+set(IQMOL_QM_FILE ${IQMOL_QM_DIR}/zh_CN.qm)
+
+add_custom_command(TARGET ${targetName} POST_BUILD
+   COMMAND ${CMAKE_COMMAND} -E make_directory ${IQMOL_QM_DIR}
+   COMMAND ${LRELEASE_EXECUTABLE} ${IQMOL_TS_FILE} -qm ${IQMOL_QM_FILE}
+   COMMENT "Generating ${IQMOL_QM_FILE} from ${IQMOL_TS_FILE}"
+)
 
 
 target_link_libraries (${targetName}

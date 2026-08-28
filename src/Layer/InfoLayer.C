@@ -39,7 +39,7 @@ Info::Info(Molecule* molecule) : m_dipoleValue(0), m_dipoleEstimated(true),
    m_energyText("Energy:"), m_configurator(*this),  m_symmetry(m_pointGroup)
 {
    clear();
-   setText("Info");
+   setText(tr("Info"));
    setMolecule(molecule);
    //appendLayer(&m_symmetry);
    appendLayer(&m_dipoleLayer);

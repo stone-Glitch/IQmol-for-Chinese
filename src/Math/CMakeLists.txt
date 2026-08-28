@@ -14,7 +14,7 @@ set( SOURCES
 add_library(${LIB} STATIC ${SOURCES})
 target_include_directories(${LIB} PUBLIC "${${LIB}_SOURCE_DIR}")
 target_link_libraries(${LIB} PRIVATE
-   QGLViewer
+   ${QGLVIEWER_LIBRARY}
    Qt5::Xml
    Qt5::OpenGL
 )

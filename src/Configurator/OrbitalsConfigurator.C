@@ -754,7 +754,7 @@ void Orbitals::enableNegativeColor(bool tf)
 
 void Orbitals::updateOrbitalRange(bool alpha)
 {
-   m_configurator.orbitalLabel->setText("Orbital(s):");
+   m_configurator.orbitalLabel->setText(tr("Orbital(s):"));
 
    QComboBox* combo(0);
 
@@ -777,7 +777,7 @@ void Orbitals::updateOrbitalRange(bool alpha)
 
 void Orbitals::updateBasisRange() 
 {
-   m_configurator.orbitalLabel->setText("Function(s):");
+   m_configurator.orbitalLabel->setText(tr("Function(s):"));
    Data::ShellList const& shellList(m_orbitals.m_orbitals.shellList());
 
    QComboBox* comboMin(m_configurator.orbitalRangeMin);

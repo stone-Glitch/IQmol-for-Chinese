@@ -33,6 +33,9 @@
 #include <QMessageBox>
 #include <QFileOpenEvent>
 #include <QSplashScreen>
+#include <QTranslator>
+#include <QLibraryInfo>
+#include <QLocale>
 
 #include <QDebug>
 #include <QThread>
@@ -44,13 +47,15 @@
 namespace IQmol {
 
 IQmolApplication::IQmolApplication(int &argc, char **argv )
-  : QApplication(argc, argv), m_splashScreen(0), 
+  : QApplication(argc, argv), m_splashScreen(0), m_qtTranslator(0), m_appTranslator(0),
     m_unhandledException(QMessageBox::Critical, "IQmol", "IQmol encountered an exception.\n"
     "See log file for details.", QMessageBox::Abort)
     
 {
    setOrganizationDomain("iqmol.org");
    setApplicationName("IQmol");
+   // 加载中文本地化翻译（Qt 基础翻译 + 应用翻译）
+   loadTranslations();
    if (argc > 1) {
       QString arg(argv[1]);
       if (arg == "--clear-jobs") {
@@ -59,6 +64,55 @@ IQmolApplication::IQmolApplication(int &argc, char **argv )
       }
   }
    // Can't log anything yet as the logger hasn't been initialized
+}
+
+
+void IQmolApplication::loadTranslations()
+{
+   // Qt 基础翻译（标准对话框按钮等）
+   m_qtTranslator = new QTranslator(this);
+   QString qtBasePath = QLibraryInfo::location(QLibraryInfo::TranslationsPath);
+   if (m_qtTranslator->load("qt_" + QLocale::system().name(), qtBasePath)) {
+      installTranslator(m_qtTranslator);
+   }
+
+   // 应用翻译（IQmol 界面字符串）
+   m_appTranslator = new QTranslator(this);
+   // 优先使用系统语言；若非中文则默认中文，以满足汉化目标
+   QString locale = QLocale::system().name();
+   if (!locale.startsWith("zh")) locale = QString("zh_CN");
+
+   // 依次尝试多个候选路径
+   QStringList searchPaths;
+   searchPaths << QApplication::applicationDirPath() + "/translations"
+               << QApplication::applicationDirPath()
+               << QDir::current().filePath("translations")
+               << QDir::currentPath();
+
+   bool loaded(false);
+   foreach (QString const& path, searchPaths) {
+      if (m_appTranslator->load("IQmol_" + locale, path)) {
+         loaded = true;
+         break;
+      }
+   }
+   // 也尝试不带前缀的文件名（与 lrelease 输出 zh_CN.qm 对应）
+   if (!loaded) {
+      foreach (QString const& path, searchPaths) {
+         if (m_appTranslator->load(locale, path)) {
+            loaded = true;
+            break;
+         }
+      }
+   }
+   if (loaded) {
+      installTranslator(m_appTranslator);
+      QLOG_INFO() << "Loaded translation:" << locale;
+      qDebug() << "[i18n] Loaded translation:" << locale;
+   } else {
+      QLOG_INFO() << "No translation file found for:" << locale;
+      qDebug() << "[i18n] No translation file found for:" << locale;
+   }
 }
 
 
