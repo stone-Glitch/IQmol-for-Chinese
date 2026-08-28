@@ -60,30 +60,53 @@ make
 
 `modules/` 下的 9 个第三方库是 Git 子模块，上游仓库体积较大，国内网络克隆时常断连、
 卡在 6% 或直接 `Failed to connect to github.com:443`。为此本仓库在
-**`submodules-package` 分支**提供了打包好的完整子模块源码（108 MB，分 3 卷），
-版本与 `.gitmodules` 记录的 commit 完全一致。
+**`submodules-package` 分支**提供了打包好的完整子模块源码（共 49,335 个文件），
+版本与 `.gitmodules` 记录的 commit 完全一致。提供两种格式，二选一：
 
-**下载**（3 个分片均需下载）：
+### 方案 A：单文件 tar.gz（推荐，73 MB，免合并）
 
-| 分片 | 大小 |
+下载这两个文件放到同一目录：
+
+| 文件 | 大小 |
 |---|---|
-| [`part_00`](https://github.com/stone-Glitch/IQmol-for-Chinese/raw/refs/heads/submodules-package/submodules-package/part_00) | 45 MB |
-| [`part_01`](https://github.com/stone-Glitch/IQmol-for-Chinese/raw/refs/heads/submodules-package/submodules-package/part_01) | 45 MB |
-| [`part_02`](https://github.com/stone-Glitch/IQmol-for-Chinese/raw/refs/heads/submodules-package/submodules-package/part_02) | 18 MB |
+| [`IQmol-submodules.tar.gz`](https://github.com/stone-Glitch/IQmol-for-Chinese/raw/refs/heads/submodules-package/submodules-package/IQmol-submodules.tar.gz) | 73 MB |
+| [`extract_submodules.bat`](https://github.com/stone-Glitch/IQmol-for-Chinese/raw/refs/heads/submodules-package/submodules-package/extract_submodules.bat) | 3.5 KB |
 
-下载慢时，把链接中的 `https://github.com/` 换成 `https://ghfast.top/https://github.com/` 走国内镜像。
+在 **cmd** 里带仓库路径运行（不是 PowerShell）：
 
-**合并并解压到仓库根目录**：
-
-```bash
-cat part_00 part_01 part_02 > IQmol-submodules.zip   # Linux/macOS/MSYS2
-# Windows cmd: copy /b part_00 + part_01 + part_02 IQmol-submodules.zip
-unzip -o IQmol-submodules.zip                        # 必须在仓库根目录执行
+```bat
+cd /d D:\Downloads
+extract_submodules.bat "D:\IQmol"
 ```
 
-合并后校验：大小 `112,618,126` 字节，MD5 `787d6023c5ec715ec0334427da4baa75`。
-完整步骤（含 Windows PowerShell 写法、校验命令、常见问题）见该分支下的
-`submodules-package/使用说明.md`。
+脚本会自动校验大小（`75,759,260` 字节）和 MD5（`9c0ed6e3527cf0dd1c8d5628cc31538f`），
+然后解压到仓库根目录。也可以手动：
 
-> 解压后**不要**再运行 `git submodule update --init --recursive`，否则会重新联网克隆覆盖。
+```bash
+tar -xzf IQmol-submodules.tar.gz    # 在仓库根目录执行；MSYS2 终端最稳
+```
+
+### 方案 B：分卷 zip（108 MB，需下载 3 片再合并）
+
+单文件下载不了时用这个：`part_00` / `part_01` / `part_02` + `merge_submodules.bat`
+（同分支目录）。双击 `merge_submodules.bat` 自动合并+校验，或 cmd 里：
+
+```bat
+copy /b part_00 + part_01 + part_02 IQmol-submodules.zip
+```
+
+校验：大小 `112,618,126` 字节，MD5 `787d6023c5ec715ec0334427da4baa75`。
+
+> 单文件版 73 MB 比分卷版 108 MB 小，是因为 tar.gz 把文件打包成一个流整体压缩，
+> 而 zip 逐个压缩海量小文件，效率低得多。
+
+### 注意事项
+
+- 下载慢时，把链接中的 `https://github.com/` 换成 `https://ghfast.top/https://github.com/` 走国内镜像
+  （实测约 1.4 MB/s，支持断点续传）。
+- **解压到仓库根目录**，不是 `modules` 里面——压缩包顶层就是 `modules/`。
+- **仓库放短路径**（如 `D:\IQmol`），Windows 260 字符路径上限会导致深层目录解压失败。
+- 解压后**不要**再运行 `git submodule update --init --recursive`，否则会重新联网克隆覆盖。
+
+完整步骤见该分支下的 `submodules-package/使用说明.md`。
 
