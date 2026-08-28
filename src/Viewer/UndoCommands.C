@@ -30,6 +30,7 @@
 #include "QsLog.h"
 #include "Layer/ConstraintLayer.h"
 #include "QVariantPtr.h"
+#include <QCoreApplication>
 
 
 using namespace qglviewer;
@@ -259,10 +260,10 @@ void MoveObjects::loadFrames(QList<Frame> const& frames)
 
 // --------------- AddConstraint ---------------
 AddConstraint::AddConstraint(Layer::Molecule* molecule, Layer::Constraint* constraint)
-   : QUndoCommand("Add constraint"), m_deleteConstraint(false), m_molecule(molecule),
+   : QUndoCommand(QCoreApplication::translate("UndoCommands", "Add constraint")), m_deleteConstraint(false), m_molecule(molecule),
      m_constraint(constraint) 
 { 
-   if (constraint->scanConstraint()) setText("Add scan coordinated");
+   if (constraint->scanConstraint()) setText(QCoreApplication::translate("UndoCommands", "Add scan coordinated"));
 }
 
 
@@ -291,7 +292,7 @@ void AddConstraint::redo()
 
 
 // --------------- ChangeAtomType ---------------
-ChangeAtomType::ChangeAtomType(Layer::Atom* atom) : QUndoCommand("Change atom type"),
+ChangeAtomType::ChangeAtomType(Layer::Atom* atom) : QUndoCommand(QCoreApplication::translate("UndoCommands", "Change atom type")),
    m_atom(atom), m_finalStateSaved(false), m_molecule(0)
 {
    MoleculeList parents(atom->findLayers<Layer::Molecule>(Layer::Parents));
@@ -337,7 +338,7 @@ void ChangeAtomType::undo()
 
 
 // --------------- ChangeBondOrder ---------------
-ChangeBondOrder::ChangeBondOrder(Layer::Bond* bond) : QUndoCommand("Change bond order"),
+ChangeBondOrder::ChangeBondOrder(Layer::Bond* bond) : QUndoCommand(QCoreApplication::translate("UndoCommands", "Change bond order")),
    m_bond(bond), m_finalStateSaved(false), m_molecule(0)
 {
    // Need a Molecule handle for the Viewer update (yugh)
@@ -382,9 +383,9 @@ AddComponent::AddComponent(Layer::Component* component, QStandardItem* parent)
    if (m_component->fileName().isEmpty()) {
       Layer::Molecule* molecule;
       if ( (molecule = qobject_cast<Layer::Molecule*>(component)) ) {
-         setText("New molecule");
+         setText(QCoreApplication::translate("UndoCommands", "New molecule"));
       }else {
-         setText("New system");
+         setText(QCoreApplication::translate("UndoCommands", "New system"));
       }
    }else {
       setText("Load file " + m_component->fileName());
@@ -432,12 +433,12 @@ RemoveComponent::RemoveComponent(Layer::Component* component, QStandardItem* par
    if (m_component->fileName().isEmpty()) {
       Layer::Molecule* molecule;
       if ( (molecule = qobject_cast<Layer::Molecule*>(component)) ) {
-         setText("Remove molecule");
+         setText(QCoreApplication::translate("UndoCommands", "Remove molecule"));
       }else {
-         setText("Remove system");
+         setText(QCoreApplication::translate("UndoCommands", "Remove system"));
       }
    }else {
-      setText("Remove " + m_component->fileName());
+      setText(QCoreApplication::translate("UndoCommands", "Remove ") + m_component->fileName());
    }
 }
 

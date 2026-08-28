@@ -1,4 +1,4 @@
-\documentclass[a4paper,12pt]{article}
+\documentclass[a4paper,12pt]{ctexart}
 
 \usepackage{epsf,psfrag,graphicx,color}
 \usepackage{hyperref,amssymb}
@@ -28,9 +28,11 @@
   boxrule=0pt,arc=5pt,%
   boxsep=2pt,left=3pt,right=3pt,top=3pt,bottom=3pt}%
 
-\newcommand{\qchem}{\href{https://q-chem.com}{{\scshape Q-Chem}}}
-\newcommand{\iqmol}{\href{https://www.iqmol.org}{{\scshape IQmol}}}
-\newcommand{\symmol}{{\scshape Symmol}}
+% ctex + xelatex 下 \scshape 不可用（TU/lmr/bx/sc 未定义），会导致字体重叠与警告。
+% 这里改用普通罗马字体并加粗，保持品牌名醒目即可。
+\newcommand{\qchem}{\href{https://q-chem.com}{\textbf{Q-Chem}}}
+\newcommand{\iqmol}{\href{https://www.iqmol.org}{\textbf{IQmol}}}
+\newcommand{\symmol}{\textbf{Symmol}}
 
 \newcommand{\heading}[1]{ \noindent{ \large \bf{#1} }}
 \newcommand{\myline}{\setlength{\unitlength}{1mm}
@@ -48,8 +50,8 @@
 \newcommand{\B}[1]{\ensuremath{\mathbf{#1}}}
 
 \newcommand{\bt}{\ensuremath{\blacktriangleright}}
-\newcommand{\ie}{\emph{i.e.}}
-\newcommand{\eg}{\emph{e.g.}}
+\newcommand{\ie}{\emph{即}}
+\newcommand{\eg}{\emph{例如}}
 
 \setlength{\headheight}{0cm}
 \setlength{\topmargin}{1cm}
@@ -58,6 +60,7 @@
 \setlength{\oddsidemargin}{0cm}
 \setlength{\evensidemargin}{0cm}
 \setlength{\hoffset}{0cm}
+
 \setlength{\textheight}{23.0cm}
 \setlength{\textwidth}{16cm}
 
@@ -67,8 +70,6 @@
 \usepackage{chngcntr}
 \counterwithin{figure}{section}
 
-%\pagestyle{empty}
-
 %----------------------------------------------------------------------%
 \begin{document}
 %----------------------------------------------------------------------%
@@ -77,7 +78,7 @@
 \noindent
 \myline\\
 \begin{center}
-{\bf \LARGE Introduction to IQmol}
+{\bf \LARGE IQmol 使用简介}
 \end{center}
 \myline\\
 
@@ -102,113 +103,87 @@
 
 
 %----------------------------------------------------------------------%
-\section{Introduction}
+\section{简介}
 %----------------------------------------------------------------------%
 
-\iqmol{} is an open-source molecular editor and visualization package that runs
-under Windows, Mac OS X and Linux.  It can read a variety of chemical file
-formats including xyz, cml, pdb, mol, fchk, cube data and \qchem{}
-input/output.  It also includes a free-form molecular builder that allows
-arbitrary molecular structures to be created.  These structures can be
-optimized using molecular mechanics force fields and symmetrized to ensure the
-structure has the correct point group symmetry.  A library of molecules and
-functional groups also exists, and these can be used to facilitate building
-more complicated molecules. 
+\iqmol{} 是一款开源的分子编辑与可视化软件，可运行于 Windows、Mac OS X 以及 Linux
+系统。它能够读取多种化学文件格式，包括 xyz、cml、pdb、mol、fchk、cube 数据以及
+\qchem{} 的输入/输出文件。软件还内置了一个自由形式的分子构建器，可用于创建任意分子结构。
+这些结构可以利用分子力学力场进行优化，并通过对称化操作确保结构具有正确的点群对称性。
+此外，软件提供一个分子库和官能团库，可用于辅助构建更复杂的分子。
 
-\iqmol{} is capable of displaying a variety of molecular properties including
-atomic charges, dipole moments and normal modes.  Several surface types can be
-displayed including molecular orbitals, (spin) densities and van der Waals
-surfaces. These surfaces can be colored according to an arbitrary scalar field,
-such as the electrostatic potential.  Animations are also available for
-vibrational frequencies, and reaction and optimization pathways.
+\iqmol{} 能够显示多种分子性质，包括原子电荷、偶极矩和简正振动模式。它可以显示多种类型的
+表面，包括分子轨道、（自旋）密度以及范德华表面。这些表面可以根据任意标量场（例如静电势）
+进行着色。软件还支持振动频率、反应路径以及优化路径的动画演示。
 
-\iqmol{} can operate as a stand-alone package, but has also been written to
-work seamlessly with the \qchem{} (\url{https://www.q-chem.com}) computational
-chemistry package.  A comprehensive input file generator, the \qchem{} User
-Interface (QUI), provides access to most of the available options in \qchem{},
-and these options are presented in an intuitive, hierarchical fashion.   The
-generated input files can be submitted to either local or remote servers that
-have the \qchem{} software installed.  In particular, a publicly accessible
-server is available that allows small (limited to approximately 10 mins)
-quantum chemistry calculations to be run without having to purchase and install
-\qchem{}.
+\iqmol{} 可以作为独立软件包使用，同时也被设计为与 \qchem{}（\url{https://www.q-chem.com}）
+计算化学程序包无缝配合工作。其内置的综合性输入文件生成器——\qchem{} 用户界面（QUI）——
+提供了对 \qchem{} 中绝大多数可用选项的访问，并以直观的分层方式呈现这些选项。所生成的输入文件
+可以提交到本地或远程服务器上运行，只要目标服务器已安装 \qchem{} 软件即可。特别地，\iqmol{}
+提供了一个公共可访问的服务器，允许用户在不购买和安装 \qchem{} 的情况下运行有限时长（约 10 分钟）
+的量子化学计算。
 
 
 
-\subsection{Installation}
+\subsection{安装}
 
-The latest version of \iqmol{} can be downloaded from the website:
+\iqmol{} 的最新版本可从官方网站下载：
 \vspace{-1.0em}
 \begin{center}
 \url{https://www.iqmol.org/downloads.html}
 \end{center}
 \vspace{-1.0em}
 
-For Mac (OS X) a disk image file is provided.  After downloading, Simply
-double-click the disk image to mount it and copy the application to the
-Applications directory, or any other desired location.
+对于 Mac（OS X）系统，提供磁盘映像文件。下载后，双击磁盘映像将其挂载，并将应用程序复制到
+Applications 目录或任何其他期望的位置即可。
 
-For Windows an installer is provided that will guide you through the
-installation process and will also create a shortcut to the application on your
-desktop.
+对于 Windows 系统，提供安装程序，它将引导您完成安装过程，并在桌面上创建程序的快捷方式。
 
-For Linux .deb and .rpm packages are now available that can be installed using
-either dpkg or yum:
+对于 Linux 系统，现已提供 .deb 和 .rpm 软件包，可分别使用 dpkg 或 yum 进行安装：
 
 \hspace*{2em}{\tt \#>  sudo dpkg -i iqmol\_x.x.x.deb}\\
 \hspace*{2em}{\tt \#> sudo apt-get install -f }
 
-The second command is required to resolve the dependency on the Qt libraries,
-which you may not have installed.
+第二条命令用于解决对 Qt 库的依赖关系，您可能尚未安装该库。
 
 \hspace*{2em}{\tt \#>  sudo yum install iqmol-x.x.x.x86\_64.rpm}
 
-Note that in either case you will need root permission.
+请注意，无论哪种情况，您都需要具有 root 权限。
 
 
-\subsection{Overview}
+\subsection{概览}
 \label{sec:overview}
 
 \begin{figure}[ht]
 \begin{center}
 \includegraphics[scale=0.35]{figures/Viewer.png}
-\caption{The main \iqmol{} window.}
+\caption{\iqmol{} 的主窗口。}
 \label{fig:main}
 \end{center}
 \end{figure}
-The main \iqmol{} window is shown in Fig.~\ref{fig:main} and comprises the
-following main parts:
+\iqmol{} 的主窗口如图~\ref{fig:main} 所示，由以下几个主要部分组成：
 \begin{itemize}
-\item The {\bf Viewer} is the main part of the window and is where you can
-      view and interact with your molecule.
-\item The {\bf Toolbar} at the top provides access to common commands and allows selection
-      between different viewer modes including manipulation 
-      \includegraphics[scale=0.40]{figures/ManipulateButton.png}, selection 
-      \includegraphics[scale=0.40]{figures/SelectButton.png} and building.
+\item {\bf 查看器（Viewer）}是窗口的主要区域，您可以在其中查看并与分子进行交互。
+\item 顶部的 {\bf 工具栏（Toolbar）}提供对常用命令的访问，并允许在不同查看器模式之间切换，
+      包括操纵模式
+      \includegraphics[scale=0.40]{figures/ManipulateButton.png}、选择模式
+      \includegraphics[scale=0.40]{figures/SelectButton.png} 以及构建模式。
       \includegraphics[scale=0.40]{figures/BuildButton.png}
-\item The {\bf Model View} panel provides a hierarchical view of the data that
-      are available for the molecule.
-\item The {\bf History} panel in the lower left shows a list of the most recent
-      actions than can be undone, either by clicking on them or by using the
-      Edit \bt\ Undo menu option. 
+\item {\bf 模型视图（Model View）}面板以分层方式展示分子可用的数据。
+\item 左下角的 {\bf 历史（History）}面板列出了最近的操作，可以通过单击这些操作或使用
+      编辑 \bt\ 撤销菜单项来撤销它们。
 \end{itemize}
 
-The Model View (MV) provides control over what objects are displayed in the Viewer,
-and also allows access to configuration options for these objects.  Visibility is
-controlled by the associated check-box.  Unchecking a check-box causes the item
-and all its children to become hidden.  If an item does not have a check-box,
-for example a bond, then its visibility can only be controlled by items higher
-in the hierarchy.  
+模型视图（MV）控制查看器中显示哪些对象，并允许访问这些对象的配置选项。可见性由相应的
+复选框控制。取消勾选复选框会使该项及其所有子项都被隐藏。如果某项没有复选框（例如化学键），
+则其可见性只能由层级中更高层级的项来控制。
 
-The appearance of many objects can be configured by double-clicking the item in
-the MV.  For example, double-clicking the molecule name brings up the Configure
-Molecule dialog which allows you to change the appearance of the molecular
-structure:
+许多对象的外观可以通过在模型视图中双击该项进行配置。例如，双击分子名称会弹出
+"配置分子"对话框，允许您更改分子结构的显示外观：
 \begin{center}
 \includegraphics[scale=0.25]{figures/MoleculeConfigurator.png}
 \end{center}
-Note that several molecules can be viewed concurrently in the same Viewer
-and the appearance of each can be configured separately.  
+请注意，可以在同一个查看器中同时显示多个分子，并且每个分子的外观都可以单独配置。
 \begin{figure}[h]
 \begin{center}
 \includegraphics[scale=0.18]{figures/CHF3-balls.png}\hspace{-3mm}~
@@ -216,431 +191,375 @@ and the appearance of each can be configured separately.
 \includegraphics[scale=0.18]{figures/CHF3-space.png}\hspace{-3mm}~
 \includegraphics[scale=0.18]{figures/CHF3-tubes.png}\hspace{-3mm}~
 \includegraphics[scale=0.18]{figures/CHF3-moly.png}
-\caption{Rendering styles for molecular structures: balls and sticks, wire frame,
-space filling, tubes and plastic.}
+\caption{分子结构的渲染样式：球棍模型、线框模型、空间填充模型、管状模型以及塑料模型。}
 \label{fig:styles}
 \end{center}
 \end{figure}
 
 
-
 %----------------------------------------------------------------------%
 \newpage
-\section{Building Molecules}
+\section{构建分子}
 %----------------------------------------------------------------------%
 
 
-\subsection{Adding Atoms and Fragments}
+\subsection{添加原子与片段}
 
-By default, \iqmol{} opens in build mode.  This is indicated by a red border
-around the \includegraphics[scale=0.40]{figures/BuildButton.png} button in the
-Toolbar.   The default build atom is indicated by the
-\includegraphics[scale=0.40]{figures/BuildAtomButton.png} button and can be changed
-by clicking on this button.  A pop-up periodic table will appear from which the
-desired element type can be selected.
 
-Clicking in the empty Viewer window will create an atom of the current build
-element. Additional atoms can be added by clicking on an existing atom and
-dragging the mouse.  This creates a new atom bonded to the first.  To create a
-disconnected atom, hold down the \emph{alt} modifier key when clicking in the
-Viewer window.  (Note that some Linux window managers use the \emph{alt} modifier
-for other purposes.  This behavior can be changed using System Settings 
-\bt\ Keyboard \bt\ Short-cuts menu).
+默认情况下，\iqmol{} 以构建模式打开。这由工具栏中
+\includegraphics[scale=0.40]{figures/BuildButton.png} 按钮周围的红色边框指示。当前构建的
+默认原子由
+\includegraphics[scale=0.40]{figures/BuildAtomButton.png} 按钮指示，单击该按钮可以更改它。
+将弹出一个周期表窗口，从中可以选择所需的元素类型。
 
-Bond orders can be increased by clicking and dragging between two existing
-atoms.  If no bond exists between the two atoms,  one is created.  Otherwise
-the bond order is increased.  To decrease the bond order, the bond must first
-be deleted and a new bond created.
+在空白的查看器窗口中单击将创建一个当前构建元素的原子。通过单击现有原子并拖动鼠标可以添加
+更多原子，这会创建一个与第一个原子成键的新原子。要创建不相连的原子，请在单击查看器窗口时
+按住 \emph{alt} 修饰键。（请注意，某些 Linux 窗口管理器将 \emph{alt} 修饰键用于其他用途。
+此行为可以通过"系统设置 \bt\ 键盘 \bt\ 快捷键"菜单进行更改。）
+
+通过单击并拖动两个现有原子之间可以增加键级。如果两个原子之间不存在键，则会创建一条键；
+否则键级会增加。要降低键级，必须首先删除该键，然后创建一个新键。
 \begin{figure}[h]
 \begin{center}
 \includegraphics[scale=0.25]{figures/Cdouble.png}
-\caption{Increasing the bond order.}
+\caption{增加键级。}
 \end{center}
 \end{figure}
 
 
-Functional groups can be added by clicking the
-\includegraphics[scale=0.40]{figures/BuildFragButton.png} button, ensuring the
-Functional Group radio button is clicked and selecting the desired group from
-the menu.  Groups are added in the same way as atoms, \emph{i.e.} clicking and
-dragging from an existing atom.  The empty valence is indicated by the yellow
-bond and shows where the group will be connected.
+可以通过单击
+\includegraphics[scale=0.40]{figures/BuildFragButton.png} 按钮、确保"官能团"单选按钮被选中并从
+菜单中选择所需的基团来添加官能团。基团的添加方式与原子相同，\emph{即}从现有原子单击并拖动。
+空的价键由黄色键指示，并显示基团将连接的位置。
 \begin{figure}
 \begin{center}
 \includegraphics[scale=0.5]{figures/FunctionalGroup.png}
-\caption{The build fragment pop-up that appears when the add fragment button
-is clicked.} 
+\caption{单击添加片段按钮时出现的构建片段弹出窗口。}
 \end{center}
 \end{figure}
 
 
-Entire molecules can also be added to your system by clicking the
-\includegraphics[scale=0.40]{figures/BuildFragButton.png} button, ensuring the
-Molecules radio button is clicked, and selecting the desired molecule from the
-menu.  Be sure to click \Ovalbox{Select} or the build selection will not be
-updated.  Unlike the other build modes, clicking anywhere in the viewer window
-will add the selected molecule (no mouse modifier is required).  This allows
-several molecules of the same type to be added quickly, (\eg\ for
-solvation), but changes the usual mouse behavior.  If you accidentally add too
-many molecules, use the Edit \bt\ Undo menu option.  When adding molecules, if
-you click and hold it is possible to alter the local orientation of the newly
-added molecule before being added to the global frame.
+也可以通过单击
+\includegraphics[scale=0.40]{figures/BuildFragButton.png} 按钮、确保"分子"单选按钮被选中并从菜单中
+选择所需的分子，将整个分子添加到您的系统中。请务必单击 \Ovalbox{选择}，否则构建选择不会被更新。
+与其他构建模式不同，在查看器窗口中任何位置单击都会添加所选分子（不需要鼠标修饰键）。这样可以
+快速添加多个相同类型的分子（\eg\ 用于溶剂化），但会改变通常的鼠标行为。如果您不小心添加了过多
+分子，请使用编辑 \bt\ 撤销菜单项。添加分子时，如果单击并按住，可以在将新添加的分子加入全局
+坐标系之前改变其局部取向。
 %\begin{center}
 %\includegraphics[scale=0.5]{figures/BuildMol.png}
 %\end{center}
 
-Once the backbone of the molecule has been drawn, the Add Hydrogens button
-\includegraphics[scale=0.40]{figures/AddHydrogensButton.png} can be clicked to
-automatically add hydrogen atoms to any unfilled valencies.
+一旦分子的骨架绘制完成，可以单击添加氢原子按钮
+\includegraphics[scale=0.40]{figures/AddHydrogensButton.png} 来自动向任何未填满的价键添加氢原子。
+该操作会根据每个原子当前的化合价推断应补充的氢数目，对于绝大多数有机分子都能得到正确的加氢原子结果。
+如果某些原子希望保持不饱和（例如用于后续手动成键），可在添加氢原子之前先调整相关原子的价态，或在
+添加后手动删除多余的氢。
+
+\paragraph{实用提示}
+\begin{itemize}
+\item 添加氢原子应在完成骨架绘制、且尚未进行对称化之前进行，这样对称化操作才能一并处理新加入的氢。
+\item 若绘制时误加了多余原子，使用编辑 \bt\ 撤销（或历史面板）即可回退到上一步，无需手动删除。
+\item 对于带电体系或含有金属原子的结构，自动加氢可能不准确，建议结合检查点文件中的实际结构进行核对。
+\end{itemize}
 
 
 
-\subsection{Optimizing Structures Using Molecular Mechanics}
+\subsection{利用分子力学优化结构}
 
-The builder in \iqmol{} is free-form, so your initial structure may look a bit
-wonky.  To improve the geometry, click the
-\includegraphics[scale=0.40]{figures/MinimizeEnergyButton.png} button.  This
-optimizes the geometry using a molecular mechanics (MM) force field.   The
-default force field is the Universal Force Field (UFF)\cite{UFF} which has the
-advantage of being defined for almost all of the periodic table.  However, the
-UFF does not perform well for systems that contain hydrogen bonds and, in these
-cases, it is recommended that the force field be changed using the Build \bt\
-Select Force Field menu option.
+\iqmol{} 中的构建器是自由形式的，因此您的初始结构可能看起来有些怪异。要改善几何结构，请单击
+\includegraphics[scale=0.40]{figures/MinimizeEnergyButton.png} 按钮。这将使用分子力学（MM）力场
+优化几何结构。默认力场是通用力场（UFF）\cite{UFF}，其优点是几乎为整个周期表所定义。然而，UFF 对于
+含有氢键的体系表现不佳，在这种情况下，建议使用构建 \bt\ 选择力场菜单项更改力场。
 
 \begin{figure}[h]
 \begin{center}
 \includegraphics[scale=0.5]{figures/ForceFieldMenu.png}
-\caption{Changing the molecular mechanics force field.}
+\caption{更改分子力学力场。}
 \end{center}
 \end{figure}
 
 
-\subsection{Symmetrizing Structures}
+\subsection{对称化结构}
 
-If your molecule has symmetry, the MM optimization is unlikely to find a
-structure with the desired symmetry.  If this is the case, a nearly symmetric
-structure can be symmetrized using the Build \bt\ Symmetrize
-Molecule menu option.  Finding very high symmetry may require relaxing the
-tolerance using the Build \bt\ Set Symmetry Tolerance menu
-option.  Relaxing the tolerance allows the program to move the nuclear
-coordinates more in order to find a symmetric structure.
+如果您的分子具有对称性，分子力学优化不太可能找到具有所需对称性的结构。在这种情况下，可以使用
+构建 \bt\ 对称化分子菜单项对接近对称的结构进行对称化。寻找非常高的对称性可能需要通过构建 \bt\
+设置对称公差菜单项放宽公差。放宽公差允许程序移动更多核坐标，以便找到对称结构。
 
-\iqmol{} uses a modified version of the \symmol{}\cite{SymMol} program written
-by Tullio Pilati and Alessandra Forni to symmetrize molecular structures.
+\iqmol{} 使用由 Tullio Pilati 和 Alessandra Forni 编写的 \symmol{}\cite{SymMol} 程序的修改版本来
+对分子结构进行对称化。
 
 
+\subsection{指定几何参数}
 
-\subsection{Specifying Geometric Parameters}
-
-Specific values for geometric parameters can be set by first selecting the
-atoms involved and using the Build \bt\ Set Geometric Constraint menu
-option.  A dialog will appear that allows the parameter to be either set,
-constrained or scanned.  Constrained parameters apply to any subsequent MM
-optimization and are also passed through to the \qchem{} input file, if a
-optimization job is requested.  Scan options are also passed through to
-\qchem{} for scan jobs.
+可以通过首先选择涉及的原子并使用构建 \bt\ 设置几何约束菜单项来设置几何参数的特定值。将弹出一个
+对话框，允许将该参数设置为固定值、约束或扫描。约束参数适用于任何后续的分子力学优化，并且如果
+请求了优化作业，还会传递到 \qchem{} 输入文件中。扫描选项也会传递到 \qchem{} 用于扫描作业。
 
 \begin{figure}[h]
 \begin{center}
 \includegraphics[scale=0.5]{figures/ConstraintDialog.png}
-\caption{Dialog for setting geometric constraints}
+\caption{用于设置几何约束的对话框}
 \end{center}
 \end{figure}
 
-The type of constraint depends on the number of atoms selected:
+约束的类型取决于所选原子的数量：
 \vspace{-1em}
 \begin{enumerate}
 \itemsep0em
-\item Fixed atom position
-\item Inter-atomic distance (or select a single bond)
-\item Bond angle
-\item Torsion (dihedral) angle
+\item 固定原子位置
+\item 原子间距离（或选择单条化学键）
+\item 键角
+\item 扭转（二面角）角
 \end{enumerate}
-Active constraints are visible in the Viewer and can be deactivated by clicking
-the adjacent check-box in the MV.
+活动约束在查看器中可见，可以通过单击模型视图中相邻的复选框来停用它们。
 
 
-\subsection{Manipulating and Selecting Molecules}
+\subsection{操纵与选择分子}
 \label{sec:mousemodes}
 
-\iqmol{} has been designed to work best with a three-button mouse or track pad.
-If you are using a track pad on a  Mac, it is recommended that you enable the
-secondary click by going to System Preferences \bt\ Trackpad.
+\iqmol{} 设计用于与三键鼠标或触控板配合使用效果最佳。如果您在 Mac 上使用触控板，建议通过
+"系统偏好设置 \bt\ 触控板"启用辅助点击。
 
-Manipulate mode is activated by clicking the
-\includegraphics[scale=0.40]{figures/ManipulateButton.png} button in the
-Toolbar, and implements the following mouse functionality:
+单击工具栏中的
+\includegraphics[scale=0.40]{figures/ManipulateButton.png} 按钮可激活操纵模式，并实现以下鼠标功能：
 \begin{itemize}
-\item {\bf Left click and drag:} Rotate the view of the molecule.  
-\item {\bf Middle click and drag:} Zoom in and out.  
-\item {\bf Right click and drag:} Translate the view of the molecule.
+\item {\bf 左键单击并拖动：} 旋转分子的视图。
+\item {\bf 中键单击并拖动：} 放大和缩小。
+\item {\bf 右键单击并拖动：} 平移分子的视图。
 \end{itemize}
 
-It is also possible to manipulate part of the molecule independently from the
-rest.  To do this, make a selection and press and hold the \emph{ctrl} modifier
-(\emph{command} key on Mac).  The mouse movements will affect only the 
-selected atoms as follows:
+也可以独立于其余部分操纵分子的某一部分。为此，请先创建选择，然后按住 \emph{ctrl} 修饰键
+（在 Mac 上为 \emph{command} 键）。鼠标移动将仅影响所选原子，如下所示：
 \begin{itemize}
-\item {\bf Left click and drag:} Rotate the selected atoms about their center. 
-\item {\bf Right click and drag:} Translate the selected atoms.  
+\item {\bf 左键单击并拖动：} 绕其中心旋转所选原子。
+\item {\bf 右键单击并拖动：} 平移所选原子。
 \end{itemize}
-If only a single bond is selected, then the mouse movements have the following effects
+如果只选择了单条化学键，则鼠标移动具有以下效果：
 \begin{itemize}
-\item {\bf Left click and drag:} Rotate around the axis of the bond.
-\item {\bf Right click and drag:} Change the length of the bond.
+\item {\bf 左键单击并拖动：} 绕键轴旋转。
+\item {\bf 右键单击并拖动：} 改变键的长度。
 \end{itemize}
 
-Select mode is activated by clicking the
-\includegraphics[scale=0.40]{figures/SelectButton.png} button in the Toolbar,
-and implements the following mouse functionality:
+单击工具栏中的
+\includegraphics[scale=0.40]{figures/SelectButton.png} 按钮可激活选择模式，并实现以下鼠标功能：
 \begin{itemize}
-\item {\bf Left click:} Adds atom or bond to selection. 
-\item {\bf Click and drag:} Creates a selection rectangle, all atoms and bonds
-           within the selection rectangle are added to the selection. 
-\item {\bf Right click:}  Removes atom or bond from selection.
+\item {\bf 左键单击：} 将原子或化学键添加到选择中。
+\item {\bf 单击并拖动：} 创建选择矩形，选择矩形内的所有原子和化学键都被添加到选择中。
+\item {\bf 右键单击：} 从选择中移除原子或化学键。
 \end{itemize}
-It is also possible to select all, select none and invert the selection via
-the options under the Edit menu.
+也可以通过编辑菜单下的选项来选择全部、选择无以及反转选择。
 
 
-\subsection{Adding Additional Conformers}
+\subsection{添加额外的构象}
 
-For setting up jobs that use the Freezing String Method (FSM), two conformers
-are required corresponding to the initial and final geometries of the string.
-Having built the first geometry, a second geometry can be added to the molecule
-by right-clicking the molecule name in the MV.  This brings up a context menu
-with the option `Duplicate Geometry'.  
+对于使用冻结字符串方法（FSM）设置作业，需要两个构象，分别对应字符串的初始和最终几何结构。
+构建第一个几何结构后，可以通过在模型视图中右键单击分子名称来将第二个几何结构添加到分子中。
+这将弹出一个带有"复制几何结构"选项的上下文菜单。
 \begin{figure}[h]
 \begin{center}
 \includegraphics[scale=0.4]{figures/MoleculeContext.png}
 \end{center}
 \end{figure}
-Selecting this menu option creates a Geometries item in the MV with two
-(identical) geometries.  The second of these can be modified by selecting it in
-the MV and manipulating selected atoms in the viewer using the \emph{ctrl}
-(\emph{command} on Mac) modifier key.  If `Freezing String' is chosen for the Calculate
-option in the QUI (see the next section) then both geometries will be included
-in the \$molecule section of the input deck, separated by ****.
-
-
+选择此菜单项会在模型视图中创建一个包含两（相同）个几何结构的"几何结构"项。可以通过在模型视图中
+选择第二个几何结构并使用 \emph{ctrl}（在 Mac 上为 \emph{command}）修饰键在查看器中操纵所选原子来
+修改它。如果在 QUI 中为计算选项选择"冻结字符串"（见下一节），则两个几何结构都将包含在输入文件的
+\$molecule 部分中，以 **** 分隔。
 
 
 
 %----------------------------------------------------------------------%
 \newpage
-\section{Running \qchem{} Calculations}
+\section{运行 \qchem{} 计算}
 %----------------------------------------------------------------------%
 
-\subsection{The QUI}
+\subsection{QUI}
 
-\iqmol{} has a built-in input file generator for \qchem{} calculations, the
-QUI, that can be accessed via the Calculation \bt\  Q-Chem Setup menu.  
+\iqmol{} 内置了一个用于 \qchem{} 计算的输入文件生成器，即 QUI，可通过计算 \bt\ Q-Chem 设置菜单访问。
 \begin{figure}[h]
 \begin{center}
 \includegraphics[scale=0.4]{figures/QUI.png}
-\caption{The \qchem{} User Interface (QUI) dialog.}
+\caption{\qchem{} 用户界面（QUI）对话框。}
 \end{center}
 \end{figure}
 
-The left hand side of the QUI dialog contains controls for setting up the
-calculation.  These are presented in a hierarchical fashion so that most
-commonly used options are presented in the top part of the panel, with other
-relevant options appearing in the lower section depending on what type of job
-is selected.  More advanced options can be accessed via the Advanced tab.  The
-generated input file is echoed in the panel on the right hand side of the QUI.
+QUI 对话框的左侧包含用于设置计算的控件。这些控件以分层方式呈现，最常用的选项显示在面板顶部，
+其他相关选项根据所选作业类型出现在下部区域。可以通过"高级"选项卡访问更高级的选项。生成的输入文件
+显示在 QUI 右侧的面板中。
 
-Clicking the Submit button will start the job running on the selected server.
-Once the job has completed you will be prompted to copy the results (for remote
-servers) before they are automatically loaded into \iqmol{}.  The
-\includegraphics[scale=0.6]{figures/Favourites.png} icon appears next to the
-molecule name in the MV when the molecule has been updated with the
-results of a calculation.
+使用 QUI 设置一次计算的典型步骤如下：
+
+\begin{enumerate}
+\item {\bf 选择作业类型：} 在左侧面板的顶部选择计算类型，例如单点能（SP）、几何优化（OPT）、
+      频率（FREQ）、过渡态搜索（TS）或各种更高阶的性质计算。选择后，面板会根据作业类型自动展开
+      相关的选项组。
+\item {\bf 设置计算方法：} 指定交换关联泛函（如 B3LYP、ωB97X-D）和基组（如 6-31G*、cc-pVTZ）。常用组合
+      可直接从下拉列表中选择，非常用的可在"高级"选项卡中手动输入 \verb|$rem| 变量。
+\item {\bf 指定分子与电荷/自旋多重度：} 分子取自当前查看器中的体系；若需要，可在输入中调整电荷与自旋
+      多重度。若之前在构建阶段添加了多个构象（见"添加额外的构象"），并可在此选择"冻结字符串"等
+      特殊计算模式。
+\item {\bf 检查输入预览：} 对话框右侧实时显示生成的 \qchem{} 输入文件，建议在提交前核对 \verb|$molecule|、
+      \verb|$rem| 与 \verb|$end| 段落是否正确。
+\item {\bf 提交：} 单击"提交"按钮，在弹出的服务器列表中选择目标服务器，作业即在所选服务器上启动。
+\end{enumerate}
+
+若需要更精细的控制（例如自定义 DFT 色散校正、冻核近似、CC 相关方法选项等），请切换到"高级"选项卡。
+在该选项卡中可以直接编辑 \verb|$rem| 段落，所有修改都会同步反映到右侧的输入预览中。
+
+单击"提交"按钮将在所选服务器上启动作业。作业完成后，系统会提示您复制结果（对于远程服务器），然后
+结果会自动加载到 \iqmol{} 中。当分子已用计算结果更新时，\includegraphics[scale=0.6]{figures/Favourites.png}
+图标会出现在模型视图中分子名称的旁边。
 
 
-\subsection{The Job Monitor}
+\subsection{任务监视器}
 
-Submitted jobs can be monitored via the Calculation \bt\ Job Monitor menu
-option.  This brings up the Job Monitor dialog that provides information on the
-progress of jobs.  Right-clicking a row in the Job Monitor brings up a context
-menu which allows running jobs to be killed or queried, and finished jobs to be
-opened.  
+已提交的作业可以通过计算 \bt\ 任务监视器菜单项进行监控。这将弹出任务监视器对话框，提供作业进度
+信息。在任务监视器中右键单击某一行会弹出一个上下文菜单，允许终止或查询正在运行的作业，以及打开
+已完成的作业。
 \begin{figure}
 \begin{center}
-\includegraphics[scale=0.5]{figures/JobMonitor.png} 
-\caption{The Job Monitor dialog.  Right-clicking on a selected job brings up
-a context menu with additional options.}
+\includegraphics[scale=0.5]{figures/JobMonitor.png}
+\caption{任务监视器对话框。右键单击所选作业会弹出一个带有附加选项的上下文菜单。}
 \end{center}
 \end{figure}
 
-If a job has the Error status, hovering the mouse over the status will show the
-error message.  Alternatively, double clicking the job will open the output
-file, if available, and may provide additional information about why the job
-failed.  Double-clicking a completed job will copy the results from the
-server (if they have not already been copied) and reload them into the main
-\iqmol{} window.
+如果作业状态为错误，将鼠标悬停在状态上会显示错误消息。或者，双击作业将打开输出文件（如果可用），
+并可能提供有关作业失败原因的额外信息。双击已完成的作业将从服务器复制结果（如果尚未复制）并重新
+加载到主 \iqmol{} 窗口中。
 
 
-\subsection{Configuring Servers}
+\subsection{配置服务器}
 
-By default \iqmol{} is configured to submit jobs to the \qchem{} server in
-Pleasanton, California.  This is a publicly available server than can be used
-by anyone wishing to run test calculations before purchasing the \qchem{}
-software.  Jobs submitted to this server can access the full suite of
-electronic structure methods available in \qchem{}, but are time-limited to 10
-minutes. 
+默认情况下，\iqmol{} 配置为向位于加利福尼亚州普莱森顿的 \qchem{} 服务器提交作业。这是一个公共可访问的
+服务器，任何希望在购买 \qchem{} 软件之前运行测试计算的人都可以使用。提交到此服务器的作业可以访问
+\qchem{} 中可用的全套电子结构方法，但时间限制为 10 分钟。
 
-Additional servers can be configured to access other computers that have the
-\qchem{} software installed.  These computers can be either local servers
-(\emph{i.e.} the same machine as the one running \iqmol{}) or remote servers
-that can be connected to via SSH.  To add an additional server, go to the
-Calculation \bt\ Edit Servers menu option and click the
-\includegraphics[scale=0.40]{figures/PlusButton.png} button.  
+可以配置其他服务器以访问已安装 \qchem{} 软件的其他计算机。这些计算机可以是本地服务器（\emph{即} 与运行
+\iqmol{} 的机器相同），也可以是通过 SSH 连接的远程服务器。要添加其他服务器，请转到计算 \bt\ 编辑服务器
+菜单项并单击 \includegraphics[scale=0.40]{figures/PlusButton.png} 按钮。
 \begin{figure}
 \begin{center}
 \includegraphics[scale=0.5]{figures/ServerDialog.png}
-\caption{The server configuration dialog.}
+\caption{服务器配置对话框。}
 \end{center}
 \end{figure}
 
-The information required to configure a server depends on its type, but default
-options exist for each case.  The following indicates the minimum that should
-be considered:
+配置服务器所需的信息取决于其类型，但每种情况都有默认选项。以下列出了应当考虑的最低要求：
 
 \begin{itemize}
-\item {\bf Local:} Set the Queue System to `Basic'
-      unless you know you are running queuing software on the machine.
-      Be sure the {\tt QC} and {\tt QCSCRATCH} variables are set to their correct
-	  values in the Run File Template, which is accessed by clicking the Configure
-      button.
-\item {\bf SSH:} The host name and account on the target machine will 
-      be required in order to connect via SSH.  Set the Authentication combo-box to
-      `Password Prompt' unless you have set up an alternative authentication protocol.
-	  Depending on how the target host has been set up, the Run File Template
-	  may require some editing to get it to work, but this will differ from
-      machine to machine.
-\item {\bf HTTP:} The default options should be suitable.  Note that on Windows
-	  HTTP should be used (and is the default in v2.8) whereas for Mac and
-      Linux HTTPS can be used and will be the default in future versions.  
+\itemsep0em
+\item {\bf 本地：} 除非您确定机器上正在运行排队软件，否则将队列系统设置为"基本"。请确保在运行文件模板中
+      （通过单击"配置"按钮访问）将 {\tt QC} 和 {\tt QCSCRATCH} 变量设置为正确的值。
+\item {\bf SSH：} 需要通过 SSH 连接的目标机器的主机名和账户。除非您已设置替代的身份验证协议，否则请将
+      身份验证组合框设置为"密码提示"。根据目标主机的设置方式，运行文件模板可能需要一些编辑才能正常工作，
+      但这会因机器而异。
+\item {\bf HTTP：} 默认选项应该适用。请注意，在 Windows 上应使用 HTTP（并且在 v2.8 中为默认），而对于 Mac 和
+      Linux 可以使用 HTTPS，并且在未来版本中将成为默认。
 \end{itemize}
 
-% exporting and loading server configuration
+% 导出和加载服务器配置
 
 
 %----------------------------------------------------------------------%
 \newpage
-\section{Analyzing Results}
+\section{分析结果}
 \label{sec:anal}
 %----------------------------------------------------------------------%
 
-\iqmol{} reads in a wide variety of file types and allows the user to visualize
-many of the results they contain.  Individual files can be opened via the File
-\bt\ Open menu option, or alternatively by dragging and dropping the file onto
-the Viewer window.  Directories can also be opened via the File \bt\ Open Dir
-menu option, or by dragging and dropping the directory onto the Viewer.  
 
-Opening directories allows more than one file associated with a molecule to be
-loaded together, such as a \qchem{} output file and a formatted checkpoint
-file.  The directory name determines the base name for the molecule and
-\iqmol{} loads all files contained within the directory that have a matching
-base name.  
+\iqmol{} 可以读取多种文件类型，并允许用户可视化其中包含的许多结果。可以通过文件 \bt\ 打开菜单项打开
+单个文件，或者将文件拖放到查看器窗口中。也可以通过文件 \bt\ 打开目录菜单项打开目录，或者将目录拖放
+到查看器上。
+
+\iqmol{} 最常读取的结果文件类型包括：
+
+\begin{itemize}
+\itemsep0em
+\item {\bf .out / .inp}：\qchem{} 的输出与输入文件，包含作业类型、能量、频率、轨道等信息。
+\item {\bf .fchk}：格式化检查点文件，是绘制分子轨道与（自旋）密度的主要数据来源（GUI rem 变量需设为 2）。
+\item {\bf .cube}：体数据文件，可包含电子密度、分子轨道或静电势，用于快速绘制等值面。
+\item {\bf .xyz}：坐标文件，常用于读入反应路径或动画帧序列。
+\item {\bf .pdb / .cml / .mol}：常见的分子结构格式。
+\end{itemize}
+
+将相关文件放在同一目录并通过"打开目录"一次性载入，可以避免基名不匹配导致部分数据未被关联的问题。
+
+打开目录允许将与分子关联的多个文件一起加载，例如 \qchem{} 输出文件和格式化检查点文件。目录名称决定了
+分子的基名，\iqmol{} 会加载目录中包含的所有具有匹配基名的文件。
 \begin{figure}[h]
 \begin{center}
 \includegraphics[scale=0.40]{figures/OpenDir.png}
-\caption{Example: Opening the Aniline directory will load the Aniline.ESP.cube,
-Aniline.FChk, Aniline.inp and Aniline.out files into the one molecule in the
-MV.  The notes.txt file will be ignored as it has a different base name.} 
+\caption{示例：打开 Aniline 目录将把 Aniline.ESP.cube、Aniline.FChk、Aniline.inp 和 Aniline.out
+文件加载到模型视图中的同一个分子下。notes.txt 文件将被忽略，因为其基名不同。}
 \end{center}
 \end{figure}
 
 
-\subsection{Molecular Surfaces}
+\subsection{分子表面}
 
-Several molecular surfaces can be generated without first performing a quantum
-chemical calculation. These include: van der Waals, pro-molecule and
-superposition of ionic densities (SID).  The SID surface is similar to the
-pro-molecule surface except that it scales the densities based on the atomic
-charges of the atoms and may provide a more accurate representation of the
-density of charged systems.
+可以在不先进行量子化学计算的情况下生成几种分子表面。这些包括：范德华表面、准分子表面以及离子密度
+叠加（SID）表面。SID 表面与准分子表面类似，只是它根据原子的原子电荷对密度进行缩放，并可以更精确地
+表示带电体系的密度。
 
-To plot one of these pseudo-density surfaces, double-click the `Surfaces'
-item in the MV associated with the molecule.
+要绘制这些伪密度表面之一，请双击与分子关联的模型视图中的"表面"项。
 
 
 
-
-\subsection{Plotting Molecular Orbitals From a Checkpoint File}
+\subsection{从检查点文件绘制分子轨道}
 
 \label{sec:mos}
-Plotting molecular orbitals (MOs) requires a formatted checkpoint file (.fchk
-file extension) which is generated by default when running \qchem{}
-calculations from \iqmol{} (GUI rem variable should be set to 2).  After
-opening the fchk file, a `Canonical Orbitals' item will appear in the MV under
-the Surfaces item.
-Double-clicking this brings up the Add Surface dialog:
+绘制分子轨道（MO）需要格式化检查点文件（扩展名为 .fchk），当从 \iqmol{} 运行 \qchem{} 计算时默认会生成
+该文件（GUI rem 变量应设置为 2）。打开 fchk 文件后，"正则轨道"项将出现在模型视图中表面项下方。
+双击此项会弹出"添加表面"对话框：
 \begin{figure}[h]
 \begin{center}
 \includegraphics[scale=0.25]{figures/MolecularOrbitalsConfigurator.png}
-\caption{The Add Surface dialog allows MOs and (spin-)densities to be plotted.
-%The right-hand panel also offers an interactive MO diagram showing occupied and
-%virtual orbital energies.
-} 
+\caption{"添加表面"对话框允许绘制分子轨道和（自旋）密度。
+%右侧面板还提供了一个交互式分子轨道图，显示占据和虚轨道能量。
+}
 \label{fig:addsurface}
 \end{center}
 \end{figure}
 
-The Add Surface dialog allows MOs, total densities, and spin densities  to be
-computed.  Several surfaces can be queued and computed at the same time, which
-is more efficient as the shell data only need to be computed once.  The
-quality, colors and opacity of the surfaces can be be set in the dialog, and
-changes to these settings are saved to the preferences as default values for
-any subsequent surfaces generated.
+"添加表面"对话框允许计算分子轨道、总密度和自旋密度。可以排队并同时计算多个表面，这样效率更高，因为
+壳层数据只需计算一次。表面的质量、颜色和透明度可以在对话框中设置，这些设置的更改会作为后续生成表面的
+默认值保存到首选项中。
 
-Note that each tick on the quality scale corresponds to roughly four times the
-number of grid points as the previous one, and will therefore take roughly four
-times as long to compute.  Also note that densities require evaluating
-shell-pair values and are significantly more expensive to compute that MOs,
-which only require shell values.  For most purposes, the pseudo densities (such
-as the pro-molecule density) available by double-clicking the Surfaces item
-provide an almost identical density surface, but at a much cheaper cost.
+请注意，质量刻度上的每个刻度对应的网格点数大约是前一个刻度的四倍，因此计算时间也大约需要四倍。还需注意，
+密度需要计算壳层对数值，其计算成本明显高于仅需要壳层数值的分子轨道。在大多数情况下，通过双击表面项可获得的
+伪密度（例如准分子密度）提供的密度表面几乎相同，但成本要低得多。
 
 \begin{figure}[h]
 \begin{center}
 \includegraphics[scale=0.32]{figures/Orbital.png}
-\caption{An example molecular orbital for aniline.}
+\caption{苯胺的一个分子轨道示例。}
 \label{fig:mo}
 \end{center}
 \end{figure}
 
-Once computed, the individual surfaces appear as sub-items in the MV, and these
-can be further configured by double-clicking the item in the MV.
+一旦计算完成，各个表面将作为子项出现在模型视图中，可以通过双击模型视图中的项进一步配置它们。
 
-The Add Surface dialog also contains an interactive energy level diagram on the
-right-hand side panel.  The vertical scale can be zoomed in and out using the
-scroll wheel (or equivalent) on the mouse.  The scale can also be translated by
-a left click-and-drag.  Individual orbitals can be selected with a left-click
-and this will cause the energy of the selected orbital to appear below the
-diagram, as shown in Fig.~\ref{fig:addsurface}.
+"添加表面"对话框还在右侧面板中包含交互式能级图。可以使用鼠标滚轮（或等效操作）放大和缩小垂直刻度。
+也可以通过左键单击并拖动来平移刻度。可以通过左键单击选择单个轨道，这将导致所选轨道的能量显示在图下方，
+如图~\ref{fig:addsurface} 所示。
 
 
-\subsection{Other Orbitals and Densities}
+\subsection{其他轨道与密度}
 
-Orbitals and densities other than those based on the canonical orbitals can
-also be visualized, if the appropriate calculation has been performed.  Localized
-orbitals, natural transition orbitals, natural bond orbitals and
-attachment/detachment densities are all possible.
+除了基于正则轨道的轨道和密度之外，如果已执行相应的计算，也可以可视化其他轨道和密度。局域轨道、自然
+跃迁轨道、自然键轨道以及附着/脱离密度都是可能的。
 
 \begin{figure}[h]
 \begin{center}
 \includegraphics[scale=0.25]{figures/LocalizedBonds.png}
-\caption{Localised $\sigma$-bonding orbitals in ethene.}
+\caption{乙烯中的局域化 $\sigma$ 成键轨道。}
 \label{fig:mo}
 \end{center}
 \end{figure}
 
-Dyson orbitals can be also displayed, either from the checkpoint file (requires
-\qchem{} $\ge$ v5.1) or from the output file using an older version of \qchem{}.
-In the latter case, the PRINT\_GENERAL\_BASIS option should be set to true in
-order for \iqmol{} to generate the basis function data.
+也可以显示戴森轨道（Dyson orbitals），可以来自检查点文件（需要 \qchem{} $\ge$ v5.1），也可以使用较旧
+版本的 \qchem{} 从输出文件显示。在后一种情况下，应将 PRINT\_GENERAL\_BASIS 选项设置为 true，以便 \iqmol{}
+生成基函数数据。
 
 {\small
 \begin{verbatim}
@@ -650,381 +569,290 @@ $rem
    EOM_EA_BETA          = [1,1,1,0]
    CC_DO_DYSON          = TRUE
    GUI                  = 2
-   PRINT_GENERAL_BASIS  = TRUE   ! Ony required for QChem < v5.1
+   PRINT_GENERAL_BASIS  = TRUE   ! 仅 QChem < v5.1 时需要
 $end
 \end{verbatim}
 }
 
-If available, Dyson Orbitals appear under the Surfaces item in the Model View
-and behave similarly to the Canonical Orbitals.
+如果可用，戴森轨道会出现在模型视图的表面项下，其行为与正则轨道类似。
 
 
 
+\subsection{导出 Cube 文件数据}
 
-
-\subsection{Exporting Cube File Data}
-
-Each surface requires the generation of data on a 3D grid and these data are
-stored internally so that subsequent calculations of the same surface (with
-different isovalues, for example) are much faster.  To see what grid data is
-being stored, right-click on the MO Surfaces item in the MV to bring up the
-context menu.  Selecting the Show Grid Info menu brings up the Grid Information
-dialog:
+每个表面都需要在三维网格上生成数据，这些数据存储在内部，以便后续计算相同表面（例如使用不同的等值面
+值）时速度快得多。要查看存储了哪些网格数据，请在模型视图中右键单击 MO 表面项以弹出上下文菜单。选择
+"显示网格信息"菜单会弹出网格信息对话框：
 \begin{figure}[h]
 \begin{center}
 \includegraphics[scale=0.4]{figures/GridInfo.png}
-\caption{The Grid Information dialog shows what data is being stored and
-offers the option of exporting the data in a cube file format.}
+\caption{网格信息对话框显示正在存储的数据，并提供以 cube 文件格式导出数据的选项。}
 \end{center}
 \end{figure}
 
-From this dialog it is possible to export cube files containing the grid data.
-Right-clicking on the desired grid brings up a context menu with the 
-Export Cube File option.  The Switch Phase option swaps the sign of the data,
-and may be useful when comparing different MOs where the (arbitrary) phases
-differ.  Cube files can be saved for future plotting to avoid having to
-recompute the data, or for reading into another plotting package.  This is
-described in the following section.
+从此对话框中可以导出包含网格数据的 cube 文件。右键单击所需的网格会弹出带有"导出 Cube 文件"选项的
+上下文菜单。"切换相位"选项会交换数据的符号，在比较相位（任意）不同的不同分子轨道时可能有用。可以
+保存 cube 文件以备将来绘制，从而避免重新计算数据，或将其读入其他绘图程序。下一节将对此进行说明。
 
 
-\subsection{Visualizing Cube File Data}
+\subsection{可视化 Cube 文件数据}
 
-Cube files contain volumetric data such as electron densities, molecular
-orbitals or electrostatic potentials (ESP).  Because the data has been
-pre-computed, generating surfaces using them is very quick.  After opening a
-cube file, a Cube Data item will appear in the MV, double-clicking this item
-brings up the Add Surface dialog which allows an isovalue surface to be
-requested (Fig.~\ref{fig:cubefile}).  The Signed check-box causes two
-isosurfaces to be generated corresponding to $\pm$ the specified isovalue, and
-this should be checked for data such as MOs and spin densities.
+Cube 文件包含体数据，例如电子密度、分子轨道或静电势（ESP）。由于数据已预先计算，使用它们生成表面非常
+快速。打开 cube 文件后，模型视图中会出现一个 Cube 数据项，双击此项会弹出"添加表面"对话框，允许请求
+等值面（图~\ref{fig:cubefile}）。"有符号"复选框会生成两个对应于 $\pm$ 指定等值面的等值面，对于分子轨道
+和自旋密度等数据应勾选此项。
 \begin{figure}[h]
 \begin{center}
 \includegraphics[scale=0.4]{figures/AddSurface.png}
-\caption{The Add Surface dialog for cube data files}
+\caption{用于 cube 数据文件的"添加表面"对话框}
 \label{fig:cubefile}
 \end{center}
 \end{figure}
 
-Cube file data can also be used to color a surface.  This will require either
-two cube files (one containing the surface data and the second containing the
-property used to color the surface) or a cube file and a checkpoint file.  In
-either case, two files need to be loaded into the one molecule using the File
-\bt\ Open Dir menu option, described above.
+Cube 文件数据也可用于对表面着色。这将需要两个 cube 文件（一个包含表面数据，第二个包含用于对表面着色的
+属性），或者一个 cube 文件和一个检查点文件。无论哪种情况，都需要使用上述文件 \bt\ 打开目录菜单项将两个文件
+加载到同一个分子中。
 
-After creating a surface, double-clicking the surface item will
-cause the Configure Surface dialog to appear:
+创建表面后，双击表面项会弹出"配置表面"对话框：
 \begin{figure}[h]
 \begin{center}
 \includegraphics[scale=0.15]{figures/SurfaceConfigurator.png}
-\caption{Configure Surface dialog showing the Cube Data as an option for the property.}
+\caption{"配置表面"对话框，将 Cube 数据显示为属性的一个选项。}
 \label{fig:surfaceconfig}
 \end{center}
 \end{figure}
 
-The Property combo-box will have the cube data as one of the options, and selecting
-this will cause the surface to be colored according to the data in the cube file.
-The gradient colors can be altered by clicking inside the gradient box.
+"属性"组合框将把 cube 数据作为选项之一，选择此项将使表面根据 cube 文件中的数据进行着色。可以通过单击
+渐变框内部来更改渐变颜色。
 \begin{figure}[h]
 \begin{center}
 \includegraphics[scale=0.30]{figures/ESP.png}
 \end{center}
-\caption{Electron density plot of aniline colored according to the electrostatic potential.}
+\caption{根据静电势着色的苯胺电子密度图。}
 \end{figure}
 
 
 \newpage
-\subsection{Orbital Animations}
+\subsection{轨道动画}
 
-Orbital animations can be created \eg{}, for watching the evolution of the
-frontier orbitals during a reaction, or watching the relaxation of an orbital
-during a self-consistent field (SCF) calculation.  Key frames should be saved
-as cube file data in a single directory.  The base name of the cube files needs
-to match the directory name, \eg{}
+可以创建轨道动画 \eg{}，用于观看反应过程中前线轨道的演变，或观看自洽场（SCF）计算过程中轨道的弛豫。
+关键帧应作为 cube 文件数据保存在单个目录中。cube 文件的基名需要与目录名匹配，\eg{}
 
 \begin{center}
 \hspace*{2em}{\tt  relaxation/relaxation.Frame.1.cube}\\
 \hspace*{2em}{\tt  relaxation/relaxation.Frame.2.cube}\\
 \end{center}
-Open the directory, as described in Sec. \ref{sec:anal}, and right-click on the
-first cube file item which appears in the MV, this will allow you to access the 
-Surface Animator dialog:
+如第 \ref{sec:anal} 节所述打开目录，并右键单击模型视图中出现的第一个 cube 文件项，这将允许您访问
+表面动画器对话框：
 \begin{center}
 \includegraphics[scale=0.40]{figures/SurfaceAnimationMenu.png}
 \end{center}
-The dialog is shown in Fig. \ref{fig:SurfaceAnimationDialog} and can be used to
-adjust the key frame order and the settings for the animation, including the
-number of interpolation frames (higher values give smoother results, but take
-longer).  Pressing \Ovalbox{Calculate} generates each frame and individual
-frames can be accessed in the MV.  Use the playback options to run the
-animation, recording it with the
-\includegraphics[scale=0.40]{figures/RecordButton.png} button, if desired.
+该对话框如图 \ref{fig:SurfaceAnimationDialog} 所示，可用于调整关键帧顺序和动画设置，包括插值帧数
+（值越高结果越平滑，但耗时越长）。按 \Ovalbox{计算} 会生成每一帧，各个帧可以在模型视图中访问。使用
+播放选项运行动画，并在需要时通过 \includegraphics[scale=0.40]{figures/RecordButton.png} 按钮录制动画。
 
 
 \begin{figure}[h]
 \begin{center}
 \includegraphics[scale=0.20]{figures/AnimationDialog.png}
 \end{center}
-\caption{The surface animation dialog.}
+\caption{表面动画对话框。}
 \label{fig:SurfaceAnimationDialog}
 \end{figure}
 
 
 
 \newpage
-\subsection{Potential Energy Surfaces}
+\subsection{势能面}
 
-Several calculation types provide information about the potential energy
-surface (PES).  These include geometry optimizations, PES scans, reaction
-pathways and transition state searches.  On opening a \qchem{} output file
-containing one of these job types a Geometries item appears in the MV and can
-be double-clicked to bring up the Geometries dialog.
+几种计算类型提供有关势能面（PES）的信息。这些包括几何优化、势能面扫描、反应路径和过渡态搜索。打开包含
+这些作业类型之一的 \qchem{} 输出文件时，模型视图中会出现一个"几何结构"项，双击它可以弹出"几何结构"对话框。
 \begin{figure}[h]
 \begin{center}
 \includegraphics[scale=0.35]{figures/PesScan.png}
-\caption{The Geometries dialog showing a selected geometry. }
+\caption{"几何结构"对话框，显示所选几何结构。}
 \end{center}
 \end{figure}
 
-The pathway can be animated in the viewer using the play button, and individual
-frames can be selected from either the table or by selecting a dot on the
-energy plot.  The Viewer window will be automatically updated with the
-corresponding structure.  As with the MO energy diagrams, the energy plot can
-also be zoomed and scrolled.
+可以使用播放按钮在查看器中动画演示该路径，并且可以从表格中选择单个帧，或通过选择能量图上的一个点来选择。
+查看器窗口将自动更新为相应的结构。与分子轨道能量图一样，能量图也可以缩放和滚动。
 
-Pathways can also be read in from an XYZ file.  The format for this is simply a
-concatenation of regular XYZ files:
+也可以从 XYZ 文件读入路径。其格式只是常规 XYZ 文件的拼接：
 {\footnotesize
 \begin{verbatim}
 5
 -291.77177
-Si  0.71979   -0.08082   -0.76577  
-H   0.73262   -1.27801    0.22990   
-H   1.10451    0.93673    0.34825   
-H  -1.32980    0.23894   -0.28240  
-H  -1.22713    0.18317    0.47002   
+Si  0.71979   -0.08082   -0.76577
+H   0.73262   -1.27801    0.22990
+H   1.10451    0.93673    0.34825
+H  -1.32980    0.23894   -0.28240
+H  -1.22713    0.18317    0.47002
 5
 -291.76961
-Si  0.67218   -0.07483   -0.72935  
-H   0.73053   -1.29428    0.22634   
-H   1.10815    0.95270    0.34714   
-H  -1.29502    0.23567   -0.33016  
-H  -1.19409    0.17584    0.49156 
+Si  0.67218   -0.07483   -0.72935
+H   0.73053   -1.29428    0.22634
+H   1.10815    0.95270    0.34714
+H  -1.29502    0.23567   -0.33016
+H  -1.19409    0.17584    0.49156
 ....
 \end{verbatim}
 }
-The first line gives the number of atoms, the second (comment) line must have
-the corresponding energy and then the following lines have the xyz coordinates
-of each atom in the system.  This pattern repeats for as many frames as you have
-available.
+第一行给出原子数，第二行（注释行）必须具有相应的能量，然后后面的行包含系统中每个原子的 xyz 坐标。
+此模式对您拥有的任意多帧重复。
 
 
-\subsection{Vibrational Frequencies}
+\subsection{振动频率}
 
-Vibrational frequencies can be read in from a \qchem{} output file and appear
-as a Frequencies item in the MV.  Normal mode vectors can be visualized by
-selecting the associated frequency item in the MV.
+可以从 \qchem{} 输出文件读入振动频率，并作为模型视图中的"频率"项出现。可以通过选择模型视图中关联的频率项
+来可视化简正模式向量。
 \begin{figure}[h]
 \begin{center}
 \includegraphics[scale=0.23]{figures/VibMode.png}
-\caption{Arrows indicating a normal mode in acetic acid.}
+\caption{指示乙酸中简正模式的箭头。}
 \end{center}
 \end{figure}
 
-Double-clicking a frequency in the MV will cause the molecule to vibrate
-according to the selected mode.  Double-clicking the Frequencies item in the 
-MV will bring up the Vibrational Frequencies dialog:
+双击模型视图中的频率会使分子根据所选模式振动。双击模型视图中的"频率"项会弹出振动频率对话框：
 \begin{figure}[h]
 \begin{center}
 \includegraphics[scale=0.40]{figures/Frequencies.png}
-\caption{The Vibrational Frequencies dialog.}
+\caption{振动频率对话框。}
 \end{center}
 \end{figure}
 
-This dialog contains an impulse spectrum showing the positions and relative
-intensities of the frequencies.  Individual modes can be selected on the
-spectrum by clicking the hollow circles, and this will also update the Viewer
-window with the selected mode.  The impulses can be broadened using either
-Gaussians or Lorentzians to give a more realistic looking spectrum, and the
-image can be exported by righ-clicking on the spectrum to bring up a context
-menu.
+此对话框包含一个脉冲谱，显示频率的位置和相对强度。可以通过单击空心圆在谱上选择单个模式，这也会用所选模式
+更新查看器窗口。可以使用高斯函数或洛伦兹函数加宽脉冲，以获得更逼真的谱，并且可以通过右键单击谱来弹出上下文
+菜单导出图像。
 
-The horizontal scale of the spectrum can be zoomed (using the scroll wheel on
-the mouse) and translated (left-click and drag) to give greater detail.
+谱的水平刻度可以缩放（使用鼠标滚轮）和平移（左键单击并拖动）以显示更多细节。
 
-\subsubsection{Isotopic Substitution}
+\subsubsection{同位素取代}
 
-\iqmol{} makes it easy to set up isotopic substitution loops for a \qchem{}
-vibrational frequency calculation.  First select the atoms  you wish to
-substitute in the Viewer and then select the Build \bt\ Set Isotopes menu option.
-A dialog will appear that allows you to change the isotope for the selected atoms,
-along with the ability to change the pressure and temperature used for calculating
-the thermochemical data..  
+\iqmol{} 可以轻松地为 \qchem{} 振动频率计算设置同位素取代循环。首先在查看器中选择要取代的原子，然后选择
+构建 \bt\ 设置同位素菜单项。将弹出一个对话框，允许您更改所选原子的同位素，以及更改用于计算热化学数据的
+压力和温度。
 \begin{figure}[h]
 \begin{center}
 \includegraphics[scale=0.20]{figures/IsotopeDialog.png}
-\caption{Isotope substitution dialog allowing non-default masses to be
-specified for the selected atoms.  Note that only one non-default mass is
-allowed for each element type.}
+\caption{同位素取代对话框，允许为所选原子指定非默认质量。请注意，每种元素类型只允许一个非默认质量。}
 \end{center}
 \end{figure}
-Once the masses have been selected, click OK and an Isotopes item appears in
-the MV containing the substitution information.  This can be edited or checked
-by double-clicking on the appropriate Substitution item in the MV.  Different
-substitutions can be set up by selecting different atoms in the Viewer and/or
-different masses and these will be looped over in the \qchem{} frequency
-calculation.  Each substitution loop only requires a re-weighting of the
-Hessian before diagonalization and so multiple loops can be obtained very
-quickly once the Hessian has been calculated.
+选择质量后，单击确定，模型视图中会出现一个包含取代信息的"同位素"项。可以通过双击模型视图中相应的取代项来
+编辑或检查它。可以通过在查看器中选择不同的原子和/或不同的质量来设置不同的取代，这些将在 \qchem{} 频率计算中
+循环遍历。每个取代循环只需要在对角化之前对 Hessian 矩阵重新加权，因此一旦计算出 Hessian 矩阵，就可以非常
+快速地获得多个循环。
 
 
-\subsection{NMR Spectra}
+\subsection{NMR 谱}
 
-NMR shieldings and chemical shifts can be visualized using \iqmol{}.  A 
-\qchem{} calculation (JOB\_TYPE = NMR) must first be run and the output
-file loaded into \iqmol{}.  Shielding constants can be displayed as atom labels
-in the viewer by selecting the Display \bt\ Atom Labels \bt\ NMR option.
+可以使用 \iqmol{} 可视化 NMR 屏蔽常数和化学位移。必须首先运行 \qchem{} 计算（JOB\_TYPE = NMR）并将输出文件
+加载到 \iqmol{} 中。可以通过选择显示 \bt\ 原子标签 \bt\ NMR 选项，在查看器中将屏蔽常数显示为原子标签。
 \begin{figure}[h]
 \begin{center}
 \includegraphics[scale=0.20]{figures/NmrDisplay.png}
-\caption{Propanol showing the NMR shieldings}
+\caption{显示 NMR 屏蔽常数的丙醇。}
 \end{center}
 \end{figure}
 
-An NMR item will appear on in the MV and double-clicking this brings up the NMR
-Spectrum dialog.
+模型视图中会出现一个 NMR 项，双击此项会弹出 NMR 谱对话框。
 \begin{figure}[h]
 \begin{center}
 \includegraphics[scale=0.35]{figures/NmrConfigurator.png}
-\caption{The NMR Spectrum dialog}
+\caption{NMR 谱对话框}
 \end{center}
 \end{figure}
 
-Various spectra can be displayed ($^1$H, $^{13}$C etc.) and if 
-a reference is available (\eg\ TMS) for the given level of theory, 
-chemical shifts can also be displayed.  Selecting rows in the table
-will also highlight the corresponding atoms in the viewer for easy
-identification.  If impulses are plotted, then these can also be selected
-to identify which atoms are responsible for the selected signal.
+可以显示各种谱（$^1$H、$^{13}$C 等），如果给定理论水平下有参考（\eg\ TMS），也可以显示化学位移。在表格中选择
+行还会突出显示查看器中相应的原子，以便于识别。如果绘制了脉冲，则也可以选择这些脉冲来识别哪些原子负责所选信号。
 
-As with the vibrational frequencies spectra, NMR spectra can be exported
-by right-clicking on the image to bring up the context menu.
+与振动频率谱一样，可以通过右键单击图像弹出上下文菜单来导出 NMR 谱。
 
 
 %----------------------------------------------------------------------%
 \newpage
-\section{Appearance}
+\section{外观}
 %----------------------------------------------------------------------%
 
-\subsection{Viewer Camera}
+\subsection{查看器相机}
 
-When viewing a molecule, the coordinates of the atoms and surfaces are fixed in
-the world reference frame.  When manipulating the molecule using the mouse (see
-\S\ \ref{sec:mousemodes}) it is actually the camera that changes position and
-orientation.  If more precise control of the camera is required (\eg\ for
-reproducing a particular image), then the camera can be configured via the
-Display \bt\ Camera menu option.  By default the camera uses a perspective
-projection to give better depth perception, but an orthographic projection can
-also be selected, if required.
+查看分子时，原子和表面的坐标固定在世界参考系中。当使用鼠标操纵分子时（见 \S\ \ref{sec:mousemodes}），实际上是
+相机改变了位置和方向。如果需要更精确地控制相机（\eg\ 用于复现特定图像），则可以通过显示 \bt\ 相机菜单项配置
+相机。默认情况下，相机使用透视投影以获得更好的深度感知，但也可以根据需要选择正交投影。
 
 \begin{figure}[h]
 \begin{center}
 \includegraphics[scale=0.25]{figures/CameraDialog.png}
-\caption{The Configure Camera dialog allows precise control over position and orientation
-of the Viewer camera.}
+\caption{"配置相机"对话框允许精确控制查看器相机的位置和方向。}
 \end{center}
 \end{figure}
 
 
 
-\subsection{Clipping Planes}
+\subsection{裁剪平面}
 
-A Global clipping plane is available and can be viewed by enabling the Clipping
-Plane item under Global in the MV.  Clipping planes can be useful for showing
-surface information without obscuring the underlying molecular structure.
-While selected, the clipping plane can be arbitrarily translated and rotated
-using the manipulate selection mode described in \S\ \ref{sec:mousemodes}.
-Alternatively, a precise orientation of the clipping plane can be set by
-double-clicking the Clipping Plane item in the MV to open the configuration
-dialog.
+提供了一个全局裁剪平面，可以通过在模型视图中启用全局下的"裁剪平面"项来查看。裁剪平面可用于显示表面信息而
+不遮挡底层的分子结构。选择时，可以使用 \S\ \ref{sec:mousemodes} 中描述的操纵选择模式任意平移和旋转裁剪平面。
+或者，可以通过双击模型视图中的"裁剪平面"项打开配置对话框来设置裁剪平面的精确方向。
 
 \begin{figure}[h]
 \begin{center}
 \includegraphics[scale=0.30]{figures/ClippingPlane.png}
-\caption{Image showing a clipped density surface allowing the underlying
-molecular structure to be more easily seen.} 
+\caption{显示裁剪后的密度表面，使底层分子结构更容易看清的图像。}
 \end{center}
 \end{figure}
 
-Individual surfaces can be clipped, by selecting the Clip check-box in in the
-surface configurator dialog (see Fig.~\ref{fig:surfaceconfig}) for each
-surface.  Once a surface has been clipped, the clipping plane remains active
-even if hidden by unchecking the Clipping Plane item check-box in the MV.
+可以通过选择每个表面的表面配置器对话框（见图~\ref{fig:surfaceconfig}）中的"裁剪"复选框来裁剪各个表面。一旦
+表面被裁剪，即使通过取消勾选模型视图中的"裁剪平面"项复选框将其隐藏，裁剪平面仍保持活动状态。
 
 
-\subsection{Shaders}
+\subsection{着色器}
 
-\iqmol{} uses GLSL shaders to enhance the appearance of the Viewer.  Shaders can
-be made active by going to the Display \bt\ Appearance menu option, and selecting
-the Shader panel.
+\iqmol{} 使用 GLSL 着色器来增强查看器的外观。可以通过显示 \bt\ 外观菜单项并选择"着色器"面板来激活着色器。
 \begin{figure}[h]
 \begin{center}
 \includegraphics[scale=0.20]{figures/ShaderDialog.png}
-\caption{Configuring shader options}
+\caption{配置着色器选项}
 \end{center}
 \end{figure}
 
-Changes to the various shader options will take immediate effect and can be saved 
-as the default by clicking \Ovalbox{Save As Default}.  Some shaders have several
-lights associated with them, and these can be turned on or off to give different
-lighting effects.
+对各种着色器选项的更改将立即生效，并且可以通过单击 \Ovalbox{另存为默认} 保存为默认值。某些着色器具有多个关联的
+光源，可以打开或关闭这些光源以获得不同的光照效果。
 
 
-\subsection{Exporting POV-Ray Files}
+\subsection{导出 POV-Ray 文件}
 
-\iqmol{} can generate scene files (.pov) for use with an external POV-Ray package.
-POV-Ray uses ray tracing algorithms to generate images of very high quality and
-resolution.  POV-Ray is open source, but several official and unofficial
-packages exist with pre-compiled binaries, in particular testing was done using
-the Mac version of MegaPOV.  Binaries can be downloaded from the
-following sites:
+\iqmol{} 可以生成用于外部 POV-Ray 程序包的场景文件（.pov）。POV-Ray 使用光线追踪算法生成非常高质量和分辨率的
+图像。POV-Ray 是开源的，但存在多个带有预编译二进制的官方和非官方程序包，特别是使用 Mac 版本的 MegaPOV 进行了
+测试。二进制文件可从以下站点下载：
 \begin{itemize}
 \itemsep0em
 \item Mac: \url{http://megapov.inetart.net/povrayunofficial_mac}
 \item Windows: \url{http://www.povray.org/download}
 \end{itemize}
 
-To export a scene file use the Edit \bt\ Generate POV-Ray Input menu option.
-Scene files are plain text with instructions for the POV-Ray program, and can
-be edited by the user for fine tuning before processing.  \iqmol{} can apply
-several effects (\eg\ surface textures) to the molecule, and these can be
-configured by opening the Appearance dialog (Display \bt\ Appearance menu
-option).
+要导出场景文件，请使用编辑 \bt\ 生成 POV-Ray 输入菜单项。场景文件是纯文本，包含供 POV-Ray 程序使用的指令，用户
+可以在处理之前对其进行微调。\iqmol{} 可以对分子应用多种效果（\eg\ 表面纹理），这些可以通过打开外观对话框
+（显示 \bt\ 外观菜单项）进行配置。
 
 \begin{figure}[h]
 \begin{center}
 \includegraphics[scale=0.20]{figures/POVRayDialog.png}
-\caption{Appearance dialog showing Options for POV-Ray scene files.}
+\caption{外观对话框，显示 POV-Ray 场景文件的选项。}
 \end{center}
 \end{figure}
 
-Note that \iqmol{} attempts to generate a scene file that matches as closely as
-possible what is shown in the Viewer window.  However, there may be slight
-variations in lighting, color and camera angle, and some trial and error may be
-required to obtain a pleasing image.  In particular, the Gamma value may need
-experimenting with, and changes to the ambient and diffuse lighting (via the
-shader options) may be required depending on if a light or dark background is
-selected for the scene.
+请注意，\iqmol{} 试图生成与查看器窗口中显示的内容尽可能匹配的场景文件。但是，光照、颜色和相机角度可能会有轻微
+差异，可能需要一些反复尝试才能获得令人满意的图像。特别是，可能需要尝试 Gamma 值，并且根据为场景选择的是浅色
+还是深色背景，可能需要更改环境光和漫反射光照（通过着色器选项）。
 
 
 %----------------------------------------------------------------------%
 \newpage
-\section{Sample Images}
+\section{示例图像}
 %----------------------------------------------------------------------%
 
-Here are some examples of the kinds of images that can be generated using
-\iqmol{}'s shader and rendering options.  Most of these are simply screen
-shots, however, tiles 3, 4 and 5 in the middle row were obtained by 
-running POV-Ray on the \iqmol{} generated scene file.
+以下是一些可以使用 \iqmol{} 的着色器和渲染选项生成的图像示例。其中大多数只是屏幕截图，但是中间行的图块 3、4 和 5
+是通过在 \iqmol{} 生成的场景文件上运行 POV-Ray 获得的。
 
 \begin{center}
 \includegraphics[scale=0.58]{figures/gallery/g13_sm.png}\
@@ -1046,7 +874,7 @@ running POV-Ray on the \iqmol{} generated scene file.
 \includegraphics[scale=0.58]{figures/gallery/g5_sm.png}\
 \includegraphics[scale=0.58]{figures/gallery/g3_sm.png}\
 \includegraphics[scale=0.58]{figures/gallery/g20_sm.png}\
-\includegraphics[scale=0.58]{figures/gallery/g6_sm.png} \\
+\includegraphics[scale=0.58]{figures/gallery/g18_sm.png} \\
 \includegraphics[scale=0.58]{figures/gallery/g2_sm.png}\
 \includegraphics[scale=0.58]{figures/gallery/g9_sm.png}\
 \includegraphics[scale=0.58]{figures/gallery/g8_sm.png}\
@@ -1055,25 +883,104 @@ running POV-Ray on the \iqmol{} generated scene file.
 \end{center}
 
 
-
+%----------------------------------------------------------------------%
 \newpage
+\section{反应路径}
+\label{sec:reaction}
+
+如第 \ref{sec:anal} 节所述，几何优化、势能面扫描、过渡态搜索等作业会在模型视图中生成一个"几何结构"
+项，其中包含了沿反应坐标的一系列结构帧。反应路径正是对这些帧进行连续播放所形成的动画。
+
+要查看反应路径，请在模型视图中双击"几何结构"项，打开几何结构对话框（见图~\ref{fig:Pes}）。对话框
+中央的能量图以曲线形式展示了各帧的相对能量，横轴为反应坐标，纵轴为能量。您可以通过以下方式与路径
+交互：
+
+\begin{itemize}
+\item {\bf 播放/暂停：} 单击对话框中的播放按钮，即可在查看器窗口中连续播放沿反应坐标演化的结构动画。
+\item {\bf 选择单帧：} 在能量图上单击某个数据点，或在下方的表格中选中某一行，查看器会立即更新为该帧对应
+      的几何结构。能量值会显示在图表下方。
+\item {\bf 缩放与平移：} 与分子轨道能级图类似，能量图可以使用鼠标滚轮缩放、左键拖动平移，以便查看局部细节。
+\end{itemize}
+
+\begin{figure}[h]
+\begin{center}
+\includegraphics[scale=0.35]{figures/PesScan.png}
+\caption{几何结构对话框，显示所选的一帧几何结构及其在能量图上的位置。}
+\label{fig:Pes}
+\end{center}
+\end{figure}
+
+如果反应的能量曲线较为复杂（例如存在多个中间体），建议先在 QUI 中将作业类型设置为过渡态搜索或
+势能面扫描，确保结果包含足够密集的帧，以获得平滑的路径动画。
+
+路径数据也可以从外部的 XYZ 文件读入。该文件的格式为多个标准 XYZ 文件的顺序拼接：每一段的第一行为
+原子数，第二行（注释行）必须给出该帧对应的能量，随后是各原子的 xyz 坐标。此模式可重复任意多帧。
+
+
+\section{制作电影}
+\label{sec:movie}
+
+\iqmol{} 可以将查看器窗口中显示的连续画面录制为电影文件，便于在演示或论文中展示分子动画（例如反应路径、
+轨道演化或振动模式）。录制功能由快照管理器（Snapshot）负责，支持将一系列帧合成为常见的视频格式。
+
+制作电影的一般流程如下：
+
+\begin{enumerate}
+\item {\bf 准备动画场景：} 先在查看器中设置好要展示的动画，例如播放一条反应路径（见第 \ref{sec:reaction} 节）、
+      轨道动画（见第 \ref{sec:anal} 节"轨道动画"）或振动模式。
+\item {\bf 开始录制：} 单击查看器工具栏中的录制按钮
+      \includegraphics[scale=0.40]{figures/RecordButton.png}
+      开始捕获画面。录制期间对查看器的所有操作都会被记录。
+\item {\bf 结束并生成：} 再次单击录制按钮停止录制。\iqmol{} 会调用外部工具（如 ffmpeg）将捕获的帧合成为
+      电影文件。生成进度可在状态栏或日志中查看，完成后会提示电影文件已保存的位置。
+\end{enumerate}
+
+需要注意以下几点：
+\begin{itemize}
+\item 录制的电影质量取决于录制时的查看器窗口分辨率与渲染设置。如希望获得高分辨率影片，建议先在显示 \bt\
+      外观菜单中调高渲染质量，或导出 POV-Ray 场景文件（见上一节）后用光线追踪渲染单帧再合成。
+\item 合成电影依赖系统中已安装的视频编码器。若录制后未能生成文件，请检查是否已安装 ffmpeg 等工具，并确认
+      其位于系统的可执行路径（PATH）中。
+\item 对于需要精确控制每一帧的场景（如反应路径电影），更稳妥的做法是先将各关键帧导出为 cube 文件，再使用
+      表面动画器（第 \ref{sec:anal} 节）生成插值帧，最后逐帧录制。
+\end{itemize}
+
+
+\section{配置}
+\label{sec:config}
+
+\iqmol{} 的大部分全局行为都可以通过"全局"项与首选项进行配置。模型视图（MV）中的"全局"（Global）项始终可用，
+展开后可以看到外观、表面默认值、服务器列表等子项，双击即可进入相应的配置界面。
+
+\subsection*{首选项}
+
+选择编辑 \bt\ 首选项菜单项，或在模型视图中展开"全局"项并双击"首选项"，会打开首选项浏览器。其中常用的设置包括：
+
+\begin{itemize}
+\item {\bf 默认力场：} 设置分子力学优化的默认力场（默认通用力场 UFF）。可在构建 \bt\ 选择力场菜单中临时更改，
+      此处为永久默认值。
+\item {\bf 撤销步数上限：} 限制历史面板中可撤销操作的数量，避免占用过多内存。
+\item {\bf 模型视图显示：} 控制程序启动时是否显示模型视图面板，以及主窗口的默认尺寸。
+\item {\bf 任务监视器列表：} 记录以往提交作业的信息，可在计算 \bt\ 任务监视器中访问；选择"清除作业"可将其清空。
+\end{itemize}
+
+\subsection*{外观配置}
+
+全局外观（背景颜色、着色器、裁剪平面等）通过显示 \bt\ 外观菜单项配置，相关内容已在本手册"外观"一章中
+详细说明。将某项着色器选项改为满意效果后，可单击 \Ovalbox{另存为默认} 使其对所有后续分子生效。
+
+\subsection*{服务器配置}
+
+用于 \qchem{} 计算的本地或远程服务器在全局"服务器"项下统一管理。添加、编辑服务器的方法见"运行 Q-Chem 计算"
+一章中的"配置服务器"一节。配置好的服务器列表会被保存，下次启动 \iqmol{} 时自动加载。
+
+通过合理使用以上配置，可以将 \iqmol{} 调整为符合个人习惯的工作环境，并保持不同会话之间的一致性。
+
+
+%----------------------------------------------------------------------%
 \bibliographystyle{acm}
 \bibliography{IQmolUserGuide}
-
-
 %----------------------------------------------------------------------%
+
 \end{document}
 %----------------------------------------------------------------------%
-
-\subsection{Reaction Pathways}
-
-\subsection{Making Movies}
-
-\subsection{Configuration}
-The Global item in the MV is always available and allows 
-
-Preferences
-appearance
-Global
-
-

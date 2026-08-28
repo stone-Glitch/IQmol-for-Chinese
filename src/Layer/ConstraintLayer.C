@@ -122,7 +122,7 @@ void Constraint::setAtomList(AtomList const& atoms)
          break;
       default:
          m_type = Invalid; 
-         setText("Invalid");
+         setText(tr("Invalid"));
          return;
          break;
    }

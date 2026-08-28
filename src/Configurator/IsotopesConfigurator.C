@@ -42,9 +42,9 @@ Isotopes::Isotopes(Layer::Isotopes& isotopes) : m_isotopes(isotopes)
    QTableWidget* table(m_configurator.isotopeTable);
    table->setColumnCount(3);
    table->verticalHeader()->setVisible(false);
-   table->horizontalHeaderItem(0)->setText("Element");
-   table->horizontalHeaderItem(1)->setText("Isotopic Mass");
-   table->horizontalHeaderItem(2)->setText("Indicies");
+   table->horizontalHeaderItem(0)->setText(tr("Element"));
+   table->horizontalHeaderItem(1)->setText(tr("Isotopic Mass"));
+   table->horizontalHeaderItem(2)->setText(tr("Indicies"));
    table->horizontalHeader()->setSectionResizeMode( 0, QHeaderView::ResizeToContents );
    table->horizontalHeader()->setSectionResizeMode( 1, QHeaderView::ResizeToContents );
    table->horizontalHeader()->setSectionResizeMode( 2, QHeaderView::Stretch );

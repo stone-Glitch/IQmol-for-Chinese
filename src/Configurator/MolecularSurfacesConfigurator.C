@@ -55,19 +55,19 @@ void MolecularSurfaces::on_surfaceType_currentIndexChanged(int index)
       case Data::SurfaceType::VanDerWaals:
          m_configurator.isovalue->setSuffix("  ");
          m_configurator.isovalue->setValue(1.000);
-         m_configurator.isovalueLabel->setText("Scale");
+         m_configurator.isovalueLabel->setText(tr("Scale"));
          break;
 
       case Data::SurfaceType::Promolecule:
          m_configurator.isovalue->setSuffix("  ");
          m_configurator.isovalue->setValue(0.020);
-         m_configurator.isovalueLabel->setText("Isovalue");
+         m_configurator.isovalueLabel->setText(tr("Isovalue"));
          break;
 
       case Data::SurfaceType::SID:
          m_configurator.isovalue->setSuffix("  ");
          m_configurator.isovalue->setValue(0.020);
-         m_configurator.isovalueLabel->setText("Isovalue");
+         m_configurator.isovalueLabel->setText(tr("Isovalue"));
          break;
    } 
 }

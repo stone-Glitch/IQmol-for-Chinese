@@ -26,6 +26,7 @@
 #include <QMessageBox>
 #include <QEvent>
 #include <QStringList>
+#include <QTranslator>
 
 
 class QSplashScreen;
@@ -56,8 +57,11 @@ namespace IQmol {
 
       private:
          void initOpenBabel();
+         void loadTranslations();
          QSplashScreen* m_splashScreen;
          QMessageBox    m_unhandledException;
+         QTranslator*   m_qtTranslator;
+         QTranslator*   m_appTranslator;
    };
 
 

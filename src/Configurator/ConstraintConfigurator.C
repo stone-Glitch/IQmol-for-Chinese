@@ -38,7 +38,7 @@ namespace Configurator {
 VectorConstraint::VectorConstraint(Layer::Constraint& constraint) : Constraint(constraint)
 {
    m_constraintConfigurator.setupUi(this);
-   setWindowTitle("Set Position");
+   setWindowTitle(tr("Set Position"));
    QChar unit(QChar(0x00c5));
    m_constraintConfigurator.xValue->setSuffix(QString(" ") + unit);
    m_constraintConfigurator.yValue->setSuffix(QString(" ") + unit);
@@ -124,7 +124,7 @@ void ScalarConstraint::init()
 
 void ScalarConstraint::initDistance()
 {  
-   setWindowTitle("Configure Distance");
+   setWindowTitle(tr("Configure Distance"));
    QChar unit(QChar(0x00c5));
 
    m_constraintConfigurator.value->setSuffix(QString(" ") + unit);
@@ -145,7 +145,7 @@ void ScalarConstraint::initDistance()
 
 void ScalarConstraint::initAngle()
 {
-   setWindowTitle("Configure Angle");
+   setWindowTitle(tr("Configure Angle"));
    QChar unit(QChar(0x00b0));
 
    m_constraintConfigurator.value->setSuffix(QString(" ") + unit);
@@ -167,7 +167,7 @@ void ScalarConstraint::initAngle()
 
 void ScalarConstraint::initTorsion()
 {
-   setWindowTitle("Configure Torsion");
+   setWindowTitle(tr("Configure Torsion"));
    QChar unit(QChar(0x00b0));
 
    m_constraintConfigurator.value->setSuffix(QString(" ") + unit);

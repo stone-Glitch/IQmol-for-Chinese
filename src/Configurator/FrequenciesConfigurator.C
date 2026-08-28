@@ -44,13 +44,13 @@ Frequencies::Frequencies(Layer::Frequencies& frequencies) : m_frequencies(freque
 
    if (m_frequencies.haveRaman()) {
       m_configurator.frequencyTable->setColumnWidth(0,60);
-      m_configurator.frequencyTable->horizontalHeaderItem(0)->setText("Freq. (cm⁻¹)");
-      m_configurator.frequencyTable->horizontalHeaderItem(1)->setText("Intens. (km/mol)");
-      m_configurator.frequencyTable->horizontalHeaderItem(2)->setText("Raman (Å4/amu)");
+      m_configurator.frequencyTable->horizontalHeaderItem(0)->setText(tr("Freq. (cm⁻¹)"));
+      m_configurator.frequencyTable->horizontalHeaderItem(1)->setText(tr("Intens. (km/mol)"));
+      m_configurator.frequencyTable->horizontalHeaderItem(2)->setText(tr("Raman (Å4/amu)"));
    }else {
       m_configurator.frequencyTable->setColumnCount(2);
-      m_configurator.frequencyTable->horizontalHeaderItem(0)->setText("Frequency (cm⁻¹)");
-      m_configurator.frequencyTable->horizontalHeaderItem(1)->setText("Intensity (km/mol)");
+      m_configurator.frequencyTable->horizontalHeaderItem(0)->setText(tr("Frequency (cm⁻¹)"));
+      m_configurator.frequencyTable->horizontalHeaderItem(1)->setText(tr("Intensity (km/mol)"));
       m_configurator.ramanCheckbox->hide();
    }
 

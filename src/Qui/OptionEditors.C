@@ -38,7 +38,7 @@ OptionListEditor::OptionListEditor(QWidget* parent, QStringList* list) :
 void OptionListEditor::on_addButton_clicked(bool) {
    QListWidgetItem* item = new QListWidgetItem(tr("New Option"));
    item->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsEditable);
-   item->setText("New option");
+   item->setText(tr("New option"));
    int row = ui.optionList->currentRow();
    if (row < 0) row = ui.optionList->count();
 

@@ -46,8 +46,8 @@ CameraDialog::CameraDialog(qglviewer::Camera& camera, Viewer* viewer) : QDialog(
 
    QTableWidget* table(m_dialog.frameTable);
    table->setColumnWidth(0,30);
-   table->horizontalHeaderItem(0)->setText("Time (s)");
-   table->horizontalHeaderItem(1)->setText("Camera Position");
+   table->horizontalHeaderItem(0)->setText(tr("Time (s)"));
+   table->horizontalHeaderItem(1)->setText(tr("Camera Position"));
    table->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
    table->setSelectionBehavior(QAbstractItemView::SelectRows);
    table->setSelectionMode(QAbstractItemView::SingleSelection);
