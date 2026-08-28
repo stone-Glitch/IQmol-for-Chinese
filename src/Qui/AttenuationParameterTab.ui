@@ -19,7 +19,7 @@
      <item>
       <widget class="QLabel" name="label_test">
        <property name="text">
-        <string>Ω（衰减参数）</string>
+        <string>Omega</string>
        </property>
       </widget>
      </item>

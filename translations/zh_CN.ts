@@ -184,12 +184,8 @@
     </message>
     <message>
         <location filename="../src/Qui/AttenuationParameterTab.ui" line="22"/>
-        <source>Ω（衰减参数）</source>
-        <translation>Ω（衰减参数）</translation>
-    </message>
-    <message>
         <source>Omega</source>
-        <translation>Omega</translation>
+        <translation>Ω（衰减参数）</translation>
     </message>
 </context>
 <context>
@@ -750,12 +746,8 @@ QToolButton:pressed {
     </message>
     <message>
         <location filename="../src/Util/ColorDialog.ui" line="361"/>
-        <source>不透明度 (α)</source>
-        <translation>不透明度 (α)</translation>
-    </message>
-    <message>
         <source>Alpha</source>
-        <translation>Alpha</translation>
+        <translation>不透明度 (α)</translation>
     </message>
     <message>
         <location filename="../src/Util/ColorDialog.ui" line="368"/>
@@ -6924,12 +6916,8 @@ in the run file template</source>
     </message>
     <message>
         <location filename="../src/Process/QueueResourcesDialog.ui" line="159"/>
-        <source>CPU 数</source>
-        <translation>CPU 数</translation>
-    </message>
-    <message>
         <source>CPUs</source>
-        <translation>CPUs</translation>
+        <translation>CPU 数</translation>
     </message>
     <message>
         <location filename="../src/Process/QueueResourcesDialog.ui" line="172"/>
