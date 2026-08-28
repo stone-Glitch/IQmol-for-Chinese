@@ -109,7 +109,7 @@ namespace Layer {
 
 bool Molecule::s_autoDetectSymmetry = false;
 
-Molecule::Molecule(QObject* parent) : Component(DefaultMoleculeName, parent),
+Molecule::Molecule(QObject* parent) : Component(tr("Untitled"), parent),
    m_drawMode(Primitive::BallsAndSticks), 
    m_atomScale(1.0), m_bondScale(1.0), m_chargeScale(1.0), 
    m_smallerHydrogens(true), 
@@ -2006,7 +2006,7 @@ Process::JobInfo Molecule::qchemJobInfo()
 
 void Molecule::jobInfoChanged(Process::JobInfo const& jobInfo)
 { 
-   if (text() == DefaultMoleculeName) {
+   if (text() == DefaultMoleculeName || text() == tr("Untitled")) {
       setText(jobInfo.get<QString>("BaseName"));
       m_info.setCharge(jobInfo.get<int>("Charge"));
       m_info.setMultiplicity(jobInfo.get<int>("Multiplicity"));

@@ -43,7 +43,7 @@ using namespace qglviewer;
 namespace IQmol {
 namespace Layer {
 
-MolecularSurfaces::MolecularSurfaces(Layer::Molecule& molecule) : Base("Surfaces"), 
+MolecularSurfaces::MolecularSurfaces(Layer::Molecule& molecule) : Base(tr("Surfaces")), 
    m_molecule(molecule)
 {
    connect(&m_configurator, SIGNAL(calculateSurface(Data::SurfaceInfo const&)),

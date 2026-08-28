@@ -33,7 +33,7 @@ namespace Layer {
 
 
 Component::Component(QString const& label, QObject* parent) : Base(label, parent),
-   m_surfaceList(this, "Surfaces")
+   m_surfaceList(this, tr("Surfaces"))
 {
    setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsUserCheckable);
    setCheckState(Qt::Checked);
