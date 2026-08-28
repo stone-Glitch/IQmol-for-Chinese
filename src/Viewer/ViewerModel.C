@@ -61,13 +61,13 @@ namespace IQmol {
 ViewerModel::ViewerModel(QWidget* parent) : 
    QStandardItemModel(0, 1, parent),
    m_parent(parent), 
-   m_global("Global", parent),
+   m_global(tr("Global"), parent),
    m_symmetryTolerance(Preferences::SymmetryTolerance()), 
    m_forceField(Preferences::DefaultForceField()), 
    m_updateEnabled(true)
 {
    QStringList labels;
-   labels << "Model View";
+   labels << tr("Model View");
    setHorizontalHeaderLabels(labels);
    invisibleRootItem()->setCheckState(Qt::Checked);
    m_global.setFlags(Qt::ItemIsEnabled);

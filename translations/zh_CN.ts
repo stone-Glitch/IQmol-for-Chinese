@@ -2633,6 +2633,13 @@ QTextBrowser#content {
     </message>
 </context>
 <context>
+    <name>IQmol::Layer::Component</name>
+    <message>
+        <source>Surfaces</source>
+        <translation>表面</translation>
+    </message>
+</context>
+<context>
     <name>IQmol::Layer::Constraint</name>
     <message>
         <source>Invalid</source>
@@ -2644,6 +2651,13 @@ QTextBrowser#content {
     <message>
         <source>Info</source>
         <translation>信息</translation>
+    </message>
+</context>
+<context>
+    <name>IQmol::Layer::MolecularSurfaces</name>
+    <message>
+        <source>Surfaces</source>
+        <translation>表面</translation>
     </message>
 </context>
 <context>
@@ -2679,6 +2693,10 @@ QTextBrowser#content {
     <message>
         <source>Save File</source>
         <translation>保存文件</translation>
+    </message>
+    <message>
+        <source>Untitled</source>
+        <translation>未命名</translation>
     </message>
 </context>
 <context>
@@ -3090,7 +3108,7 @@ QTextBrowser#content {
     </message>
     <message>
         <source>Job Info</source>
-        <translation>作业信息</translation>
+        <translation>任务信息</translation>
     </message>
     <message>
         <source>Executable</source>
@@ -3117,6 +3135,17 @@ QTextBrowser#content {
     <message>
         <source>Difference Surface</source>
         <translation>差分表面</translation>
+    </message>
+</context>
+<context>
+    <name>IQmol::ViewerModel</name>
+    <message>
+        <source>Model View</source>
+        <translation>模型视图</translation>
+    </message>
+    <message>
+        <source>Global</source>
+        <translation>全局</translation>
     </message>
 </context>
 <context>
