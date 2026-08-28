@@ -156,7 +156,7 @@ in the run file template</string>
      <item row="4" column="0">
       <widget class="QLabel" name="label_6">
        <property name="text">
-        <string>CPU 数</string>
+        <string>CPUs</string>
        </property>
       </widget>
      </item>
