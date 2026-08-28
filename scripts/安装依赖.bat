@@ -31,16 +31,23 @@ if exist "%MSYS2_ROOT%\usr\bin\bash.exe" (
     goto :install_deps
 )
 
-REM ---- 2. download self-extracting archive ----
-echo ==^> downloading MSYS2 archive (~100MB, please wait)...
+REM ---- 2. download self-extracting archive (via China mirror for speed) ----
+echo ==^> downloading MSYS2 archive (~100MB, via mirror)...
 set "DL=%TEMP%\msys2-base-x86_64-latest.sfx.exe"
-set "URL=https://github.com/msys2/msys2-installer/releases/download/nightly-x86_64/msys2-base-x86_64-latest.sfx.exe"
+set "GH=https://github.com/msys2/msys2-installer/releases/download/nightly-x86_64/msys2-base-x86_64-latest.sfx.exe"
 
 where curl >nul 2>nul
 if not errorlevel 1 (
-    curl -L --fail --output "%DL%" "%URL%"
+    REM try mirrors first (gh-proxy.com fastest, ghfast.top fallback), then direct
+    curl -L --fail --output "%DL%" "https://gh-proxy.com/%GH%"
+    if not exist "%DL%" (
+        curl -L --fail --output "%DL%" "https://ghfast.top/%GH%"
+    )
+    if not exist "%DL%" (
+        curl -L --fail --output "%DL%" "%GH%"
+    )
 ) else (
-    powershell -NoProfile -Command "[Net.ServicePointManager]::SecurityProtocol=[Net.SecurityProtocolType]::Tls12; Invoke-WebRequest -UseBasicParsing -Uri '%URL%' -OutFile '%DL%'"
+    powershell -NoProfile -Command "[Net.ServicePointManager]::SecurityProtocol=[Net.SecurityProtocolType]::Tls12; Invoke-WebRequest -UseBasicParsing -Uri 'https://gh-proxy.com/%GH%' -OutFile '%DL%'"
 )
 if not exist "%DL%" (
     echo [ERROR] download failed. Download manually from https://www.msys2.org/ and install to %MSYS2_ROOT%
