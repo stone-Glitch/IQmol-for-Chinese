@@ -74,9 +74,7 @@ make
 `modules/` 下的 9 个第三方库是 Git 子模块，上游仓库体积较大，国内网络克隆时常断连、
 卡在 6% 或直接 `Failed to connect to github.com:443`。为此本仓库在
 **`submodules-package` 分支**提供了打包好的完整子模块源码（共 49,335 个文件），
-版本与 `.gitmodules` 记录的 commit 完全一致。提供两种格式，二选一：
-
-### 方案 A：单文件 tar.gz（推荐，73 MB，免合并）
+版本与 `.gitmodules` 记录的 commit 完全一致，单文件 73 MB，无需合并：
 
 下载这两个文件放到同一目录：
 
@@ -99,19 +97,8 @@ extract_submodules.bat "D:\IQmol"
 tar -xzf IQmol-submodules.tar.gz    # 在仓库根目录执行；MSYS2 终端最稳
 ```
 
-### 方案 B：分卷 zip（108 MB，需下载 3 片再合并）
-
-单文件下载不了时用这个：`part_00` / `part_01` / `part_02` + `merge_submodules.bat`
-（同分支目录）。双击 `merge_submodules.bat` 自动合并+校验，或 cmd 里：
-
-```bat
-copy /b part_00 + part_01 + part_02 IQmol-submodules.zip
-```
-
-校验：大小 `112,618,126` 字节，MD5 `787d6023c5ec715ec0334427da4baa75`。
-
-> 单文件版 73 MB 比分卷版 108 MB 小，是因为 tar.gz 把文件打包成一个流整体压缩，
-> 而 zip 逐个压缩海量小文件，效率低得多。
+> 选 tar.gz 而不是 zip：tar.gz 把文件打包成一个流再整体压缩，对 4.9 万个小文件
+> 效率高得多——同样内容 tar.gz 只要 73 MB，zip 要 108 MB。
 
 ### 注意事项
 
