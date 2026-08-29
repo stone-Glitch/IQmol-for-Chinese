@@ -1,6 +1,19 @@
 # IQmol3
 IQmol version 3
 
+> 📌 **本仓库 = IQmol3 官方版 + 简体中文全面本地化**
+> 上游原版：[nutjunkie/IQmol3](https://github.com/nutjunkie/IQmol3)
+>
+> **文档导航**
+>
+> | 你想做什么 | 看这里 |
+> |---|---|
+> | 了解目录结构、代码模块、汉化文件在哪 | [仓库结构说明.md](仓库结构说明.md) |
+> | 在 Windows 上编译出 IQmol.exe | [doc/构建说明-中文版.md](doc/构建说明-中文版.md) |
+> | 子模块下载不动（国内网络） | 本文「子模块离线包」章节 |
+> | 学会用这个软件 | [中文用户手册](doc/IQmolUserGuide.pdf)（34 页） |
+> | 维护/更新翻译 | 本文「简体中文本地化」章节 + `scripts/update_translations.sh` |
+
 This is IQmol, a molecular builder and visualization package written by Andrew
 Gilbert.  IQmol is able to build molecules, set up and submit input for Q-Chem
 calculations, and analyse the output.  Analyses include display of molecular

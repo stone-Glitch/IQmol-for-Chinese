@@ -1,6 +1,10 @@
 build
 .*.swp
 .DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.user
 
 # LaTeX 中间文件（仅限 doc 目录，避免误伤 samples/*.out 等样本数据）
 /doc/*.aux
@@ -10,3 +14,28 @@ build
 /doc/*.out
 /doc/*.toc
 /doc/*.synctex.gz
+
+# ---- 编译产物（顶层 CMake 构建目录已由上面的 build 覆盖）----
+*.o
+*.obj
+*.a
+*.lib
+*.ilk
+*.exp
+# 注意：不要忽略 *.pdb —— 本仓库的 .pdb 是蛋白质结构数据文件
+# (samples/3nir.pdb 等分子样本)，不是 Visual Studio 调试符号
+moc_*.cpp
+ui_*.h
+qrc_*.cpp
+/CMakeCache.txt
+/CMakeFiles/
+
+# ---- Windows 可执行文件与部署产物 ----
+*.exe
+*.dll
+*.pyd
+
+# ---- 子模块离线包（体积大，勿误提交）----
+IQmol-submodules.zip
+IQmol-submodules.tar.gz
+part_0?
