@@ -1,17 +1,25 @@
 #!/usr/bin/env bash
 # IQmol Windows 自动构建脚本（在 MINGW64 终端运行）
 # 用法:
-#   bash build_windows.sh                       # 自动下载 CMake 3.31 并构建
+#   bash build_windows.sh            # 增量构建（默认，推荐）
+#   bash build_windows.sh --clean    # 删掉 build/ 从零重来（慢，仅在换配置时用）
+#   JOBS=8 bash build_windows.sh     # 手动指定并行度（默认自动取核数，上限 8）
 #   CMAKE_BIN="D:/cmake-3.31/bin/cmake.exe" bash build_windows.sh   # 用已有 3.31
 #
 # 脚本请放在 IQmol-src/ 根目录，或 IQmol-src/scripts/ 下。
 # 把交付的 modules_CMakeLists.txt 放在同一目录可离线补全缺失文件。
+#
+# 重要：默认【增量】。configure 成功后不要删 build/，重跑本脚本只会编译
+# 改动过的部分；编译中断后直接重跑即可续上，不会从头开始。
 set -u
 
 # ===== 可调参数（可用环境变量覆盖）=====
 CMAKE_BIN="${CMAKE_BIN:-cmake}"
 MINGW_PREFIX="${MINGW_PREFIX:-/d/msys64/mingw64}"
-JOBS="${JOBS:-4}"
+# 并行度自动取 CPU 核数，但上限 8：OpenBabel / QGLViewer 部分编译单元峰值
+# 内存可达 1~2GB，核数多的机器开满容易 OOM，反而更慢。
+JOBS="${JOBS:-$(nproc 2>/dev/null || echo 4)}"
+if [ "$JOBS" -gt 8 ] 2>/dev/null; then JOBS=8; fi
 
 # 推导源码根：脚本在 scripts/ 下则取上一级，否则取脚本所在目录
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -104,29 +112,52 @@ for d in maeparser-v1.2.3 coordgen-master rapidjson-1.1.0; do
   fi
 done
 
-# ===== 4. configure =====
+# ===== 4. configure（增量：build/ 已配置过就跳过）=====
 BUILD_DIR="$SRC_DIR/build"
-rm -rf "$BUILD_DIR"
+CLEAN="${CLEAN:-0}"
+case "${1:-}" in
+  --clean|--reconfigure|-c) CLEAN=1 ;;
+esac
+
+if [ "$CLEAN" = "1" ] && [ -d "$BUILD_DIR" ]; then
+  echo "==> 清理旧构建目录 --clean（会重新 configure，较慢）..."
+  rm -rf "$BUILD_DIR"
+fi
 mkdir -p "$BUILD_DIR"
 cd "$BUILD_DIR" || exit 1
 
-"$CMAKE_BIN" .. \
-  -G "MinGW Makefiles" \
-  -DCMAKE_BUILD_TYPE=Release \
-  -DCMAKE_PREFIX_PATH="$MINGW_PREFIX" \
-  -DCMAKE_CXX_FLAGS="-fpermissive -std=gnu++17 -Wno-deprecated" \
-  -DCMAKE_MAKE_PROGRAM="mingw32-make" \
-  -DBOOST_ROOT="$MINGW_PREFIX"
-if [ $? -ne 0 ]; then
-  echo "ERROR: cmake configure 失败，详见上方输出"
-  exit 1
+if [ -f "$BUILD_DIR/CMakeCache.txt" ]; then
+  # 已配置过：直接沿用缓存编译。若 CMakeLists 有改动，make 会自动触发重配。
+  echo "==> 检测到已有配置，跳过 configure（要重配请加 --clean）"
+else
+  echo "==> 首次 configure...（约 1~5 分钟，Windows 下 CMake 需逐个编译检查程序）"
+  "$CMAKE_BIN" .. \
+    -G "MinGW Makefiles" \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_PREFIX_PATH="$MINGW_PREFIX" \
+    -DCMAKE_CXX_FLAGS="-fpermissive -std=gnu++17 -Wno-deprecated" \
+    -DCMAKE_MAKE_PROGRAM="mingw32-make" \
+    -DBOOST_ROOT="$MINGW_PREFIX"
+  if [ $? -ne 0 ]; then
+    echo "ERROR: cmake configure 失败，详见上方输出"
+    exit 1
+  fi
 fi
 
 # ===== 5. 编译 =====
-mingw32-make -j"$JOBS"
+# 优先 mingw32-make，某些环境只装了 GNU make（不带前缀）
+MAKE_BIN="mingw32-make"
+command -v "$MAKE_BIN" >/dev/null 2>&1 || MAKE_BIN="make"
+
+echo "==> 开始编译（并行 -j$JOBS，首次约 20~40 分钟）..."
+"$MAKE_BIN" -j"$JOBS"
 if [ $? -ne 0 ]; then
-  echo "ERROR: 编译失败，请把输出贴出以便排查（GCC 16.x 较新，可能需要额外补丁）"
+  echo "ERROR: 编译失败。请往上翻找第一条 'error:' 并贴出。"
+  echo "       提示：直接重跑本脚本可续编（已完成的 .o 不会重编）。"
   exit 1
 fi
 
-echo "==> 构建完成，产物: $BUILD_DIR/IQmol.exe"
+echo "==> 构建完成"
+ls -la "$BUILD_DIR"/IQmol.exe 2>/dev/null || \
+  find "$BUILD_DIR" -maxdepth 2 -name "IQmol*.exe" 2>/dev/null || \
+  echo "    未找到 IQmol.exe，请检查 build/ 下产物"

@@ -145,8 +145,9 @@ tar -xzf D:\Downloads\IQmol-openbabel-formats-fix.tar.gz
 > uninstall 保护随之丢失、174 行冲突会复现。顺序必须是：**先完整包 → 再打上面两个补丁包**。
 
 四个包（子模块 / OpenBabel deps / OpenBabel fix / OpenBabel formats）都解压到位后，推荐用
-`scripts/build_windows.sh` 一键构建——它会自动下载 CMake 3.31、补全缺失的
-`modules/CMakeLists.txt`、检查 OpenBabel 依赖，再 configure + 编译。
+`scripts/build_windows.sh` 一键构建——默认**增量**：首次 configure + 编译，之后只要 `build/`
+目录还在，重跑脚本会跳过 configure 直接续编，不会从头再来。脚本会自动下载 CMake 3.31、补全
+缺失的 `modules/CMakeLists.txt`、检查 OpenBabel 依赖。具体命令见 `doc/编译-照着敲.md`。
 
 ### 注意事项
 
