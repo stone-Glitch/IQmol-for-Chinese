@@ -115,6 +115,31 @@ cd /d D:\IQmol\modules\openbabel
 tar -xzf D:\Downloads\IQmol-openbabel-deps.tar.gz
 ```
 
+### OpenBabel 构建补丁（必看）
+
+子模块包解压后，OpenBabel 在 CMake 3.x 下还会因两处问题 configure 失败：
+
+1. `modules/openbabel/src/formats/libinchi/` 与 `modules/openbabel/test/` 目录在解压时偶有缺失；
+2. OpenBabel 的 `ADD_CUSTOM_TARGET(uninstall)` 与 yaml-cpp 同名目标冲突（CMP0002）。
+
+本仓库额外提供一个补丁包，解压到 **`modules/openbabel/`** 即可同时修好（含加了重名保护的 `CMakeLists.txt`）：
+
+| 文件 | 大小 |
+|---|---|
+| `IQmol-openbabel-fix.tar.gz` | 32 MB |
+
+```bat
+cd /d D:\IQmol\modules\openbabel
+tar -xzf D:\Downloads\IQmol-openbabel-fix.tar.gz
+```
+
+> 务必用 **MINGW64 终端的 `tar`** 解压（不要用 360 压缩——它常只解出中间层 `.tar`）。
+> 若不想补全 `test/` 单测目录，可加 `-DENABLE_TESTS=OFF`，但 `test/` 目录仍需存在。
+
+三个包（子模块 / OpenBabel deps / OpenBabel fix）都解压到位后，推荐用
+`scripts/build_windows.sh` 一键构建——它会自动下载 CMake 3.31、补全缺失的
+`modules/CMakeLists.txt`、检查 OpenBabel 依赖，再 configure + 编译。
+
 ### 注意事项
 
 - 下载慢时，把链接中的 `https://github.com/` 换成 `https://ghfast.top/https://github.com/` 走国内镜像

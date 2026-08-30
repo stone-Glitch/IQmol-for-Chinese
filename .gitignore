@@ -39,3 +39,6 @@ qrc_*.cpp
 IQmol-submodules.zip
 IQmol-submodules.tar.gz
 part_0?
+
+# ---- build_windows.sh 自动下载的 portable CMake（生成于源码树下 .tools/，勿提交）----
+.tools/
