@@ -15,7 +15,16 @@ set -u
 
 # ===== 可调参数（可用环境变量覆盖）=====
 CMAKE_BIN="${CMAKE_BIN:-cmake}"
-MINGW_PREFIX="${MINGW_PREFIX:-/d/msys64/mingw64}"
+# MINGW64 终端里 MinGW 根目录就是 /mingw64（MSYS2 装在哪个盘都一样），
+# 不要写成 /c/msys64/mingw64 或 /d/msys64/mingw64 —— 那是错的，会让 CMake
+# 找不到 Qt / Boost，Generate 阶段直接失败。
+MINGW_PREFIX="${MINGW_PREFIX:-/mingw64}"
+if [ ! -d "$MINGW_PREFIX" ]; then
+  for _p in /mingw64 /c/msys64/mingw64 /d/msys64/mingw64 /c/msys2/mingw64; do
+    if [ -d "$_p" ]; then MINGW_PREFIX="$_p"; break; fi
+  done
+fi
+echo "==> MinGW 前缀: $MINGW_PREFIX"
 # 并行度自动取 CPU 核数，但上限 8：OpenBabel / QGLViewer 部分编译单元峰值
 # 内存可达 1~2GB，核数多的机器开满容易 OOM，反而更慢。
 JOBS="${JOBS:-$(nproc 2>/dev/null || echo 4)}"
@@ -126,10 +135,16 @@ fi
 mkdir -p "$BUILD_DIR"
 cd "$BUILD_DIR" || exit 1
 
-if [ -f "$BUILD_DIR/CMakeCache.txt" ]; then
+# 判定"配置成功"必须同时有 CMakeCache.txt 和 Makefile：上次 configure 失败时
+# 会留下 CMakeCache.txt 却没有 Makefile，只看前者会误判为已配好，
+# 进而直接进 make 报 "No targets specified and no makefile found"。
+if [ -f "$BUILD_DIR/CMakeCache.txt" ] && [ -f "$BUILD_DIR/Makefile" ]; then
   # 已配置过：直接沿用缓存编译。若 CMakeLists 有改动，make 会自动触发重配。
   echo "==> 检测到已有配置，跳过 configure（要重配请加 --clean）"
 else
+  if [ -f "$BUILD_DIR/CMakeCache.txt" ]; then
+    echo "==> 上次 configure 未完成（有 CMakeCache.txt 但无 Makefile），重新配置"
+  fi
   echo "==> 首次 configure...（约 1~5 分钟，Windows 下 CMake 需逐个编译检查程序）"
   "$CMAKE_BIN" .. \
     -G "MinGW Makefiles" \
