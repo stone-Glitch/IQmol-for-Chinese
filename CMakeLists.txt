@@ -65,6 +65,36 @@ if (LINUX)
 else()
    include_directories(modules/openbabel/include)
    include_directories(${CMAKE_CURRENT_BINARY_DIR}/modules/openbabel/include)
+   # babelconfig.h 是 OpenBabel 在 configure 期由 src/config.h.cmake 生成的头文件，
+   # 嵌入构建时偶发未生成，会导致 elements.h 等包含 <openbabel/babelconfig.h> 失败。
+   # 这里先用已知 3.1.1 取值显式生成一份兜底；若 OpenBabel 自身 configure_file 随后运行，
+   # 会用其正确版本覆盖本文件。
+   set(_OB_DATADIR "${CMAKE_CURRENT_SOURCE_DIR}/modules/openbabel/data")
+   set(BABEL_DATADIR "${_OB_DATADIR}")
+   set(BABEL_MAJ_VER 3)
+   set(BABEL_MIN_VER 1)
+   set(BABEL_PATCH_VER 1)
+   set(BABEL_VERSION "3.1.1")
+   set(MODULE_EXTENSION ".obf")
+   set(OB_MODULE_PATH "${_OB_DATADIR}")
+   set(OB_SHARED_PTR_HEADER "memory")
+   set(OB_SHARED_PTR_IMPLEMENTATION "std::shared_ptr")
+   set(HAVE_SHARED_POINTER 1)
+   set(HAVE_STD_SHARED_PTR 1)
+   set(HAVE_GCC_VISIBILITY 1)
+   set(HAVE_CONIO_H 1)
+   set(HAVE_SYS_TIME_H 1)
+   set(HAVE_TIME_H 1)
+   set(HAVE_SSTREAM 1)
+   set(HAVE_CLOCK_T 1)
+   set(HAVE_RINT 1)
+   set(HAVE_SNPRINTF 1)
+   set(HAVE_STRCASECMP 1)
+   set(HAVE_STRNCASECMP 1)
+   file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/modules/openbabel/include/openbabel)
+   configure_file(
+      ${CMAKE_CURRENT_SOURCE_DIR}/modules/openbabel/src/config.h.cmake
+      ${CMAKE_CURRENT_BINARY_DIR}/modules/openbabel/include/openbabel/babelconfig.h)
    add_subdirectory(modules/openbabel  EXCLUDE_FROM_ALL)
 endif()
 
