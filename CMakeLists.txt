@@ -108,9 +108,12 @@ elseif (APPLE)
       link_directories(/opt/homebrew/lib/)
    endif()
 elseif (WIN32)
-   include_directories(modules/zstd/lib)
+   # 注意: 上游此分支原引用 modules/zstd, 但该目录在上游仓库中并不存在
+   # (仅有 9 个子模块, 无 zstd), 故原写法在 Windows 上 configure 必崩。
+   # libarchive 的 ENABLE_ZSTD 为可选依赖, 找不到 zstd 会自动跳过,
+   # IQmol 不需要读写 .zst 压缩包, 因此这里只编 libarchive 本身。
    include_directories(modules/libarchive)
-   add_subdirectory(modules/zstd/build/cmake EXCLUDE_FROM_ALL)
+   add_subdirectory(modules/libarchive EXCLUDE_FROM_ALL)
    set(ARCHIVE_LIBRARY ${CMAKE_BINARY_DIR}/modules/libarchive/libarchive/libarchive.a bcrypt)
 endif()
 

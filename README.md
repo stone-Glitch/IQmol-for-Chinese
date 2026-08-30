@@ -100,6 +100,21 @@ tar -xzf IQmol-submodules.tar.gz    # 在仓库根目录执行；MSYS2 终端最
 > 选 tar.gz 而不是 zip：tar.gz 把文件打包成一个流再整体压缩，对 4.9 万个小文件
 > 效率高得多——同样内容 tar.gz 只要 73 MB，zip 要 108 MB。
 
+### OpenBabel 额外依赖（必看）
+
+子模块解压后，OpenBabel 在编译期还会联网拉取 3 个依赖（maeparser / coordgenlibs / rapidjson），
+国内网络拉不到会直接 `FATAL_ERROR`。本仓库另提供一个预置包（已按 `external/` 布局摆好），
+解压到 **`modules/openbabel/`** 即可离线构建：
+
+| 文件 | 大小 |
+|---|---|
+| `IQmol-openbabel-deps.tar.gz` | 1.2 MB |
+
+```bat
+cd /d D:\IQmol\modules\openbabel
+tar -xzf D:\Downloads\IQmol-openbabel-deps.tar.gz
+```
+
 ### 注意事项
 
 - 下载慢时，把链接中的 `https://github.com/` 换成 `https://ghfast.top/https://github.com/` 走国内镜像
@@ -107,6 +122,7 @@ tar -xzf IQmol-submodules.tar.gz    # 在仓库根目录执行；MSYS2 终端最
 - **解压到仓库根目录**，不是 `modules` 里面——压缩包顶层就是 `modules/`。
 - **仓库放短路径**（如 `D:\IQmol`），Windows 260 字符路径上限会导致深层目录解压失败。
 - 解压后**不要**再运行 `git submodule update --init --recursive`，否则会重新联网克隆覆盖。
+- **CMake 必须用 3.x（3.31）**，不要用 4.x（详见 `doc/构建说明-中文版.md`）。
 
 完整步骤见该分支下的 `submodules-package/使用说明.md`。
 
