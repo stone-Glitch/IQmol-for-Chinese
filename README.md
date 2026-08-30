@@ -117,26 +117,34 @@ tar -xzf D:\Downloads\IQmol-openbabel-deps.tar.gz
 
 ### OpenBabel 构建补丁（必看）
 
-子模块包解压后，OpenBabel 在 CMake 3.x 下还会因两处问题 configure 失败：
+子模块包解压后，OpenBabel 在 CMake 3.x 下还会因两类问题 configure 失败：
 
-1. `modules/openbabel/src/formats/libinchi/` 与 `modules/openbabel/test/` 目录在解压时偶有缺失；
-2. OpenBabel 的 `ADD_CUSTOM_TARGET(uninstall)` 与 yaml-cpp 同名目标冲突（CMP0002）。
+1. **文件缺失**：`src/formats/libinchi/`、`test/` 目录，以及 `src/formats/xml/`、
+   `src/formats/json/` 下的部分源文件（报 `not an existing directory` 或
+   `No SOURCES given to target: pubchem / xmlformat / ...`）；
+2. **目标重名**：OpenBabel 的 `ADD_CUSTOM_TARGET(uninstall)` 与 yaml-cpp 同名目标冲突（CMP0002）。
 
-本仓库额外提供一个补丁包，解压到 **`modules/openbabel/`** 即可同时修好（含加了重名保护的 `CMakeLists.txt`）：
+本仓库额外提供两个补丁包，**都解压到 `modules/openbabel/`**：
 
-| 文件 | 大小 |
-|---|---|
-| `IQmol-openbabel-fix.tar.gz` | 32 MB |
+| 文件 | 大小 | 说明 |
+|---|---|---|
+| `IQmol-openbabel-fix.tar.gz` | 32 MB | 补全 `libinchi/`、`test/` + 给 uninstall 加重名保护 |
+| `IQmol-openbabel-formats-fix.tar.gz` | 1.3 MB | 补全 `src/formats/` 全部格式源文件（xml / json 等 128 个 `.cpp`） |
 
 ```bat
 cd /d D:\IQmol\modules\openbabel
 tar -xzf D:\Downloads\IQmol-openbabel-fix.tar.gz
+tar -xzf D:\Downloads\IQmol-openbabel-formats-fix.tar.gz
 ```
 
-> 务必用 **MINGW64 终端的 `tar`** 解压（不要用 360 压缩——它常只解出中间层 `.tar`）。
+> ⚠️ **务必用 MINGW64 终端的 `tar` 解压，不要用 360 压缩 / 7-Zip 图形工具**——
+> 后者解 `.tar.gz` 会**静默丢文件**（本项目已连续两轮因此缺文件），且常只解出中间层 `.tar`。
 > 若不想补全 `test/` 单测目录，可加 `-DENABLE_TESTS=OFF`，但 `test/` 目录仍需存在。
 
-三个包（子模块 / OpenBabel deps / OpenBabel fix）都解压到位后，推荐用
+> ⚠️ **顺序陷阱**：重新解压完整子模块包会把 `openbabel/CMakeLists.txt` 覆盖回**未修版**，
+> uninstall 保护随之丢失、174 行冲突会复现。顺序必须是：**先完整包 → 再打上面两个补丁包**。
+
+四个包（子模块 / OpenBabel deps / OpenBabel fix / OpenBabel formats）都解压到位后，推荐用
 `scripts/build_windows.sh` 一键构建——它会自动下载 CMake 3.31、补全缺失的
 `modules/CMakeLists.txt`、检查 OpenBabel 依赖，再 configure + 编译。
 
