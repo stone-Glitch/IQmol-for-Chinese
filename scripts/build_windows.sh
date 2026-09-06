@@ -41,24 +41,41 @@ MODULES_DIR="$SRC_DIR/modules"
 
 echo "==> 源码根: $SRC_DIR"
 
+# ===== 0. 通用下载函数：优先 ghfast.top 镜像，失败再直连 =====
+# raw.githubusercontent.com / github.com 在墙内直连基本必挂（Connection reset），
+# 所以任何联网下载都必须先走 ghfast.top 镜像。
+fetch_from_github() {
+  # 用法: fetch_from_github <输出路径> <原始URL>
+  local OUT="$1"; local URL="$2"; local U
+  for U in "https://ghfast.top/$URL" "$URL"; do
+    echo "    尝试 $U"
+    if command -v curl >/dev/null 2>&1; then
+      curl -fsSL --connect-timeout 15 "$U" -o "$OUT" && return 0
+    elif command -v wget >/dev/null 2>&1; then
+      wget -qO "$OUT" "$U" && return 0
+    fi
+  done
+  return 1
+}
+
 # ===== 1. 检查/补全 modules/CMakeLists.txt（构建 libQGLViewer 的聚合脚本）=====
 if [ ! -f "$MODULES_DIR/CMakeLists.txt" ]; then
   echo "==> 缺失 modules/CMakeLists.txt，尝试恢复..."
-  LOCAL_FIX="$SCRIPT_DIR/modules_CMakeLists.txt"
-  if [ -f "$LOCAL_FIX" ]; then
+  # 兼容脚本放源码根 / 放 scripts/ 两种位置
+  LOCAL_FIX=""
+  for CAND in "$SCRIPT_DIR/modules_CMakeLists.txt" "$SCRIPT_DIR/scripts/modules_CMakeLists.txt"; do
+    [ -f "$CAND" ] && LOCAL_FIX="$CAND" && break
+  done
+  if [ -n "$LOCAL_FIX" ]; then
     cp "$LOCAL_FIX" "$MODULES_DIR/CMakeLists.txt"
     echo "    已从本地 $LOCAL_FIX 复制"
   else
     URL="https://raw.githubusercontent.com/stone-Glitch/IQmol-for-Chinese/main/modules/CMakeLists.txt"
-    echo "    从 $URL 下载..."
-    if command -v curl >/dev/null 2>&1; then
-      curl -fsSL "$URL" -o "$MODULES_DIR/CMakeLists.txt"
-    elif command -v wget >/dev/null 2>&1; then
-      wget -qO "$MODULES_DIR/CMakeLists.txt" "$URL"
-    else
-      echo "ERROR: 无 curl/wget，且同目录无 modules_CMakeLists.txt，请手动放置该文件到 $MODULES_DIR/CMakeLists.txt"
+    echo "    下载补全文件..."
+    fetch_from_github "$MODULES_DIR/CMakeLists.txt" "$URL" || {
+      echo "ERROR: 下载失败。请手动放置 modules_CMakeLists.txt 到 $SCRIPT_DIR/"
       exit 1
-    fi
+    }
   fi
   if [ ! -f "$MODULES_DIR/CMakeLists.txt" ]; then
     echo "ERROR: 仍无法获取 modules/CMakeLists.txt，请手动放置后重试"
@@ -130,12 +147,8 @@ if [ -f "$OB_CML" ] && ! grep -q "NOT TARGET uninstall" "$OB_CML"; then
     echo "    已用 $FIX_CML 覆盖"
   else
     URL="https://raw.githubusercontent.com/stone-Glitch/IQmol-for-Chinese/main/scripts/openbabel_CMakeLists.txt"
-    echo "    本地无修复文件，从 $URL 下载..."
-    if command -v curl >/dev/null 2>&1; then
-      curl -fsSL "$URL" -o "$OB_CML"
-    elif command -v wget >/dev/null 2>&1; then
-      wget -qO "$OB_CML" "$URL"
-    fi
+    echo "    本地无修复文件，下载..."
+    fetch_from_github "$OB_CML" "$URL" || true
   fi
   if grep -q "NOT TARGET uninstall" "$OB_CML" 2>/dev/null; then
     echo "    修复完成"
