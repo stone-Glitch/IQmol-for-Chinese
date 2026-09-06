@@ -262,12 +262,19 @@ if [ $RC -ne 0 ]; then
   echo ""
   echo "ERROR: 编译失败（以下自动提取第一条编译错误及其上下文）"
   echo "==================== 第一条 error 上下文 ===================="
-  # 只抓小写 error:(编译错误), 不要抓 "Error 2" 汇总行(会把真错误挤出 head)
-  grep -n "error:" "$BUILD_DIR/cmake_make.log" | head -5
+  # gcc/g++ 的 C++ 错误是小写 error:；gfortran 是大写 "Error:"/"Fatal Error:"；
+  # 链接错误主行(undefined reference)本身无 error: 字样。
+  # 用 -i 忽略大小写抓 error:（带冒号，天然排除 make 的 "Error 2" 汇总行）。
+  grep -in "error:" "$BUILD_DIR/cmake_make.log" | head -8
+  echo "---- 链接错误（undefined reference 等）----"
+  grep -in "undefined reference\|cannot find -l" "$BUILD_DIR/cmake_make.log" | head -5
   echo "---- 第一条 error 前后文 ----"
-  FIRST=$(grep -m1 -n "error:" "$BUILD_DIR/cmake_make.log" | cut -d: -f1)
+  FIRST=$(grep -inm1 "error:" "$BUILD_DIR/cmake_make.log" | cut -d: -f1)
   if [ -n "$FIRST" ]; then
     sed -n "$((FIRST>8?FIRST-8:1)),$((FIRST+12))p" "$BUILD_DIR/cmake_make.log"
+  else
+    echo "(未匹配到 error:，显示日志最后 50 行兜底)"
+    tail -50 "$BUILD_DIR/cmake_make.log"
   fi
   echo "============================================================"
   echo "把上面这段完整贴给助手即可定位。提示：直接重跑本脚本可续编（已完成的 .o 不会重编）。"
