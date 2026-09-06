@@ -164,9 +164,15 @@ else
     -DCMAKE_PREFIX_PATH="$MINGW_PREFIX" \
     -DCMAKE_CXX_FLAGS="-fpermissive -std=gnu++17 -Wno-deprecated" \
     -DCMAKE_MAKE_PROGRAM="mingw32-make" \
-    -DBOOST_ROOT="$MINGW_PREFIX"
-  if [ $? -ne 0 ]; then
-    echo "ERROR: cmake configure 失败，详见上方输出"
+    -DBOOST_ROOT="$MINGW_PREFIX" 2>&1 | tee "$BUILD_DIR/cmake_config.log"
+  RC=${PIPESTATUS[0]}   # 取 cmake 的退出码而非 tee 的
+  if [ $RC -ne 0 ]; then
+    echo ""
+    echo "ERROR: cmake configure 失败（真正的错误往往被刷出屏幕，以下自动提取）"
+    echo "==================== CMake Error 上下文 ===================="
+    awk '/CMake Error/{c=15} c>0{print; c--}' "$BUILD_DIR/cmake_config.log" | head -80
+    echo "============================================================"
+    echo "把上面这段完整贴给助手即可定位。"
     exit 1
   fi
 fi
@@ -177,10 +183,15 @@ MAKE_BIN="mingw32-make"
 command -v "$MAKE_BIN" >/dev/null 2>&1 || MAKE_BIN="make"
 
 echo "==> 开始编译（并行 -j$JOBS，首次约 20~40 分钟）..."
-"$MAKE_BIN" -j"$JOBS"
-if [ $? -ne 0 ]; then
-  echo "ERROR: 编译失败。请往上翻找第一条 'error:' 并贴出。"
-  echo "       提示：直接重跑本脚本可续编（已完成的 .o 不会重编）。"
+"$MAKE_BIN" -j"$JOBS" 2>&1 | tee "$BUILD_DIR/cmake_make.log"
+RC=${PIPESTATUS[0]}
+if [ $RC -ne 0 ]; then
+  echo ""
+  echo "ERROR: 编译失败（以下自动提取第一条编译错误及其上下文）"
+  echo "==================== 第一条 error 上下文 ===================="
+  awk '/error:/{c=10; print; next} /Error [12]/{c=10} c>0{print; c--}' "$BUILD_DIR/cmake_make.log" | head -60
+  echo "============================================================"
+  echo "把上面这段完整贴给助手即可定位。提示：直接重跑本脚本可续编（已完成的 .o 不会重编）。"
   exit 1
 fi
 
