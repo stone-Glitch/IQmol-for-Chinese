@@ -99,25 +99,27 @@ else()
 endif()
 
 
+#-------------------------------------------------------------------
+# 子模块链接约定: 所有平台一律通过 CMake target 名链接, 由 CMake
+# 管理构建顺序与产物路径; Linux 端使用系统库时才直接用库名。
+# 不要写死产物文件路径——各子模块产物命名规则不一(有的重命名,
+# 有的受 BUILD_SHARED_LIBS 影响), 写死路径在 Windows/MinGW 下必报
+# "No rule to make target"。
+#-------------------------------------------------------------------
+
+# libssh2 (静态库 target: libssh2_static)
 if (LINUX)
-   set(LIBSSH2_LIBRARY ssh2)
-elseif (APPLE)
-   include_directories(modules/libssh2/include)
-   add_subdirectory(modules/libssh2  EXCLUDE_FROM_ALL)
    set(LIBSSH2_LIBRARY ssh2)
 else (WIN32)
    include_directories(modules/libssh2/include)
    add_subdirectory(modules/libssh2  EXCLUDE_FROM_ALL)
-   # libssh2 1.11 静态库 target 名为 libssh2_static(产物 OUTPUT_NAME=libssh2)。
-   # 原先写死文件路径 ${CMAKE_BINARY_DIR}/.../libssh2.a: 构建树缺 libssh2 子构建时
-   # 链接阶段报 "No rule to make target 'modules/libssh2/src/libssh2.a'"(MinGW)。
-   # 改用 target 名让 CMake 自动管理构建顺序与产物路径。
    set(LIBSSH2_LIBRARY libssh2_static)
 endif()
 
 
+# OpenMesh (上游三平台 target 名不同, 保持原样——Windows 侧已实测可用)
 if (LINUX)
-   find_package(OpenMesh REQUIRED) 
+   find_package(OpenMesh REQUIRED)
    set(OPENMESH_LIBRARIES OpenMeshCore OpenMeshTools)
 elseif (APPLE)
    include_directories(modules/openmesh/src)
@@ -130,23 +132,21 @@ else (WIN32)
 endif()
 
 
+# libarchive (静态库 target: archive_static; bcrypt 为 Windows 下的 SHA 依赖。
+# 上游 WIN32 分支原引用不存在的 modules/zstd 导致 configure 必崩, 已移除;
+# zstd 为 libarchive 可选依赖, 缺失时自动跳过, IQmol 无需 .zst 支持)
 if (LINUX)
    find_package(LibArchive REQUIRED)
    set(ARCHIVE_LIBRARY ${LibArchive_LIBRARIES})
 elseif (APPLE)
    find_package(ZSTD REQUIRED)
-   include_directories(modules/libarchive/libarchive)
-   add_subdirectory(modules/libarchive EXCLUDE_FROM_ALL)
-   set(ARCHIVE_LIBRARY archive)
    if (EXISTS /opt/homebrew/lib/)
       link_directories(/opt/homebrew/lib/)
    endif()
-elseif (WIN32)
-   # 注意: 上游此分支原引用 modules/zstd, 但该目录在上游仓库中并不存在
-   # (仅有 9 个子模块, 无 zstd), 故原写法在 Windows 上 configure 必崩。
-   # libarchive 的 ENABLE_ZSTD 为可选依赖, 找不到 zstd 会自动跳过,
-   # IQmol 不需要读写 .zst 压缩包, 因此这里只编 libarchive 本身。
-   # 链接用 target 名 archive_static(坑: BUILD_SHARED_LIBS 默认 ON 时 Windows 产物名是 libarchive_static.a 而非 libarchive.a, 写死路径必报 No rule to make target); bcrypt 为 libarchive 在 Windows 的 SHA 依赖
+   include_directories(modules/libarchive/libarchive)
+   add_subdirectory(modules/libarchive EXCLUDE_FROM_ALL)
+   set(ARCHIVE_LIBRARY archive_static)
+else (WIN32)
    include_directories(modules/libarchive)
    add_subdirectory(modules/libarchive EXCLUDE_FROM_ALL)
    set(ARCHIVE_LIBRARY archive_static bcrypt)
