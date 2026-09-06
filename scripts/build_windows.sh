@@ -262,18 +262,18 @@ if [ $RC -ne 0 ]; then
   echo ""
   echo "ERROR: 编译失败（以下自动提取第一条编译错误及其上下文）"
   echo "==================== 第一条 error 上下文 ===================="
-  # gcc/g++ 的 C++ 错误是小写 error:；gfortran 是大写 "Error:"/"Fatal Error:"；
-  # 链接错误主行(undefined reference)本身无 error: 字样。
-  # 用 -i 忽略大小写抓 error:（带冒号，天然排除 make 的 "Error 2" 汇总行）。
-  grep -in "error:" "$BUILD_DIR/cmake_make.log" | head -8
-  echo "---- 链接错误（undefined reference 等）----"
-  grep -in "undefined reference\|cannot find -l" "$BUILD_DIR/cmake_make.log" | head -5
+  # 多模式提取：小写/大写 error:；CMake Error at ...（无冒号，构建期重配失败）；
+  # process_begin/CreateProcess（MinGW make 找不到命令）；Configuring incomplete；
+  # 链接错误 undefined reference / cannot find -l。make 汇总行 "Error 2" 均不匹配。
+  grep -in "error:\|CMake Error\|Configuring incomplete\|process_begin\|CreateProcess\|undefined reference\|cannot find -l" "$BUILD_DIR/cmake_make.log" | head -10
+  echo "---- 失败目标链（make recipe 行）----"
+  grep -n "recipe for target\|Error 1\|Error 2" "$BUILD_DIR/cmake_make.log" | head -5
   echo "---- 第一条 error 前后文 ----"
-  FIRST=$(grep -inm1 "error:" "$BUILD_DIR/cmake_make.log" | cut -d: -f1)
+  FIRST=$(grep -inm1 "error:\|CMake Error\|Configuring incomplete\|process_begin\|CreateProcess" "$BUILD_DIR/cmake_make.log" | cut -d: -f1)
   if [ -n "$FIRST" ]; then
-    sed -n "$((FIRST>8?FIRST-8:1)),$((FIRST+12))p" "$BUILD_DIR/cmake_make.log"
+    sed -n "$((FIRST>8?FIRST-8:1)),$((FIRST+15))p" "$BUILD_DIR/cmake_make.log"
   else
-    echo "(未匹配到 error:，显示日志最后 50 行兜底)"
+    echo "(未匹配到任何错误模式，显示日志最后 50 行兜底)"
     tail -50 "$BUILD_DIR/cmake_make.log"
   fi
   echo "============================================================"
