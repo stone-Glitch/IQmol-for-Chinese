@@ -146,9 +146,10 @@ elseif (WIN32)
    # (仅有 9 个子模块, 无 zstd), 故原写法在 Windows 上 configure 必崩。
    # libarchive 的 ENABLE_ZSTD 为可选依赖, 找不到 zstd 会自动跳过,
    # IQmol 不需要读写 .zst 压缩包, 因此这里只编 libarchive 本身。
+   # 链接用 target 名 archive_static(坑: BUILD_SHARED_LIBS 默认 ON 时 Windows 产物名是 libarchive_static.a 而非 libarchive.a, 写死路径必报 No rule to make target); bcrypt 为 libarchive 在 Windows 的 SHA 依赖
    include_directories(modules/libarchive)
    add_subdirectory(modules/libarchive EXCLUDE_FROM_ALL)
-   set(ARCHIVE_LIBRARY ${CMAKE_BINARY_DIR}/modules/libarchive/libarchive/libarchive.a bcrypt)
+   set(ARCHIVE_LIBRARY archive_static bcrypt)
 endif()
 
 
