@@ -158,6 +158,33 @@ if [ -f "$OB_CML" ] && ! grep -q "NOT TARGET uninstall" "$OB_CML"; then
   fi
 fi
 
+# ===== 2c. 检查/替换 openbabel/data 生成逻辑(Windows 无法执行 bin2hex.pl) =====
+# 原版用 perl 生成 bondtyp.h 等 9 个数据头, MinGW 不认 shebang → 生成失败
+# → 编译报 "'BondTypeData' was not declared"。
+# 修复版改为优先复制 data/pregen/ 下的预生成头(见 IQmol-data-headers.tar.gz)。
+DATA_CML="$MODULES_DIR/openbabel/data/CMakeLists.txt"
+if [ -f "$DATA_CML" ] && ! grep -q "pregen" "$DATA_CML"; then
+  echo "==> 检测到 data/CMakeLists.txt 为原版, 自动替换为预生成头方案..."
+  FIX_DATA=""
+  for CAND in "$SCRIPT_DIR/openbabel_data_CMakeLists.txt" "$SCRIPT_DIR/scripts/openbabel_data_CMakeLists.txt"; do
+    [ -f "$CAND" ] && FIX_DATA="$CAND" && break
+  done
+  if [ -n "$FIX_DATA" ]; then
+    cp "$FIX_DATA" "$DATA_CML"
+    echo "    已用 $FIX_DATA 覆盖"
+  else
+    URL="https://raw.githubusercontent.com/stone-Glitch/IQmol-for-Chinese/main/scripts/openbabel_data_CMakeLists.txt"
+    echo "    本地无修复文件, 下载..."
+    fetch_from_github "$DATA_CML" "$URL" || true
+  fi
+fi
+if [ -f "$DATA_CML" ] && grep -q "pregen" "$DATA_CML" && [ ! -d "$MODULES_DIR/openbabel/data/pregen" ]; then
+  echo "ERROR: 缺少预生成数据头目录 modules/openbabel/data/pregen/" >&2
+  echo "       请下载 IQmol-data-headers.tar.gz 并在源码根解压:" >&2
+  echo "       cd $SRC_DIR && tar -xzf /d/IQmol/IQmol-data-headers.tar.gz" >&2
+  exit 1
+fi
+
 # ===== 3. 检查 OpenBabel external 依赖（缺了 configure 必崩，直接拦截）=====
 # OpenBabel 缺这三个包时不会跳过，而是尝试联网从 GitHub 下载；
 # 墙内下载失败 → FATAL_ERROR "Failed getting or unpacking Maeparser/coordgen"
