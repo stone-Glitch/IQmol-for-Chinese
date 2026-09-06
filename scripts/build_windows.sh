@@ -284,21 +284,28 @@ fi
 RC=${PIPESTATUS[0]}
 if [ $RC -ne 0 ]; then
   echo ""
-  echo "ERROR: 编译失败（以下自动提取第一条编译错误及其上下文）"
-  echo "==================== 第一条 error 上下文 ===================="
-  # 多模式提取：小写/大写 error:；CMake Error at ...（无冒号，构建期重配失败）；
-  # process_begin/CreateProcess（MinGW make 找不到命令）；Configuring incomplete；
-  # 链接错误 undefined reference / cannot find -l。make 汇总行 "Error 2" 均不匹配。
-  grep -in "error:\|CMake Error\|Configuring incomplete\|process_begin\|CreateProcess\|undefined reference\|cannot find -l" "$BUILD_DIR/cmake_make.log" | head -10
-  echo "---- 失败目标链（make recipe 行）----"
-  grep -n "recipe for target\|Error 1\|Error 2" "$BUILD_DIR/cmake_make.log" | head -5
-  echo "---- 第一条 error 前后文 ----"
-  FIRST=$(grep -inm1 "error:\|CMake Error\|Configuring incomplete\|process_begin\|CreateProcess" "$BUILD_DIR/cmake_make.log" | cut -d: -f1)
+  echo "ERROR: 编译失败（以下自动提取错误现场）"
+  # 错误提取: 单一正则覆盖全部实测过的错误格式, 以后遇到新格式只需在此追加:
+  #   error:                     gcc/g++/collect2; gfortran 的 Error: 靠 -i 大小写通吃
+  #   CMake Error                构建期重配失败(CMake 的 Error 后无冒号)
+  #   Configuring incomplete     重配失败汇总行
+  #   No rule to make target     make 依赖缺失(子模块 target 未进构建树)
+  #   process_begin/CreateProcess   MinGW make 找不到命令
+  #   undefined reference|cannot find -l   链接错误
+  # (make 汇总行 "Error N" 无冒号, 天然不匹配。)
+  ERR_RE="error:|CMake Error|Configuring incomplete|No rule to make target|process_begin|CreateProcess|undefined reference|cannot find -l"
+  MAKE_LOG="$BUILD_DIR/cmake_make.log"
+  echo "==================== 错误现场(自动提取) ===================="
+  grep -in "$ERR_RE" "$MAKE_LOG" | head -10
+  echo "---- 失败目标链 ----"
+  grep -n "recipe for target\|Error [0-9]" "$MAKE_LOG" | head -5
+  echo "---- 首个错误前后文 ----"
+  FIRST=$(grep -inm1 "$ERR_RE" "$MAKE_LOG" | cut -d: -f1)
   if [ -n "$FIRST" ]; then
-    sed -n "$((FIRST>8?FIRST-8:1)),$((FIRST+15))p" "$BUILD_DIR/cmake_make.log"
+    sed -n "$((FIRST>8?FIRST-8:1)),$((FIRST+15))p" "$MAKE_LOG"
   else
-    echo "(未匹配到任何错误模式，显示日志最后 50 行兜底)"
-    tail -50 "$BUILD_DIR/cmake_make.log"
+    echo "(未匹配到已知错误格式, 输出日志最后 50 行)"
+    tail -50 "$MAKE_LOG"
   fi
   echo "============================================================"
   echo "把上面这段完整贴给助手即可定位。提示：直接重跑本脚本可续编（已完成的 .o 不会重编）。"
