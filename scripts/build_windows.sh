@@ -208,7 +208,7 @@ else
     -G "MinGW Makefiles" \
     -DCMAKE_BUILD_TYPE=Release \
     -DCMAKE_PREFIX_PATH="$MINGW_PREFIX" \
-    -DCMAKE_CXX_FLAGS="-fpermissive -std=gnu++17 -Wno-deprecated" \
+    -DCMAKE_CXX_FLAGS="-fpermissive -std=gnu++17 -Wno-deprecated -include cstdint" \
     -DCMAKE_MAKE_PROGRAM="mingw32-make" \
     -DBOOST_ROOT="$MINGW_PREFIX" 2>&1 | tee "$BUILD_DIR/cmake_config.log"
   RC=${PIPESTATUS[0]}   # 取 cmake 的退出码而非 tee 的
