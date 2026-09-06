@@ -206,6 +206,18 @@ if [ -n "$MISSING" ]; then
 fi
 echo "==> OpenBabel external 依赖齐备"
 
+# ===== 3b. 检查 libssh2 源码完整性(链接 IQmol.exe 需要 libssh2 静态库) =====
+# modules/libssh2 是 git submodule, 子模块包漏解压时目录为空;
+# 空目录会让 add_subdirectory 直接 configure 失败, 提前拦截给出明确指引。
+if [ ! -f "$MODULES_DIR/libssh2/CMakeLists.txt" ] || [ ! -f "$MODULES_DIR/libssh2/src/libssh2.c" ]; then
+  echo "ERROR: modules/libssh2 源码缺失或不完整(需要 CMakeLists.txt 与 src/libssh2.c)" >&2
+  echo "       链接 IQmol.exe 需要 libssh2 静态库(SFTP 远程作业功能依赖)。" >&2
+  echo "       请重新解压 IQmol-submodules.tar.gz 补全:" >&2
+  echo "       cd $SRC_DIR && tar -xzf /d/IQmol/IQmol-submodules.tar.gz modules/libssh2" >&2
+  exit 1
+fi
+echo "==> libssh2 源码完整"
+
 # ===== 4. configure（增量：build/ 已配置过就跳过）=====
 BUILD_DIR="$SRC_DIR/build"
 CLEAN="${CLEAN:-0}"
@@ -256,6 +268,15 @@ MAKE_BIN="mingw32-make"
 command -v "$MAKE_BIN" >/dev/null 2>&1 || MAKE_BIN="make"
 
 echo "==> 开始编译（并行 -j$JOBS，首次约 20~40 分钟）..."
+# 构建树自愈: 旧构建树若未包含 libssh2 子构建(早于子模块包解压时配置),
+# 链接 IQmol.exe 会报 "No rule to make target 'modules/libssh2/src/libssh2.a'"。
+# touch 顶层 CMakeLists.txt 令 make 自动重新 configure, 把 libssh2 纳入构建树。
+if [ -f "$BUILD_DIR/CMakeCache.txt" ] && [ -f "$BUILD_DIR/Makefile" ] \
+   && [ ! -f "$BUILD_DIR/modules/libssh2/CMakeFiles/libssh2_static.dir" ] \
+   && [ ! -d "$BUILD_DIR/modules/libssh2" ]; then
+  echo "==> 检测到构建树缺少 libssh2 子构建(旧配置遗留), 触发重新 configure(约 1~5 分钟)..."
+  touch "$SRC_DIR/CMakeLists.txt"
+fi
 "$MAKE_BIN" -j"$JOBS" 2>&1 | tee "$BUILD_DIR/cmake_make.log"
 RC=${PIPESTATUS[0]}
 if [ $RC -ne 0 ]; then
