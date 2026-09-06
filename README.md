@@ -131,10 +131,11 @@ tar -xzf D:\Downloads\IQmol-openbabel-deps.tar.gz
 | `IQmol-openbabel-fix.tar.gz` | 32 MB | 补全 `libinchi/`、`test/` + 给 uninstall 加重名保护 |
 | `IQmol-openbabel-formats-fix.tar.gz` | 1.3 MB | 补全 `src/formats/` 全部格式源文件（xml / json 等 128 个 `.cpp`） |
 
-```bat
-cd /d D:\IQmol\modules\openbabel
-tar -xzf D:\Downloads\IQmol-openbabel-fix.tar.gz
-tar -xzf D:\Downloads\IQmol-openbabel-formats-fix.tar.gz
+```bash
+# 注意：这两个包顶层是 modules/openbabel/，必须在【源码根】解压！
+cd /d/IQmol/IQmol-src
+tar -xzf /d/IQmol/IQmol-openbabel-fix.tar.gz
+tar -xzf /d/IQmol/IQmol-openbabel-formats-fix.tar.gz
 ```
 
 > ⚠️ **务必用 MINGW64 终端的 `tar` 解压，不要用 360 压缩 / 7-Zip 图形工具**——
