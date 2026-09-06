@@ -112,6 +112,39 @@ if echo "$CMAKE_VER" | grep -qE " 4\.[0-9]"; then
   echo "==> 改用 $CMAKE_VER"
 fi
 
+# ===== 2b. 检查/修复 openbabel/CMakeLists.txt 的 uninstall 目标保护 =====
+# yaml-cpp 先定义了 uninstall 目标，OpenBabel 774 行再定义就撞车（CMP0002），
+# configure 报: ADD_CUSTOM_TARGET cannot create target "uninstall"。
+# 修复版在 scripts/openbabel_CMakeLists.txt（与 fix 包内一致）。
+# 注意：若解压过 submodules 完整包，此文件会被覆盖回未修版——本步骤自动修复。
+OB_CML="$MODULES_DIR/openbabel/CMakeLists.txt"
+if [ -f "$OB_CML" ] && ! grep -q "NOT TARGET uninstall" "$OB_CML"; then
+  echo "==> 检测到 openbabel/CMakeLists.txt 缺 uninstall 保护，自动修复..."
+  # 兼容脚本放源码根 / 放 scripts/ 两种位置
+  FIX_CML=""
+  for CAND in "$SCRIPT_DIR/openbabel_CMakeLists.txt" "$SCRIPT_DIR/scripts/openbabel_CMakeLists.txt"; do
+    [ -f "$CAND" ] && FIX_CML="$CAND" && break
+  done
+  if [ -n "$FIX_CML" ]; then
+    cp "$FIX_CML" "$OB_CML"
+    echo "    已用 $FIX_CML 覆盖"
+  else
+    URL="https://raw.githubusercontent.com/stone-Glitch/IQmol-for-Chinese/main/scripts/openbabel_CMakeLists.txt"
+    echo "    本地无修复文件，从 $URL 下载..."
+    if command -v curl >/dev/null 2>&1; then
+      curl -fsSL "$URL" -o "$OB_CML"
+    elif command -v wget >/dev/null 2>&1; then
+      wget -qO "$OB_CML" "$URL"
+    fi
+  fi
+  if grep -q "NOT TARGET uninstall" "$OB_CML" 2>/dev/null; then
+    echo "    修复完成"
+  else
+    echo "ERROR: 修复失败。请手动从 IQmol-openbabel-fix.tar.gz 重新解压到 modules/openbabel/" >&2
+    exit 1
+  fi
+fi
+
 # ===== 3. 检查 OpenBabel external 依赖（缺了 configure 必崩，直接拦截）=====
 # OpenBabel 缺这三个包时不会跳过，而是尝试联网从 GitHub 下载；
 # 墙内下载失败 → FATAL_ERROR "Failed getting or unpacking Maeparser/coordgen"
