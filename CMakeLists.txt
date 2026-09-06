@@ -108,7 +108,11 @@ elseif (APPLE)
 else (WIN32)
    include_directories(modules/libssh2/include)
    add_subdirectory(modules/libssh2  EXCLUDE_FROM_ALL)
-   set(LIBSSH2_LIBRARY ${CMAKE_BINARY_DIR}/modules/libssh2/src/libssh2.a)
+   # libssh2 1.11 静态库 target 名为 libssh2_static(产物 OUTPUT_NAME=libssh2)。
+   # 原先写死文件路径 ${CMAKE_BINARY_DIR}/.../libssh2.a: 构建树缺 libssh2 子构建时
+   # 链接阶段报 "No rule to make target 'modules/libssh2/src/libssh2.a'"(MinGW)。
+   # 改用 target 名让 CMake 自动管理构建顺序与产物路径。
+   set(LIBSSH2_LIBRARY libssh2_static)
 endif()
 
 
