@@ -19,6 +19,7 @@
   with IQmol.  If not, see <http://www.gnu.org/licenses/>.
 
 ********************************************************************************/
+#include <cstdint>  // GCC15+ 需显式包含(cstdint 补丁)
 
 #include "OctreeLayer.h"
 
