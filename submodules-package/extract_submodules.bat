@@ -20,8 +20,8 @@ setlocal EnableDelayedExpansion
 cd /d "%~dp0"
 
 set "PKG=IQmol-submodules.tar.gz"
-set "EXPSIZE=75759260"
-set "EXPMD5=9c0ed6e3527cf0dd1c8d5628cc31538f"
+set "EXPSIZE=75761144"
+set "EXPMD5=6a04b71aa0c29dfe43881830805220c7"
 
 echo.
 echo ============================================================
@@ -107,7 +107,8 @@ echo   %CNT% directories under modules\  (expected 9)
 echo.
 echo   Next step:
 echo     cd /d "%DEST%"
-echo     scripts\build_windows.bat
+echo     bash scripts\build_windows.sh        (MSYS2/MINGW64, recommended)
+echo     scripts\build_windows.bat            (cmd, legacy)
 echo.
 pause
 exit /b 0
