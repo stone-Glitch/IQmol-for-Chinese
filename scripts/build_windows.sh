@@ -112,14 +112,26 @@ if echo "$CMAKE_VER" | grep -qE " 4\.[0-9]"; then
   echo "==> 改用 $CMAKE_VER"
 fi
 
-# ===== 3. 检查 OpenBabel external 依赖（墙内无法联网下载，需预置）=====
+# ===== 3. 检查 OpenBabel external 依赖（缺了 configure 必崩，直接拦截）=====
+# OpenBabel 缺这三个包时不会跳过，而是尝试联网从 GitHub 下载；
+# 墙内下载失败 → FATAL_ERROR "Failed getting or unpacking Maeparser/coordgen"
+# → 整个 configure 白跑。所以这里提前拦截，省得等几分钟才崩。
 OB_EXT="$MODULES_DIR/openbabel/external"
+MISSING=""
 for d in maeparser-v1.2.3 coordgen-master rapidjson-1.1.0; do
-  if [ ! -d "$OB_EXT/$d" ]; then
-    echo "WARN: 缺少 OpenBabel 依赖 $OB_EXT/$d"
-    echo "      请将 IQmol-openbabel-deps.tar.gz 解压到 $MODULES_DIR/openbabel/ 后重试"
-  fi
+  [ -d "$OB_EXT/$d" ] || MISSING="$MISSING $d"
 done
+if [ -n "$MISSING" ]; then
+  echo "ERROR: OpenBabel external 依赖缺失:$MISSING" >&2
+  echo "" >&2
+  echo "  处理：把 IQmol-openbabel-deps.tar.gz 解压到 modules/openbabel/ 下，" >&2
+  echo "        解压后会生成 external/ 目录。命令示例（MINGW64）：" >&2
+  echo "        cd $MODULES_DIR/openbabel && tar -xzf /d/IQmol/IQmol-openbabel-deps.tar.gz" >&2
+  echo "" >&2
+  echo "  包的位置：GitHub submodules-package 分支 / 对话文件卡片均可下载。" >&2
+  exit 1
+fi
+echo "==> OpenBabel external 依赖齐备"
 
 # ===== 4. configure（增量：build/ 已配置过就跳过）=====
 BUILD_DIR="$SRC_DIR/build"
