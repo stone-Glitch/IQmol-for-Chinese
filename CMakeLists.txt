@@ -134,7 +134,10 @@ endif()
 
 # libarchive (静态库 target: archive_static; bcrypt 为 Windows 下的 SHA 依赖。
 # 上游 WIN32 分支原引用不存在的 modules/zstd 导致 configure 必崩, 已移除;
-# zstd 为 libarchive 可选依赖, 缺失时自动跳过, IQmol 无需 .zst 支持)
+# zstd 为 libarchive 可选依赖, 缺失时自动跳过, IQmol 无需 .zst 支持;
+# CMake 预注入 ICONV_CONST=const: 绕过 libarchive 自带 CHECK_ICONV 对 MinGW 的不可靠探测,
+# 强制 char *itp → const char *itp, 与 OpenBabel 自带 iconv.h 的 const char** 声明对齐,
+# 否则 archive_string.c:2092 调用 libiconv 时实参 char** 与形参 const char** 冲突)
 if (LINUX)
    find_package(LibArchive REQUIRED)
    set(ARCHIVE_LIBRARY ${LibArchive_LIBRARIES})
@@ -148,6 +151,7 @@ elseif (APPLE)
    set(ARCHIVE_LIBRARY archive_static)
 else (WIN32)
    include_directories(modules/libarchive)
+   add_compile_definitions(ICONV_CONST=const)
    add_subdirectory(modules/libarchive EXCLUDE_FROM_ALL)
    set(ARCHIVE_LIBRARY archive_static bcrypt)
 endif()
