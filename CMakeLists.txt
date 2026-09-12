@@ -135,9 +135,12 @@ endif()
 # libarchive (静态库 target: archive_static; bcrypt 为 Windows 下的 SHA 依赖。
 # 上游 WIN32 分支原引用不存在的 modules/zstd 导致 configure 必崩, 已移除;
 # zstd 为 libarchive 可选依赖, 缺失时自动跳过, IQmol 无需 .zst 支持;
-# CMake 预注入 ICONV_CONST=const: 绕过 libarchive 自带 CHECK_ICONV 对 MinGW 的不可靠探测,
-# 强制 char *itp → const char *itp, 与 OpenBabel 自带 iconv.h 的 const char** 声明对齐,
-# 否则 archive_string.c:2092 调用 libiconv 时实参 char** 与形参 const char** 冲突)
+# MinGW 下 libarchive 自带 CHECK_ICONV 探测不可靠, 生成的 config.h 把 ICONV_CONST
+# 定义成空; 而 OpenBabel 自带 iconv.h 声明 iconv 形参 inbuf 为 const char**,
+# 导致 archive_string.c:2092 iconv(cd, &itp,...) 实参 char** 与 const char** 冲突。
+# 命令行 -DICONV_CONST=const 会被 config.h 后定义反覆盖(实测 redefined 仍报错),
+# 故在 configure 阶段对子模块源做幂等修补(见 WIN32 分支), 调用处实参转型为
+# (const char **)&itp, 与 OpenBabel iconv.h 的 const char** 声明对齐)
 if (LINUX)
    find_package(LibArchive REQUIRED)
    set(ARCHIVE_LIBRARY ${LibArchive_LIBRARIES})
@@ -151,7 +154,23 @@ elseif (APPLE)
    set(ARCHIVE_LIBRARY archive_static)
 else (WIN32)
    include_directories(modules/libarchive)
-   add_compile_definitions(ICONV_CONST=const)
+   # 修复 MinGW 下 libarchive 调用 libiconv 的签名冲突: 对子模块源做幂等修补。
+   # OpenBabel 自带 iconv.h 声明 inbuf 为 const char**, 而 libarchive 的 config.h
+   # 把 ICONV_CONST 定义成空, 使 archive_string.c:2092 的 &itp 为 char** 不匹配。
+   # 此处把调用处实参转型为 (const char **)&itp (已修补则跳过, 避免重复),
+   # 它在任意 ICONV_CONST 取值下都合法, 比强行覆盖宏更鲁棒。
+   set(_LA_STRING "${CMAKE_SOURCE_DIR}/modules/libarchive/libarchive/archive_string.c")
+   if (EXISTS "${_LA_STRING}")
+      file(READ "${_LA_STRING}" _LA_SRC)
+      string(FIND "${_LA_SRC}" "iconv(cd, (const char **)&itp," _LA_DONE)
+      if (_LA_DONE EQUAL -1)
+         string(REPLACE "iconv(cd, &itp, &remaining, &outp, &avail)"
+                         "iconv(cd, (const char **)&itp, &remaining, &outp, &avail)"
+                         _LA_SRC "${_LA_SRC}")
+         file(WRITE "${_LA_STRING}" "${_LA_SRC}")
+         message(STATUS "[IQmol] 已修补 libarchive archive_string.c: iconv 实参 &itp -> (const char**)&itp")
+      endif()
+   endif()
    add_subdirectory(modules/libarchive EXCLUDE_FROM_ALL)
    set(ARCHIVE_LIBRARY archive_static bcrypt)
 endif()
