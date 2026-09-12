@@ -16,6 +16,21 @@ endif()
 set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -Wno-deprecated")
 set(BUILD_SHARED_LIBS OFF)
 
+#-------------------------------------------------------------------
+# QGLViewer / yaml-cpp 静态链接宏 (Windows 必需):
+# 二者均为静态库 (modules/CMakeLists.txt 用 add_library(QGLViewer STATIC),
+# yaml-cpp 继承 BUILD_SHARED_LIBS=OFF), 但它们的头文件靠编译宏判断"静态还是 DLL":
+#   libQGLViewer/QGLViewer/config.h: 未定义 QGLVIEWER_STATIC 时 -> __declspec(dllimport)
+#   yaml-cpp/include/yaml-cpp/dll.h : 未定义 YAML_CPP_STATIC_DEFINE 时 -> dllimport
+# 而 BUILD_SHARED_LIBS=OFF 只影响库本体如何编译, 不会传递到消费者头文件。
+# 结果: 所有引用这些头的 .o 生成 __imp_ 导入符号, 但静态库里只有普通符号,
+# 链接 IQmol.exe 时报大量 undefined reference to `__imp__ZN9QGLViewer.../__imp__ZN4YAML...
+# 故在此显式定义"静态库"宏, 使两类头文件均按静态语义展开(宏为空/无 dllimport)。
+#-------------------------------------------------------------------
+if (WIN32)
+   add_compile_definitions(QGLVIEWER_STATIC YAML_CPP_STATIC_DEFINE)
+endif()
+
 if (UNIX AND NOT APPLE)
    set(LINUX TRUE)
 endif()
