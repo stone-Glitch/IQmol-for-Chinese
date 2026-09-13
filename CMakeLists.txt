@@ -401,31 +401,40 @@ target_link_libraries (${targetName}
 #-------------------------------------------------------------------
 if (WIN32 AND NOT BUILD_SHARED_LIBS)
    if (TARGET openbabel)
-      # 取到 openbabel.a 的真实路径 (可能是 Qt/CMake 生成的带配置后缀名)
-      set(_OB_ARCHIVE "$<TARGET_FILE:openbabel>")
-      target_link_libraries (${targetName}
-         -Wl,--whole-archive
-         ${_OB_ARCHIVE}
-         -Wl,--no-whole-archive
-      )
-      message(STATUS "[IQmol] 已对 openbabel 启用 --whole-archive (保证静态插件自注册不被丢弃)")
-   else()
+      # 注意: 这里必须用【目标名 openbabel】而不是 $<TARGET_FILE:openbabel>。
+      #
+      # 用 $<TARGET_FILE:...> 会把真实文件路径(如 modules/openbabel/src/
+      # libopenbabel.a)直接写进 link.txt, 绕过了 CMake 的目标依赖跟踪。
+      # 而 openbabel 是以 EXCLUDE_FROM_ALL 方式 add_subdirectory 进来的,
+      # 默认构建目标里不含它, 于是 MinGW Makefile 后端在链接时报:
+      #   No rule to make target 'modules/openbabel/src/libopenbabel.a',
+      #   needed by 'bin/IQmol.exe'
+      # 用目标名则会自动建立依赖边, 并自动补上 --whole-archive 之间的
+      # 库位置，无需手写路径。
       target_link_libraries (${targetName}
          -Wl,--whole-archive
          openbabel
          -Wl,--no-whole-archive
       )
-      message(STATUS "[IQmol] 已对 openbabel 启用 --whole-archive (按名称)")
+      # 双保险：显式声明依赖, 确保 openbabel 在链接前被构建
+      # (openbabel 经 EXCLUDE_FROM_ALL 引入, 不属于默认 all 目标)
+      add_dependencies(${targetName} openbabel)
+      message(STATUS "[IQmol] 已对 openbabel 启用 --whole-archive (保证静态插件自注册不被丢弃)")
+   else()
+      target_link_libraries (${targetName} openbabel)
+      message(WARNING "[IQmol] 未找到 openbabel 目标, 直接按名称链接")
    endif()
 else()
    # 非 Windows 静态构建 (Linux/其他平台): 同样需要整体保留, 否则力场等插件
    # 在部分链接器配置下也会被丢弃。动态构建时 --whole-archive 无副作用。
+   # 同 Windows 分支: 用目标名而非 $<TARGET_FILE:...>, 以保留 CMake 依赖跟踪。
    if (NOT BUILD_SHARED_LIBS AND TARGET openbabel)
       target_link_libraries (${targetName}
          -Wl,--whole-archive
-         "$<TARGET_FILE:openbabel>"
+         openbabel
          -Wl,--no-whole-archive
       )
+      add_dependencies(${targetName} openbabel)
       message(STATUS "[IQmol] 已对 openbabel 启用 --whole-archive (非 Windows 静态构建)")
    else()
       target_link_libraries (${targetName} openbabel)
