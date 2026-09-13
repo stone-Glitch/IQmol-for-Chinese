@@ -269,12 +269,14 @@ fi
 #--------------------------------------------------------------------
 _cfg_fingerprint() {
   local _cm="$SRC_DIR/CMakeLists.txt"
-  local _bs=0 _wa=0
+  local _bs=0 _wa=0 _ms=0
   # BUILD_SHARED 是否被同步为 OFF（静态）
   if grep -q 'set(BUILD_SHARED OFF CACHE' "$_cm" 2>/dev/null; then _bs=1; fi
   # 是否包含 --whole-archive 处理
   if grep -q -- '--whole-archive' "$_cm" 2>/dev/null; then _wa=1; fi
-  echo "BUILD_SHARED_SYNC=$_bs WHOLE_ARCHIVE=$_wa"
+  # 是否定义 MAEPARSER_STATIC_DEFINE（消除 maeparser 的 DLL 导入 __imp_）
+  if grep -q 'MAEPARSER_STATIC_DEFINE' "$_cm" 2>/dev/null; then _ms=1; fi
+  echo "BUILD_SHARED_SYNC=$_bs WHOLE_ARCHIVE=$_wa MAEPARSER_STATIC=$_ms"
 }
 
 STAMP_FILE="$BUILD_DIR/.iqmol_config_stamp"

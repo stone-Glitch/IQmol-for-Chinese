@@ -163,6 +163,16 @@ else()
       set(BUILD_SHARED ON CACHE BOOL "OpenBabel: build shared library + dynamic plugins" FORCE)
    endif()
 
+   # 静态构建 OpenBabel 时, 其捆绑的子库(maeparser 等)由 CMake
+   # GenerateExportHeader 生成的导出宏默认按"DLL 导入"处理外部符号,
+   # 会在 MinGW 链接期产生 undefined reference to
+   # `__imp__ZN11schrodinger3mae6Reader...`(MAE 格式) 等。
+   # 定义 *_STATIC_DEFINE 使这些宏退化为普通符号, 才能与静态 .a 匹配。
+   # 必须在 add_subdirectory 之前设置, 让 maeparser 子目录继承该宏。
+   if (NOT BUILD_SHARED_LIBS)
+      add_compile_definitions(MAEPARSER_STATIC_DEFINE)
+   endif()
+
    add_subdirectory(modules/openbabel  EXCLUDE_FROM_ALL)
 endif()
 
@@ -439,6 +449,20 @@ else()
    else()
       target_link_libraries (${targetName} openbabel)
    endif()
+endif()
+
+# maeparser 是 OpenBabel 捆绑的独立静态库(MAE 格式: schrodinger::mae 命名空间),
+# 其实现符号同样可能被链接器按引用丢弃, 且需与上面的 MAEPARSER_STATIC_DEFINE
+# 配合。若它是独立 CMake 目标则一并整体保留; 否则由 openbabel 的 PRIVATE 依赖
+# 传递链入(此时已被 openbabel 的 --whole-archive 覆盖, 无需重复)。
+if (TARGET maeparser)
+   target_link_libraries (${targetName}
+      -Wl,--whole-archive
+      maeparser
+      -Wl,--no-whole-archive
+   )
+   add_dependencies(${targetName} maeparser)
+   message(STATUS "[IQmol] 已对 maeparser 启用 --whole-archive")
 endif()
 
 if (WIN32)
