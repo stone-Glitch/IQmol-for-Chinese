@@ -5,7 +5,7 @@
 | 日期 | 2026-09-13 |
 | 平台 | Windows 10 / MSYS2 MinGW64（复现与修复验证） |
 | 影响版本 | IQmol 3.2.3 静态构建（`BUILD_SHARED_LIBS OFF`） |
-| 提交 | `5111a63`（`--whole-archive`）、`e4f5857`（`BUILD_SHARED` 同步） |
+| 提交 | `e4f5857`（`BUILD_SHARED` 同步）、`45a09a0`（`--whole-archive`，含依赖修复） |
 | 状态 | 已修复并通过最小工程验证 |
 
 ---
@@ -26,7 +26,7 @@ Windows 端先后出现两条报错，它们是**同一根因的两个层次**�
 | 提交 | 修复内容 | 解决什么 |
 | --- | --- | --- |
 | `e4f5857` | 同步 `BUILD_SHARED` = `BUILD_SHARED_LIBS` | 让插件**被编进**程序（解决 ②，根治） |
-| `5111a63` | `openbabel` 加 `--whole-archive` | 让已编入的插件注册对象**不被链接器丢弃**（解决 ①，防护） |
+| `45a09a0` | `openbabel` 加 `--whole-archive` | 让已编入的插件注册对象**不被链接器丢弃**（解决 ①，防护） |
 
 > 只做 `--whole-archive` 而不做 `BUILD_SHARED` 同步，插件根本没进静态库，无从链接；
 > 只做 `BUILD_SHARED` 同步而不做 `--whole-archive`，插件进了库但仍会被 GNU ld 丢弃。
@@ -230,17 +230,19 @@ if (WIN32 AND NOT BUILD_SHARED_LIBS)
    if (TARGET openbabel)
       target_link_libraries (${targetName}
          -Wl,--whole-archive
-         "$<TARGET_FILE:openbabel>"
+         openbabel
          -Wl,--no-whole-archive
       )
+      add_dependencies(${targetName} openbabel)
    endif()
 else()
    if (NOT BUILD_SHARED_LIBS AND TARGET openbabel)
       target_link_libraries (${targetName}
          -Wl,--whole-archive
-         "$<TARGET_FILE:openbabel>"
+         openbabel
          -Wl,--no-whole-archive
       )
+      add_dependencies(${targetName} openbabel)
    else()
       target_link_libraries (${targetName} openbabel)
    endif()
@@ -248,6 +250,27 @@ endif()
 ```
 
 同时移除了原链接列表中裸写的 `openbabel`，避免重复链接。
+
+### 5.3 踩坑记录：不要用 `$<TARGET_FILE:openbabel>`
+
+`--whole-archive` 的首版写法用的是生成器表达式 `"$<TARGET_FILE:openbabel>"`（提交 `5111a63`），在 Windows 链接期报了：
+
+```
+mingw32-make[2]: *** No rule to make target
+    'modules/openbabel/src/libopenbabel.a', needed by 'bin/IQmol.exe'.  Stop.
+```
+
+**原因**：`$<TARGET_FILE:...>` 会把库的**真实文件路径**直接写进 `link.txt`，从而**绕过 CMake 的目标依赖跟踪**。而 `openbabel` 是以 `EXCLUDE_FROM_ALL` 方式 `add_subdirectory` 进来的（不属于默认 `all` 目标），MinGW Makefile 后端因此找不到生成该文件的规则。
+
+**正确做法**（提交 `45a09a0`）：用**目标名** `openbabel` 书写，由 CMake 自动建立依赖边并解析为相对构建目录的库路径，同时补 `add_dependencies()` 双保险。
+
+实测 `link.txt` 生成结果，确认选项与库的相对顺序被保留、目标也被正确构建：
+
+```
+-Wl,--whole-archive sub/libsub.a -Wl,--no-whole-archive
+```
+
+> 经验：在 `target_link_libraries` 中混写选项与目标名时，CMake **保持书写顺序**输出到链接行；但**只要用了 `$<TARGET_FILE:...>`，就等于放弃了依赖管理** —— 对 `EXCLUDE_FROM_ALL` 引入的子模块尤其致命。
 
 ---
 
