@@ -52,6 +52,18 @@ find_package(OpenGL  REQUIRED)
 find_package(OpenMP QUIET)
 find_package(OpenSSL REQUIRED)
 
+# OpenGL 链接目标兜底: 现代 CMake 的 FindOpenGL 提供 imported target OpenGL::GL
+# (旧式 OPENGL_LIBRARIES 变量在 3.14+ 不再设置); 老版本则只有旧变量。
+# 这里统一收敛为单一变量 OPENGL_TARGET, 供最终 target_link_libraries 使用,
+# 避免"变量为空 -> opengl32 未链接 -> __imp_gl* 未定义"的静默失败。
+if (TARGET OpenGL::GL)
+   set(OPENGL_TARGET OpenGL::GL)
+elseif (TARGET OpenGL::OpenGL)
+   set(OPENGL_TARGET OpenGL::OpenGL)
+else()
+   set(OPENGL_TARGET ${OPENGL_LIBRARIES})
+endif()
+
 find_package(ZLIB REQUIRED)
    include_directories(${ZLIB_INCLUDE_DIRS})
 
@@ -312,7 +324,11 @@ target_link_libraries (${targetName}
    ${LIBSSH2_LIBRARY}
    ${QGLVIEWER_LIBRARY}
    ${OPENMESH_LIBRARIES}
-   ${OPENGL_LIBRARIES}
+   # OpenGL: 使用上方统一收敛的 OPENGL_TARGET (OpenGL::GL 或旧变量兜底)。
+   # 旧代码直接写 ${OPENGL_LIBRARIES}, 在 CMake 3.14+ 为空 -> opengl32 未链接,
+   # 导致 OctreeLayer.C 的 glStencilFunc/glClearStencil/glStencilMask/glStencilOp
+   # 报 undefined reference to `__imp_gl...'。
+   ${OPENGL_TARGET}
    ${ZLIB_LIBRARIES}
    ${FORTRAN_LIBRARIES}
    ${ARCHIVE_LIBRARY}
