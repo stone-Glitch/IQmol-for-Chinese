@@ -237,14 +237,27 @@ cd "$BUILD_DIR" || exit 1
 # 判定"配置成功"必须同时有 CMakeCache.txt 和 Makefile：上次 configure 失败时
 # 会留下 CMakeCache.txt 却没有 Makefile，只看前者会误判为已配好，
 # 进而直接进 make 报 "No targets specified and no makefile found"。
-if [ -f "$BUILD_DIR/CMakeCache.txt" ] && [ -f "$BUILD_DIR/Makefile" ]; then
-  # 已配置过：直接沿用缓存编译。若 CMakeLists 有改动，make 会自动触发重配。
+#
+# 另外：仅当顶层 CMakeLists.txt 不比 CMakeCache.txt 新时才跳过 configure。
+# 之前无条件跳过，导致改了 CMakeLists（如补链接库/加编译宏）后 make 未必
+# 自动重配，修复"看起来没生效"，白白多跑一轮。这里用时间戳显式判定。
+NEED_CONFIG=0
+if [ ! -f "$BUILD_DIR/CMakeCache.txt" ] || [ ! -f "$BUILD_DIR/Makefile" ]; then
+  NEED_CONFIG=1
+elif [ "$SRC_DIR/CMakeLists.txt" -nt "$BUILD_DIR/CMakeCache.txt" ]; then
+  NEED_CONFIG=1
+  echo "==> 检测到 CMakeLists.txt 比上次配置新，自动重新 configure..."
+fi
+
+if [ "$NEED_CONFIG" = "0" ]; then
+  # 已配置过且顶层 CMakeLists 未变：直接沿用缓存编译。
   echo "==> 检测到已有配置，跳过 configure（要重配请加 --clean）"
 else
-  if [ -f "$BUILD_DIR/CMakeCache.txt" ]; then
-    echo "==> 上次 configure 未完成（有 CMakeCache.txt 但无 Makefile），重新配置"
+  if [ ! -f "$BUILD_DIR/CMakeCache.txt" ]; then
+    echo "==> 首次 configure...（约 1~5 分钟，Windows 下 CMake 需逐个编译检查程序）"
+  elif [ ! -f "$BUILD_DIR/Makefile" ]; then
+    echo "==> 上次 configure 未完成（有 CMakeCache.txt 但无 Makefile），重新配置..."
   fi
-  echo "==> 首次 configure...（约 1~5 分钟，Windows 下 CMake 需逐个编译检查程序）"
   "$CMAKE_BIN" .. \
     -G "MinGW Makefiles" \
     -DCMAKE_BUILD_TYPE=Release \
