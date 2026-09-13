@@ -150,6 +150,16 @@ tar -xzf /d/IQmol/IQmol-openbabel-formats-fix.tar.gz
 目录还在，重跑脚本会跳过 configure 直接续编，不会从头再来。脚本会自动下载 CMake 3.31、补全
 缺失的 `modules/CMakeLists.txt`、检查 OpenBabel 依赖。具体命令见 `doc/编译-照着敲.md`。
 
+编译成功后，**运行前还要执行一次部署**（复制 Qt 插件、运行库与资源）：
+
+```bash
+cd /d/IQmol/IQmol-src
+bash ./scripts/deploy_windows.sh
+cd build/bin && ./IQmol.exe
+```
+
+> 只编译不部署的话，程序会因缺少 Qt 平台插件或 OpenBabel 数据而无法启动或功能异常。
+
 ### 注意事项
 
 - 下载慢时，把链接中的 `https://github.com/` 换成 `https://ghfast.top/https://github.com/` 走国内镜像
