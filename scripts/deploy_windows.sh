@@ -191,11 +191,48 @@ else
 fi
 
 # OpenBabel 数据 -> build/share/openbabel （BABEL_DATADIR）
+# 同时铺两份布局，兼容 OpenBabel 的两种查找顺序:
+#   src/tokenst.cpp  OpenDatafile() 依次尝试:
+#     ① 当前工作目录
+#     ② ${BABEL_DATADIR}/<BABEL_VERSION>/UFF.prm   （版本子目录, install() 的默认目标）
+#     ③ ${BABEL_DATADIR}/UFF.prm                   （扁平目录）
+# 本项目走 install() 之外的拷贝路径，所以两种都放，避免任何 linker/版本差异。
 OB_DATA="$SRC_DIR/modules/openbabel/data"
+BABEL_VER=""
+# 从子模块 CMakeLists 解析 BABEL_MAJ/MIN/PATCH，拼出版本号用于子目录名
+_OB_CML="$SRC_DIR/modules/openbabel/CMakeLists.txt"
+if [ -f "$_OB_CML" ]; then
+  _maj=$(sed -n 's/^set(BABEL_MAJ_VER[ \t]*\([0-9]*\)).*/\1/p' "$_OB_CML" | head -1)
+  _min=$(sed -n 's/^set(BABEL_MIN_VER[ \t]*\([0-9]*\)).*/\1/p' "$_OB_CML" | head -1)
+  _pat=$(sed -n 's/^set(BABEL_PATCH_VER[ \t]*\([0-9]*\)).*/\1/p' "$_OB_CML" | head -1)
+  if [ -n "$_maj" ] && [ -n "$_min" ] && [ -n "$_pat" ]; then
+    BABEL_VER="${_maj}.${_min}.${_pat}"
+  fi
+fi
+[ -z "$BABEL_VER" ] && BABEL_VER="3.1.1"
+
 if [ -d "$OB_DATA" ]; then
-  echo "==> 复制 OpenBabel 数据 -> share/openbabel"
+  echo "==> 复制 OpenBabel 数据 -> share/openbabel  (版本子目录: $BABEL_VER)"
   mkdir -p "$BUILD_DIR/share/openbabel"
   cp -rf "$OB_DATA/." "$BUILD_DIR/share/openbabel/" && copied=$((copied+1))
+  # 版本子目录副本（OpenBabel 优先查这里）
+  mkdir -p "$BUILD_DIR/share/openbabel/$BABEL_VER"
+  cp -rf "$OB_DATA/." "$BUILD_DIR/share/openbabel/$BABEL_VER/" && copied=$((copied+1))
+
+  # 数据文件自检：这些是 OpenBabel 3.1.1 data/ 下真实存在的力场参数文件。
+  # 注意 MMFF94 的参数表是编译进二进制内的，data/ 里并没有 MMFF94.prm，
+  # 因此不要把 MMFF94.prm 列进自检，否则每次部署都会误报。
+  _missing=""
+  for f in UFF.prm ghemical.prm gaff.prm mm2.prm; do
+    [ -f "$BUILD_DIR/share/openbabel/$f" ] || _missing="$_missing $f"
+  done
+  if [ -n "$_missing" ]; then
+    echo "    警告: 缺少力场参数文件:$_missing"
+    echo "          运行时会出现 'Failed to load force field' 提示。"
+  else
+    echo "    力场参数已就位: UFF.prm / ghemical.prm / gaff.prm / mm2.prm"
+  fi
+  echo "    文件总数: $(ls "$BUILD_DIR/share/openbabel" 2>/dev/null | wc -l)"
 else
   echo "    警告: 未找到 modules/openbabel/data，OpenBabel 可能无法识别某些文件格式"
 fi
