@@ -249,6 +249,46 @@ elif [ "$SRC_DIR/CMakeLists.txt" -nt "$BUILD_DIR/CMakeCache.txt" ]; then
   echo "==> 检测到 CMakeLists.txt 比上次配置新，自动重新 configure..."
 fi
 
+#--------------------------------------------------------------------
+# 配置指纹自检（针对"改了 CMakeLists 但配置未真正更新"这类坑）
+#
+# 背景：曾多次出现"补丁已下载到 CMakeLists.txt，但 build/ 里的缓存仍是旧
+# 配置，编译出的程序行为照旧"的情况。仅靠时间戳判断并不可靠 ——
+# 用户可能手工改过文件、可能用别的方式 configure 过、也可能时间戳因
+# 解压/复制而失真。
+#
+# 做法：把若干"必须反映到构建里"的关键配置项提取成指纹，写入
+#       build/.iqmol_config_stamp。每次构建前重新计算并比对，
+#       不一致就强制重新 configure。
+#
+# 当前纳入指纹的关键配置：
+#   - OpenBabel 子模块 BUILD_SHARED 的同步结果（决定插件静态内联
+#     还是动态加载；错配会导致 "Unable to find OpenBabel plugins"）
+#   - openbabel 的 --whole-archive 链接处理（防止静态插件注册对象
+#     被链接器丢弃；缺失会导致 "Failed to load force field: UFF"）
+#--------------------------------------------------------------------
+_cfg_fingerprint() {
+  local _cm="$SRC_DIR/CMakeLists.txt"
+  local _bs=0 _wa=0
+  # BUILD_SHARED 是否被同步为 OFF（静态）
+  if grep -q 'set(BUILD_SHARED OFF CACHE' "$_cm" 2>/dev/null; then _bs=1; fi
+  # 是否包含 --whole-archive 处理
+  if grep -q -- '--whole-archive' "$_cm" 2>/dev/null; then _wa=1; fi
+  echo "BUILD_SHARED_SYNC=$_bs WHOLE_ARCHIVE=$_wa"
+}
+
+STAMP_FILE="$BUILD_DIR/.iqmol_config_stamp"
+CUR_STAMP="$(_cfg_fingerprint)"
+OLD_STAMP=""
+[ -f "$STAMP_FILE" ] && OLD_STAMP="$(cat "$STAMP_FILE" 2>/dev/null)"
+
+if [ "$NEED_CONFIG" = "0" ] && [ "$CUR_STAMP" != "$OLD_STAMP" ]; then
+  NEED_CONFIG=1
+  echo "==> 检测到 CMakeLists.txt 关键配置发生变化，自动重新 configure..."
+  echo "    上次: ${OLD_STAMP:-（无记录）}"
+  echo "    本次: $CUR_STAMP"
+fi
+
 if [ "$NEED_CONFIG" = "0" ]; then
   # 已配置过且顶层 CMakeLists 未变：直接沿用缓存编译。
   echo "==> 检测到已有配置，跳过 configure（要重配请加 --clean）"
@@ -275,6 +315,8 @@ else
     echo "把上面这段完整贴给助手即可定位。"
     exit 1
   fi
+  # configure 成功后记录本次指纹，供下次比对
+  echo "$CUR_STAMP" > "$STAMP_FILE"
 fi
 
 # ===== 5. 编译 =====
