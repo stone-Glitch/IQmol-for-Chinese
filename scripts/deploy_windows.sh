@@ -113,16 +113,48 @@ else
 fi
 
 #--------------------------------------------------------------------
+# 1b. Qt 插件同步到 build/lib/ 与 build/lib/plugins/
+#     源码 IQmolApplication.C:115-116 对 Windows 显式执行:
+#        QApplication::addLibraryPath(path + "/lib")
+#        QApplication::addLibraryPath(path + "/lib/plugins")
+#     其中 path 为运行时根(=build/)。因此除 Qt 默认的 exe 同级目录外,
+#     再把这些插件复制一份到 lib/ 下与源码逻辑对齐, 双保险。
+#--------------------------------------------------------------------
+echo "==> 同步 Qt 插件到 lib/ (与源码 addLibraryPath 对齐)"
+mkdir -p "$BUILD_DIR/lib/plugins"
+for sub in platforms styles imageformats iconengines platforminputcontexts; do
+  for srcroot in "$BIN_DIR" "$MINGW_PREFIX/share/qt5/plugins" \
+                 "$MINGW_PREFIX/lib/qt5/plugins"; do
+    if [ -d "$srcroot/$sub" ]; then
+      cp -rf "$srcroot/$sub" "$BUILD_DIR/lib/" 2>/dev/null && \
+      cp -rf "$srcroot/$sub" "$BUILD_DIR/lib/plugins/" 2>/dev/null
+    fi
+  done
+done
+
+#--------------------------------------------------------------------
 # 2. Qt 平台插件（必须；否则报 "could not find or load the Qt platform plugin windows"）
 #    正常情况下 windeployqt 已复制，这里兜底确保存在。
 #--------------------------------------------------------------------
 if [ ! -d "$BIN_DIR/platforms" ]; then
   echo "==> 补装 Qt platforms 插件"
   mkdir -p "$BIN_DIR/platforms"
-  copy_item "$MINGW_PREFIX/share/qt5/plugins/platforms/qwindows.dll" \
-            "$BIN_DIR/platforms/"
-  copy_item "$MINGW_PREFIX/lib/qt5/plugins/platforms/qwindows.dll" \
-            "$BIN_DIR/platforms/"
+  for cand in "$MINGW_PREFIX/share/qt5/plugins/platforms/qwindows.dll" \
+              "$MINGW_PREFIX/lib/qt5/plugins/platforms/qwindows.dll"; do
+    [ -f "$cand" ] && copy_item "$cand" "$BIN_DIR/platforms/" && break
+  done
+fi
+# 双保险：lib/ 下也要有
+if [ ! -f "$BUILD_DIR/lib/platforms/qwindows.dll" ]; then
+  for cand in "$BIN_DIR/platforms/qwindows.dll" \
+              "$MINGW_PREFIX/share/qt5/plugins/platforms/qwindows.dll" \
+              "$MINGW_PREFIX/lib/qt5/plugins/platforms/qwindows.dll"; do
+    if [ -f "$cand" ]; then
+      mkdir -p "$BUILD_DIR/lib/platforms"
+      copy_item "$cand" "$BUILD_DIR/lib/platforms/"
+      break
+    fi
+  done
 fi
 
 #--------------------------------------------------------------------
