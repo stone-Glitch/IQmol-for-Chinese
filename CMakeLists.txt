@@ -344,6 +344,12 @@ target_link_libraries (${targetName}
    # gluUnProject 等(ClippingPlaneLayer.C/AtomLayer.C/camera.cpp) 报未定义符号。
    ${OPENGL_TARGET}
    ${GLU_TARGET}
+   # OpenSSL: Network 的 SshConnection.C 直接调用 MD5() 等 OpenSSL 函数,
+   # 但 Network 以 PRIVATE 方式链接 OpenSSL::SSL —— 静态库的 PRIVATE 依赖
+   # 不会传播到最终可执行文件, 故顶层必须显式补链, 否则链接期报
+   # undefined reference to `MD5' / `__imp_MD5'。
+   OpenSSL::SSL
+   OpenSSL::Crypto
    ${ZLIB_LIBRARIES}
    ${FORTRAN_LIBRARIES}
    ${ARCHIVE_LIBRARY}
