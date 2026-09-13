@@ -326,6 +326,23 @@ if [ $RC -ne 0 ]; then
 fi
 
 echo "==> 构建完成"
-ls -la "$BUILD_DIR"/IQmol.exe 2>/dev/null || \
-  find "$BUILD_DIR" -maxdepth 2 -name "IQmol*.exe" 2>/dev/null || \
-  echo "    未找到 IQmol.exe，请检查 build/ 下产物"
+EXE_FOUND=""
+for cand in "$BUILD_DIR/bin/IQmol.exe" "$BUILD_DIR/IQmol.exe"; do
+  if [ -f "$cand" ]; then EXE_FOUND="$cand"; break; fi
+done
+if [ -n "$EXE_FOUND" ]; then
+  ls -la "$EXE_FOUND"
+  echo ""
+  echo "==================== 编译链接成功 ===================="
+  echo "  可执行文件: $EXE_FOUND"
+  echo ""
+  echo "  下一步（运行前必须做一次，否则会缺 Qt 插件/资源无法启动）:"
+  echo "    bash scripts/deploy_windows.sh"
+  echo ""
+  echo "  部署完成后启动:"
+  echo "    cd \"$BUILD_DIR/bin\" && ./IQmol.exe"
+  echo "======================================================"
+else
+  find "$BUILD_DIR" -maxdepth 3 -name "IQmol*.exe" 2>/dev/null || \
+    echo "    未找到 IQmol.exe，请检查 build/ 下产物"
+fi
