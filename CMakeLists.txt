@@ -52,16 +52,30 @@ find_package(OpenGL  REQUIRED)
 find_package(OpenMP QUIET)
 find_package(OpenSSL REQUIRED)
 
-# OpenGL 链接目标兜底: 现代 CMake 的 FindOpenGL 提供 imported target OpenGL::GL
-# (旧式 OPENGL_LIBRARIES 变量在 3.14+ 不再设置); 老版本则只有旧变量。
-# 这里统一收敛为单一变量 OPENGL_TARGET, 供最终 target_link_libraries 使用,
-# 避免"变量为空 -> opengl32 未链接 -> __imp_gl* 未定义"的静默失败。
+# OpenGL / GLU 链接目标兜底:
+# 现代 CMake 的 FindOpenGL 提供 imported target OpenGL::GL / OpenGL::GLU
+# (旧式 OPENGL_LIBRARIES 变量在 3.14+ 不再设置)。历史上这里写死 ${OPENGL_LIBRARIES},
+# 展开为空 -> opengl32/glu32 从未进入链接命令, 导致
+#   OctreeLayer.C 的 glStencilFunc/glClearStencil/glStencilMask/glStencilOp
+#     报 undefined reference to `__imp_gl...'
+#   ClippingPlaneLayer.C / AtomLayer.C 的 gluNewQuadric/gluSphere/gluCylinder/
+#     gluDisk/gluUnProject/gluDeleteQuadric/gluQuadricOrientation
+#     报 undefined reference to `glu...'
+# 统一收敛: 优先用 imported target, 不可用时回退到平台库名, 保证一定非空。
 if (TARGET OpenGL::GL)
    set(OPENGL_TARGET OpenGL::GL)
-elseif (TARGET OpenGL::OpenGL)
-   set(OPENGL_TARGET OpenGL::OpenGL)
+elseif (WIN32)
+   set(OPENGL_TARGET opengl32)
 else()
    set(OPENGL_TARGET ${OPENGL_LIBRARIES})
+endif()
+
+if (TARGET OpenGL::GLU)
+   set(GLU_TARGET OpenGL::GLU)
+elseif (WIN32)
+   set(GLU_TARGET glu32)
+else()
+   set(GLU_TARGET ${OPENGL_glu_LIBRARY})
 endif()
 
 find_package(ZLIB REQUIRED)
@@ -324,11 +338,12 @@ target_link_libraries (${targetName}
    ${LIBSSH2_LIBRARY}
    ${QGLVIEWER_LIBRARY}
    ${OPENMESH_LIBRARIES}
-   # OpenGL: 使用上方统一收敛的 OPENGL_TARGET (OpenGL::GL 或旧变量兜底)。
-   # 旧代码直接写 ${OPENGL_LIBRARIES}, 在 CMake 3.14+ 为空 -> opengl32 未链接,
-   # 导致 OctreeLayer.C 的 glStencilFunc/glClearStencil/glStencilMask/glStencilOp
-   # 报 undefined reference to `__imp_gl...'。
+   # OpenGL + GLU: 使用上方统一收敛的 OPENGL_TARGET / GLU_TARGET。
+   # 旧代码只写 ${OPENGL_LIBRARIES}, 在 CMake 3.14+ 为空 -> opengl32/glu32 均未链接,
+   # 导致 glStencil*(OctreeLayer.C) 与 gluNewQuadric/gluSphere/gluCylinder/gluDisk/
+   # gluUnProject 等(ClippingPlaneLayer.C/AtomLayer.C/camera.cpp) 报未定义符号。
    ${OPENGL_TARGET}
+   ${GLU_TARGET}
    ${ZLIB_LIBRARIES}
    ${FORTRAN_LIBRARIES}
    ${ARCHIVE_LIBRARY}
