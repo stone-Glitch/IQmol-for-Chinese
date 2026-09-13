@@ -327,7 +327,6 @@ target_link_libraries (${targetName}
    Fort
    Amber 
    yaml-cpp
-   openbabel
    Qt5::Core
    Qt5::Gui
    Qt5::Xml
@@ -354,6 +353,57 @@ target_link_libraries (${targetName}
    ${FORTRAN_LIBRARIES}
    ${ARCHIVE_LIBRARY}
 )
+
+#-------------------------------------------------------------------
+# 静态链接 OpenBabel 插件整体保留 (Windows/MinGW 必需):
+#
+#   OpenBabel 的插件(力场/格式/描述符/指纹等)不是通过显式函数调用注册的,
+#   而是靠源文件里的全局对象在 main() 之前自注册, 例如:
+#       forcefields/forcefielduff.cpp:579
+#       OBForceFieldUFF theForceFieldUFF("UFF", true);
+#   构造函数把实例塞进 OBForceField::Map()。
+#
+#   BUILD_SHARED_LIBS OFF 时这些 .cpp 被编成静态库 openbabel.a 的成员。
+#   GNU ld 只按"符号引用"提取静态库成员: 若某个 .o 里的符号没有任何地方
+#   引用(纯全局构造副作用), 该 .o 会被整个丢弃, 自注册随之失效。
+#   症状: 运行时 FindForceField("UFF") 返回 NULL, IQmol 弹出
+#         "Failed to load force field: UFF", 但编译链接期毫无报错。
+#
+#   Linux 上通常因动态链接或系统包展开而恰好可用, Windows 静态构建必踩。
+#   修复: 用 --whole-archive 包裹 openbabel, 强制链入其全部目标文件。
+#-------------------------------------------------------------------
+if (WIN32 AND NOT BUILD_SHARED_LIBS)
+   if (TARGET openbabel)
+      # 取到 openbabel.a 的真实路径 (可能是 Qt/CMake 生成的带配置后缀名)
+      set(_OB_ARCHIVE "$<TARGET_FILE:openbabel>")
+      target_link_libraries (${targetName}
+         -Wl,--whole-archive
+         ${_OB_ARCHIVE}
+         -Wl,--no-whole-archive
+      )
+      message(STATUS "[IQmol] 已对 openbabel 启用 --whole-archive (保证静态插件自注册不被丢弃)")
+   else()
+      target_link_libraries (${targetName}
+         -Wl,--whole-archive
+         openbabel
+         -Wl,--no-whole-archive
+      )
+      message(STATUS "[IQmol] 已对 openbabel 启用 --whole-archive (按名称)")
+   endif()
+else()
+   # 非 Windows 静态构建 (Linux/其他平台): 同样需要整体保留, 否则力场等插件
+   # 在部分链接器配置下也会被丢弃。动态构建时 --whole-archive 无副作用。
+   if (NOT BUILD_SHARED_LIBS AND TARGET openbabel)
+      target_link_libraries (${targetName}
+         -Wl,--whole-archive
+         "$<TARGET_FILE:openbabel>"
+         -Wl,--no-whole-archive
+      )
+      message(STATUS "[IQmol] 已对 openbabel 启用 --whole-archive (非 Windows 静态构建)")
+   else()
+      target_link_libraries (${targetName} openbabel)
+   endif()
+endif()
 
 if (WIN32)
    target_link_libraries (${targetName} ws2_32)
