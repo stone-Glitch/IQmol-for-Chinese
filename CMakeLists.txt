@@ -136,6 +136,33 @@ else()
    configure_file(
       ${CMAKE_CURRENT_SOURCE_DIR}/modules/openbabel/src/config.h.cmake
       ${CMAKE_CURRENT_BINARY_DIR}/modules/openbabel/include/openbabel/babelconfig.h)
+
+   #----------------------------------------------------------------
+   # 关键: 让 OpenBabel 子模块的 BUILD_SHARED 跟随顶层 BUILD_SHARED_LIBS。
+   #
+   # OpenBabel 用的是自己的私有开关 BUILD_SHARED (modules/openbabel/
+   # CMakeLists.txt:105, 默认 ON), 与 CMake 标准的 BUILD_SHARED_LIBS
+   # 互不相干。若不显式同步, 在顶层 BUILD_SHARED_LIBS=OFF (静态构建)
+   # 的情况下 OpenBabel 仍按 BUILD_SHARED=ON 配置, 导致:
+   #   - 定义 -DUSING_DYNAMIC_LIBS, 插件不再内联进主库,
+   #     而是编成独立 MODULE (.obf/.so) 期望运行时从磁盘加载;
+   #   - 运行期 OBPlugin::LoadAllPlugins() (src/plugin.cpp:46) 进入
+   #     #if defined(USING_DYNAMIC_LIBS) 分支, 在 BABEL_LIBDIR 下找
+   #     插件文件, 找不到即报:
+   #       "Unable to find OpenBabel plugins.
+   #        Try setting the BABEL_LIBDIR environment variable."
+   #   - 进而 FindForceField("UFF") 返回 NULL -> 能量计算报
+   #     "Failed to load force field: UFF"。
+   #
+   # 必须在 add_subdirectory(modules/openbabel) 之前设置; 用 FORCE 保证
+   # 覆盖已被缓存/已定义的 option 值。
+   #----------------------------------------------------------------
+   if (NOT BUILD_SHARED_LIBS)
+      set(BUILD_SHARED OFF CACHE BOOL "OpenBabel: build shared library + dynamic plugins" FORCE)
+   else()
+      set(BUILD_SHARED ON CACHE BOOL "OpenBabel: build shared library + dynamic plugins" FORCE)
+   endif()
+
    add_subdirectory(modules/openbabel  EXCLUDE_FROM_ALL)
 endif()
 

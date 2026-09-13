@@ -263,12 +263,33 @@ elif [ -f "$TS" ]; then
 fi
 
 #--------------------------------------------------------------------
-# 6. OpenBabel 动态插件目录（静态 OpenBabel 时为占位；存在则复制）
+# 6. OpenBabel 插件目录
+#
+# 项目采用静态内联 OpenBabel（顶层 BUILD_SHARED_LIBS=OFF，并已强制
+# OpenBabel 子模块的 BUILD_SHARED 同步为 OFF），此时:
+#   - 不定义 USING_DYNAMIC_LIBS；插件(力场/格式/描述符/指纹)编译进主
+#     可执行文件，运行期不会去磁盘加载 .obf，也不读 BABEL_LIBDIR；
+#   - 因此 lib/openbabel/ 只是占位，缺失属正常，不应当作错误。
+#
+# 但为兼容"误配成动态构建"的历史产物，若确实在 build/ 下发现了 .obf，
+# 说明构建被配置成了动态插件模式，此时才需要把它们放到 BABEL_LIBDIR。
+# 下面做一次检测并在需要时兜底复制，同时对异常情况给出明确告警。
 #--------------------------------------------------------------------
-if [ -d "$MINGW_PREFIX/lib/openbabel" ]; then
-  echo "==> 复制 OpenBabel 插件（若为动态版）"
+_OBF_FOUND=$(find "$BUILD_DIR" -name "*.obf" 2>/dev/null | head -1)
+if [ -n "$_OBF_FOUND" ]; then
+  echo "==> 检测到 .obf 动态插件，按动态构建方式部署到 lib/openbabel"
+  echo "    注意: 这通常意味着 OpenBabel 被配置成了 BUILD_SHARED=ON，"
+  echo "          静态构建下不应出现。若力场仍加载失败请检查该配置。"
   mkdir -p "$BUILD_DIR/lib/openbabel"
-  cp -rf "$MINGW_PREFIX/lib/openbabel/." "$BUILD_DIR/lib/openbabel/" 2>/dev/null || true
+  find "$BUILD_DIR" -name "*.obf" -exec cp -f {} "$BUILD_DIR/lib/openbabel/" \; 2>/dev/null || true
+  echo "    已复制 $(ls "$BUILD_DIR/lib/openbabel" 2>/dev/null | wc -l) 个插件"
+else
+  echo "==> OpenBabel 为静态内联构建（无 .obf），lib/openbabel/ 无需插件文件"
+  # 仅当系统里恰好存在同名目录时做个占位拷贝，失败也不影响运行
+  if [ -d "$MINGW_PREFIX/lib/openbabel" ]; then
+    mkdir -p "$BUILD_DIR/lib/openbabel"
+    cp -rf "$MINGW_PREFIX/lib/openbabel/." "$BUILD_DIR/lib/openbabel/" 2>/dev/null || true
+  fi
 fi
 
 #--------------------------------------------------------------------
