@@ -10,9 +10,22 @@
 
 ## 工具清单
 
+### 翻译包裹重放（第三层方案 A 项，推荐）
+
 | 脚本 | 语言 | 用途 | 关键说明 |
 |---|---|---|---|
-| `wrap_tr.py` | Python | 行号驱动的 `MainWindow.C` `tr()` 包裹 | 精确、注释安全；跳过品牌名 / 力场名 / 注释块 / 内部标识符 |
+| `extract_tr_rules.py` | Python | 从 `git diff <base>..HEAD` **反向提取** `tr()` 包裹规则 | 产出内容驱动规则表；`--verify` 校验覆盖率（当前 250 条 / 36 文件 / 100%） |
+| `replay_tr.py` | Python | 按规则表**幂等重放**翻译包裹 | 支持 `tr()` / `QCoreApplication::translate()` 三种形态；默认 dry-run，`--apply` 才落盘 |
+| `wrap_tr.rules` | TSV | 规则表本体（自动生成，勿手改） | 格式 `<路径>\t<字面量>\t<形态>\t<出现次数>` |
+
+> 上游升级后，用这两个脚本一键重建 29+ 个文件的翻译包裹，不必人工逐行核对。
+> 详见 [`docs/第三层-重放机制说明.md`](../../docs/第三层-重放机制说明.md)。
+
+### 其他翻译工具
+
+| 脚本 | 语言 | 用途 | 关键说明 |
+|---|---|---|---|
+| `wrap_tr.py` | Python | **【已弃用】** 行号驱动的 `MainWindow.C` `tr()` 包裹 | 行号随上游改动即失效，已由 `replay_tr.py` 取代，仅作归档 |
 | `translate_iqmol.py` | Python | 全量 UI 字符串中译（V2） | 匹配优先级：已知译文 > 短语 > 单词组合 > 排除/保留；特殊处理全大写缩写、HTML 富文本、元素/同位素/溶剂名；未命中转 `unfinished` 供人工复核 |
 | `fill_translations.py` | Python | 按 `source` 原文匹配填充 `zh_CN.ts` 译文 | 与 `translate_iqmol.py` 互补，用于把已审定译文落盘到 `.ts` |
 | `build_manual.py` | Python | 由 `.tex` 生成自包含中文用户手册 HTML | 图片以 base64 内嵌，单文件可直接分发 |
@@ -65,6 +78,17 @@ python3 build_manual.py     # 读取 doc/IQmolUserGuide.tex，输出中文手册
 ```bash
 python3 translate_iqmol.py  # 产出 zh_CN_new.ts
 python3 fill_translations.py
+```
+
+### 4. 上游升级后重建翻译包裹
+
+```bash
+# 从当前成果重新提取规则表（吸收后续新增的包裹）
+python3 extract_tr_rules.py --base af7ff60 --verify
+
+# 合并上游后，先 dry-run 审阅，再落盘
+python3 replay_tr.py
+python3 replay_tr.py --apply
 ```
 
 ---

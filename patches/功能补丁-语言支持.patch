@@ -1,0 +1,215 @@
+diff --git a/src/Layer/OctreeLayer.C b/src/Layer/OctreeLayer.C
+index 1c7236f..33ab988 100644
+--- a/src/Layer/OctreeLayer.C
++++ b/src/Layer/OctreeLayer.C
+@@ -19,6 +19,7 @@
+   with IQmol.  If not, see <http://www.gnu.org/licenses/>.
+ 
+ ********************************************************************************/
++#include <cstdint>  // GCC15+ 需显式包含(cstdint 补丁)
+ 
+ #include "OctreeLayer.h"
+ 
+diff --git a/src/Main/IQmolApplication.C b/src/Main/IQmolApplication.C
+index ca84274..9f5f227 100644
+--- a/src/Main/IQmolApplication.C
++++ b/src/Main/IQmolApplication.C
+@@ -33,6 +33,9 @@
+ #include <QMessageBox>
+ #include <QFileOpenEvent>
+ #include <QSplashScreen>
++#include <QTranslator>
++#include <QLibraryInfo>
++#include <QLocale>
+ 
+ #include <QDebug>
+ #include <QThread>
+@@ -44,13 +47,15 @@
+ namespace IQmol {
+ 
+ IQmolApplication::IQmolApplication(int &argc, char **argv )
+-  : QApplication(argc, argv), m_splashScreen(0), 
++  : QApplication(argc, argv), m_splashScreen(0), m_qtTranslator(0), m_appTranslator(0),
+     m_unhandledException(QMessageBox::Critical, "IQmol", "IQmol encountered an exception.\n"
+     "See log file for details.", QMessageBox::Abort)
+     
+ {
+    setOrganizationDomain("iqmol.org");
+    setApplicationName("IQmol");
++   // 加载中文本地化翻译（Qt 基础翻译 + 应用翻译）
++   loadTranslations();
+    if (argc > 1) {
+       QString arg(argv[1]);
+       if (arg == "--clear-jobs") {
+@@ -62,6 +67,69 @@ IQmolApplication::IQmolApplication(int &argc, char **argv )
+ }
+ 
+ 
++void IQmolApplication::loadTranslations()
++{
++   // 计算目标 locale。三态偏好(见 Preferences::Language 注释):
++   //   "en"     -> 强制英文
++   //   "zh_CN"  -> 强制中文
++   //   "system" -> 跟随系统(系统非中文时, 应用自身翻译文件不存在则自然回退英文)
++   //   未设置    -> 首次运行: 保持汉化默认, 非中文环境也显示中文
++   QString locale = QLocale::system().name();
++   QString pref = Preferences::Language();
++   if (pref == "en") {
++      locale = QString("en");
++   } else if (pref == "zh_CN") {
++      locale = QString("zh_CN");
++   } else if (pref == "system") {
++      // 保留系统 locale; 若无对应翻译文件, 下面加载会失败并回退英文
++   } else if (!locale.startsWith("zh")) {
++      locale = QString("zh_CN");   // 首次运行: 汉化默认
++   }
++
++   // Qt 基础翻译（标准对话框按钮等），跟随最终 locale
++   m_qtTranslator = new QTranslator(this);
++   QString qtBasePath = QLibraryInfo::location(QLibraryInfo::TranslationsPath);
++   if (m_qtTranslator->load("qt_" + locale, qtBasePath)) {
++      installTranslator(m_qtTranslator);
++   }
++
++   // 应用翻译（IQmol 界面字符串）
++   m_appTranslator = new QTranslator(this);
++
++   // 依次尝试多个候选路径
++   QStringList searchPaths;
++   searchPaths << QApplication::applicationDirPath() + "/translations"
++               << QApplication::applicationDirPath()
++               << QDir::current().filePath("translations")
++               << QDir::currentPath();
++
++   bool loaded(false);
++   foreach (QString const& path, searchPaths) {
++      if (m_appTranslator->load("IQmol_" + locale, path)) {
++         loaded = true;
++         break;
++      }
++   }
++   // 也尝试不带前缀的文件名（与 lrelease 输出 zh_CN.qm 对应）
++   if (!loaded) {
++      foreach (QString const& path, searchPaths) {
++         if (m_appTranslator->load(locale, path)) {
++            loaded = true;
++            break;
++         }
++      }
++   }
++   if (loaded) {
++      installTranslator(m_appTranslator);
++      QLOG_INFO() << "Loaded translation:" << locale;
++      qDebug() << "[i18n] Loaded translation:" << locale;
++   } else {
++      QLOG_INFO() << "No translation file found for:" << locale;
++      qDebug() << "[i18n] No translation file found for:" << locale;
++   }
++}
++
++
+ IQmolApplication::~IQmolApplication()
+ {
+ // This seems to cause a crash on exit under windows
+diff --git a/src/Main/IQmolApplication.h b/src/Main/IQmolApplication.h
+index bd9112d..4ee8cb9 100644
+--- a/src/Main/IQmolApplication.h
++++ b/src/Main/IQmolApplication.h
+@@ -26,6 +26,7 @@
+ #include <QMessageBox>
+ #include <QEvent>
+ #include <QStringList>
++#include <QTranslator>
+ 
+ 
+ class QSplashScreen;
+@@ -56,8 +57,11 @@ namespace IQmol {
+ 
+       private:
+          void initOpenBabel();
++         void loadTranslations();
+          QSplashScreen* m_splashScreen;
+          QMessageBox    m_unhandledException;
++         QTranslator*   m_qtTranslator;
++         QTranslator*   m_appTranslator;
+    };
+ 
+ 
+diff --git a/src/Main/PreferencesBrowser.C b/src/Main/PreferencesBrowser.C
+index 48d419b..2c7599a 100644
+--- a/src/Main/PreferencesBrowser.C
++++ b/src/Main/PreferencesBrowser.C
+@@ -79,6 +79,12 @@ void Browser::init()
+    m_preferencesBrowser.forceFieldCombo->setCurrentIndex(idx);
+    m_preferencesBrowser.undoLimit->setValue(UndoLimit());
+    m_preferencesBrowser.labelFontSize->setValue(LabelFontSize());
++
++   // 语言切换逃生舱: 0=中文, 1=English, 2=跟随系统
++   // 未设置(首次运行)按"中文"项显示, 与汉化默认行为一致
++   QString lang(Language());
++   int idx(lang == "en" ? 1 : (lang == "system" ? 2 : 0));
++   m_preferencesBrowser.languageComboBox->setCurrentIndex(idx);
+ }
+ 
+ 
+@@ -123,6 +129,12 @@ void Browser::on_buttonBox_accepted()
+    DefaultForceField(m_preferencesBrowser.forceFieldCombo->currentText());
+    UndoLimit(m_preferencesBrowser.undoLimit->value());
+    LabelFontSize(m_preferencesBrowser.labelFontSize->value());
++
++   // 语言切换逃生舱: 0=中文, 1=English, 2=跟随系统
++   int idx(m_preferencesBrowser.languageComboBox->currentIndex());
++   QString lang(idx == 1 ? "en" : (idx == 2 ? QString("system") : QString("zh_CN")));
++   Language(lang);
++
+    updated();
+    accept();
+ }
+diff --git a/src/Util/Preferences.C b/src/Util/Preferences.C
+index b5e3a86..a020f4d 100644
+--- a/src/Util/Preferences.C
++++ b/src/Util/Preferences.C
+@@ -422,6 +422,27 @@ void FFmpegPath(QString const& filePath)
+    Set("FFmpegPath", QVariant::fromValue(filePath));
+ }
+ 
++// ---------
++
++// 语言切换逃生舱。取值语义:
++//   "system"  = 跟随系统(显式选择)
++//   "zh_CN"   = 强制中文
++//   "en"      = English
++//   未设置     = 首次运行, 保持汉化默认(非中文环境也显示中文)
++// 注意: 早期实现用空字符串表示"跟随系统", 但空值与"未设置"无法区分,
++// 导致选"跟随系统"时被 loadTranslations() 当成未设置, 仍强制中文(选项失效)。
++// 故改用显式哨兵值 "system"。
++QString Language() 
++{
++   QVariant value(Get("Language"));
++   return value.isNull() ? QString() : value.value<QString>();
++}
++
++void Language(QString const& lang)
++{
++   Set("Language", lang);
++}
++
+ 
+ // ---------
+ 
+diff --git a/src/Util/Preferences.h b/src/Util/Preferences.h
+index 9920952..7309206 100644
+--- a/src/Util/Preferences.h
++++ b/src/Util/Preferences.h
+@@ -109,6 +109,11 @@ namespace Preferences {
+    QString FFmpegPath();
+    void    FFmpegPath(QString const&);
+ 
++   // 语言切换逃生舱。取值: "system"=跟随系统, "zh_CN"=中文, "en"=English;
++   // 未设置 = 首次运行, 保持汉化默认(非中文环境也显示中文)。
++   QString Language();
++   void    Language(QString const&);
++
+    double  SymmetryTolerance();
+    void    SymmetryTolerance(double const);
+    
