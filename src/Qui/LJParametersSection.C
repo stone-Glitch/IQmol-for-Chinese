@@ -73,7 +73,7 @@ void LJParametersSection::generateData(QString const& geometry)
       QString msg("The molecule contains atoms for which there are no inbuilt "
                   "Lennard-Jones parameters:");
       msg += notFound;
-      QMessageBox::warning(0, "LJ Parameter Error",msg);
+      QMessageBox::warning(0, tr("LJ Parameter Error"),msg);
   
    }
  

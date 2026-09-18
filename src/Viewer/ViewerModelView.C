@@ -72,15 +72,15 @@ void ViewerModelView::contextMenuEvent(QContextMenuEvent*)
           }
       }
       if (allMolecules) {
-         QAction* action(new QAction("Merge Molecules")); 
+         QAction* action(new QAction(tr("Merge Molecules"))); 
          connect(action, SIGNAL(triggered()), this, SLOT(mergeSelection()));
          menu.addAction(action);
 
-         action = new QAction("Show Molecules"); 
+         action = new QAction(tr("Show Molecules")); 
          connect(action, SIGNAL(triggered()), this, SLOT(showMolecules()));
          menu.addAction(action);
 
-         action = new QAction("Hide Molecules"); 
+         action = new QAction(tr("Hide Molecules")); 
          connect(action, SIGNAL(triggered()), this, SLOT(hideMolecules()));
          menu.addAction(action);
       }

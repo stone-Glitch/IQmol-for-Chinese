@@ -52,9 +52,9 @@ void MoleculeSection::read(QString const& input)
    // TODO: This should really load a molecule object so that the coordinate
    // conversion can be done.
    if (!okay) {
-      QString msg("Problem reading $molecule section: \n");
+      QString msg(tr("Problem reading $molecule section: \n"));
       msg += input;
-      QMessageBox::warning(0, "Parse Error", msg);
+      QMessageBox::warning(0, tr("Parse Error"), msg);
    }
 }
 

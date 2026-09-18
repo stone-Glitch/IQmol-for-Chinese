@@ -122,8 +122,8 @@ void GridInfoDialog::contextMenu(QPoint const& point)
    QMenu menu(this);
 
    menu.addAction("Delete", this, SLOT(deleteGrid()));
-   menu.addAction("Export Cube File", this, SLOT(exportCubeFilePositive()));
-   menu.addAction("Export Cube File (Switch Phase)", this, SLOT(exportCubeFileNegative()));
+   menu.addAction(tr("Export Cube File"), this, SLOT(exportCubeFilePositive()));
+   menu.addAction(tr("Export Cube File (Switch Phase)"), this, SLOT(exportCubeFileNegative()));
 
    menu.exec(table->mapToGlobal(point));
 }

@@ -79,6 +79,11 @@ void Browser::init()
    m_preferencesBrowser.forceFieldCombo->setCurrentIndex(idx);
    m_preferencesBrowser.undoLimit->setValue(UndoLimit());
    m_preferencesBrowser.labelFontSize->setValue(LabelFontSize());
+
+   // 语言切换逃生舱: 0=中文, 1=English, 2=跟随系统(空)
+   QString lang(Language());
+   int idx(lang == "en" ? 1 : (lang.isEmpty() ? 2 : 0));
+   m_preferencesBrowser.languageComboBox->setCurrentIndex(idx);
 }
 
 
@@ -123,6 +128,12 @@ void Browser::on_buttonBox_accepted()
    DefaultForceField(m_preferencesBrowser.forceFieldCombo->currentText());
    UndoLimit(m_preferencesBrowser.undoLimit->value());
    LabelFontSize(m_preferencesBrowser.labelFontSize->value());
+
+   // 语言切换逃生舱: 0=中文, 1=English, 2=跟随系统(空)
+   int idx(m_preferencesBrowser.languageComboBox->currentIndex());
+   QString lang(idx == 1 ? "en" : (idx == 2 ? QString() : "zh_CN"));
+   Language(lang);
+
    updated();
    accept();
 }

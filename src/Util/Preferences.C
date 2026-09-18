@@ -422,6 +422,20 @@ void FFmpegPath(QString const& filePath)
    Set("FFmpegPath", QVariant::fromValue(filePath));
 }
 
+// ---------
+
+// 语言切换逃生舱: 空字符串 = 跟随系统(默认中文); "zh_CN" = 中文; "en" = English
+QString Language() 
+{
+   QVariant value(Get("Language"));
+   return value.isNull() ? QString() : value.value<QString>();
+}
+
+void Language(QString const& lang)
+{
+   Set("Language", lang);
+}
+
 
 // ---------
 

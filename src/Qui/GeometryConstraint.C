@@ -115,16 +115,16 @@ void Dialog::loadConstraintsToTable(List const& constraints) {
 void Dialog::addConstraintToTable(Constraint const& constraint) {
 
    if (!constraint.isValid(m_nAtoms)) {
-      QString msg("The following constraint is invalid:\n");
+      QString msg(tr("The following constraint is invalid:\n"));
       msg += constraint.format() + "\n";
-      msg += "Most likely this is because your atom numbers are not unique "
+      msg += tr("Most likely this is because your atom numbers are not unique "
              "or out of range. Please correct this before proceeding.\n";
-      QMessageBox::warning(this, "Invalid Constraint", msg);
+      QMessageBox::warning(this, tr("Invalid Constraint"), msg);
       return;
    }else if (m_constraintKeys.find(constraint.key()) != m_constraintKeys.end()) {
-      QString msg("A constraint involving the following atoms has already been defined:\n");
+      QString msg(tr("A constraint involving the following atoms has already been defined:\n"));
       msg += constraint.key() + "\n";
-      QMessageBox::warning(this, "Duplicate Constraint", msg);
+      QMessageBox::warning(this, tr("Duplicate Constraint"), msg);
       return;
    }
 
@@ -369,8 +369,8 @@ void Dialog::deleteConstraint() {
    QTableWidget* table(m_ui.constraintTable);
    QList<QTableWidgetItem*> list(table->selectedItems());
    if (list.count() > 1) {
-      QString msg("Are you sure you want to delete the selected constraint?");
-      if (QMessageBox::question(this, "Delete Constraint?", msg, 
+      QString msg(tr("Are you sure you want to delete the selected constraint?"));
+      if (QMessageBox::question(this, tr("Delete Constraint?"), msg, 
           QMessageBox::Ok | QMessageBox::Cancel) == QMessageBox::Ok) {
 
          int row = table->row(list[0]);

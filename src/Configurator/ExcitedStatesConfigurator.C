@@ -338,7 +338,7 @@ void ExcitedStates::updateSpectrum(Constants::Units const units)
 
    }else if (m_configurator.gaussianButton->isChecked()) {
       plotSpectrum(Gaussian, width);
-      m_spectrum->yAxis->setLabel("Rel. Strength");
+      m_spectrum->yAxis->setLabel(tr("Rel. Strength"));
 
    }else if (m_configurator.lorentzianButton->isChecked()) {
       plotSpectrum(Lorentzian, width);

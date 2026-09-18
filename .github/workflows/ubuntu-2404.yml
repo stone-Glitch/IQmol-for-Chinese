@@ -31,6 +31,10 @@ jobs:
           sudo apt-get install libopenbabel-dev -y
           sudo apt-get install libboost-iostreams-dev libboost-serialization-dev -y
           sudo apt-get install qtbase5-dev -y
+          # 汉化 CI 依赖: Qt5LinguistTools 的 CMake config 由 qttools5-dev 提供, 不在 qtbase5-dev 内
+          sudo apt-get install qttools5-dev qttools5-dev-tools -y
+          # 本地成功环境也包含以下两项, 一并补齐避免后续缺失
+          sudo apt-get install libqt5opengl5-dev libqt5sql5-sqlite -y
           sudo ln -s /usr/include/openbabel3/openbabel /usr/include/
 
       - name: Link Dependencies on x86_64
