@@ -407,24 +407,23 @@ target_link_libraries (${targetName}
 #         "Failed to load force field: UFF", 但编译链接期毫无报错。
 #
 #   Linux 上通常因动态链接或系统包展开而恰好可用, Windows 静态构建必踩。
-#   修复: 用 --whole-archive 包裹 openbabel, 强制链入其全部目标文件。
+#
+#   关键: 不能用裸 -Wl,--whole-archive openbabel -Wl,--no-whole-archive ——
+#   CMake 在生成 link.txt 时会把"链接器旗标"与"库名"拆开重新排序, 结果
+#   --whole-archive / --no-whole-archive 被错误地套在 IQmol 自己的 objects.a
+#   上, 而 openbabel 被塞进 linkLibs.rsp 做普通链接, 自注册成员照样被丢弃。
+#   修复: 用 CMake 官方封装 $<LINK_LIBRARY:WHOLE_ARCHIVE,openbabel>, 由 CMake
+#   保证 --whole-archive 紧贴 openbabel 路径, 不惧排序。要求 cmake >= 3.24
+#   (本项目 build_windows.sh 自带 3.31.6, 满足)。
 #-------------------------------------------------------------------
 if (WIN32 AND NOT BUILD_SHARED_LIBS)
    if (TARGET openbabel)
-      # 注意: 这里必须用【目标名 openbabel】而不是 $<TARGET_FILE:openbabel>。
-      #
-      # 用 $<TARGET_FILE:...> 会把真实文件路径(如 modules/openbabel/src/
-      # libopenbabel.a)直接写进 link.txt, 绕过了 CMake 的目标依赖跟踪。
-      # 而 openbabel 是以 EXCLUDE_FROM_ALL 方式 add_subdirectory 进来的,
-      # 默认构建目标里不含它, 于是 MinGW Makefile 后端在链接时报:
-      #   No rule to make target 'modules/openbabel/src/libopenbabel.a',
-      #   needed by 'bin/IQmol.exe'
-      # 用目标名则会自动建立依赖边, 并自动补上 --whole-archive 之间的
-      # 库位置，无需手写路径。
+      # 用 CMake 官方封装 $<LINK_LIBRARY:WHOLE_ARCHIVE,openbabel> 而非裸
+      # -Wl,--whole-archive: 裸旗标会被 CMake 在生成 link.txt 时与库名拆开重排,
+      # 错误地套到 IQmol 自己的 objects.a 上。官方封装保证 --whole-archive 紧贴
+      # openbabel 路径, 并保留目标依赖跟踪(无需手写 $<TARGET_FILE:...> 路径)。
       target_link_libraries (${targetName}
-         -Wl,--whole-archive
-         openbabel
-         -Wl,--no-whole-archive
+         $<LINK_LIBRARY:WHOLE_ARCHIVE,openbabel>
       )
       # 双保险：显式声明依赖, 确保 openbabel 在链接前被构建
       # (openbabel 经 EXCLUDE_FROM_ALL 引入, 不属于默认 all 目标)
@@ -436,13 +435,11 @@ if (WIN32 AND NOT BUILD_SHARED_LIBS)
    endif()
 else()
    # 非 Windows 静态构建 (Linux/其他平台): 同样需要整体保留, 否则力场等插件
-   # 在部分链接器配置下也会被丢弃。动态构建时 --whole-archive 无副作用。
-   # 同 Windows 分支: 用目标名而非 $<TARGET_FILE:...>, 以保留 CMake 依赖跟踪。
+   # 在部分链接器配置下也会被丢弃。动态构建时 WHOLE_ARCHIVE 无副作用。
+   # 统一用官方封装, 由 CMake 保证 --whole-archive 紧贴 openbabel。
    if (NOT BUILD_SHARED_LIBS AND TARGET openbabel)
       target_link_libraries (${targetName}
-         -Wl,--whole-archive
-         openbabel
-         -Wl,--no-whole-archive
+         $<LINK_LIBRARY:WHOLE_ARCHIVE,openbabel>
       )
       add_dependencies(${targetName} openbabel)
       message(STATUS "[IQmol] 已对 openbabel 启用 --whole-archive (非 Windows 静态构建)")
@@ -454,12 +451,10 @@ endif()
 # maeparser 是 OpenBabel 捆绑的独立静态库(MAE 格式: schrodinger::mae 命名空间),
 # 其实现符号同样可能被链接器按引用丢弃, 且需与上面的 MAEPARSER_STATIC_DEFINE
 # 配合。若它是独立 CMake 目标则一并整体保留; 否则由 openbabel 的 PRIVATE 依赖
-# 传递链入(此时已被 openbabel 的 --whole-archive 覆盖, 无需重复)。
+# 传递链入(此时已被 openbabel 的 WHOLE_ARCHIVE 覆盖, 无需重复)。
 if (TARGET maeparser)
    target_link_libraries (${targetName}
-      -Wl,--whole-archive
-      maeparser
-      -Wl,--no-whole-archive
+      $<LINK_LIBRARY:WHOLE_ARCHIVE,maeparser>
    )
    add_dependencies(${targetName} maeparser)
    message(STATUS "[IQmol] 已对 maeparser 启用 --whole-archive")
