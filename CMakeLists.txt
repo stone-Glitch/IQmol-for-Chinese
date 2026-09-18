@@ -163,14 +163,24 @@ else()
       set(BUILD_SHARED ON CACHE BOOL "OpenBabel: build shared library + dynamic plugins" FORCE)
    endif()
 
-   # 静态构建 OpenBabel 时, 其捆绑的子库(maeparser 等)由 CMake
-   # GenerateExportHeader 生成的导出宏默认按"DLL 导入"处理外部符号,
-   # 会在 MinGW 链接期产生 undefined reference to
-   # `__imp__ZN11schrodinger3mae6Reader...`(MAE 格式) 等。
-   # 定义 *_STATIC_DEFINE 使这些宏退化为普通符号, 才能与静态 .a 匹配。
-   # 必须在 add_subdirectory 之前设置, 让 maeparser 子目录继承该宏。
+   # 静态构建 OpenBabel 时, 其捆绑的 maeparser (schrodinger::mae 命名空间) 默认
+   # 按"DLL 导入"处理, 会在 MinGW 链接期产生 undefined reference:
+   #   __imp__ZN11schrodinger3mae6Reader... (MAE 格式)
+   # 原因: maeparser 的 MaeParserConfig.hpp 用 STATIC_MAEPARSER 控制导出宏:
+   #     #ifndef STATIC_MAEPARSER
+   #       #define EXPORT_MAEPARSER __declspec(dllimport)   // 消费者侧
+   #     #else
+   #       #define EXPORT_MAEPARSER                          // 静态: 空
+   #     #endif
+   # 而 maeparser/CMakeLists.txt 只做了
+   #   target_compile_definitions(maeparser PRIVATE "STATIC_MAEPARSER")
+   # —— PRIVATE 不会传播给消费者(openbabel 的 maeformat.cpp), 故消费者
+   # 仍按 DLL 导入展开。必须在消费者侧补上 STATIC_MAEPARSER。
+   # 注意: 宏名是 STATIC_MAEPARSER, 不是 MAEPARSER_STATIC_DEFINE
+   # (后者是 GenerateExportHeader 的命名习惯, 对 maeparser v1.2.3 无效)。
+   # 必须在 add_subdirectory 之前设置, 让 openbabel/maeparser 子目录继承该宏。
    if (NOT BUILD_SHARED_LIBS)
-      add_compile_definitions(MAEPARSER_STATIC_DEFINE)
+      add_compile_definitions(STATIC_MAEPARSER)
    endif()
 
    add_subdirectory(modules/openbabel  EXCLUDE_FROM_ALL)
@@ -449,9 +459,10 @@ else()
 endif()
 
 # maeparser 是 OpenBabel 捆绑的独立静态库(MAE 格式: schrodinger::mae 命名空间),
-# 其实现符号同样可能被链接器按引用丢弃, 且需与上面的 MAEPARSER_STATIC_DEFINE
-# 配合。若它是独立 CMake 目标则一并整体保留; 否则由 openbabel 的 PRIVATE 依赖
-# 传递链入(此时已被 openbabel 的 WHOLE_ARCHIVE 覆盖, 无需重复)。
+# 其实现符号同样可能被链接器按引用丢弃, 且需与上面的 STATIC_MAEPARSER 宏
+# 配合(消除 __imp_ DLL 导入前缀)。若它是独立 CMake 目标则一并整体保留;
+# 否则由 openbabel 的 PRIVATE 依赖传递链入(此时已被 openbabel 的 WHOLE_ARCHIVE
+# 覆盖, 无需重复)。
 if (TARGET maeparser)
    target_link_libraries (${targetName}
       $<LINK_LIBRARY:WHOLE_ARCHIVE,maeparser>

@@ -13,6 +13,7 @@
 | [`2026-09-13-OpenBabel插件加载失败诊断与修复.md`](2026-09-13-OpenBabel插件加载失败诊断与修复.md) | 问题诊断 | `Unable to find OpenBabel plugins` 根因（静态插件自注册被 ld 丢弃）与两层修复 | 2026-09-13 |
 | [`2026-09-13-OpenBabel-Windows静态链接undefined-reference诊断.md`](2026-09-13-OpenBabel-Windows静态链接undefined-reference诊断.md) | 问题诊断 | 链接期 undefined reference（maeparser `__imp_` 导入 + 静态库成员被丢弃）与修复 | 2026-09-13 |
 | [`2026-09-13-仓库整理报告.md`](2026-09-13-仓库整理报告.md) | 整理报告 | 文档过时路径修正、结构对齐、工作区归置 | 2026-09-13 |
+| [`2026-09-18-OpenBabel静态链接additional_sources与maeparser宏诊断.md`](2026-09-18-OpenBabel静态链接additional_sources与maeparser宏诊断.md) | 问题诊断 | 第二轮 undefined reference：openbabel 静态分支漏加 `additional_sources`（ASCIIPainter/CommandPainter/NMReadWLN）+ maeparser 宏名用错（应为 `STATIC_MAEPARSER`） | 2026-09-18 |
 | [`2026-09-18-第三方评测Qui.h完整性核查-已证伪.md`](2026-09-18-第三方评测Qui.h完整性核查-已证伪.md) | 澄清存档 | 第三方评测称 `src/Qui/Qui.h` 被清空致构建必败；双源实测证伪（1587 字节 / 60 行 / 6 符号全在） | 2026-09-18 |
 | [`2026-09-18-仓库整理报告.md`](2026-09-18-仓库整理报告.md) | 整理报告 | 采纳反馈包后的文档一致性维护：条数口径统一、索引补全、断链修正、新特性入档 | 2026-09-18 |
 | [`IQmol-i18n-构建验证指南.md`](IQmol-i18n-构建验证指南.md) | 构建指南 | 端到端翻译管线（tr → lupdate → ts → lrelease → QTranslator）打通说明；含环境要求、构建步骤、翻译加载逻辑 | 早期（2026-08-28，2026-09-13 补注） |
