@@ -69,13 +69,21 @@ IQmolApplication::IQmolApplication(int &argc, char **argv )
 
 void IQmolApplication::loadTranslations()
 {
-   // 计算目标 locale: 优先用户偏好(语言切换逃生舱), 否则非中文环境默认中文
+   // 计算目标 locale。三态偏好(见 Preferences::Language 注释):
+   //   "en"     -> 强制英文
+   //   "zh_CN"  -> 强制中文
+   //   "system" -> 跟随系统(系统非中文时, 应用自身翻译文件不存在则自然回退英文)
+   //   未设置    -> 首次运行: 保持汉化默认, 非中文环境也显示中文
    QString locale = QLocale::system().name();
    QString pref = Preferences::Language();
-   if (!pref.isEmpty()) {
-      locale = pref;
-   } else if (!locale.startsWith("zh")) {
+   if (pref == "en") {
+      locale = QString("en");
+   } else if (pref == "zh_CN") {
       locale = QString("zh_CN");
+   } else if (pref == "system") {
+      // 保留系统 locale; 若无对应翻译文件, 下面加载会失败并回退英文
+   } else if (!locale.startsWith("zh")) {
+      locale = QString("zh_CN");   // 首次运行: 汉化默认
    }
 
    // Qt 基础翻译（标准对话框按钮等），跟随最终 locale
