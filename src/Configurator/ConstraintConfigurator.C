@@ -52,7 +52,7 @@ VectorConstraint::VectorConstraint(Layer::Constraint& constraint) : Constraint(c
 void VectorConstraint::init()
 {
    QString atoms(QString::number(m_constraint.m_atoms[0]->getIndex()));
-   m_constraintConfigurator.label->setText("Set position of atom " + atoms);
+   m_constraintConfigurator.label->setText(tr("Set position of atom %1").arg(atoms));
    m_constraint.setText("Position " + atoms);
 }
 
@@ -138,7 +138,7 @@ void ScalarConstraint::initDistance()
    QString atoms(QString::number(m_constraint.m_atoms[0]->getIndex()) + "-" +
                  QString::number(m_constraint.m_atoms[1]->getIndex()));
 
-   m_constraintConfigurator.label->setText("Distance between atoms " + atoms);
+   m_constraintConfigurator.label->setText(tr("Distance between atoms %1").arg(atoms));
    m_constraint.setText("Distance " + atoms);
 }
 
@@ -160,7 +160,7 @@ void ScalarConstraint::initAngle()
                  QString::number(m_constraint.m_atoms[1]->getIndex()) + "-" +
                  QString::number(m_constraint.m_atoms[2]->getIndex()));
 
-   m_constraintConfigurator.label->setText("Angle between atoms " + atoms);
+   m_constraintConfigurator.label->setText(tr("Angle between atoms %1").arg(atoms));
    m_constraint.setText("Angle " + atoms);
 }
 

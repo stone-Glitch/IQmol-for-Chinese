@@ -34,7 +34,7 @@ void CustomPlot::contextMenuEvent(QContextMenuEvent* event)
 {
    QMenu *menu(new QMenu(this));
    menu->setAttribute(Qt::WA_DeleteOnClose);
-   menu->addAction("Save Image As", this, SLOT(saveAs()));
+   menu->addAction(tr("Save Image As"), this, SLOT(saveAs()));
    menu->popup(mapToGlobal(event->pos()));
 }
 

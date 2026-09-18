@@ -271,7 +271,7 @@ void Orbitals::initPlot()
                       m_orbitals.betaOrbitalAmplitude( nOrbs/2-1));
       yMax = std::max(m_orbitals.alphaOrbitalAmplitude(nOrbs/2), 
                       m_orbitals.betaOrbitalAmplitude( nOrbs/2));
-      m_customPlot->yAxis->setLabel("Occupancy");
+      m_customPlot->yAxis->setLabel(tr("Occupancy"));
 
    }else {
 

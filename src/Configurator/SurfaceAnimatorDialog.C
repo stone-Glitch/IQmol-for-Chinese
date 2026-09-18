@@ -368,8 +368,8 @@ void SurfaceAnimatorDialog::computeMultiGridAnimation()
 
            surface = calculateSurface(t, isovalue);
            frames.append(new Animator::Combo::Data(geomT, surface));
-           label = (j == 0) ? "Cube Data " + QString::number(i) 
-                            : "Interpolation Frame " + QString::number(j);
+           label = (j == 0) ? tr("Cube Data %1").arg(i) 
+                            : tr("Interpolation Frame %1").arg(j);
            surface->setText(label);
            cube->appendLayer(surface);
 
@@ -391,7 +391,7 @@ void SurfaceAnimatorDialog::computeMultiGridAnimation()
 
    // Take care of the final reference frame
    surface = calculateSurface(*B, isovalue);
-   surface->setText("Cube Data " + QString::number(m_referenceFrames));
+   surface->setText(tr("Cube Data %1").arg(m_referenceFrames));
    cube->appendLayer(surface);
 
    frames.append(new Animator::Combo::Data(cube->cubeData().geometry(), surface));

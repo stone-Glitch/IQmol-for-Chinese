@@ -801,9 +801,9 @@ GeminalOrbitalProperty::GeminalOrbitalProperty(Data::GeminalOrbitals const& gemi
   //QList<unsigned> const& Limits(geminalOrbitals.geminalOrbitalLimits());
   
   if(index < geminalOrbitals.nAlpha()){
-   setText("Geminal Alpha " + QString::number(index+1));
+   setText(tr("Geminal Alpha %1").arg(index+1));
   } else {
-    setText("Geminal Beta " + QString::number(index+1-geminalOrbitals.nAlpha()));
+    setText(tr("Geminal Beta %1").arg(index+1-geminalOrbitals.nAlpha()));
  }
   m_function = std::bind(&GeminalOrbitalProperty::orbital, this, 
      std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);

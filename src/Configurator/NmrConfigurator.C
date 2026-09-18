@@ -190,10 +190,10 @@ void Nmr::updatePlot()
 
    if (isotope.isEmpty()) {
       data = m_data.shieldings();
-      m_plot->xAxis->setLabel("Nuclear Shielding (ppm)");
+      m_plot->xAxis->setLabel(tr("Nuclear Shielding (ppm)"));
    }else {
       data = computeShifts(currentReference(), isotope);
-      m_plot->xAxis->setLabel("Chemical Shift (ppm)");
+      m_plot->xAxis->setLabel(tr("Chemical Shift (ppm)"));
    }
 
    if (m_ui->impulseButton->isChecked()) {
@@ -254,7 +254,7 @@ void Nmr::plotImpulse(QList<double> const& data, QPair<double, double> const& do
   // m_plot->yAxis->setAutoTickStep(false);
    //m_plot->yAxis->ticker()->setTickStep(1);
    m_plot->yAxis->setTickLabels(true);
-   m_plot->yAxis->setLabel("Count");
+   m_plot->yAxis->setLabel(tr("Count"));
 }
 
 
@@ -306,7 +306,7 @@ void Nmr::plotSpectrum(QList<double> const& data, QPair<double, double> const& d
    graph->selectionDecorator()->setPen(m_selectPen);
 
    m_plot->yAxis->setRange(-0.00, 1.05*maxIntensity);
-   m_plot->yAxis->setLabel("Relative Intensity");
+   m_plot->yAxis->setLabel(tr("Relative Intensity"));
    m_plot->yAxis->setTickLabels(false);
 }
 

@@ -109,6 +109,10 @@ namespace Preferences {
    QString FFmpegPath();
    void    FFmpegPath(QString const&);
 
+   // 语言切换逃生舱: 用户可显式选择界面语言; 空字符串 = 跟随系统(默认中文)
+   QString Language();
+   void    Language(QString const&);
+
    double  SymmetryTolerance();
    void    SymmetryTolerance(double const);
    

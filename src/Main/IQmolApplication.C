@@ -69,18 +69,24 @@ IQmolApplication::IQmolApplication(int &argc, char **argv )
 
 void IQmolApplication::loadTranslations()
 {
-   // Qt 基础翻译（标准对话框按钮等）
+   // 计算目标 locale: 优先用户偏好(语言切换逃生舱), 否则非中文环境默认中文
+   QString locale = QLocale::system().name();
+   QString pref = Preferences::Language();
+   if (!pref.isEmpty()) {
+      locale = pref;
+   } else if (!locale.startsWith("zh")) {
+      locale = QString("zh_CN");
+   }
+
+   // Qt 基础翻译（标准对话框按钮等），跟随最终 locale
    m_qtTranslator = new QTranslator(this);
    QString qtBasePath = QLibraryInfo::location(QLibraryInfo::TranslationsPath);
-   if (m_qtTranslator->load("qt_" + QLocale::system().name(), qtBasePath)) {
+   if (m_qtTranslator->load("qt_" + locale, qtBasePath)) {
       installTranslator(m_qtTranslator);
    }
 
    // 应用翻译（IQmol 界面字符串）
    m_appTranslator = new QTranslator(this);
-   // 优先使用系统语言；若非中文则默认中文，以满足汉化目标
-   QString locale = QLocale::system().name();
-   if (!locale.startsWith("zh")) locale = QString("zh_CN");
 
    // 依次尝试多个候选路径
    QStringList searchPaths;

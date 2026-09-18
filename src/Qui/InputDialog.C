@@ -861,8 +861,8 @@ void InputDialog::readChargesFinished()
 void InputDialog::deleteAllJobs(bool const prompt) 
 {
    if (prompt) {
-      QString msg("Are you sure you want to delete all generated input?");
-      if (QMessageBox::question(this, "Delete input?",msg,
+      QString msg(tr("Are you sure you want to delete all generated input?"));
+      if (QMessageBox::question(this, tr("Delete input?"),msg,
           QMessageBox::Ok | QMessageBox::Cancel) == QMessageBox::Cancel)  {
           return;
       }

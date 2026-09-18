@@ -22,7 +22,9 @@ command -v lupdate >/dev/null 2>&1 || { echo "错误: 未找到 lupdate"; exit 1
 command -v lrelease >/dev/null 2>&1 || { echo "错误: 未找到 lrelease"; exit 1; }
 
 echo "==> lupdate 扫描源码"
-lupdate "$TOPDIR/src/" -ts "$TS" 2>&1 | grep -E "Found|Kept" || true
+# 注意 -extensions C,ui 必须放在目录参数之前:
+# IQmol 全部源文件用大写 .C 后缀, lupdate 默认扩展名列表不含 .C, 会导致 292 个源文件 tr() 零提取
+lupdate -extensions C,ui "$TOPDIR/src/" -ts "$TS" 2>&1 | grep -E "Found|Kept" || true
 
 echo "==> 移除误标的 vanished 标记 (防退化)"
 python3 - "$TS" <<'PY'

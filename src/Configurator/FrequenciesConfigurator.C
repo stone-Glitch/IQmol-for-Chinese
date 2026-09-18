@@ -90,7 +90,7 @@ void Frequencies::initSpectrum()
    m_spectrum->axisRect()->setRangeZoom(Qt::Horizontal);
 
    m_spectrum->xAxis->setSelectableParts(QCPAxis::spNone);
-   m_spectrum->xAxis->setLabel("Frequency");
+   m_spectrum->xAxis->setLabel(tr("Frequency"));
    m_spectrum->yAxis->setLabel("Intensity");
 
    connect(m_spectrum, SIGNAL(mousePress(QMouseEvent*)),
@@ -226,7 +226,7 @@ void Frequencies::updatePlot()
 
    }else if (m_configurator.gaussianButton->isChecked()) {
       plotSpectrum(Gaussian, scale, width);
-      m_spectrum->yAxis->setLabel("Rel. Intensity");
+      m_spectrum->yAxis->setLabel(tr("Rel. Intensity"));
 
    }else if (m_configurator.lorentzianButton->isChecked()) {
       plotSpectrum(Lorentzian, scale, width);

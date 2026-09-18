@@ -116,9 +116,9 @@ void RemSection::read(QString const& input) {
    }
 
    if (invalidLines.count() > 0) {
-      QString msg("An error occured when parsing the following options:\n");
+      QString msg(tr("An error occured when parsing the following options:\n"));
       msg += invalidLines.join("\n");
-      QMessageBox::warning(0, "Input File Error", msg); 
+      QMessageBox::warning(0, tr("Input File Error"), msg); 
    }
 }
 

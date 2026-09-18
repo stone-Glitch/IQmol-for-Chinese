@@ -455,7 +455,7 @@ void StopButton::getColor()
 void StopButton::contextMenuEvent(QContextMenuEvent*)
 {
    QMenu menu;
-   QAction* action(new QAction("Select color", this));
+   QAction* action(new QAction(tr("Select color"), this));
    connect(action, SIGNAL(triggered()), this, SLOT(getColor()));
    menu.addAction(action);
    menu.exec(QCursor::pos());

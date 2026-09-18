@@ -740,13 +740,13 @@ void JobMonitor::contextMenu(QPoint const& pos)
 
    switch (status) {
       case JobInfo::Queued:   
-         kill = menu->addAction("Delete Job From Queue", this, SLOT(killJob()));
+         kill = menu->addAction(tr("Delete Job From Queue"), this, SLOT(killJob()));
          break;
       case JobInfo::Copying:   
-         kill = menu->addAction("Cancel Copy", this, SLOT(cancelCopy()));
+         kill = menu->addAction(tr("Cancel Copy"), this, SLOT(cancelCopy()));
          break;
       default:
-         kill = menu->addAction("Kill Job", this, SLOT(killJob()));
+         kill = menu->addAction(tr("Kill Job"), this, SLOT(killJob()));
          break;
    }
 
