@@ -1,0 +1,291 @@
+# IQmol3 汉化 tr() 包裹规则表（由 extract_tr_rules.py 自动生成，请勿手改）
+#
+# 格式: <相对路径>\t<字面量>\t<形态>\t<出现次数>
+#   形态 = call:<函数名>      →  重放为 <函数名>(tr("字面量"))
+#   形态 = bare               →  重放为 tr("字面量")
+#   形态 = translate:<上下文>  →  重放为 QCoreApplication::translate("<上下文>", "字面量")
+#                                 （非 QObject 类没有 tr()，只能用静态翻译）
+#   出现次数 = 该字面量在该文件中【最终应被包裹的总数】
+#              （注意：上游自带的 tr() 也计入其中）
+# 同一字面量可同时出现多行（形态不同），例如 MainWindow.C 的 Save：
+#     Save\tcall:messageBox.addButton  ← messageBox.addButton(tr("Save"), ...)
+#     Save\tbare                      ← name = tr("Save");
+# 重放由 replay_tr.py 执行，幂等：已包裹的不会被二次包裹。
+#
+# ---------------------------------------------------------------
+# 已知例外：以下 6 个文件的改动【超出机械包裹范围】，本规则表无法完整重放，
+# 上游升级后需人工核对（详见 docs/第三层-重放机制说明.md §4.1/§4.2）：
+#
+#   [拼接 → 占位符重构] 目的是让 Qt 翻译系统能处理变量插值
+#     src/Configurator/ConstraintConfigurator.C
+#     src/Configurator/MullikenDecompositionsDialog.C
+#     src/Configurator/SurfaceAnimatorDialog.C
+#     src/Layer/GeminalOrbitalsLayer.C
+#     src/Qui/GeometryConstraint.C        （跨行字符串拼接）
+#
+#   [常量 → 可翻译字面量替换]
+#     src/Layer/MoleculeLayer.C           （DefaultMoleculeName → "Untitled"）
+#
+# 注：src/Viewer/UndoCommands.C 曾属例外，现由 translate:<上下文> 形态覆盖，
+#     残余差异仅 1 行（同上『拼接 → 占位符重构』类）。
+# 其余 30 个文件可由本规则表 100% 精确重放。
+# ---------------------------------------------------------------
+#
+# 另注：以下 6 个文件相对上游有改动但【不含任何翻译包裹】，属功能性补丁，
+# 需用 patches/功能补丁-语言支持.patch 单独重放（upstream 干净应用已验证）：
+#     src/Main/IQmolApplication.C / .h    （loadTranslations 语言加载）
+#     src/Main/PreferencesBrowser.C       （语言下拉框绑定）
+#     src/Util/Preferences.C / .h         （Language 偏好存取）
+#     src/Layer/OctreeLayer.C             （#include <cstdint>，GCC15 兼容）
+# ---------------------------------------------------------------
+#
+src/Configurator/ConstraintConfigurator.C	Angle between atoms %1	bare	1
+src/Configurator/ConstraintConfigurator.C	Angle between atoms %1	call:m_constraintConfigurator.label->setText	1
+src/Configurator/ConstraintConfigurator.C	Configure Angle	bare	1
+src/Configurator/ConstraintConfigurator.C	Configure Angle	call:setWindowTitle	1
+src/Configurator/ConstraintConfigurator.C	Configure Distance	bare	1
+src/Configurator/ConstraintConfigurator.C	Configure Distance	call:setWindowTitle	1
+src/Configurator/ConstraintConfigurator.C	Configure Torsion	bare	1
+src/Configurator/ConstraintConfigurator.C	Configure Torsion	call:setWindowTitle	1
+src/Configurator/ConstraintConfigurator.C	Distance between atoms %1	bare	1
+src/Configurator/ConstraintConfigurator.C	Distance between atoms %1	call:m_constraintConfigurator.label->setText	1
+src/Configurator/ConstraintConfigurator.C	Set Position	bare	1
+src/Configurator/ConstraintConfigurator.C	Set Position	call:setWindowTitle	1
+src/Configurator/ConstraintConfigurator.C	Set position of atom %1	bare	1
+src/Configurator/ConstraintConfigurator.C	Set position of atom %1	call:m_constraintConfigurator.label->setText	1
+src/Configurator/ExcitedStatesConfigurator.C	Rel. Strength	bare	1
+src/Configurator/ExcitedStatesConfigurator.C	Rel. Strength	call:m_spectrum->yAxis->setLabel	1
+src/Configurator/FrequenciesConfigurator.C	Freq. (cm⁻¹)	bare	1
+src/Configurator/FrequenciesConfigurator.C	Freq. (cm⁻¹)	call:setText	1
+src/Configurator/FrequenciesConfigurator.C	Frequency	bare	1
+src/Configurator/FrequenciesConfigurator.C	Frequency	call:m_spectrum->xAxis->setLabel	1
+src/Configurator/FrequenciesConfigurator.C	Frequency (cm⁻¹)	bare	1
+src/Configurator/FrequenciesConfigurator.C	Frequency (cm⁻¹)	call:setText	1
+src/Configurator/FrequenciesConfigurator.C	Intens. (km/mol)	bare	1
+src/Configurator/FrequenciesConfigurator.C	Intens. (km/mol)	call:setText	1
+src/Configurator/FrequenciesConfigurator.C	Intensity (km/mol)	bare	1
+src/Configurator/FrequenciesConfigurator.C	Intensity (km/mol)	call:setText	1
+src/Configurator/FrequenciesConfigurator.C	Raman (Å4/amu)	bare	1
+src/Configurator/FrequenciesConfigurator.C	Raman (Å4/amu)	call:setText	1
+src/Configurator/FrequenciesConfigurator.C	Rel. Intensity	bare	1
+src/Configurator/FrequenciesConfigurator.C	Rel. Intensity	call:m_spectrum->yAxis->setLabel	1
+src/Configurator/GeometryListConfigurator.C	Geometric Parameter	bare	1
+src/Configurator/GeometryListConfigurator.C	Geometric Parameter	call:m_customPlot->xAxis->setLabel	1
+src/Configurator/GeometryListConfigurator.C	Geometry	bare	1
+src/Configurator/GeometryListConfigurator.C	Geometry	call:m_customPlot->xAxis->setLabel	1
+src/Configurator/IsotopesConfigurator.C	Element	bare	1
+src/Configurator/IsotopesConfigurator.C	Element	call:setText	1
+src/Configurator/IsotopesConfigurator.C	Indicies	bare	1
+src/Configurator/IsotopesConfigurator.C	Indicies	call:setText	1
+src/Configurator/IsotopesConfigurator.C	Isotopic Mass	bare	1
+src/Configurator/IsotopesConfigurator.C	Isotopic Mass	call:setText	1
+src/Configurator/MolecularSurfacesConfigurator.C	Isovalue	bare	2
+src/Configurator/MolecularSurfacesConfigurator.C	Isovalue	call:m_configurator.isovalueLabel->setText	2
+src/Configurator/MolecularSurfacesConfigurator.C	Scale	bare	1
+src/Configurator/MolecularSurfacesConfigurator.C	Scale	call:m_configurator.isovalueLabel->setText	1
+src/Configurator/MullikenDecompositionsDialog.C	Mulliken decomposition for %1	bare	1
+src/Configurator/MullikenDecompositionsDialog.C	Mulliken decomposition for %1	call:setWindowTitle	1
+src/Configurator/NmrConfigurator.C	Chemical Shift (ppm)	bare	1
+src/Configurator/NmrConfigurator.C	Chemical Shift (ppm)	call:m_plot->xAxis->setLabel	1
+src/Configurator/NmrConfigurator.C	Count	bare	1
+src/Configurator/NmrConfigurator.C	Count	call:m_plot->yAxis->setLabel	1
+src/Configurator/NmrConfigurator.C	Nuclear Shielding (ppm)	bare	1
+src/Configurator/NmrConfigurator.C	Nuclear Shielding (ppm)	call:m_plot->xAxis->setLabel	1
+src/Configurator/NmrConfigurator.C	Relative Intensity	bare	1
+src/Configurator/NmrConfigurator.C	Relative Intensity	call:m_plot->yAxis->setLabel	1
+src/Configurator/NmrConfigurator.C	Resolution	bare	1
+src/Configurator/NmrConfigurator.C	Resolution	call:m_ui->widthLabel->setText	1
+src/Configurator/OrbitalsConfigurator.C	Function(s):	bare	1
+src/Configurator/OrbitalsConfigurator.C	Function(s):	call:m_configurator.orbitalLabel->setText	1
+src/Configurator/OrbitalsConfigurator.C	Occupancy	bare	1
+src/Configurator/OrbitalsConfigurator.C	Occupancy	call:m_customPlot->yAxis->setLabel	1
+src/Configurator/OrbitalsConfigurator.C	Orbital(s):	bare	1
+src/Configurator/OrbitalsConfigurator.C	Orbital(s):	call:m_configurator.orbitalLabel->setText	1
+src/Configurator/SurfaceAnimatorDialog.C	Cube Data %1	bare	2
+src/Configurator/SurfaceAnimatorDialog.C	Cube Data %1	call:surface->setText	2
+src/Configurator/SurfaceAnimatorDialog.C	Difference Surface	bare	1
+src/Configurator/SurfaceAnimatorDialog.C	Difference Surface	call:surface->setText	1
+src/Configurator/SurfaceAnimatorDialog.C	Interpolation Frame %1	bare	1
+src/Grid/GridInfoDialog.C	Export Cube File	bare	1
+src/Grid/GridInfoDialog.C	Export Cube File	call:menu.addAction	1
+src/Grid/GridInfoDialog.C	Export Cube File (Switch Phase)	bare	1
+src/Grid/GridInfoDialog.C	Export Cube File (Switch Phase)	call:menu.addAction	1
+src/Layer/BackgroundLayer.C	Background	bare	1
+src/Layer/BackgroundLayer.C	Background	call:setText	1
+src/Layer/ComponentLayer.C	Surfaces	bare	1
+src/Layer/ConstraintLayer.C	Invalid	bare	1
+src/Layer/ConstraintLayer.C	Invalid	call:setText	1
+src/Layer/GeminalOrbitalsLayer.C	Geminal Alpha %1	bare	1
+src/Layer/GeminalOrbitalsLayer.C	Geminal Alpha %1	call:setText	1
+src/Layer/GeminalOrbitalsLayer.C	Geminal Beta %1	bare	1
+src/Layer/GeminalOrbitalsLayer.C	Geminal Beta %1	call:setText	1
+src/Layer/InfoLayer.C	Info	bare	1
+src/Layer/InfoLayer.C	Info	call:setText	1
+src/Layer/MolecularSurfacesLayer.C	Surfaces	bare	1
+src/Layer/MolecularSurfacesLayer.C	Surfaces	call:Base	1
+src/Layer/MoleculeLayer.C	Untitled	bare	2
+src/Layer/MoleculeLayer.C	Untitled	call:Component	2
+src/Layer/SolventLayer.C	Solvent	bare	1
+src/Layer/SolventLayer.C	Solvent	call:setText	1
+src/Layer/SystemLayer.C	Molecule	bare	2
+src/Layer/SystemLayer.C	Molecule	call:molecule->setText	2
+src/Layer/SystemLayer.C	Ribbons	bare	1
+src/Layer/SystemLayer.C	Ribbons	call:m_surfaceList.setText	1
+src/Main/MainWindow.C	(none)	bare	1
+src/Main/MainWindow.C	(none)	call:serverList.append	1
+src/Main/MainWindow.C	About	bare	1
+src/Main/MainWindow.C	Amber System Builder	bare	1
+src/Main/MainWindow.C	Appearance	bare	1
+src/Main/MainWindow.C	Atom Label	bare	1
+src/Main/MainWindow.C	Atom Labels	bare	1
+src/Main/MainWindow.C	Auto-detect Symmetry	bare	1
+src/Main/MainWindow.C	Build	bare	1
+src/Main/MainWindow.C	Build	call:addMenu	1
+src/Main/MainWindow.C	Calculation	bare	1
+src/Main/MainWindow.C	Calculation	call:addMenu	1
+src/Main/MainWindow.C	Camera	bare	1
+src/Main/MainWindow.C	Cancel	bare	1
+src/Main/MainWindow.C	Cancel	call:messageBox.addButton	1
+src/Main/MainWindow.C	Clear List	bare	1
+src/Main/MainWindow.C	Clear List	call:m_recentFilesMenu->addAction	1
+src/Main/MainWindow.C	Close Viewer	bare	1
+src/Main/MainWindow.C	Copy	bare	1
+src/Main/MainWindow.C	Cut	bare	1
+src/Main/MainWindow.C	Discard	bare	1
+src/Main/MainWindow.C	Discard	call:messageBox.addButton	1
+src/Main/MainWindow.C	Display	bare	1
+src/Main/MainWindow.C	Display	call:addMenu	1
+src/Main/MainWindow.C	Do you want to proceed?	bare	1
+src/Main/MainWindow.C	Do you want to proceed?	call:mbox.setInformativeText	1
+src/Main/MainWindow.C	Edit	bare	1
+src/Main/MainWindow.C	Edit	call:addMenu	1
+src/Main/MainWindow.C	Edit Amber Config	bare	1
+src/Main/MainWindow.C	Edit Gomacs Server	bare	1
+src/Main/MainWindow.C	Edit Gromacs Config	bare	1
+src/Main/MainWindow.C	Edit Servers	bare	1
+src/Main/MainWindow.C	Element	bare	1
+src/Main/MainWindow.C	File	bare	1
+src/Main/MainWindow.C	File	call:addMenu	1
+src/Main/MainWindow.C	Fill Valencies With Hydrogens	bare	1
+src/Main/MainWindow.C	Freeze Selected Atoms	bare	1
+src/Main/MainWindow.C	Full Screen	bare	1
+src/Main/MainWindow.C	Gromacs Setup	bare	1
+src/Main/MainWindow.C	Help	bare	1
+src/Main/MainWindow.C	Help	call:addMenu	1
+src/Main/MainWindow.C	History:	bare	1
+src/Main/MainWindow.C	History:	call:m_undoStackView.setEmptyLabel	1
+src/Main/MainWindow.C	IQmol	bare	1
+src/Main/MainWindow.C	IQmol	call:setWindowTitle	1
+src/Main/MainWindow.C	Index	bare	1
+src/Main/MainWindow.C	Insert Molecule by ID	bare	1
+src/Main/MainWindow.C	Invert Selection	bare	1
+src/Main/MainWindow.C	Job Monitor	bare	1
+src/Main/MainWindow.C	Loading	bare	3
+src/Main/MainWindow.C	Loading	call:m_statusWidget.showMessage	3
+src/Main/MainWindow.C	Mass	bare	1
+src/Main/MainWindow.C	Minimize Structure	bare	1
+src/Main/MainWindow.C	NMR	bare	1
+src/Main/MainWindow.C	Network access available	bare	1
+src/Main/MainWindow.C	New Molecule	bare	1
+src/Main/MainWindow.C	New Viewer	bare	1
+src/Main/MainWindow.C	Only one molecule can be visible when reindexing atoms.	bare	1
+src/Main/MainWindow.C	Only one molecule can be visible when reindexing atoms.	call:msg	1
+src/Main/MainWindow.C	Open	bare	1
+src/Main/MainWindow.C	Open Dir	bare	1
+src/Main/MainWindow.C	Open Recent	bare	1
+src/Main/MainWindow.C	Partial Charge	bare	1
+src/Main/MainWindow.C	Paste	bare	1
+src/Main/MainWindow.C	Preferences	bare	1
+src/Main/MainWindow.C	Q-Chem Setup	bare	1
+src/Main/MainWindow.C	Quit	bare	1
+src/Main/MainWindow.C	Record Animation	bare	1
+src/Main/MainWindow.C	Redo	bare	1
+src/Main/MainWindow.C	Reindex Atoms	bare	1
+src/Main/MainWindow.C	Reperceive Bonds	bare	1
+src/Main/MainWindow.C	Reset View	bare	1
+src/Main/MainWindow.C	Save	bare	2
+src/Main/MainWindow.C	Save	call:messageBox.addButton	2
+src/Main/MainWindow.C	Save As	bare	1
+src/Main/MainWindow.C	Save Changes?	bare	1
+src/Main/MainWindow.C	Save Picture	bare	1
+src/Main/MainWindow.C	Select All	bare	1
+src/Main/MainWindow.C	Select Force Field	bare	1
+src/Main/MainWindow.C	Select None	bare	1
+src/Main/MainWindow.C	Set Geometric Constraint	bare	1
+src/Main/MainWindow.C	Set Isotopes	bare	1
+src/Main/MainWindow.C	Set Symmetry Tolerance	bare	1
+src/Main/MainWindow.C	Show Axes	bare	1
+src/Main/MainWindow.C	Show Help	bare	1
+src/Main/MainWindow.C	Show Message Log	bare	1
+src/Main/MainWindow.C	Spin Densities	bare	1
+src/Main/MainWindow.C	Symmetrize Molecule	bare	1
+src/Main/MainWindow.C	Translate To Center	bare	1
+src/Main/MainWindow.C	Undo	bare	1
+src/Main/MainWindow.C	Use <esc> to exit full screen mode	bare	1
+src/Main/MainWindow.C	Welcome to IQmol	bare	1
+src/Main/MainWindow.C	Welcome to IQmol	call:m_statusWidget.showMessage	1
+src/Main/MainWindow.C	Wonky molecule detected	bare	1
+src/Main/MainWindow.C	Wonky molecule detected	call:mbox.setText	1
+src/Plot/CustomPlot.C	Save Image As	bare	1
+src/Plot/CustomPlot.C	Save Image As	call:menu->addAction	1
+src/Process/JobMonitor.C	Cancel Copy	bare	1
+src/Process/JobMonitor.C	Cancel Copy	call:menu->addAction	1
+src/Process/JobMonitor.C	Delete Job From Queue	bare	1
+src/Process/JobMonitor.C	Delete Job From Queue	call:menu->addAction	1
+src/Process/JobMonitor.C	Kill Job	bare	1
+src/Process/JobMonitor.C	Kill Job	call:menu->addAction	1
+src/Process/QueueOptionsDialog.C	Download	bare	2
+src/Process/QueueOptionsDialog.C	Download	call:m_dialog.queueInfoLabel->setText	2
+src/Process/QueueOptionsDialog.C	Executable	bare	1
+src/Process/QueueOptionsDialog.C	Executable	call:m_dialog.queueInfoLabel->setText	1
+src/Process/QueueOptionsDialog.C	Job Info	bare	1
+src/Process/QueueOptionsDialog.C	Job Info	call:m_dialog.jobFileListLabel->setText	1
+src/Qui/GeometryConstraint.C	A constraint involving the following atoms has already been defined:\n	bare	1
+src/Qui/GeometryConstraint.C	A constraint involving the following atoms has already been defined:\n	call:msg	1
+src/Qui/GeometryConstraint.C	Are you sure you want to delete the selected constraint?	bare	1
+src/Qui/GeometryConstraint.C	Are you sure you want to delete the selected constraint?	call:msg	1
+src/Qui/GeometryConstraint.C	Delete Constraint?	bare	1
+src/Qui/GeometryConstraint.C	Duplicate Constraint	bare	1
+src/Qui/GeometryConstraint.C	Invalid Constraint	bare	1
+src/Qui/GeometryConstraint.C	The following constraint is invalid:\n	bare	1
+src/Qui/GeometryConstraint.C	The following constraint is invalid:\n	call:msg	1
+src/Qui/InputDialog.C	Are you sure you want to delete all generated input?	bare	1
+src/Qui/InputDialog.C	Are you sure you want to delete all generated input?	call:msg	1
+src/Qui/InputDialog.C	Delete input?	bare	1
+src/Qui/LJParametersSection.C	LJ Parameter Error	bare	1
+src/Qui/MoleculeSection.C	Parse Error	bare	1
+src/Qui/MoleculeSection.C	Problem reading $molecule section: \n	bare	1
+src/Qui/MoleculeSection.C	Problem reading $molecule section: \n	call:msg	1
+src/Qui/OptionEditors.C	New option	bare	1
+src/Qui/OptionEditors.C	New option	call:item->setText	1
+src/Qui/RemSection.C	An error occured when parsing the following options:\n	bare	1
+src/Qui/RemSection.C	An error occured when parsing the following options:\n	call:msg	1
+src/Qui/RemSection.C	Input File Error	bare	1
+src/Util/ColorDialog.C	Select color	bare	1
+src/Util/ColorDialog.C	Select color	call:QAction	1
+src/Util/LogMessageDialog.C	Logging disabled	bare	1
+src/Util/LogMessageDialog.C	Logging disabled	call:m_logMessageDialog.logTextBrowser->setText	1
+src/Viewer/CameraDialog.C	Camera Position	bare	1
+src/Viewer/CameraDialog.C	Camera Position	call:setText	1
+src/Viewer/CameraDialog.C	Time (s)	bare	1
+src/Viewer/CameraDialog.C	Time (s)	call:setText	1
+src/Viewer/UndoCommands.C	Add constraint	translate:UndoCommands	1
+src/Viewer/UndoCommands.C	Add scan coordinated	translate:UndoCommands	1
+src/Viewer/UndoCommands.C	Change atom type	translate:UndoCommands	1
+src/Viewer/UndoCommands.C	Change bond order	translate:UndoCommands	1
+src/Viewer/UndoCommands.C	Load file %1	bare	1
+src/Viewer/UndoCommands.C	Load file %1	call:setText	1
+src/Viewer/UndoCommands.C	New molecule	translate:UndoCommands	1
+src/Viewer/UndoCommands.C	New system	translate:UndoCommands	1
+src/Viewer/UndoCommands.C	Remove 	translate:UndoCommands	1
+src/Viewer/UndoCommands.C	Remove molecule	translate:UndoCommands	1
+src/Viewer/UndoCommands.C	Remove system	translate:UndoCommands	1
+src/Viewer/ViewerModel.C	Global	bare	1
+src/Viewer/ViewerModel.C	Global	call:m_global	1
+src/Viewer/ViewerModel.C	Model View	bare	1
+src/Viewer/ViewerModelView.C	Hide Molecules	bare	1
+src/Viewer/ViewerModelView.C	Hide Molecules	call:QAction	1
+src/Viewer/ViewerModelView.C	Merge Molecules	bare	1
+src/Viewer/ViewerModelView.C	Merge Molecules	call:QAction	1
+src/Viewer/ViewerModelView.C	Show Molecules	bare	1
+src/Viewer/ViewerModelView.C	Show Molecules	call:QAction	1
