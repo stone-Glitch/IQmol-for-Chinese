@@ -237,6 +237,47 @@ if [ -n "$MISSING" ]; then
 fi
 echo "==> OpenBabel external 依赖齐备"
 
+# ===== 3a. 补丁状态汇总（让"补丁是否到位"不再是黑盒）=====
+# 背景：曾出现"报错与上一轮完全一致"的情况，事后查明是补丁虽被覆盖到源码树，
+# 但构建系统的生成文件未重建。为便于一眼诊断，这里统一打印 4 个补丁的就位状态。
+# 有 ❌ 即中止——那意味着这次构建注定复现链接错误，不必白跑一轮编译。
+PATCH_FAIL=0
+if [ ! -f "$MODULES_DIR/CMakeLists.txt" ]; then
+  echo "    [FAIL] modules/CMakeLists.txt            不存在"; PATCH_FAIL=1
+else
+  echo "    [ OK ] modules/CMakeLists.txt"
+fi
+if [ ! -f "$MODULES_DIR/openbabel/CMakeLists.txt" ]; then
+  echo "    [FAIL] openbabel/CMakeLists.txt          不存在"; PATCH_FAIL=1
+elif grep -q 'NOT TARGET uninstall' "$MODULES_DIR/openbabel/CMakeLists.txt"; then
+  echo "    [ OK ] openbabel/CMakeLists.txt          uninstall 保护"
+else
+  echo "    [FAIL] openbabel/CMakeLists.txt          缺 uninstall 保护"; PATCH_FAIL=1
+fi
+if [ ! -f "$MODULES_DIR/openbabel/data/CMakeLists.txt" ]; then
+  echo "    [FAIL] openbabel/data/CMakeLists.txt     不存在"; PATCH_FAIL=1
+elif grep -q 'pregen' "$MODULES_DIR/openbabel/data/CMakeLists.txt"; then
+  echo "    [ OK ] openbabel/data/CMakeLists.txt     预生成头方案"
+else
+  echo "    [FAIL] openbabel/data/CMakeLists.txt     未打补丁"; PATCH_FAIL=1
+fi
+if [ ! -f "$MODULES_DIR/openbabel/src/CMakeLists.txt" ]; then
+  echo "    [FAIL] openbabel/src/CMakeLists.txt      不存在"; PATCH_FAIL=1
+elif grep -q 'format}_additional_sources' "$MODULES_DIR/openbabel/src/CMakeLists.txt"; then
+  echo "    [ OK ] openbabel/src/CMakeLists.txt      additional_sources"
+else
+  echo "    [FAIL] openbabel/src/CMakeLists.txt      未打补丁(将导致 undefined reference)"; PATCH_FAIL=1
+fi
+echo "==> 补丁状态自检完成（上方 4 项应全为 [ OK ]）"
+if [ "$PATCH_FAIL" = "1" ]; then
+  echo "" >&2
+  echo "ERROR: 存在未就位的补丁，继续构建必然复现 undefined reference。" >&2
+  echo "       常见原因：解压 submodules 离线包把 modules/ 下的文件覆盖回了上游原版。" >&2
+  echo "       请确认已拉取最新脚本（含步骤 2b/2c/2d 的自动修复），然后重跑。" >&2
+  echo "       本次为安全起见直接中止，避免白跑一轮编译。" >&2
+  exit 1
+fi
+
 # ===== 3b. 检查 libssh2 源码完整性(链接 IQmol.exe 需要 libssh2 静态库) =====
 # modules/libssh2 是 git submodule, 子模块包漏解压时目录为空;
 # 空目录会让 add_subdirectory 直接 configure 失败, 提前拦截给出明确指引。
