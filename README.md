@@ -47,7 +47,7 @@ make
 
 本仓库在原版 IQmol3 基础上完成了面向简体中文用户的全面本地化：
 
-- **界面翻译**：`translations/zh_CN.ts`（1519 条翻译，111 个上下文，全部完成），
+- **界面翻译**：`translations/zh_CN.ts`（1563 条翻译，全部完成，0 未译），
   构建时由 CMake 自动调用 lrelease 生成 `zh_CN.qm` 并随可执行文件输出到
   `translations/` 目录。系统需安装 Qt5 Linguist 工具（lupdate/lrelease，
   如 `qtbase5-dev-tools`、`qttools5-dev-tools`），缺失时构建仍可继续，但界面回退英文。
@@ -66,6 +66,10 @@ make
   ./scripts/update_translations.sh          # lupdate + 防退化 + lrelease
   ./scripts/update_translations.sh --sync   # 并同步 qm 到 build 目录
   ```
+  > `lupdate` 已加 `-extensions C,ui`：IQmol 源码多为大写 `.C`，默认 `lupdate` 只认
+  > 小写 `.c`，不加该参数会导致 292 个 `.C` 源文件的 `tr()` 零提取。
+- **界面语言切换**：偏好设置中可切换「中文 / English / 跟随系统」（默认中文）。
+  切回英文便于与上游比对、排查误译；切换为静态生效（重启后应用）。
 - **界面截图**：`dialog_screenshots/` 保存了中文界面下各对话框的运行时截图，
   可用于文档配图与翻译效果验证。
 
