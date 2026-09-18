@@ -185,6 +185,37 @@ if [ -f "$DATA_CML" ] && grep -q "pregen" "$DATA_CML" && [ ! -d "$MODULES_DIR/op
   exit 1
 fi
 
+# ===== 2d. 修复 openbabel/src/CMakeLists.txt 的 additional_sources 漏加 =====
+# 上游静态构建分支(BUILD_SHARED=OFF)收集源文件时只加 formats/${format}.cpp,
+# 漏掉 ${format}_additional_sources, 导致这些文件从未编入 libopenbabel.a:
+#   asciipainter.cpp   (asciiformat)  → OpenBabel::ASCIIPainter
+#   commandpainter.cpp (painterformat) → OpenBabel::CommandPainter
+#   wln-nextmove.cpp   (wlnformat)     → NMReadWLN
+# 链接期即报 undefined reference。共享构建不受影响(走 formats/CMakeLists.txt)。
+# 修复版在 scripts/openbabel_src_CMakeLists.txt（第 184-199 行附近）。
+OB_SRC_CML="$MODULES_DIR/openbabel/src/CMakeLists.txt"
+if [ -f "$OB_SRC_CML" ] && ! grep -q "format}_additional_sources" "$OB_SRC_CML"; then
+  echo "==> 检测到 openbabel/src/CMakeLists.txt 静态分支漏加 additional_sources，自动修复..."
+  FIX_SRC_CML=""
+  for CAND in "$SCRIPT_DIR/openbabel_src_CMakeLists.txt" "$SCRIPT_DIR/scripts/openbabel_src_CMakeLists.txt"; do
+    [ -f "$CAND" ] && FIX_SRC_CML="$CAND" && break
+  done
+  if [ -n "$FIX_SRC_CML" ]; then
+    cp "$FIX_SRC_CML" "$OB_SRC_CML"
+    echo "    已用 $FIX_SRC_CML 覆盖"
+  else
+    URL="https://raw.githubusercontent.com/stone-Glitch/IQmol-for-Chinese/master/scripts/openbabel_src_CMakeLists.txt"
+    echo "    本地无修复文件，下载..."
+    fetch_from_github "$OB_SRC_CML" "$URL" || true
+  fi
+  if grep -q "format}_additional_sources" "$OB_SRC_CML" 2>/dev/null; then
+    echo "    修复完成"
+  else
+    echo "ERROR: 修复失败。请手动从 IQmol-openbabel-fix.tar.gz 重新解压到 modules/openbabel/" >&2
+    exit 1
+  fi
+fi
+
 # ===== 3. 检查 OpenBabel external 依赖（缺了 configure 必崩，直接拦截）=====
 # OpenBabel 缺这三个包时不会跳过，而是尝试联网从 GitHub 下载；
 # 墙内下载失败 → FATAL_ERROR "Failed getting or unpacking Maeparser/coordgen"
@@ -269,15 +300,22 @@ fi
 #--------------------------------------------------------------------
 _cfg_fingerprint() {
   local _cm="$SRC_DIR/CMakeLists.txt"
-  local _bs=0 _wa=0 _ms=0
+  local _bs=0 _wa=0 _ms=0 _sm=0 _as=0
   # BUILD_SHARED 是否被同步为 OFF（静态）
   if grep -q 'set(BUILD_SHARED OFF CACHE' "$_cm" 2>/dev/null; then _bs=1; fi
   # 是否包含 WHOLE_ARCHIVE 处理（裸 --whole-archive 已改为官方封装
   # $<LINK_LIBRARY:WHOLE_ARCHIVE,...>, 字面不再出现, 故匹配 WHOLE_ARCHIVE）
   if grep -q 'WHOLE_ARCHIVE' "$_cm" 2>/dev/null; then _wa=1; fi
-  # 是否定义 MAEPARSER_STATIC_DEFINE（消除 maeparser 的 DLL 导入 __imp_）
-  if grep -q 'MAEPARSER_STATIC_DEFINE' "$_cm" 2>/dev/null; then _ms=1; fi
-  echo "BUILD_SHARED_SYNC=$_bs WHOLE_ARCHIVE=$_wa MAEPARSER_STATIC=$_ms"
+  # 是否定义 STATIC_MAEPARSER（消除 maeparser 的 DLL 导入 __imp_）
+  # 注: 宏名是 STATIC_MAEPARSER(maeparser v1.2.3 MaeParserConfig.hpp 使用),
+  #     早期误用 MAEPARSER_STATIC_DEFINE, 两者都检测以兼容旧配置。
+  if grep -q 'STATIC_MAEPARSER' "$_cm" 2>/dev/null; then _ms=1; fi
+  # 是否已包含 additional_sources 修复（静态分支漏加 asciipainter 等）
+  local _src_cml="$MODULES_DIR/openbabel/src/CMakeLists.txt"
+  if grep -q 'format}_additional_sources' "$_src_cml" 2>/dev/null; then _as=1; fi
+  # openbabel 源码根 CMakeLists 是否已打补丁（防 submodules 包覆盖回未修版）
+  if grep -q 'NOT TARGET uninstall' "$MODULES_DIR/openbabel/CMakeLists.txt" 2>/dev/null; then _sm=1; fi
+  echo "BUILD_SHARED_SYNC=$_bs WHOLE_ARCHIVE=$_wa MAEPARSER_STATIC=$_ms OB_SRC_ADDITIONAL=$_as OB_ROOT_PATCHED=$_sm"
 }
 
 STAMP_FILE="$BUILD_DIR/.iqmol_config_stamp"
