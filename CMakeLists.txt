@@ -179,8 +179,13 @@ else()
    # 注意: 宏名是 STATIC_MAEPARSER, 不是 MAEPARSER_STATIC_DEFINE
    # (后者是 GenerateExportHeader 的命名习惯, 对 maeparser v1.2.3 无效)。
    # 必须在 add_subdirectory 之前设置, 让 openbabel/maeparser 子目录继承该宏。
+   #
+   # coordgen 有完全相同的缺陷(其 CoordgenConfig.hpp 用 STATIC_COORDGEN 控制
+   # 导出宏, 而 coordgenlibs/CMakeLists.txt 同样用 PRIVATE 定义不传播)。
+   # 当前 WITH_COORDGEN 在静态构建下默认为 OFF、且 openbabel 源码不引用
+   # coordgen 符号, 故不触发; 此处一并预防, 以便将来打开该选项时不会踩坑。
    if (NOT BUILD_SHARED_LIBS)
-      add_compile_definitions(STATIC_MAEPARSER)
+      add_compile_definitions(STATIC_MAEPARSER STATIC_COORDGEN)
    endif()
 
    add_subdirectory(modules/openbabel  EXCLUDE_FROM_ALL)
