@@ -13,6 +13,8 @@ IQmol version 3
 > | 子模块下载不动（国内网络） | 本文「子模块离线包」章节 |
 > | 学会用这个软件 | [中文用户手册](doc/IQmolUserGuide.pdf)（34 页） |
 > | 维护/更新翻译 | 本文「简体中文本地化」章节 + `scripts/update_translations.sh` |
+> | 上游发新版了，怎么升级合并 | [docs/上游升级迁移指南.md](docs/上游升级迁移指南.md) |
+> | 想彻底降低升级冲突（长期治理方案） | [docs/改动面最小化方案（第三层）.md](docs/改动面最小化方案（第三层）.md) |
 
 This is IQmol, a molecular builder and visualization package written by Andrew
 Gilbert.  IQmol is able to build molecules, set up and submit input for Q-Chem
