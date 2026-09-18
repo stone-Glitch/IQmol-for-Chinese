@@ -424,7 +424,14 @@ void FFmpegPath(QString const& filePath)
 
 // ---------
 
-// 语言切换逃生舱: 空字符串 = 跟随系统(默认中文); "zh_CN" = 中文; "en" = English
+// 语言切换逃生舱。取值语义:
+//   "system"  = 跟随系统(显式选择)
+//   "zh_CN"   = 强制中文
+//   "en"      = English
+//   未设置     = 首次运行, 保持汉化默认(非中文环境也显示中文)
+// 注意: 早期实现用空字符串表示"跟随系统", 但空值与"未设置"无法区分,
+// 导致选"跟随系统"时被 loadTranslations() 当成未设置, 仍强制中文(选项失效)。
+// 故改用显式哨兵值 "system"。
 QString Language() 
 {
    QVariant value(Get("Language"));

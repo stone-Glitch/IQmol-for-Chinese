@@ -109,7 +109,8 @@ namespace Preferences {
    QString FFmpegPath();
    void    FFmpegPath(QString const&);
 
-   // 语言切换逃生舱: 用户可显式选择界面语言; 空字符串 = 跟随系统(默认中文)
+   // 语言切换逃生舱。取值: "system"=跟随系统, "zh_CN"=中文, "en"=English;
+   // 未设置 = 首次运行, 保持汉化默认(非中文环境也显示中文)。
    QString Language();
    void    Language(QString const&);
 
