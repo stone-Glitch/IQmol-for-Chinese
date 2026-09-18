@@ -310,6 +310,8 @@ _cfg_fingerprint() {
   # 注: 宏名是 STATIC_MAEPARSER(maeparser v1.2.3 MaeParserConfig.hpp 使用),
   #     早期误用 MAEPARSER_STATIC_DEFINE, 两者都检测以兼容旧配置。
   if grep -q 'STATIC_MAEPARSER' "$_cm" 2>/dev/null; then _ms=1; fi
+  # 是否定义 STATIC_COORDGEN（coordgen 同类缺陷的预防性修复）
+  if grep -q 'STATIC_COORDGEN' "$_cm" 2>/dev/null; then _ms=1; fi
   # 是否已包含 additional_sources 修复（静态分支漏加 asciipainter 等）
   local _src_cml="$MODULES_DIR/openbabel/src/CMakeLists.txt"
   if grep -q 'format}_additional_sources' "$_src_cml" 2>/dev/null; then _as=1; fi
