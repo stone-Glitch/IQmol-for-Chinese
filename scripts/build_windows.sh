@@ -332,9 +332,57 @@ if [ "$NEED_CONFIG" = "0" ] && [ "$CUR_STAMP" != "$OLD_STAMP" ]; then
   echo "    本次: $CUR_STAMP"
 fi
 
+#--------------------------------------------------------------------
+# 补丁指纹自检（针对"补丁改了子目录文件 → 不触发重配 → 修了等于没修"）
+#
+# 上面两个判定都有盲区：时间戳只比较【顶层 CMakeLists.txt】，
+# 字符串指纹也只读【顶层 CMakeLists.txt】。而步骤 1 / 2b / 2c / 2d
+# 改的是 modules/ 下的文件。用户只要曾 configure 成功过一次，
+# 之后这些补丁就只是"文件被覆盖了，构建系统的生成文件却没更新"，
+# 表现为【报错与上次一模一样，补丁看起来完全没生效】。
+#
+# 做法：记录【补丁文件当前是否处于已修状态】（语义标记，非动作记录）。
+#   - 用语义标记而非"本次是否执行了覆盖"：后者会在
+#     「执行补丁的那轮」与「不执行的那轮」之间来回抖动，
+#     导致每轮都判定为变化、反复 re-configure。
+#   - 语义标记下：打补丁前=0，打补丁后=1 → 恰好变化一次即触发；
+#     之后每轮都是 1 → 稳定跳过，增量构建不受影响。
+# 与上次记录不一致即强制重新 configure。
+#----------------------------------------------------------------
+_patch_fingerprint() {
+  local _mods=0 _ob_root=0 _ob_data=0 _ob_src=0
+  # 顶层 modules/CMakeLists.txt 是否存在（libQGLViewer 聚合脚本，缺则必崩）
+  [ -f "$MODULES_DIR/CMakeLists.txt" ] && _mods=1
+  # openbabel 根 CMakeLists 是否已有 uninstall 目标保护（步骤 2b）
+  grep -q 'NOT TARGET uninstall' "$MODULES_DIR/openbabel/CMakeLists.txt" 2>/dev/null && _ob_root=1
+  # openbabel/data 是否已改为预生成头方案（步骤 2c）
+  grep -q 'pregen' "$MODULES_DIR/openbabel/data/CMakeLists.txt" 2>/dev/null && _ob_data=1
+  # openbabel/src 静态分支是否已带上 additional_sources（步骤 2d）
+  grep -q 'format}_additional_sources' "$MODULES_DIR/openbabel/src/CMakeLists.txt" 2>/dev/null && _ob_src=1
+  printf 'PATCH_STATE MODS=%s OB_ROOT=%s OB_DATA=%s OB_SRC=%s' \
+         "$_mods" "$_ob_root" "$_ob_data" "$_ob_src"
+}
+
+PATCH_STAMP_FILE="$BUILD_DIR/.iqmol_patch_stamp"
+CUR_PATCH="$(_patch_fingerprint)"
+OLD_PATCH=""
+[ -f "$PATCH_STAMP_FILE" ] && OLD_PATCH="$(cat "$PATCH_STAMP_FILE" 2>/dev/null)"
+
+if [ "$NEED_CONFIG" = "0" ] && [ "$CUR_PATCH" != "$OLD_PATCH" ]; then
+  NEED_CONFIG=1
+  echo "==> 检测到子模块补丁状态变化（补丁已应用到源码树，但尚未反映到构建配置），自动重新 configure..."
+  echo "    上次: ${OLD_PATCH:-（无记录）}"
+  echo "    本次: $CUR_PATCH"
+fi
+
 if [ "$NEED_CONFIG" = "0" ]; then
   # 已配置过且顶层 CMakeLists 未变：直接沿用缓存编译。
   echo "==> 检测到已有配置，跳过 configure（要重配请加 --clean）"
+  # 未重配时也要把补丁指纹落盘：否则下次仍会判定为"变化"，
+  # 每次都被强制重新 configure，反而拖慢增量构建。
+  echo "$CUR_PATCH" > "$PATCH_STAMP_FILE"
+  # 配置指纹同理：仅在缺失时补写（正常情况下它已与当前值一致）
+  [ -f "$STAMP_FILE" ] || echo "$CUR_STAMP" > "$STAMP_FILE"
 else
   if [ ! -f "$BUILD_DIR/CMakeCache.txt" ]; then
     echo "==> 首次 configure...（约 1~5 分钟，Windows 下 CMake 需逐个编译检查程序）"
@@ -360,6 +408,7 @@ else
   fi
   # configure 成功后记录本次指纹，供下次比对
   echo "$CUR_STAMP" > "$STAMP_FILE"
+  echo "$CUR_PATCH" > "$PATCH_STAMP_FILE"
 fi
 
 # ===== 5. 编译 =====
