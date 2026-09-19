@@ -33,6 +33,10 @@ namespace Layer {
 EfpFragmentList::EfpFragmentList(Layer::Base* parent) : Base("EFP Fragments"), m_atomScale(0.5),
    m_bondScale(0.5), m_drawMode(Primitive::Tubes), m_configurator(*this) 
 {
+   // [i18n] 初始化列表中的标签为裸字符串，此处覆盖为译文，
+   // 使 lupdate 可提取、界面显示中文。
+   setText(tr("EFP Fragments"));
+
    setConfigurator(&m_configurator);
    setPersistentParent(parent);
    setProperty(RemoveWhenChildless);

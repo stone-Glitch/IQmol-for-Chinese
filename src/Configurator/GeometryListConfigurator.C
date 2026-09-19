@@ -69,7 +69,7 @@ void GeometryList::initPlot()
 
    m_customPlot->xAxis->setSelectableParts(QCPAxis::spNone);
    m_customPlot->xAxis->setLabel(tr("Geometry"));
-   m_customPlot->yAxis->setLabel("Energy");
+   m_customPlot->yAxis->setLabel(tr("Energy"));
 
    connect(m_customPlot, SIGNAL(mousePress(QMouseEvent*)), 
       this, SLOT(setSelectionRectMode(QMouseEvent*)));
@@ -132,7 +132,7 @@ void GeometryList::load()
    if (property) {
       m_customPlot->xAxis->setLabel(tr("Geometric Parameter"));
    }else {
-      m_customPlot->xAxis->setLabel("Geometry");
+      m_customPlot->xAxis->setLabel(tr("Geometry"));
    }
 
    plotEnergies();

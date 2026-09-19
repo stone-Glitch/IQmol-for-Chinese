@@ -44,6 +44,31 @@ void Orbitals::on_densityMatrixButton_clicked(bool)
 }
 
 
+//---------------------------------------------------------------------------
+// [i18n] 把"界面显示名"与"数据键"分开存放的小工具。
+//
+// 背景：surfaceType 下拉框既用于显示，又被逻辑当成数据键使用 ——
+// on_mullikenDecompositionsButton_clicked() 里有句注释写着
+// "A little dodge, we use the label to match the density"，即拿下拉框
+// 当前文本去和 Data::Density::label()（来自解析器的英文标签）比对。
+// 一旦把显示文本翻成中文，这个比对就会失配。
+//
+// 因此：显示文本走 tr()，英文原文另存到 itemData(Qt::UserRole+1)，
+// 所有逻辑读取都改走 itemData，译文怎么变都不会影响匹配。
+//
+// 注意这里必须显式写出每一条 tr("...") 字面量，不能用宏拼接 ——
+// lupdate 是在宏展开前的源码上做静态扫描的，宏里的 tr() 提取不到。
+//---------------------------------------------------------------------------
+namespace {
+   void addSurfaceType(QComboBox* combo, QString const& text,
+                       int kind, QString const& translated)
+   {
+      combo->addItem(translated, kind);
+      combo->setItemData(combo->count()-1, text, Qt::UserRole+1);
+   }
+}
+
+
 Orbitals::Orbitals(Layer::Orbitals& orbitals)
   : m_orbitals(orbitals), m_nAlpha(0), m_nBeta(0), m_nOrbitals(0), m_customPlot(0)
 {
@@ -52,27 +77,33 @@ qDebug() << "Orbital Type in configurator: " << Data::Orbitals::toString(m_orbit
 
    m_configurator.surfaceType->clear();
    // Watch the ordering of these affects the index selection below
-   m_configurator.surfaceType->addItem("Basis Function", Data::SurfaceType::BasisFunction);
+   // [i18n] 显示名 = tr() 译文，数据键 = 英文原文(存在 UserRole+1)，
+   // 详见文件上方 addSurfaceType() 的说明。
+   QComboBox* surfaceType(m_configurator.surfaceType);
+   addSurfaceType(surfaceType, "Basis Function", Data::SurfaceType::BasisFunction,
+                  tr("Basis Function"));
   
    if (m_orbitals.m_orbitals.orbitalType() == Data::Orbitals::NaturalTransition) {
-      m_configurator.surfaceType->addItem("Alpha NTO",  Data::SurfaceType::AlphaOrbital);
-      m_configurator.surfaceType->addItem("Beta NTO",   Data::SurfaceType::BetaOrbital);
-    //m_configurator.surfaceType->addItem("Transition Density", TotalDensity);
+      addSurfaceType(surfaceType, "Alpha NTO", Data::SurfaceType::AlphaOrbital, tr("Alpha NTO"));
+      addSurfaceType(surfaceType, "Beta NTO",  Data::SurfaceType::BetaOrbital,  tr("Beta NTO"));
+    //addSurfaceType(surfaceType, "Transition Density", TotalDensity, tr("Transition Density"));
    }else if (m_orbitals.m_orbitals.orbitalType() == Data::Orbitals::NaturalBond) {
-      m_configurator.surfaceType->addItem("Alpha NBO",  Data::SurfaceType::AlphaOrbital);
-      m_configurator.surfaceType->addItem("Beta NBO", Data::SurfaceType::BetaOrbital);
+      addSurfaceType(surfaceType, "Alpha NBO", Data::SurfaceType::AlphaOrbital, tr("Alpha NBO"));
+      addSurfaceType(surfaceType, "Beta NBO",  Data::SurfaceType::BetaOrbital,  tr("Beta NBO"));
    }else if (m_orbitals.m_orbitals.orbitalType() == Data::Orbitals::Dyson) {
-      m_configurator.surfaceType->addItem("Dyson (Left)",  Data::SurfaceType::DysonLeft);
-      m_configurator.surfaceType->addItem("Dyson (Right)", Data::SurfaceType::DysonRight);
+      addSurfaceType(surfaceType, "Dyson (Left)",  Data::SurfaceType::DysonLeft,  tr("Dyson (Left)"));
+      addSurfaceType(surfaceType, "Dyson (Right)", Data::SurfaceType::DysonRight, tr("Dyson (Right)"));
    }else if (m_orbitals.m_orbitals.orbitalType() == Data::Orbitals::Generic) {
-      m_configurator.surfaceType->addItem("Orbital",  Data::SurfaceType::GenericOrbital);
+      addSurfaceType(surfaceType, "Orbital", Data::SurfaceType::GenericOrbital, tr("Orbital"));
 
    }else if (m_orbitals.m_orbitals.orbitalType() == Data::Orbitals::Complex) {
-      m_configurator.surfaceType->addItem("Complex Alpha Orbital",  Data::SurfaceType::AlphaRealOrbital);
-      m_configurator.surfaceType->addItem("Complex Beta Orbital",   Data::SurfaceType::BetaRealOrbital);
+      addSurfaceType(surfaceType, "Complex Alpha Orbital",
+                     Data::SurfaceType::AlphaRealOrbital, tr("Complex Alpha Orbital"));
+      addSurfaceType(surfaceType, "Complex Beta Orbital",
+                     Data::SurfaceType::BetaRealOrbital,  tr("Complex Beta Orbital"));
    }else {
-      m_configurator.surfaceType->addItem("Alpha Orbital",  Data::SurfaceType::AlphaOrbital);
-      m_configurator.surfaceType->addItem("Beta Orbital",   Data::SurfaceType::BetaOrbital);
+      addSurfaceType(surfaceType, "Alpha Orbital", Data::SurfaceType::AlphaOrbital, tr("Alpha Orbital"));
+      addSurfaceType(surfaceType, "Beta Orbital",  Data::SurfaceType::BetaOrbital,  tr("Beta Orbital"));
    }
 
    setIsovalueUnits(m_configurator.atomicUnits->isChecked());
@@ -507,7 +538,10 @@ void Orbitals::setNegativeColor(QColor const& color)
 void Orbitals::on_mullikenDecompositionsButton_clicked(bool)
 {
    // A little dodge, we use the label to match the density
-   QString label(m_configurator.surfaceType->currentText());
+   // [i18n] 必须取英文数据键(UserRole+1)，不能用已翻译的 currentText()，
+   // 否则与 Data::Density::label() 的英文标签匹配不上。见 addSurfaceType()。
+   QString label(m_configurator.surfaceType->itemData(
+                    m_configurator.surfaceType->currentIndex(), Qt::UserRole+1).toString());
 
    Data::DensityList& densities(m_orbitals.m_availableDensities);
    Data::DensityList::iterator density;
@@ -718,7 +752,9 @@ void Orbitals::on_addToQueueButton_clicked(bool)
       case Data::SurfaceType::CustomDensity: {
          info.setIsSigned(false);
          info.type().setKind(Data::SurfaceType::Custom);
-         info.type().setLabel(m_configurator.surfaceType->currentText());
+         // [i18n] 同上，取英文数据键而非显示译文
+         info.type().setLabel(m_configurator.surfaceType->itemData(
+            m_configurator.surfaceType->currentIndex(), Qt::UserRole+1).toString());
          queueSurface(info);
       } break;
 

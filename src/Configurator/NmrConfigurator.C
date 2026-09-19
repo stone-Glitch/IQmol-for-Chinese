@@ -80,7 +80,7 @@ Nmr::Nmr(Layer::Nmr& layer, Data::Nmr& data) : m_layer(layer), m_data(data), m_u
    // This needs to occur after the table has been initialized
    Data::NmrReferenceLibrary& library(Data::NmrReferenceLibrary::instance());
    m_ui->isotopeCombo->clear();
-   m_ui->isotopeCombo->addItem("Shieldings");
+   m_ui->isotopeCombo->addItem(tr("Shieldings"));
    m_ui->isotopeCombo->addItems(library.availableIsotopes());
 }
 

@@ -36,7 +36,7 @@ Background::Background() : m_backgroundColor(Preferences::BackgroundColor()),
    setText(tr("Background"));
    setCheckState(Qt::Checked);
    setConfigurator(&m_configurator);
-   connect(newAction("Edit Color"), SIGNAL(triggered()), this, SLOT(configure()));
+   connect(newAction(tr("Edit Color")), SIGNAL(triggered()), this, SLOT(configure()));
 }
 
 

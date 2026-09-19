@@ -55,7 +55,12 @@ namespace Data {
          SurfaceType(Kind const kind = Custom, unsigned index = 0) 
           : m_kind(kind), m_index(index) { }
 
+         // [i18n] toString() 返回稳定的英文数据键，供程序内部比较与
+         // 文件输出使用，切勿翻译；界面显示请用 toDisplayString()。
          QString toString() const;
+
+         // 返回已翻译的界面显示名，用于列表、图表标题等展示场景
+         QString toDisplayString() const;
 
          Kind const& kind() const { return m_kind; }
          void setKind(Kind const kind) { m_kind = kind; }

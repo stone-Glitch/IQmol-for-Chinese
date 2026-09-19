@@ -132,6 +132,17 @@ Molecule::Molecule(QObject* parent) : Component(tr("Untitled"), parent),
    m_currentGeometry(0), 
    m_chargeType(Data::Type::GasteigerCharge)
 {
+   // [i18n] 初始化列表中的标签为裸字符串，此处覆盖为译文，
+   // 使 lupdate 可提取、界面显示中文。
+   m_atomList.setText(tr("Atoms"));
+   m_bondList.setText(tr("Bonds"));
+   m_chargesList.setText(tr("Charges"));
+   m_fileList.setText(tr("Files"));
+   m_constraintList.setText(tr("Constraints"));
+   m_isotopesList.setText(tr("Isotopes"));
+   m_scanList.setText(tr("Scan Coordinates"));
+   m_groupList.setText(tr("Groups"));
+
    setFlags(Qt::ItemIsSelectable | Qt::ItemIsDropEnabled | 
       Qt::ItemIsUserCheckable | Qt::ItemIsEnabled | Qt::ItemIsEditable);
 
@@ -149,28 +160,28 @@ Molecule::Molecule(QObject* parent) : Component(tr("Untitled"), parent),
    conv.SetInFormat("xyz");
 
    // Add actions for the context menu
-   connect(newAction("Configure"), SIGNAL(triggered()), 
+   connect(newAction(tr("Configure")), SIGNAL(triggered()), 
       this, SLOT(configure()));
-   connect(newAction("Select All"), SIGNAL(triggered()),
+   connect(newAction(tr("Select All")), SIGNAL(triggered()),
       this, SLOT(selectAll()));
-   connect(newAction("Reperceive Bonds"), SIGNAL(triggered()), 
+   connect(newAction(tr("Reperceive Bonds")), SIGNAL(triggered()), 
       this, SLOT(reperceiveBondsSlot()));
-   connect(newAction("Add Hydrogens"), SIGNAL(triggered()), 
+   connect(newAction(tr("Add Hydrogens")), SIGNAL(triggered()), 
       this, SLOT(addHydrogens()));
 //   connect(newAction("Generate Conformers"), SIGNAL(triggered()), 
 //      this, SLOT(generateConformersDialog()));
 
-   m_addGeometryMenu = newAction("Duplicate Geometry");
+   m_addGeometryMenu = newAction(tr("Duplicate Geometry"));
 
    connect(m_addGeometryMenu, SIGNAL(triggered()), 
       this, SLOT(createGeometryList()));
 
-   m_atomicChargesMenu = newAction("Atomic Charges");
+   m_atomicChargesMenu = newAction(tr("Atomic Charges"));
 
-   connect(newAction("Remove"), SIGNAL(triggered()), 
+   connect(newAction(tr("Remove")), SIGNAL(triggered()), 
       this, SLOT(removeMolecule()));
 
-   connect(newAction("Save As"), SIGNAL(triggered()), 
+   connect(newAction(tr("Save As")), SIGNAL(triggered()), 
       this, SLOT(saveAs()));
 
    connect(&m_efpFragmentList, SIGNAL(updated()), this, SIGNAL(softUpdate()));
@@ -230,7 +241,7 @@ qDebug() << "Molecule::appendData(Layer::List)";
    QList<Base*> currentLayers(findLayers<Base>(Children));
    QStringList labels;
 
-   labels << "Info";
+   labels << tr("Info");
    QList<Base*>::iterator base;
    for (base = currentLayers.begin(); base != currentLayers.end(); ++base) {
        labels << (*base)->text();
@@ -2783,7 +2794,7 @@ void Molecule::initProperties()
 
    // Gasteiger
    type = Data::Type::GasteigerCharge;
-   QAction* action(menu->addAction("Gasteiger"));
+   QAction* action(menu->addAction(tr("Gasteiger")));
    action->setCheckable(true);
    action->setChecked(true);
    action->setData(type);
@@ -2796,7 +2807,7 @@ void Molecule::initProperties()
    // Mulliken
    if (m_currentGeometry->hasProperty<Data::MullikenCharge>()) {
       type = Data::Type::MullikenCharge;
-      action = menu->addAction("Mulliken");
+      action = menu->addAction(tr("Mulliken"));
       action->setCheckable(true);
       action->setData(type);
       chargeTypes->addAction(action);
@@ -2807,7 +2818,7 @@ void Molecule::initProperties()
    // Multipole Derived
    if (m_currentGeometry->hasProperty<Data::MultipoleDerivedCharge>()) {
       type = Data::Type::MultipoleDerivedCharge;
-      action = menu->addAction("Multipole Derived");
+      action = menu->addAction(tr("Multipole Derived"));
       action->setCheckable(true);
       action->setData(type);
       chargeTypes->addAction(action);
@@ -2818,7 +2829,7 @@ void Molecule::initProperties()
    // ChelpG
    if (m_currentGeometry->hasProperty<Data::ChelpgCharge>()) {
       type = Data::Type::ChelpgCharge;
-      action = menu->addAction("CHELPG");
+      action = menu->addAction(tr("CHELPG"));
       action->setCheckable(true);
       action->setData(type);
       chargeTypes->addAction(action);
@@ -2829,7 +2840,7 @@ void Molecule::initProperties()
    // Hirshfeld
    if (m_currentGeometry->hasProperty<Data::HirshfeldCharge>()) {
       type = Data::Type::HirshfeldCharge;
-      action = menu->addAction("Hirshfeld");
+      action = menu->addAction(tr("Hirshfeld"));
       action->setCheckable(true);
       action->setData(type);
       chargeTypes->addAction(action);
@@ -2840,7 +2851,7 @@ void Molecule::initProperties()
    // Lowdin
    if (m_currentGeometry->hasProperty<Data::LowdinCharge>()) {
       type = Data::Type::LowdinCharge;
-      action = menu->addAction("Lowdin");
+      action = menu->addAction(tr("Lowdin"));
       action->setCheckable(true);
       action->setData(type);
       chargeTypes->addAction(action);
@@ -2851,8 +2862,8 @@ void Molecule::initProperties()
    // Natural
    if (m_currentGeometry->hasProperty<Data::NaturalCharge>()) {
       type = Data::Type::NaturalCharge;
-      action = menu->addAction("Lowdin");
-      action = menu->addAction("Natural");
+      action = menu->addAction(tr("Lowdin"));
+      action = menu->addAction(tr("Natural"));
       action->setCheckable(true);
       action->setData(type);
       chargeTypes->addAction(action);
@@ -2863,7 +2874,7 @@ void Molecule::initProperties()
    // Merz Kollman RESP
    if (m_currentGeometry->hasProperty<Data::MerzKollmanEspCharge>()) {
       type = Data::Type::MerzKollmanEspCharge;
-      action = menu->addAction("Merz-Kollman ESP");
+      action = menu->addAction(tr("Merz-Kollman ESP"));
       action->setCheckable(true);
       action->setData(type);
       chargeTypes->addAction(action);
@@ -2874,7 +2885,7 @@ void Molecule::initProperties()
    // Merz Kollman RESP
    if (m_currentGeometry->hasProperty<Data::MerzKollmanRespCharge>()) {
       type = Data::Type::MerzKollmanRespCharge;
-      action = menu->addAction("Merz-Kollman RESP");
+      action = menu->addAction(tr("Merz-Kollman RESP"));
       action->setCheckable(true);
       action->setData(type);
       chargeTypes->addAction(action);

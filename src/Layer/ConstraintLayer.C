@@ -82,8 +82,8 @@ Constraint::Constraint(Data::TorsionConstraint const& /* constraint*/)
 
 void Constraint::init()
 {
-   connect(newAction("Configure"), SIGNAL(triggered()), this, SLOT(configure())); 
-   connect(newAction("Delete"), SIGNAL(triggered()), this, SIGNAL(invalid())); 
+   connect(newAction(tr("Configure")), SIGNAL(triggered()), this, SLOT(configure())); 
+   connect(newAction(tr("Delete")), SIGNAL(triggered()), this, SIGNAL(invalid())); 
    setFlags( Qt::ItemIsSelectable | 
              Qt::ItemIsEnabled | 
              Qt::ItemIsEditable);

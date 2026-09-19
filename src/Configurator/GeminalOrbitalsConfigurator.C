@@ -41,8 +41,9 @@ GeminalOrbitals::GeminalOrbitals(Layer::GeminalOrbitals& geminalOrbitals)
       m_configurator.orbitalRangeMax, SLOT(setCurrentIndex(int)));
 
    m_configurator.surfaceType->clear();
-   m_configurator.surfaceType->addItem("Geminal", Geminal);
-   m_configurator.surfaceType->addItem("Geminal Correlation", Correlation);
+   // [i18n] 显示文本走 tr()，逻辑读 itemData(index)（见本文件 282 行），不受译文影响。
+   m_configurator.surfaceType->addItem(tr("Geminal"), Geminal);
+   m_configurator.surfaceType->addItem(tr("Geminal Correlation"), Correlation);
    m_configurator.surfaceType->setCurrentIndex(0); 
 
    setPositiveColor(Preferences::PositiveSurfaceColor());

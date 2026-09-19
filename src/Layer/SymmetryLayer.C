@@ -29,6 +29,10 @@ namespace Layer {
 Symmetry::Symmetry(Data::PointGroup const& pointGroup) : Base("Symmetry"), 
    m_configurator(*this), m_pointGroup(pointGroup)
 {
+   // [i18n] 初始化列表中的标签为裸字符串，此处覆盖为译文，
+   // 使 lupdate 可提取、界面显示中文。
+   setText(tr("Symmetry"));
+
    setConfigurator(&m_configurator);
 }
 

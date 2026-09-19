@@ -91,7 +91,7 @@ void Frequencies::initSpectrum()
 
    m_spectrum->xAxis->setSelectableParts(QCPAxis::spNone);
    m_spectrum->xAxis->setLabel(tr("Frequency"));
-   m_spectrum->yAxis->setLabel("Intensity");
+   m_spectrum->yAxis->setLabel(tr("Intensity"));
 
    connect(m_spectrum, SIGNAL(mousePress(QMouseEvent*)),
       this, SLOT(setSelectionRectMode(QMouseEvent*)));
@@ -222,7 +222,7 @@ void Frequencies::updatePlot()
 
    if (m_configurator.impulseButton->isChecked()) {
       plotImpulse(scale);
-      m_spectrum->yAxis->setLabel("Intensity");
+      m_spectrum->yAxis->setLabel(tr("Intensity"));
 
    }else if (m_configurator.gaussianButton->isChecked()) {
       plotSpectrum(Gaussian, scale, width);
@@ -230,7 +230,7 @@ void Frequencies::updatePlot()
 
    }else if (m_configurator.lorentzianButton->isChecked()) {
       plotSpectrum(Lorentzian, scale, width);
-      m_spectrum->yAxis->setLabel("Rel. Intensity");
+      m_spectrum->yAxis->setLabel(tr("Rel. Intensity"));
 
    }
 

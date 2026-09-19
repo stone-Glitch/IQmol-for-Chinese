@@ -48,6 +48,10 @@ GLfloat Octree::s_selectionColor[] = {0.0, 0.8, 1.0, 0.2};
 Octree::Octree(AtomList const& atoms) : GLObject("Octree Box"), m_atomList(atoms),
    m_configurator(*this), m_selectionRadius(0.0)
 {
+   // [i18n] 初始化列表中的标签为裸字符串，此处覆盖为译文，
+   // 使 lupdate 可提取、界面显示中文。
+   setText(tr("Octree Box"));
+
    setFlags(Qt::ItemIsUserCheckable | Qt::ItemIsEnabled);
    setCheckState(Qt::Checked);
    setConfigurator(&m_configurator);

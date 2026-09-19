@@ -85,7 +85,7 @@ void Vibronic::initPlotCanvas()
    m_plotCanvas->axisRect()->setRangeZoom(Qt::Horizontal);
 
    m_plotCanvas->xAxis->setSelectableParts(QCPAxis::spNone);
-   m_plotCanvas->yAxis->setLabel("Intensity");
+   m_plotCanvas->yAxis->setLabel(tr("Intensity"));
    m_plotCanvas->legend->setVisible(true);
 
    connect(m_plotCanvas, SIGNAL(mousePress(QMouseEvent*)),
@@ -218,7 +218,7 @@ void Vibronic::updateSpectra(Constants::Units const units)
 
            graph = m_plotCanvas->addGraph();
            graph->setData(x, y);
-           graph->setName("Electronic Transition");
+           graph->setName(tr("Electronic Transition"));
            graph->setLineStyle(QCPGraph::lsImpulse);
            graph->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssCircle));
            graph->setPen(pen);
