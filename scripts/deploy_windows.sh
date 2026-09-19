@@ -163,7 +163,8 @@ fi
 #--------------------------------------------------------------------
 echo "==> 复制 MinGW 运行库"
 for dll in libstdc++-6.dll libgcc_s_seh-1.dll libwinpthread-1.dll \
-           libssp-0.dll; do
+           libssp-0.dll libgfortran-5.dll libquadmath-0.dll \
+           libgomp-1.dll; do
   if [ -f "$MINGW_PREFIX/bin/$dll" ]; then
     copy_item "$MINGW_PREFIX/bin/$dll" "$BIN_DIR/"
   fi
@@ -176,6 +177,33 @@ for dll in zlib1.dll libzstd.dll libssl-3-x64.dll libcrypto-3-x64.dll \
     copy_item "$MINGW_PREFIX/bin/$dll" "$BIN_DIR/"
   fi
 done
+
+#--------------------------------------------------------------------
+# 3b. 依赖闭包自动补缺
+#     用 objdump 解析 bin/ 下所有 exe/dll 的直接依赖，迭代补齐
+#     MINGW_PREFIX 中存在而 bin/ 缺失的 DLL（如 libgfortran-5.dll），
+#     直到不再新增为止。系统 DLL（KERNEL32 / api-ms-win-* 等）不在
+#     MINGW_PREFIX/bin，天然被过滤，不会被误复制。
+#--------------------------------------------------------------------
+if command -v objdump >/dev/null 2>&1; then
+  echo "==> 扫描依赖闭包，自动补缺 MinGW 运行库"
+  for _round in 1 2 3 4 5; do
+    _added=0
+    for _f in "$BIN_DIR"/*.exe "$BIN_DIR"/*.dll; do
+      [ -e "$_f" ] || continue
+      for _dll in $(objdump -p "$_f" 2>/dev/null | sed -n 's/[[:space:]]*DLL Name: //p'); do
+        if [ ! -e "$BIN_DIR/$_dll" ] && [ -f "$MINGW_PREFIX/bin/$_dll" ]; then
+          copy_item "$MINGW_PREFIX/bin/$_dll" "$BIN_DIR/"
+          echo "    自动补入: $_dll"
+          _added=$((_added+1))
+        fi
+      done
+    done
+    [ "$_added" -eq 0 ] && break
+  done
+else
+  echo "    (未找到 objdump, 跳过依赖自动补缺)"
+fi
 
 #--------------------------------------------------------------------
 # 4. IQmol 资源：share/
