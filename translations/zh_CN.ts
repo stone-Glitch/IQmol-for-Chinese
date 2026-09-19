@@ -3691,6 +3691,14 @@ QTextBrowser#content {
             <source>Done</source>
             <translation>完成</translation>
         </message>
+        <message>
+            <source>Search Results</source>
+            <translation>搜索结果</translation>
+        </message>
+        <message>
+            <source>No results found.</source>
+            <translation>未找到匹配结果。</translation>
+        </message>
     </context>
     <context>
         <name>IQmol::CameraDialog</name>

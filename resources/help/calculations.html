@@ -5,160 +5,110 @@
 
 <body>
 
-   <center> <h1> Running Q-Chem <br> </h1> </center><p></p>
+   <center> <h1> 运行 Q-Chem <br> </h1> </center><p></p>
 
-   <p> IQmol can be configured to run Q-Chem calculations either on your local
-   machine or on a remote server.  In order to do this Q-Chem must be correctly
-   installed on the computer that will be running the calculations.  A Server
-   must also be configured as outlined below.
+   <p> IQmol 可以配置为在本地计算机或远程服务器上运行 Q-Chem 计算。为此，
+   Q-Chem 必须已正确安装在实际执行计算的计算机上，并且还需要按下文所述配置一个服务器。
 
-   <h3><a name="serverConfiguration"></a>Server Configuration</h3>
+   <h3><a name="serverConfiguration"></a>服务器配置</h3>
 
    <ol>
-	  <li> Select the Calculation&rarr;Edit Servers menu option to add a new
-		   Server.  A dialog will appear with a list of configured servers.
-           Initially this list will be empty. <br>
-	  <li> Click the Add New Server button with the '+' icon. This opens the
-		   Server Dialog which allows the new server to be configured. The server is
-           the machine which has your copy of Q-Chem installed.  <br>
+	  <li> 选择菜单 计算&rarr;编辑服务器 添加新服务器。此时会弹出一个对话框，
+		   其中列出已配置的服务器，初始为空。<br>
+	  <li> 点击带 "+" 图标的"添加新服务器"按钮，打开服务器对话框以配置新服务器。
+		   服务器指安装了你的 Q-Chem 副本的那台机器。<br>
    <p><center><img src="images/ServerDialog.png" /></center></p>
 
-	  <li> Give the server a name (this is simply used to identify the current
-		   server configuration and does not have to match the actual machine
-		   name) and select if the machine is local (i.e. the same machine as
-           IQmol is running on) or remote.  Presently, remote servers must be
-           Unix-based (i.e. not a Windows server). <br>
-	  <li> If there is PBS or SGE software running on the server, select the 
-		   appropriate 'Type' option, otherwise the Basic option should
-           suffice.  <br>
-	  <li> If required, the server can be further configured using the
-		   Configure button. Details on this can be found in the
-            <a href="#serverOptions">Server Options</a> section below. <br>
-	  <li> For non-PBS servers the number of concurrent Q-Chem jobs can be
-		   limited using a simple inbuilt queuing system. The maximum number of
-		   jobs is set by the Job Limit control. If the Job Limit is set to
-		   zero the queue is disabled and any number of jobs can be run
-		   concurrently.  Please note that this limit applies to the current
-		   IQmol session and does not account for jobs submitted by other users
-           or by other IQmol sessions.  <br>
-	  <li> For remote servers the address of the machine and your user name are
-		   also required. IQmol uses SSH to connect to remote machines and the
-		   most convenient way to set this up is by using authorized keys (see
-           <a href="http://www.debian.org/devel/passwordlessssh"> 
-		   http://www.debian.org/devel/passwordlessssh</a> for details on how
-		   these can be set up). IQmol can then connect via the SSH Agent and
-		   will not have to prompt you for your password. If you are not able
-		   to use an SSH Agent, several other authentication methods are
-           offered: 
+	  <li> 给服务器起个名字（仅用于标识当前的服务器配置，无须与实际机器名一致），
+		   并选择该机器是本地（即与 IQmol 运行在同一台机器上）还是远程。目前远程服务器必须是基于
+           Unix 的系统（即不支持 Windows 服务器）。<br>
+	  <li> 如果服务器上运行着 PBS 或 SGE 软件，请选择相应的"类型"选项；
+		   否则选择"基本"（Basic）即可。<br>
+	  <li> 如有需要，可通过"配置"按钮进一步设置服务器。详见下文
+           <a href="#serverOptions">服务器选项</a>一节。<br>
+	  <li> 对于非 PBS 服务器，可以用内置的简单队列限制并发的 Q-Chem 任务数。
+		   任务数上限由"任务上限"控件设定。若设为零，则禁用队列，可同时运行任意多个任务。
+		   注意：此上限只对当前 IQmol 会话有效，不会统计其他用户或其他 IQmol 会话提交的任务。<br>
+	  <li> 对于远程服务器，还需提供机器地址和你的用户名。IQmol 通过 SSH 连接远程机器，
+		   最方便的设置方式是使用授权密钥（设置方法参见
+           <a href="http://www.debian.org/devel/passwordlessssh">
+		   http://www.debian.org/devel/passwordlessssh</a>）。这样 IQmol 可通过 SSH 代理连接，
+           无须再提示输入密码。如果无法使用 SSH 代理，还可以选择其他几种认证方式：
            <ul>
-			  <li> Public Key This requires you to enter your SSH passphrase
-				   (if any) to unlock your private key file. The passphrase is
-				   stored in memory, not disk, so you will need to re-enter
-                   this each time IQmol is run.  <br>
-			  <li> Password Vault This allows a single password (the vault key)
-				   to be used to unlock the passwords for all the configured
-				   servers. The server passwords are salted with 64 random bits
-				   and encrypted using the AES algorithm before being stored on
-				   disk. The vault key is not stored permanently and must be
-                   re-entered each time IQmol is run. <br>
-			  <li> Password Prompt This requires each server password to be
-				   entered each time IQmol is run. Once the connection has been
-				   established the memory used to hold the password is
-				   overwritten to reduce the risk of recovery from a core dump.
-				   Further configuration of SSH options should not be required
-                   unless your public/private keys are stored in a non-standard
-                   location.   <br>
+			  <li> 公钥（Public Key）：需要输入 SSH 密语（如有）以解锁你的私钥文件。
+				   密语只保存在内存中而不写入磁盘，因此每次运行 IQmol 都需要重新输入。<br>
+			  <li> 密码保险库（Password Vault）：只需一个密码（保险库密钥）即可解锁所有已配置
+				   服务器的密码。服务器密码在存盘前会用 64 位随机数加盐，并使用 AES 算法加密。
+				   保险库密钥不会永久保存，每次运行 IQmol 都需要重新输入。<br>
+			  <li> 密码提示（Password Prompt）：每次运行 IQmol 都需要输入服务器密码。
+				   连接建立后，保存密码的内存会被覆写，以降低从核心转储中恢复出密码的风险。
+				   除非你的公钥/私钥存放在非标准位置，否则无需再配置其他 SSH 选项。<br>
            </ul>
       </ol>
 
-   <p> For remote servers, it is recommended that you test the server connection
-   before attempting to submit a job. Multiple servers can be configured if you
-   have access to more than one machine with Q-Chem installed, or if you have
-   different account configurations. In this case the default server is the first
-   on the list and this can be changed by using the arrow buttons in the Server
-   List dialog. 
+   <p> 对于远程服务器，建议在提交任务之前先测试服务器连接。如果你有多台装了 Q-Chem 的机器，
+   或有多个不同的账户配置，可以配置多个服务器。默认服务器是列表中的第一个，
+   可在服务器列表对话框中用箭头按钮调整顺序。
 
-   <p> Note that changes made to an existing server may not take effect until
-   IQmol has been restarted.  If problems are encountered, particularly after
-   upgrading, it is recommended that you delete the server and try configuring
-   a new one.
+   <p> 注意：对已有服务器的修改可能要重启 IQmol 后才生效。如果遇到问题（尤其是升级之后），
+   建议删除该服务器并重新配置一个。
 
 
-   <h3><a name="serverOptions"></a>Server Options</h3>
+   <h3><a name="serverOptions"></a>服务器选项</h3>
 
-   <p> If IQmol does not work with the default set up you can customize the
-   behavior by clicking the Configure button in the Server Dialog.  This opens
-   the Server Options window:
-   
+   <p> 如果默认设置无法工作，可以在服务器对话框中点击"配置"按钮自定义行为。
+   这会打开服务器选项窗口：
+
    <p><center><img src="images/ServerOptions.png" /></center></p>
 
-   <p> The Command Settings define several commands which are used in the
-   submission and control of Q-Chem processes.  Changes to these may be
-   required if your system has non-standard paths to common utilities such as
-   the ps command, or if the output from the command is non-standard.  
+   <p> "命令设置"定义了提交和控制 Q-Chem 进程时用到的几条命令。如果你的系统中
+   ps 等常用工具的路径非标准，或命令输出格式非标准，就可能需要修改这些设置。
 
-   <p> The Run File Template is the script that is used to run the Q-Chem job
-   and can be configured to include, for example, the hostname or start time in
-   the output file, or to copy scratch files to a permanent location.   If the
-   necessary Q-Chem environment variables are not set in your .cshrc (or
-   equivalent), they will need to be explicitly set here.
+   <p> "运行文件模板"是用于运行 Q-Chem 任务的脚本，可以配置为在输出文件中加入
+   主机名或开始时间等信息，或把临时文件复制到永久位置。如果你的 .cshrc（或等效文件）中
+   没有设置必要的 Q-Chem 环境变量，就需要在这里显式设置。
 
-   <p> Valid macros that appear in the template will be substituted with
-   specified values when submitting the job.  Macros are identified by the
-   ${...} motif and are distinct from environment variables (which do not
-   include the braces).  The following variables can be used:
+   <p> 模板中的合法宏会在提交任务时替换为指定的值。宏以 ${...} 形式标识，
+   与环境变量不同（环境变量不带花括号）。可用的变量有：
    <ul>
-	  <li> ${JOB_ID}: This is set to the PBS job number for PBS servers and the
-           process ID otherwise.
-	  <li> ${JOB_NAME}: This is the base name for the job and is what appears
-		   as the molecule name in the Model View.  By default this is used to
-		   name the input and output files and for this reason it should not
-           include any spaces.
+	  <li> ${JOB_ID}：PBS 服务器上为 PBS 任务编号，其他情况下为进程 ID。
+	  <li> ${JOB_NAME}：任务的基本名称，也是模型视图中显示的分子名。默认还会用它命名
+		   输入输出文件，因此其中不应包含空格。
    </ul>
 
-   <p> For PBS servers, the following additional variables are available.  The
-	   user is prompted for values for these variables when submitting a job to
-       a PBS server:
+   <p> 对于 PBS 服务器，还有以下附加变量。向 PBS 服务器提交任务时会提示用户为这些变量赋值：
    <ul>
-	  <li> ${QUEUE}: The name of the PBS queue to which the job is submitted.
-	  <li> ${WALLTIME}: The wall time limit for job.
-	  <li> ${MEMORY}: The virtual memory limit for the job.
-	  <li> ${SCRATCH}: The file space limit for the job.
-	  <li> ${NCPUS}: The number of CPUs to use.  Note you will need a parallel
-           version of Q-Chem for this option to have any effect.
+	  <li> ${QUEUE}：任务提交到的 PBS 队列名称。
+	  <li> ${WALLTIME}：任务的墙钟时间上限。
+	  <li> ${MEMORY}：任务的虚拟内存上限。
+	  <li> ${SCRATCH}：任务的文件空间上限。
+	  <li> ${NCPUS}：使用的 CPU 数量。注意需要并行版本的 Q-Chem，该选项才会生效。
    </ul>
 
-   
 
-   <h3><a name="submittingCalculations"></a>Submitting Calculations</h3>
 
-   <p> Calculations can be set up via the Calculation&rarr;Q-Chem Setup menu option.
-   A dialog appears with the current molecule inserted into the input.  Changes to the
-   various options can be made using the appropriate controls before selecting the
-   desired server and submitting the job.  You will be prompted for a name for the
-   working directory and, if it is a PBS server, resource limits.
+   <h3><a name="submittingCalculations"></a>提交计算</h3>
 
-   <p> Please note that while Q-Chem is file-based, as of version 2.1 IQmol
-   uses a directory to organize the various files from a calculation. 
+   <p> 通过菜单 计算&rarr;Q-Chem 设置 来配置计算。弹出的对话框中已自动插入当前分子作为输入。
+   可以先用相应控件修改各项选项，然后选择目标服务器并提交任务。系统会提示你为工作目录命名，
+   如果是 PBS 服务器，还会提示设置资源限额。
 
-   <h3><a name="processMonitor"></a>The Process Monitor</h3>
+   <p> 请注意，虽然 Q-Chem 基于文件，但从 2.1 版起，IQmol 会用一个目录来整理一次计算的
+   各类文件。
 
-   <p> Once the job has been successfully submitted, you can monitor its progress
-   using the Process Monitor which can be opened via the Calculations&rarr;Job
-   Monitor menu option.  
+   <h3><a name="processMonitor"></a>任务监视器</h3>
+
+   <p> 任务成功提交后，可以通过任务监视器查看其进度。打开方式为菜单
+   计算&rarr;任务监视器。
 
    <p><center><img src="images/ProcessMonitor.png"/></center></p>
 
-   <p> The Process Monitor displays a list of submitted jobs and their current
-   status which is updated every few seconds as determined by the Update
-   Interval in the Server Options dialog.  Right-clicking on an item in the
-   monitor brings up a context menu which allows you to perform certain tasks
-   such as terminating the process or viewing the output from a finished
-   calculation.
-      
-   <p> When a job complete successfully, the output is automatically loaded
-   into IQmol.  The presence of new output is indicated by a 
-   <img src="images/Favourites.png"> icon in the Model View.
+   <p> 任务监视器列出已提交的任务及其当前状态，刷新间隔由服务器选项对话框中的
+   "更新间隔"决定。在监视器中的条目上点击右键会弹出上下文菜单，可执行终止进程、
+   查看已完成计算的输出等操作。
+
+   <p> 任务成功完成后，输出会自动载入 IQmol。模型视图中会出现
+   <img src="images/Favourites.png"> 图标，标示有新输出。
 
 
 </body>

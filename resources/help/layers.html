@@ -5,126 +5,91 @@
 
 <body>
 
-   <center> <h1> Layers <br> </h1> </center><p></p>
- 
+   <center> <h1> 图层 <br> </h1> </center><p></p>
 
-   <h3><a name="layers"></a>Introduction</h3>
 
-   <p> IQmol uses the concept of Layers for overlays that are displayed on the
-   molecule model and also for representing data associated with a molecule.
-   Layers appear in the Model View section of the main window and form a tree
-   structure.  A checkbox besides a layer item indicates that the user has
-   control over the visibility of the layer.  Unchecking this causes the layer and
-   all its children to become invisible.
+   <h3><a name="layers"></a>简介</h3>
 
-   <p> Many layers can be configured by double clicking the layer item in the
-   Model View.  If there are any options for the layer, a dialog will appear
-   displaying them.  For example, double clicking on the molecule name causes
-   the molecule configurator dialog to appear which contains options for changing
-   the way the molecule appears (CPK, tubes etc.) and also allows model density
-   surfaces to be added.
+   <p> IQmol 用"图层"的概念来表示显示在分子模型上的覆盖物，以及与分子相关的各类数据。
+   图层出现在主窗口的模型视图区域，构成树状结构。图层条目旁的复选框表示用户可以控制
+   该图层的可见性；取消勾选后，该图层及其所有子项都会隐藏。
 
-   <p> Note that each layer is configured separately, which gives maximum
-   control over the appearance of elements that make up the system.
+   <p> 许多图层都可以通过在模型视图中双击来配置。如果该图层有可配置的选项，
+   会弹出相应的对话框。例如，双击分子名称会弹出分子配置对话框，其中包含更改分子
+   显示方式（CPK、管状等）的选项，还可以添加模型密度表面。
+
+   <p> 注意：每个图层都是单独配置的，这样可以最大限度地控制系统各组成部分的外观。
 
 
    <br>
-   <h3><a name="global"></a>Global Layers</h3>
+   <h3><a name="global"></a>全局图层</h3>
 
-   <p> These layers are always present and can be accessed by opening the
-   Global layer item at the top of the Model View.  They represent items
-   that are not associated with a particular molecule.
+   <p> 这些图层始终存在，通过展开模型视图顶部的"全局"条目即可访问。
+   它们表示与具体分子无关的条目。
 
-   <p> <b>Background:</b> This layer allows the user to change the color of the
-   Viewer background.  The checkbox can be used to disable the current color
-   and turns the background white.  This is useful when taking snapshots that
-   should have a white background.  The configurator allows the color to be
-   changed.
+   <p> <b>背景：</b> 此图层用于更改查看器的背景颜色。复选框可用来停用当前颜色，
+   使背景变回白色——拍摄需要白色背景的快照时很有用。通过配置器可以更改颜色。
 
-   <p> <b>Axes:</b> This layer provides a visual aid to identify the cartesian
-   axes in the Viewer.  The axes are colored red (<i>x</i>), green (<i>y</i>),
-   blue (<i>z</i>).
+   <p> <b>坐标轴：</b> 此图层提供视觉辅助，用于在查看器中识别笛卡尔坐标轴。
+   坐标轴着色为红（<i>x</i>）、绿（<i>y</i>）、蓝（<i>z</i>）。
 
-   <p> <b>Mesh:</b> This layer provides a visual aid to identify the cartesian
-   planes in the view.  A regular grid is drawn in either the <i>xy</i> (default), 
-   <i>xz</i> or <i>yz</i> planes.  The density of the mesh and its type (either
-   (cartesian or radial) can be configured.
+   <p> <b>网格：</b> 此图层提供视觉辅助，用于在视图中识别笛卡尔平面。
+   可以在 <i>xy</i>（默认）、<i>xz</i> 或 <i>yz</i> 平面中绘制规则网格。
+   网格的密度和类型（笛卡尔或径向）均可配置。
 
 
 
    <br>
-   <h3><a name="molecule"></a>Molecule Layers</h3>
+   <h3><a name="molecule"></a>分子图层</h3>
 
-   <p> IQmol supports the display of multiple molecules and each molecule is
-   represented by its own layer in the Model View.  Data elements associated with
-   the molecule are appended as children.  A non-empty molecule always has the 
-   following layers:
+   <p> IQmol 支持同时显示多个分子，每个分子在模型视图中都有自己的图层。
+   与分子关联的数据元素会作为子项附加在下面。非空分子始终包含以下图层：
 
    <ul>
-	  <li> <b>Info:</b> The Info configurator provides a container for
-		   information about the molecule such as the number of atoms,
-           molecular mass and point group.  The dipole direction vector
-           is appended as a child to the Info layer.<br>
+	  <li> <b>信息：</b> 信息配置器汇集了分子的相关信息，如原子数、分子质量和点群。
+		   偶极方向矢量会作为子项附加在信息图层下。<br>
 
-      <li> <b>Atoms:</b> a list of the atoms in the system.  Atoms can be
-           selected using the Model View.  Multiple atoms can be selected by
-           holding down the <i>shift</i> key or the <i>ctrl</i> modifier
-           (&#8984; key on Mac).<br>
+      <li> <b>原子：</b> 体系中所有原子的列表。可以在模型视图中选择原子：
+           按住 <i>shift</i> 键或 <i>ctrl</i> 修饰键（Mac 上为 &#8984; 键）可选择多个原子。<br>
 
-      <li> <b>Bonds:</b> a list of the bonds in the system.  Like atoms, bonds
-           can also be selected using the Model View.<br>
+      <li> <b>键：</b> 体系中所有键的列表。与原子一样，也可以在模型视图中选择键。<br>
    </ul>
 
 
    <br>
-   <h3><a name="other"></a>Other Layers</h3>
+   <h3><a name="other"></a>其他图层</h3>
 
-   <p> In addition to the above layers, there are several other layers that
-   form part of the molecule data structure.  These layers only appear when
-   certain actions are taken by the user, for example opening a file.
+   <p> 除上述图层外，还有几个图层属于分子数据结构的一部分。
+   这些图层只在执行了某些操作（例如打开文件）后才会出现。
 
    <ul>
-      <li> <b>Files:</b> A list of files associated with the molecule that
-		   contain data that can be visualized using IQmol.  These include:
-		   output files (.out), formatted checkpoint files (.fchk) and cube
-		   files (.cube).  Double clicking a data file brings up a file viewer
-           that allows the user to view and search the contents of the file. <br>
+      <li> <b>文件：</b> 与分子关联、且其数据可用 IQmol 可视化的文件列表，
+		   包括输出文件（.out）、格式化检查点文件（.fchk）和 cube 文件（.cube）。
+		   双击数据文件会打开文件查看器，可查看和搜索文件内容。<br>
 
-	  <li> <b>Surfaces:</b> There are two surfaces layers.  One appears when
-           a formatted checkpoint file has been loaded into IQmol, the other
-           appears when a surface (vdW, or pseudo density) is generated from
-		   the molecule configurator.  In each case this layer contains a list
-           of the various surfaces that have been generated for the molecule.  
-		   See the <a href="surfaces.html">Plotting Surfaces</a> section on how
-		   to generate different types of surfaces.  Configuring a surface
-		   layer allows the user to customise the colors, surface property,
-		   rendering and some of the OpenGL display variables (e.g.
-           transparency).<br>
+	  <li> <b>表面：</b> 表面图层有两种。一种在向 IQmol 载入格式化检查点文件后出现，
+		   另一种在分子配置器中生成表面（范德华表面或近似密度）后出现。
+		   两种情况下，该图层都列出了为该分子生成的各种表面。
+		   如何生成不同类型的表面请参阅<a href="surfaces.html">绘制表面</a>一节。
+		   配置表面图层可以自定义颜色、表面性质、渲染方式以及部分 OpenGL 显示变量
+		   （如透明度）。<br>
 
-	  <li> <b>Frequencies:</b> This layer appears when an output file containing
-		   a frequency job is loaded.  See the 
-           <a href="vibrations.html">Vibrational Frequencies</a> section for more
-           details.<br>
+	  <li> <b>频率：</b> 载入包含频率计算的输出文件后出现。详见
+           <a href="vibrations.html">振动频率</a>一节。<br>
 
-	  <li> <b>Geometries:</b> This layer appears when an output file containing
-           an optimization or intrinsic reaction coordinate (IRC) job is loaded.
-		   See the <a href="paths.html">Visualizing Pathways</a> section for more
-           details.<br>
+	  <li> <b>几何结构：</b> 载入包含优化或内禀反应坐标（IRC）计算的输出文件后出现。
+		   详见<a href="paths.html">反应路径可视化</a>一节。<br>
 
-	  <li> <b>Constraints:</b> A list of constraints that have been applied to
-		   the molecule.  Constraints can be added by selecting the appropriate
-           atoms and using the Build&rarr;Set Constraint menu option.  The type of
-           constraint is determined by the number of selected atoms:
+	  <li> <b>约束：</b> 已应用于分子的约束列表。选中相应原子后使用菜单
+		   构建&rarr;设置约束 即可添加约束。约束的类型由选中原子的数目决定：
            <ol>
-              <li> Fixed atom
-              <li> Inter-atomic distance
-              <li> Bond angle
-              <li> Torsion angle<br>
+              <li> 固定原子
+              <li> 原子间距离
+              <li> 键角
+              <li> 二面角<br>
            </ol>
-		   The constraint is displayed in the Viewer and can be disabled by
-		   clicking the checkbox in the Model View.  Only visible constraints
-		   are active when minimizing the energy and when generating a Q-Chem
-           input file.  
+		   约束会显示在查看器中，可通过模型视图中的复选框停用。只有处于可见状态的约束
+		   才会在能量最小化和生成 Q-Chem 输入文件时生效。
 
    </ul>
 

@@ -5,32 +5,26 @@
 
 <body>
 
-   <center> <h1> Visualizing Pathways <br> </h1> </center><p></p>
- 
-   <p> IQmol can animate pathways, either from a geometry optimization or an
-   intrinsic reaction coordinate (IRC) calculation.  Currently only output from
-   the Q-Chem program is supported.
+   <center> <h1> 反应路径可视化 <br> </h1> </center><p></p>
 
-   <p> Visualization of the pathway is controlled via the Geometries
-   configurator which can be opened by double clicking the Geometries layer in the
-   Model View.  If the output has been read correctly a window similar to the
-   following will appear:
+   <p> IQmol 可以播放路径动画，路径既可以来自几何优化，也可以来自内禀反应坐标（IRC）
+   计算。目前仅支持 Q-Chem 程序的输出文件。
+
+   <p> 路径的可视化通过"几何结构"配置器控制，双击模型视图中的"几何结构"图层即可打开。
+   如果输出读取正确，会出现类似下图的窗口：
 
 
    <p><center><img src="images/PathWindow.png" /></center></p>
 
-   <p> Individual conformers can be selected and will be displayed in the
-   Viewer.  Conformers can be selected by either directly clicking on them,
-   pushing the  <img src="images/buttons/GoForward.png">  and 
-   <img src="images/buttons/GoBack.png"> buttons, or by using the arrow
-   keys on the keyboard.  The pathway can also be animated by clicking the
-   <img src="images/buttons/Play.png">  button and the speed of the
-   animation can be controlled via the slider.  
+   <p> 可以选择单个构象，选中的构象会显示在查看器中。构象可以直接点击选择，
+   也可以用 <img src="images/buttons/GoForward.png"> 和
+   <img src="images/buttons/GoBack.png"> 按钮或键盘方向键切换。
+   点击 <img src="images/buttons/Play.png"> 按钮还可以播放路径动画，
+   动画速度由滑块控制。
 
-   <p> The Bounce button controls whether or not the direction of the animation
-   is reversed at the end of the loop.  Click the Update Bonds button to 
-   reperceive bonds for each geometry.
-   
+   <p> "往返"（Bounce）按钮控制动画在到达循环末端时是否反向播放。
+   点击"更新键"（Update Bonds）按钮可为每个几何结构重新识别键。
+
 
 </body>
 
