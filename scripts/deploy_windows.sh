@@ -86,7 +86,13 @@ copy_item() {
 _find_dll() {
   local _d="$1" _p _f
   [ -f "$MINGW_PREFIX/bin/$_d" ] && { echo "$MINGW_PREFIX/bin/$_d"; return 0; }
+  # PATH 兜底：仅当源码位于 MSYS2 工具链目录时采用；
+  # 命中 /c/Windows/System32 等系统目录的一律排除——Windows 系统 DLL 不应随附分发。
   _f=$(command -v "$_d" 2>/dev/null)
+  case "$_f" in
+    /c/Windows/*|/C/Windows/*|/d/Windows/*|/mnt/c/Windows/*|/mnt/C/Windows/*|\
+    */System32/*|*/SysWOW64/*|*/system32/*|*/syswow64/*) _f="" ;;
+  esac
   [ -n "$_f" ] && [ -f "$_f" ] && { echo "$_f"; return 0; }
   for _p in /mingw64/bin /mingw32/bin /ucrt64/bin /clang64/bin \
             /c/msys64/mingw64/bin /d/msys64/mingw64/bin \
