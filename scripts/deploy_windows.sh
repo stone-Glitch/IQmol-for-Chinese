@@ -79,6 +79,23 @@ copy_item() {
   fi
 }
 
+# 在 MINGW_PREFIX/bin、PATH、常见 MSYS2 前缀里查找某个 DLL 的真实路径。
+# 构建机本机能启动 IQmol，说明这些运行库一定在某处 PATH 中；不能只盯死
+# /mingw64/bin（缺对应 MSYS2 包时它为空，会静默漏出分发包）。
+# 用法: _find_dll <name.dll>  -> 输出绝对路径或空
+_find_dll() {
+  local _d="$1" _p _f
+  [ -f "$MINGW_PREFIX/bin/$_d" ] && { echo "$MINGW_PREFIX/bin/$_d"; return 0; }
+  _f=$(command -v "$_d" 2>/dev/null)
+  [ -n "$_f" ] && [ -f "$_f" ] && { echo "$_f"; return 0; }
+  for _p in /mingw64/bin /mingw32/bin /ucrt64/bin /clang64/bin \
+            /c/msys64/mingw64/bin /d/msys64/mingw64/bin \
+            /c/msys2/mingw64/bin /d/msys2/mingw64/bin; do
+    [ -f "$_p/$_d" ] && { echo "$_p/$_d"; return 0; }
+  done
+  return 1
+}
+
 #--------------------------------------------------------------------
 # 1. Qt 运行时（DLL + 插件）
 #    windeployqt 能自动分析 IQmol.exe 的 Qt 依赖并复制所需 DLL 与插件，
@@ -165,10 +182,11 @@ echo "==> 复制 MinGW 运行库"
 for dll in libstdc++-6.dll libgcc_s_seh-1.dll libwinpthread-1.dll \
            libssp-0.dll libgfortran-5.dll libquadmath-0.dll \
            libgomp-1.dll; do
-  if [ -f "$MINGW_PREFIX/bin/$dll" ]; then
-    copy_item "$MINGW_PREFIX/bin/$dll" "$BIN_DIR/"
+  src=$(_find_dll "$dll")
+  if [ -n "$src" ]; then
+    copy_item "$src" "$BIN_DIR/"
   else
-    echo "    警告: $MINGW_PREFIX/bin/$dll 不存在（MSYS2 缺包?），未复制"
+    echo "    警告: 全机未找到 $dll（缺 MSYS2 包?），未复制"
   fi
 done
 
@@ -195,13 +213,14 @@ if command -v objdump >/dev/null 2>&1; then
       [ -e "$_f" ] || continue
       for _dll in $(objdump -p "$_f" 2>/dev/null | sed -n 's/[[:space:]]*DLL Name: //p'); do
         [ -e "$BIN_DIR/$_dll" ] && continue
-        if [ -f "$MINGW_PREFIX/bin/$_dll" ]; then
-          copy_item "$MINGW_PREFIX/bin/$_dll" "$BIN_DIR/"
-          echo "    自动补入: $_dll"
+        src=$(_find_dll "$_dll")
+        if [ -n "$src" ]; then
+          copy_item "$src" "$BIN_DIR/"
+          echo "    自动补入: $_dll (来自 $src)"
           _added=$((_added+1))
         elif [[ "$_dll" == lib* ]]; then
-          # lib*.dll 既不在 bin/ 也不在 MinGW —— 目标机器上几乎必报"找不到 DLL"
-          echo "    严重: $_f 依赖 $_dll，但 $MINGW_PREFIX/bin/ 中不存在！"
+          # lib*.dll 既不在 bin/ 也不在 MinGW/全机 PATH —— 目标机器上几乎必报"找不到 DLL"
+          echo "    严重: $_f 依赖 $_dll，全机 PATH 中均不存在！"
         fi
       done
     done
