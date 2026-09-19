@@ -26,6 +26,7 @@
 #include "QMsgBox.h"
 
 #include <QComboBox>
+#include <QCoreApplication>
 #include <QDebug>
 #include <QDir>
 
@@ -100,10 +101,15 @@ void ShaderDialog::setupShaderTab()
    }
 
    QStringList shaderNames(m_shaderLibrary.availableShaders());
-   m_dialog.shaderCombo->addItems(shaderNames);
+   for (QString const& shaderName : shaderNames) {
+      // 显示名走翻译, 数据键(原文)存入 userData, 供 findData/currentData 使用
+      m_dialog.shaderCombo->addItem(
+         QCoreApplication::translate("ShaderDialog", shaderName.toUtf8().constData()),
+         shaderName);
+   }
 
-   int index(m_dialog.shaderCombo->findText(Preferences::DefaultShader()));
-   if (index < 0) index = m_dialog.shaderCombo->findText(ShaderLibrary::NoShader);
+   int index(m_dialog.shaderCombo->findData(Preferences::DefaultShader()));
+   if (index < 0) index = m_dialog.shaderCombo->findData(ShaderLibrary::NoShader);
 
    m_dialog.shaderCombo->setCurrentIndex(index);
    on_shaderCombo_currentIndexChanged(index);
@@ -135,7 +141,7 @@ void ShaderDialog::setupEffectsTab()
 
 void ShaderDialog::on_shaderCombo_currentIndexChanged(int)
 {
-   QString name(m_dialog.shaderCombo->currentText());
+   QString name(m_dialog.shaderCombo->currentData().toString());
 
    if (!m_shaderLibrary.bindShader(name)) {
       QString msg("Shader not found: ");
@@ -264,7 +270,7 @@ QVariantMap ShaderDialog::getParametersFromDialog()
 
 void ShaderDialog::installShaderParameters(int)
 {
-   QString name(m_dialog.shaderCombo->currentText());
+   QString name(m_dialog.shaderCombo->currentData().toString());
    m_shaderLibrary.setUniformVariables(name, getParametersFromDialog());
    updated();
 }
@@ -272,14 +278,14 @@ void ShaderDialog::installShaderParameters(int)
 
 void ShaderDialog::on_saveAsDefault_clicked(bool)
 {
-   qDebug() << "Setting Default Shader" << m_dialog.shaderCombo->currentText();
+   qDebug() << "Setting Default Shader" << m_dialog.shaderCombo->currentData().toString();
    qDebug() << getParametersFromDialog();
    qDebug() << "Setting Default Shader";
    qDebug() << getFilterParametersFromDialog();
    qDebug() << "Setting Default PovRay Parameters";
    qDebug() << getPovRayParametersFromDialog();
 
-   Preferences::DefaultShader(m_dialog.shaderCombo->currentText());
+   Preferences::DefaultShader(m_dialog.shaderCombo->currentData().toString());
    Preferences::DefaultShaderParameters(getParametersFromDialog());
    Preferences::DefaultFilterParameters(getFilterParametersFromDialog());
    Preferences::DefaultPovRayParameters(getPovRayParametersFromDialog());
