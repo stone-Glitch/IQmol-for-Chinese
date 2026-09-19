@@ -167,6 +167,8 @@ for dll in libstdc++-6.dll libgcc_s_seh-1.dll libwinpthread-1.dll \
            libgomp-1.dll; do
   if [ -f "$MINGW_PREFIX/bin/$dll" ]; then
     copy_item "$MINGW_PREFIX/bin/$dll" "$BIN_DIR/"
+  else
+    echo "    警告: $MINGW_PREFIX/bin/$dll 不存在（MSYS2 缺包?），未复制"
   fi
 done
 
@@ -192,10 +194,14 @@ if command -v objdump >/dev/null 2>&1; then
     for _f in "$BIN_DIR"/*.exe "$BIN_DIR"/*.dll; do
       [ -e "$_f" ] || continue
       for _dll in $(objdump -p "$_f" 2>/dev/null | sed -n 's/[[:space:]]*DLL Name: //p'); do
-        if [ ! -e "$BIN_DIR/$_dll" ] && [ -f "$MINGW_PREFIX/bin/$_dll" ]; then
+        [ -e "$BIN_DIR/$_dll" ] && continue
+        if [ -f "$MINGW_PREFIX/bin/$_dll" ]; then
           copy_item "$MINGW_PREFIX/bin/$_dll" "$BIN_DIR/"
           echo "    自动补入: $_dll"
           _added=$((_added+1))
+        elif [[ "$_dll" == lib* ]]; then
+          # lib*.dll 既不在 bin/ 也不在 MinGW —— 目标机器上几乎必报"找不到 DLL"
+          echo "    严重: $_f 依赖 $_dll，但 $MINGW_PREFIX/bin/ 中不存在！"
         fi
       done
     done
@@ -203,6 +209,25 @@ if command -v objdump >/dev/null 2>&1; then
   done
 else
   echo "    (未找到 objdump, 跳过依赖自动补缺)"
+fi
+
+#--------------------------------------------------------------------
+# 3c. 关键运行库终检：缺任何一个，没装 MSYS2 的机器上都会报"找不到 DLL"
+#--------------------------------------------------------------------
+_missing_crit=""
+for dll in libstdc++-6.dll libgcc_s_seh-1.dll libwinpthread-1.dll \
+           libgfortran-5.dll libquadmath-0.dll libgomp-1.dll; do
+  [ -f "$BIN_DIR/$dll" ] || _missing_crit="$_missing_crit $dll"
+done
+if [ -n "$_missing_crit" ]; then
+  echo ""
+  echo "ERROR: 关键运行库缺失:$_missing_crit"
+  echo "  这些 DLL 由 MSYS2 提供，缺了分发包在别人机器上无法启动。"
+  echo "  修复: 在 MSYS2 MINGW64 终端安装对应包后重跑本脚本:"
+  echo "    pacman -S mingw-w64-x86_64-libgomp      # 提供 libgomp-1.dll"
+  echo "    pacman -S mingw-w64-x86_64-gcc-fortran  # 提供 libgfortran-5/libquadmath-0.dll"
+  echo "  装完确认 $MINGW_PREFIX/bin/ 下有上述 DLL。"
+  exit 1
 fi
 
 #--------------------------------------------------------------------
