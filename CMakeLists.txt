@@ -217,30 +217,50 @@ else()
    # find_package(OpenBabel3) 时 openbabel 是 IMPORTED 目标(指向系统 .so),
    # CMake 禁止给 IMPORTED 目标追加源(target_sources 会直接报错), 且系统库本身
    # 已编好, 无需也不可能补源。故这里先排除 IMPORTED 场景。
+   #
+   # 去重: 这些附加源也可能已由 openbabel 自身(或其 CMakeLists 被外部补丁改过,
+   # 例如 scripts/build_windows.sh 步骤 2d 给 openbabel/src/CMakeLists.txt 打补丁)
+   # 编入目标。若目标 SOURCES 里已含同名文件, 此处跳过, 避免同一 .cpp 被加两次
+   # 触发重复定义/链接错误。
    #----------------------------------------------------------------
    set(_ob_is_imported FALSE)
    if (TARGET openbabel)
       get_target_property(_ob_is_imported openbabel IMPORTED)
    endif()
    if (TARGET openbabel AND NOT _ob_is_imported)
+      # 收集 openbabel 目标当前已含的源文件基名, 用于去重
+      set(_ob_existing_names "")
+      get_target_property(_ob_existing_srcs openbabel SOURCES)
+      if (_ob_existing_srcs)
+         foreach(_s ${_ob_existing_srcs})
+            get_filename_component(_s_name "${_s}" NAME)
+            list(APPEND _ob_existing_names "${_s_name}")
+         endforeach()
+      endif()
       set(_ob_missing_srcs "")
       foreach(_ob_src
             modules/openbabel/src/depict/asciipainter.cpp
             modules/openbabel/src/depict/commandpainter.cpp
             modules/openbabel/src/formats/wln-nextmove.cpp)
          if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/${_ob_src}")
-            list(APPEND _ob_missing_srcs "${_ob_src}")
+            get_filename_component(_ob_base "${_ob_src}" NAME)
+            list(FIND _ob_existing_names "${_ob_base}" _ob_idx)
+            if (_ob_idx EQUAL -1)
+               list(APPEND _ob_missing_srcs "${_ob_src}")
+            else()
+               message(STATUS "[IQmol] 附加源 ${_ob_base} 已由 openbabel 自身编入, 跳过重复添加")
+            endif()
          endif()
       endforeach()
       if (_ob_missing_srcs)
          target_sources(openbabel PRIVATE ${_ob_missing_srcs})
          message(STATUS "[IQmol] 已为静态 openbabel 补齐漏编的附加源: ${_ob_missing_srcs}")
       else()
-         message(WARNING
-            "[IQmol] 未能找到 openbabel 的 asciipainter/commandpainter/wln-nextmove 附加源, "
-            "若启用 asciiformat/painterformat/wlnformat, 链接期可能报 ASCIIPainter/CommandPainter/NMReadWLN undefined reference")
+         message(STATUS "[IQmol] 无需补齐 openbabel 附加源(均已就位或由 openbabel 自身编入)")
       endif()
       unset(_ob_missing_srcs)
+      unset(_ob_existing_srcs)
+      unset(_ob_existing_names)
    endif()
    unset(_ob_is_imported)
 endif()
