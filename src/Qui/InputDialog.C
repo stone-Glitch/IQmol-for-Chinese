@@ -370,13 +370,13 @@ void InputDialog::initializeMenus()
    menu = menubar->addMenu(tr("File"));
 
       // File -> Save As
-      name = "Save As";
+      name = tr("Save As");
       action = menu->addAction(name);
       connect(action, SIGNAL(triggered()), this, SLOT(menuSaveAs()));
       action->setShortcut(Qt::CTRL | Qt::Key_S );
 
       // File -> Close 
-      name = "Close";
+      name = tr("Close");
       action = menu->addAction(name);
       connect(action, SIGNAL(triggered()), this, SLOT(close()));
       action->setShortcut(QKeySequence::Close);
@@ -386,20 +386,20 @@ void InputDialog::initializeMenus()
    menu = menubar->addMenu(tr("Edit"));
 
       // Edit -> Copy
-      name = "Copy";
+      name = tr("Copy");
       action = menu->addAction(name);
 
       connect(action, SIGNAL(triggered()), m_ui.previewText, SLOT(copy()));
       action->setShortcut(QKeySequence::Copy);
 
       // Edit -> Paste
-      name = "Paste";
+      name = tr("Paste");
       action = menu->addAction(name);
       connect(action, SIGNAL(triggered()), m_ui.previewText, SLOT(paste()));
       action->setShortcut(QKeySequence::Paste);
 
       // Edit -> Cut
-      name = "Cut";
+      name = tr("Cut");
       action = menu->addAction(name);
       connect(action, SIGNAL(triggered()), m_ui.previewText, SLOT(cut()));
       action->setShortcut(QKeySequence::Cut);
@@ -423,7 +423,7 @@ void InputDialog::initializeMenus()
       menu->addSeparator();
 
       // Job -> Submit
-      name = "Submit";
+      name = tr("Submit");
       action = menu->addAction(name);
       connect(action, SIGNAL(triggered()), this, SLOT(submitJob()));
       action->setShortcut(Qt::CTRL | Qt::Key_U );

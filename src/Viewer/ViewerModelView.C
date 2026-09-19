@@ -99,7 +99,7 @@ void ViewerModelView::contextMenuEvent(QContextMenuEvent*)
    }
 
    if (canPromote) {
-      QAction* action(new QAction("New Molecule From Selection")); 
+      QAction* action(new QAction(tr("New Molecule From Selection"))); 
       connect(action, SIGNAL(triggered()), this, SLOT(newMoleculeFromSelection()));
       menu.addAction(action);
    }

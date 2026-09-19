@@ -773,8 +773,8 @@ void InputDialog::initializeQuiLogic()
        + Disable(m_ui.ee_states)
        + ee_singlets.makeSameAs(qui_eom_states1)
        + ee_triplets.makeSameAs(qui_eom_states2)
-       + SetLabel(m_eomTab.m_ui.label_eom1, "Singlets")
-       + SetLabel(m_eomTab.m_ui.label_eom2, "Triplets")
+       + SetLabel(m_eomTab.m_ui.label_eom1, tr("Singlets"))
+       + SetLabel(m_eomTab.m_ui.label_eom2, tr("Triplets"))
    );
 
    qui_eom_ee.addRule(rule);    qui_eom_states1.addRule(rule);
@@ -811,8 +811,8 @@ void InputDialog::initializeQuiLogic()
        + Disable(m_ui.dip_states)
        + dip_singlets.makeSameAs(qui_eom_states1) 
        + dip_triplets.makeSameAs(qui_eom_states2)
-       + SetLabel(m_eomTab.m_ui.label_eom1, "Singlets") 
-       + SetLabel(m_eomTab.m_ui.label_eom2, "Triplets")
+       + SetLabel(m_eomTab.m_ui.label_eom1, tr("Singlets")) 
+       + SetLabel(m_eomTab.m_ui.label_eom2, tr("Triplets"))
    );
 
    qui_eom_dip.addRule(rule);   qui_eom_states1.addRule(rule);
@@ -866,7 +866,7 @@ void InputDialog::initializeQuiLogic()
        + ip_beta.makeSameAs(qui_eom_states1) 
        + ip_alpha.makeSameAs(qui_eom_states2)
        + SetLabel(m_eomTab.m_ui.label_eom1, "Beta") 
-       + SetLabel(m_eomTab.m_ui.label_eom2, "Alpha")
+       + SetLabel(m_eomTab.m_ui.label_eom2, tr("Alpha"))
    );
 
    qui_eom_ip.addRule(rule);   qui_eom_states1.addRule(rule);  qui_eom_states2.addRule(rule);
@@ -883,7 +883,7 @@ void InputDialog::initializeQuiLogic()
    rule = If(qui_eom_ea == QtTrue, 
       Enable(m_ui.eom_ea_alpha) + Enable(m_ui.eom_ea_beta)
        + ea_beta.makeSameAs(qui_eom_states1) + ea_alpha.makeSameAs(qui_eom_states2)
-       + SetLabel(m_eomTab.m_ui.label_eom1, "Beta") + SetLabel(m_eomTab.m_ui.label_eom2, "Alpha")
+       + SetLabel(m_eomTab.m_ui.label_eom1, "Beta") + SetLabel(m_eomTab.m_ui.label_eom2, tr("Alpha"))
    );
 
    qui_eom_ea.addRule(rule);   qui_eom_states1.addRule(rule);  qui_eom_states2.addRule(rule);
@@ -919,7 +919,7 @@ void InputDialog::initializeQuiLogic()
 
    rule = If(isADCandCS,
        Enable(m_ui.ee_singlets) + Enable(m_ui.ee_triplets) + Disable(m_ui.ee_states)
-       + SetLabel(m_adcTab.m_ui.label_adc1, "Singlets") + SetLabel(m_adcTab.m_ui.label_adc2, "Triplets")
+       + SetLabel(m_adcTab.m_ui.label_adc1, tr("Singlets")) + SetLabel(m_adcTab.m_ui.label_adc2, tr("Triplets"))
        + ee_singlets.makeSameAs(qui_adc_es1) + ee_triplets.makeSameAs(qui_adc_es2));
 
    method.addRule(rule);

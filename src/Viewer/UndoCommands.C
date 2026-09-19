@@ -388,7 +388,9 @@ AddComponent::AddComponent(Layer::Component* component, QStandardItem* parent)
          setText(QCoreApplication::translate("UndoCommands", "New system"));
       }
    }else {
-      setText(tr("Load file %1").arg(m_component->fileName()));
+      // [i18n] QUndoCommand 不是 QObject，没有 tr() 可用
+      setText(QCoreApplication::translate("UndoCommands", "Load file %1")
+         .arg(m_component->fileName()));
    }
 }
 

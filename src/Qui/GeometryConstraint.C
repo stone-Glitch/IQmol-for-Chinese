@@ -6,6 +6,7 @@
  */
 
 #include <QtDebug>
+#include <QCoreApplication>
 #include <QMessageBox>
 #include "GeometryConstraint.h"
 #include "OptSection.h"
@@ -25,18 +26,41 @@ namespace GeometryConstraint {
 
 
 QString ToString(Type::ID const& type) {
+   // [i18n] 本函数处于 namespace 中，没有 tr() 可用，故使用
+   // QCoreApplication::translate；上下文沿用 ts 中已有的
+   // Qui::GeometryConstraint。
    QString text;
    switch (type) {
-      case Type::Stretch:       { text = "Stretch";                } break;
-      case Type::Bend:          { text = "Bend";                   } break;
-      case Type::OutOfPlane:    { text = "Out Of Plane";           } break;
-      case Type::Dihedral:      { text = "Dihedral";               } break;
-      case Type::Coplanar:      { text = "Coplanar";               } break;
-      case Type::Perpendicular: { text = "Perpendicular";          } break;
-      case Type::Fixed:         { text = "Fixed";                  } break;
-      case Type::DummyNormal:   { text = "Dummy - Plane Normal";   } break;
-      case Type::DummyBisector: { text = "Dummy - Angle Bisector"; } break;
-      case Type::Connect:       { text = "Connect";                } break;
+      case Type::Stretch:
+         text = QCoreApplication::translate("Qui::GeometryConstraint", "Stretch");
+         break;
+      case Type::Bend:
+         text = QCoreApplication::translate("Qui::GeometryConstraint", "Bend");
+         break;
+      case Type::OutOfPlane:
+         text = QCoreApplication::translate("Qui::GeometryConstraint", "Out Of Plane");
+         break;
+      case Type::Dihedral:
+         text = QCoreApplication::translate("Qui::GeometryConstraint", "Dihedral");
+         break;
+      case Type::Coplanar:
+         text = QCoreApplication::translate("Qui::GeometryConstraint", "Coplanar");
+         break;
+      case Type::Perpendicular:
+         text = QCoreApplication::translate("Qui::GeometryConstraint", "Perpendicular");
+         break;
+      case Type::Fixed:
+         text = QCoreApplication::translate("Qui::GeometryConstraint", "Fixed");
+         break;
+      case Type::DummyNormal:
+         text = QCoreApplication::translate("Qui::GeometryConstraint", "Dummy - Plane Normal");
+         break;
+      case Type::DummyBisector:
+         text = QCoreApplication::translate("Qui::GeometryConstraint", "Dummy - Angle Bisector");
+         break;
+      case Type::Connect:
+         text = QCoreApplication::translate("Qui::GeometryConstraint", "Connect");
+         break;
    }
    return text;
 }
@@ -118,7 +142,7 @@ void Dialog::addConstraintToTable(Constraint const& constraint) {
       QString msg(tr("The following constraint is invalid:\n"));
       msg += constraint.format() + "\n";
       msg += tr("Most likely this is because your atom numbers are not unique "
-             "or out of range. Please correct this before proceeding.\n";
+             "or out of range. Please correct this before proceeding.\n");
       QMessageBox::warning(this, tr("Invalid Constraint"), msg);
       return;
    }else if (m_constraintKeys.find(constraint.key()) != m_constraintKeys.end()) {

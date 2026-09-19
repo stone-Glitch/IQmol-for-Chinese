@@ -484,9 +484,15 @@ QToolButton:pressed {
              <property name="text">
               <string>None</string>
              </property>
+             <property name="userData">
+              <string>None</string>
+             </property>
             </item>
             <item>
              <property name="text">
+              <string>Default</string>
+             </property>
+             <property name="userData">
               <string>Default</string>
              </property>
             </item>
@@ -494,9 +500,15 @@ QToolButton:pressed {
              <property name="text">
               <string>Black</string>
              </property>
+             <property name="userData">
+              <string>Black</string>
+             </property>
             </item>
             <item>
              <property name="text">
+              <string>White</string>
+             </property>
+             <property name="userData">
               <string>White</string>
              </property>
             </item>

@@ -157,12 +157,14 @@ void Dialog::init()
    QComboBox* combo(m_dialog.gradientCombo);
    combo->blockSignals(true);
    combo->clear();
-   combo->addItem("Custom");
-   combo->addItem("Default");
-   combo->addItem("Spectrum");
-   combo->addItem("Primary Spectrum");
-   combo->addItem("Reflected Default");
-   combo->addItem("Reflected Spectrum");
+   // [i18n] 这里仅作显示，逻辑一律通过 setCurrentIndex(index) 定位，
+   // 其中 index 由 Gradient 枚举映射而来，不依赖文本，故可安全翻译。
+   combo->addItem(tr("Custom"));
+   combo->addItem(tr("Default"));
+   combo->addItem(tr("Spectrum"));
+   combo->addItem(tr("Primary Spectrum"));
+   combo->addItem(tr("Reflected Default"));
+   combo->addItem(tr("Reflected Spectrum"));
 
    m_dialog.gradientCombo->setCurrentIndex(index);
    m_dialog.gradientCombo->blockSignals(false);
