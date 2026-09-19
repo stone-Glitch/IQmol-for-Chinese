@@ -34,7 +34,7 @@ Axes::Axes()
    m_configurator(*this)
 { 
    setConfigurator(&m_configurator);
-   connect(newAction("Configure"), SIGNAL(triggered()), this, SLOT(configure()));
+   connect(newAction(tr("Configure")), SIGNAL(triggered()), this, SLOT(configure()));
 }
             
  

@@ -39,11 +39,12 @@ namespace Layer {
 CubeData::CubeData(Data::CubeData const& cube) : Base("Cube Data"), m_configurator(*this),
    m_cube(cube), m_molecule(0)
 {
+   // [i18n] 初始化列表中的标签为裸字符串，界面显示用下面这条带 label 的格式串。
    connect(&m_configurator, SIGNAL(calculateSurface(Data::SurfaceInfo const&)),
       this, SLOT(calculateSurface(Data::SurfaceInfo const&)));
    setConfigurator(&m_configurator);
    setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled | Qt::ItemIsEditable);
-   setText("Cube Data (" + m_cube.label() + ")");
+   setText(tr("Cube Data") + " (" + m_cube.label() + ")");
 }
 
 
@@ -57,7 +58,7 @@ void CubeData::setMolecule(Molecule* molecule)
 {
    m_molecule = molecule;
    // Actions for the context menu
-   connect(newAction("Surface Animator"), SIGNAL(triggered()),
+   connect(newAction(tr("Surface Animator")), SIGNAL(triggered()),
       m_molecule, SLOT(openSurfaceAnimator()));
 }
 

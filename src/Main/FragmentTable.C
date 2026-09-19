@@ -22,11 +22,21 @@
 
 #include "FragmentTable.h"
 #include "Preferences.h"
+#include <QCoreApplication>
 #include <QHeaderView>
 
 #include "QsLog.h"
 
 namespace IQmol {
+
+// [i18n] 片段名由目录/文件名派生（如 "Carboxylic_Acid" -> "Carboxylic Acid"），
+// 是运行时变量，lupdate 无法提取，因此用显式上下文查表。
+// 对应译文以 <context><name>FragmentTable</name> 手工维护在 translations/zh_CN.ts。
+// 查不到时 translate() 原样返回英文，行为安全。
+static QString fragmentLabel(QString const& name)
+{
+   return QCoreApplication::translate("FragmentTable", name.toUtf8().constData());
+}
 
 int FragmentTable::s_fileRole  = Qt::UserRole+1;
 int FragmentTable::s_imageRole = Qt::UserRole+2;
@@ -106,9 +116,12 @@ QList<QTreeWidgetItem*> FragmentTable::loadFragments(QDir const& dir, QTreeWidge
        name = name.replace(".xyz", " ", Qt::CaseInsensitive);
        name = name.replace("_L", " (L)");
        name = name.replace("_", " ");
+       name = name.trimmed();
+       // [i18n] 显示名走翻译表；文件名/路径仍用原始 name 取数据，互不影响。
+       QString label(fragmentLabel(name));
  
        if (info.isDir()) {
-          item = new QTreeWidgetItem(parent, QStringList(name));
+          item = new QTreeWidgetItem(parent, QStringList(label));
           loadFragments(QDir(info.filePath()), item);
           items.append(item);
           item->setData(0, s_fileRole, s_invalidFile);
@@ -118,10 +131,10 @@ QList<QTreeWidgetItem*> FragmentTable::loadFragments(QDir const& dir, QTreeWidge
                  info.suffix().contains("xyz", Qt::CaseInsensitive) ) {
 
           if (parent == 0) {
-             item = new QTreeWidgetItem(QStringList(name));
+             item = new QTreeWidgetItem(QStringList(label));
              items.append(item);
           }else {
-             item = new QTreeWidgetItem(parent, QStringList(name));
+             item = new QTreeWidgetItem(parent, QStringList(label));
           }
 
           item->setData(0, s_fileRole, info.filePath());

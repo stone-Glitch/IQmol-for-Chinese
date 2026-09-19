@@ -34,6 +34,7 @@
 #include "Util/QsLog.h"
 
 #include "QGLViewer/vec.h"
+#include <QCoreApplication>
 #include <QElapsedTimer>
 #include <QProgressDialog>
 #include <cmath>
@@ -50,6 +51,10 @@ namespace Layer {
 GeminalOrbitals::GeminalOrbitals(Data::GeminalOrbitals& molecularOrbitals)
  : Base("Geminal Orbitals"), m_configurator(*this), m_geminalOrbitals(molecularOrbitals)
 {
+   // [i18n] 初始化列表中的标签为裸字符串，此处覆盖为译文，
+   // 使 lupdate 可提取、界面显示中文。
+   setText(tr("Geminal Orbitals"));
+
    connect(&m_configurator, SIGNAL(queueSurface(Data::SurfaceInfo const&)),
       this, SLOT(addToQueue(Data::SurfaceInfo const&)));
 
@@ -60,9 +65,9 @@ GeminalOrbitals::GeminalOrbitals(Data::GeminalOrbitals& molecularOrbitals)
       this, SLOT(processSurfaceQueue()));
 
    // Actions for the context menu
-   connect(newAction("Show Grid Info"), SIGNAL(triggered()),
+   connect(newAction(tr("Show Grid Info")), SIGNAL(triggered()),
       this, SLOT(showGridInfo()));
-   connect(newAction("Edit Bounding Box"), SIGNAL(triggered()),
+   connect(newAction(tr("Edit Bounding Box")), SIGNAL(triggered()),
       this, SLOT(editBoundingBox()));
 
    setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
@@ -800,10 +805,15 @@ GeminalOrbitalProperty::GeminalOrbitalProperty(Data::GeminalOrbitals const& gemi
   
   //QList<unsigned> const& Limits(geminalOrbitals.geminalOrbitalLimits());
   
+  // [i18n] GeminalOrbitalProperty 继承自 Property::Spatial -> Property::Base，
+  // 是普通 C++ 类（非 QObject），没有 tr() 可用，必须用
+  // QCoreApplication::translate 并显式指定上下文。
   if(index < geminalOrbitals.nAlpha()){
-   setText(tr("Geminal Alpha %1").arg(index+1));
+   setText(QCoreApplication::translate("IQmol::Layer::GeminalOrbitalProperty",
+      "Geminal Alpha %1").arg(index+1));
   } else {
-    setText(tr("Geminal Beta %1").arg(index+1-geminalOrbitals.nAlpha()));
+   setText(QCoreApplication::translate("IQmol::Layer::GeminalOrbitalProperty",
+      "Geminal Beta %1").arg(index+1-geminalOrbitals.nAlpha()));
  }
   m_function = std::bind(&GeminalOrbitalProperty::orbital, this, 
      std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);

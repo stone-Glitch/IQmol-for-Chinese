@@ -74,9 +74,9 @@ Orbitals::Orbitals(Data::Orbitals& orbitals)
       this, SLOT(processSurfaceQueue()));
 
    // Actions for the context menu
-   connect(newAction("Show Grid Info"), SIGNAL(triggered()),
+   connect(newAction(tr("Show Grid Info")), SIGNAL(triggered()),
       this, SLOT(showGridInfo()));
-   connect(newAction("Edit Bounding Box"), SIGNAL(triggered()),
+   connect(newAction(tr("Edit Bounding Box")), SIGNAL(triggered()),
       this, SLOT(editBoundingBox()));
 
    setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);

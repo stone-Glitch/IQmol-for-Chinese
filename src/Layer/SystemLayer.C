@@ -56,9 +56,9 @@ System::System(QString const& label, QObject* parent) : Component(label, parent)
 
    m_surfaceList.setText(tr("Ribbons"));
 
-   connect(newAction("Box System"), SIGNAL(triggered()), this, SLOT(boxSystem()));
-   connect(newAction("Export PDB"), SIGNAL(triggered()), this, SLOT(exportPdb()));
-   connect(newAction("Remove System"), SIGNAL(triggered()), this, SLOT(removeSystem()));
+   connect(newAction(tr("Box System")), SIGNAL(triggered()), this, SLOT(boxSystem()));
+   connect(newAction(tr("Export PDB")), SIGNAL(triggered()), this, SLOT(exportPdb()));
+   connect(newAction(tr("Remove System")), SIGNAL(triggered()), this, SLOT(removeSystem()));
 }
 
 
@@ -120,7 +120,7 @@ void System::appendData(Layer::List& list)
    QList<Base*> currentLayers(findLayers<Base>(Children));
 
    QStringList labels;
-   labels << "Info";
+   labels << tr("Info");
    for (auto base = currentLayers.begin(); base != currentLayers.end(); ++base) {
        labels << (*base)->text();
    }

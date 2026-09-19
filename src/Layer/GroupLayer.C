@@ -54,10 +54,10 @@ Group::Group(PrimitiveList const& primitives, QString const& label) : Primitive(
    setFlags(Qt::ItemIsSelectable |  Qt::ItemIsEnabled | Qt::ItemIsEditable);
    addPrimitives(primitives);
 
-   connect(newAction("Add Hydrogens"), SIGNAL(triggered()),
+   connect(newAction(tr("Add Hydrogens")), SIGNAL(triggered()),
      this, SLOT(addHydrogens()));
 
-   connect(newAction("Reperceive Bonds"), SIGNAL(triggered()),
+   connect(newAction(tr("Reperceive Bonds")), SIGNAL(triggered()),
      this, SLOT(reperceiveBonds()));
 }
 

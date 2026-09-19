@@ -21,6 +21,7 @@
 ********************************************************************************/
 
 #include "SurfaceType.h"
+#include <QCoreApplication>
 #include <QDebug>
 
 
@@ -124,6 +125,64 @@ QString SurfaceType::toString() const
 
    if (isIndexed()) label += " " + QString::number(m_index+1);
    return label;
+}
+
+
+QString SurfaceType::toDisplayString() const
+{
+   // [i18n] 界面显示名 = 数据键的译文。数据键本身保持不变，
+   // 以保证 operator==、文件名、图层比较等逻辑不受语言影响。
+   //
+   // 注意：SurfaceType 继承自 Data::Base（普通 C++ 类，非 QObject），
+   // 没有 tr() 可用，必须用 QCoreApplication::translate 并显式指定
+   // 上下文 IQmol::Data::SurfaceType。
+   QString label(toString());
+   QString suffix;
+   if (isIndexed() && m_index >= 0) {
+      // 先摘掉尾部编号（如 "Alpha 1" 的 " 1"）再翻译，稍后加回
+      suffix = " " + QString::number(m_index+1);
+      label.chop(suffix.length());
+   }
+
+   // 数据键 -> 已翻译显示名。QCoreApplication::translate 用完整上下文取词，
+   // 上下文与 translations/zh_CN.ts 中 IQmol::Data::SurfaceType 一致。
+   //
+   // 每条字面量都显式写出，不用宏拼接 —— lupdate 在宏展开前的源码上
+   // 做静态扫描，宏里的 translate() 参数提取不到。
+   QString translated;
+   if      (label == "Alpha")                   translated = QCoreApplication::translate("IQmol::Data::SurfaceType", "Alpha");
+   else if (label == "Beta")                    translated = QCoreApplication::translate("IQmol::Data::SurfaceType", "Beta");
+   else if (label == "Total Density")           translated = QCoreApplication::translate("IQmol::Data::SurfaceType", "Total Density");
+   else if (label == "Spin Density")            translated = QCoreApplication::translate("IQmol::Data::SurfaceType", "Spin Density");
+   else if (label == "Alpha Density")           translated = QCoreApplication::translate("IQmol::Data::SurfaceType", "Alpha Density");
+   else if (label == "Beta Density")            translated = QCoreApplication::translate("IQmol::Data::SurfaceType", "Beta Density");
+   else if (label == "User Defined Density")    translated = QCoreApplication::translate("IQmol::Data::SurfaceType", "User Defined Density");
+   else if (label == "Cube Data")               translated = QCoreApplication::translate("IQmol::Data::SurfaceType", "Cube Data");
+   else if (label == "van der Waals")           translated = QCoreApplication::translate("IQmol::Data::SurfaceType", "van der Waals");
+   else if (label == "Promolecule")             translated = QCoreApplication::translate("IQmol::Data::SurfaceType", "Promolecule");
+   else if (label == "Solvent Excluded")        translated = QCoreApplication::translate("IQmol::Data::SurfaceType", "Solvent Excluded");
+   else if (label == "SID")                     translated = QCoreApplication::translate("IQmol::Data::SurfaceType", "SID");
+   else if (label == "Electrostatic Potential") translated = QCoreApplication::translate("IQmol::Data::SurfaceType", "Electrostatic Potential");
+   else if (label == "Geminal")                 translated = QCoreApplication::translate("IQmol::Data::SurfaceType", "Geminal");
+   else if (label == "Correlated Density")      translated = QCoreApplication::translate("IQmol::Data::SurfaceType", "Correlated Density");
+   else if (label == "Custom Density")          translated = QCoreApplication::translate("IQmol::Data::SurfaceType", "Custom Density");
+   else if (label == "Basis Function")          translated = QCoreApplication::translate("IQmol::Data::SurfaceType", "Basis Function");
+   else if (label == "Dyson (left)")            translated = QCoreApplication::translate("IQmol::Data::SurfaceType", "Dyson (left)");
+   else if (label == "Dyson (right)")           translated = QCoreApplication::translate("IQmol::Data::SurfaceType", "Dyson (right)");
+   else if (label == "Mulliken Atomic")         translated = QCoreApplication::translate("IQmol::Data::SurfaceType", "Mulliken Atomic");
+   else if (label == "Mulliken Diatomic")       translated = QCoreApplication::translate("IQmol::Data::SurfaceType", "Mulliken Diatomic");
+   else if (label == "Orbital")                 translated = QCoreApplication::translate("IQmol::Data::SurfaceType", "Orbital");
+   else if (label == "Ribbon")                  translated = QCoreApplication::translate("IQmol::Data::SurfaceType", "Ribbon");
+   else if (label == "Alpha Real Orbital")      translated = QCoreApplication::translate("IQmol::Data::SurfaceType", "Alpha Real Orbital");
+   else if (label == "Alpha Imaginary Orbital") translated = QCoreApplication::translate("IQmol::Data::SurfaceType", "Alpha Imaginary Orbital");
+   else if (label == "Beta Real Orbital")       translated = QCoreApplication::translate("IQmol::Data::SurfaceType", "Beta Real Orbital");
+   else if (label == "Beta Imaginary Orbital")  translated = QCoreApplication::translate("IQmol::Data::SurfaceType", "Beta Imaginary Orbital");
+   else {
+      // Custom 类型的 label 是用户/解析器给的名字，原样返回
+      return toString();
+   }
+
+   return translated + suffix;
 }
 
 

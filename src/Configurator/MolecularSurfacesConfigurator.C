@@ -34,9 +34,10 @@ MolecularSurfaces::MolecularSurfaces()
    m_configurator.setupUi(this);
 
    m_configurator.surfaceType->clear();
-   m_configurator.surfaceType->addItem("van der Waals", Data::SurfaceType::VanDerWaals);
-   m_configurator.surfaceType->addItem("Promolecule",   Data::SurfaceType::Promolecule);
-   m_configurator.surfaceType->addItem("SID",           Data::SurfaceType::SID);
+   // [i18n] 显示文本走 tr()，逻辑一律读 itemData(index)，不受译文影响。
+   m_configurator.surfaceType->addItem(tr("van der Waals"), Data::SurfaceType::VanDerWaals);
+   m_configurator.surfaceType->addItem(tr("Promolecule"),   Data::SurfaceType::Promolecule);
+   m_configurator.surfaceType->addItem(tr("SID"),           Data::SurfaceType::SID);
    m_configurator.surfaceType->setCurrentIndex(0);
 
    setPositiveColor(Preferences::PositiveSurfaceColor());

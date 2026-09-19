@@ -63,13 +63,13 @@ Surface::Surface(Data::Surface& surface) : m_surface(surface), m_configurator(*t
    setConfigurator(&m_configurator); 
    m_configurator.setWindowTitle("Configure Surface: " + m_surface.description());
 
-   connect(newAction("Show Vertex Normals"), SIGNAL(triggered()), 
+   connect(newAction(tr("Show Vertex Normals")), SIGNAL(triggered()), 
       this, SLOT(toggleVertexNormals()));
-   connect(newAction("Show Face Normals"), SIGNAL(triggered()), 
+   connect(newAction(tr("Show Face Normals")), SIGNAL(triggered()), 
       this, SLOT(toggleFaceNormals()));
-   connect(newAction("Decimate"), SIGNAL(triggered()), 
+   connect(newAction(tr("Decimate")), SIGNAL(triggered()), 
       this, SLOT(decimate()));
-   connect(newAction("Print Mesh Info"), SIGNAL(triggered()), 
+   connect(newAction(tr("Print Mesh Info")), SIGNAL(triggered()), 
       this, SLOT(dumpMeshInfo()));
 
    setText(m_surface.description());
@@ -98,8 +98,11 @@ void Surface::setComponent(Component* component)
 bool Surface::isVdW() const
 {
    //hack
+   // [i18n] 不可比较 text()（已翻译的显示名），改用存放于
+   // Qt::UserRole 的英文数据键
    Data::SurfaceType type(Data::SurfaceType::VanDerWaals);
-   return text() == type.toString();
+   QString key(data(Qt::UserRole).toString());
+   return key == type.toString();
 }
 
 
