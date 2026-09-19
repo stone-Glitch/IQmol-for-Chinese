@@ -1633,7 +1633,7 @@ QToolButton:pressed {
         <message>
             <location filename="../src/Main/FragmentTable.ui" line="38" />
             <source>EFP</source>
-            <translation>EFP</translation>
+            <translation>EFP 片段</translation>
         </message>
         <message>
             <location filename="../src/Main/FragmentTable.ui" line="48" />
@@ -1693,7 +1693,7 @@ QToolButton:pressed {
         <message>
             <location filename="../src/Main/FragmentTable.ui" line="160" />
             <source>Bases</source>
-            <translation>基组</translation>
+            <translation>碱基</translation>
         </message>
         <message>
             <location filename="../src/Main/FragmentTable.ui" line="182" />
@@ -1705,7 +1705,1199 @@ QToolButton:pressed {
             <source>Select</source>
             <translation>选择</translation>
         </message>
-    </context>
+        <message>
+            <source>1 2-Oxazole</source>
+            <translation>1,2-噁唑</translation>
+        </message>
+        <message>
+            <source>1 2-Thiazole</source>
+            <translation>1,2-噻唑</translation>
+        </message>
+        <message>
+            <source>1 3-Oxazole</source>
+            <translation>1,3-噁唑</translation>
+        </message>
+        <message>
+            <source>1 3-Thiazole</source>
+            <translation>1,3-噻唑</translation>
+        </message>
+        <message>
+            <source>12-Crown-4</source>
+            <translation>12-冠-4</translation>
+        </message>
+        <message>
+            <source>15-Crown-5</source>
+            <translation>15-冠-5</translation>
+        </message>
+        <message>
+            <source>18-Crown-6</source>
+            <translation>18-冠-6</translation>
+        </message>
+        <message>
+            <source>1H-Indene</source>
+            <translation>1H-茚</translation>
+        </message>
+        <message>
+            <source>1H-Indole</source>
+            <translation>1H-吲哚</translation>
+        </message>
+        <message>
+            <source>1H-Pyrazole</source>
+            <translation>1H-吡唑</translation>
+        </message>
+        <message>
+            <source>1H-Pyrrole</source>
+            <translation>1H-吡咯</translation>
+        </message>
+        <message>
+            <source>2 2 2-Trichloroacetic acid</source>
+            <translation>2,2,2-三氯乙酸</translation>
+        </message>
+        <message>
+            <source>2 2 2-Trifluoroacetic acid</source>
+            <translation>2,2,2-三氟乙酸</translation>
+        </message>
+        <message>
+            <source>2 2-Dichloroacetic acid</source>
+            <translation>2,2-二氯乙酸</translation>
+        </message>
+        <message>
+            <source>2-Methylpropane</source>
+            <translation>2-甲基丙烷</translation>
+        </message>
+        <message>
+            <source>3-Trigonal-planar</source>
+            <translation>3-平面三角形</translation>
+        </message>
+        <message>
+            <source>3-Trigonal-pyramidal</source>
+            <translation>3-三角锥形</translation>
+        </message>
+        <message>
+            <source>4-Planar</source>
+            <translation>4-平面形</translation>
+        </message>
+        <message>
+            <source>4-Tetrahedral</source>
+            <translation>4-四面体形</translation>
+        </message>
+        <message>
+            <source>5-Square-pyramidal</source>
+            <translation>5-四方锥形</translation>
+        </message>
+        <message>
+            <source>5-Trigonal-bipyramidal</source>
+            <translation>5-三角双锥形</translation>
+        </message>
+        <message>
+            <source>6-Octahedral</source>
+            <translation>6-八面体形</translation>
+        </message>
+        <message>
+            <source>ACETONE (L)</source>
+            <translation>丙酮 (L)</translation>
+        </message>
+        <message>
+            <source>ACETONITRILE (L)</source>
+            <translation>乙腈 (L)</translation>
+        </message>
+        <message>
+            <source>ADENINE (L)</source>
+            <translation>腺嘌呤 (L)</translation>
+        </message>
+        <message>
+            <source>AMMONIA (L)</source>
+            <translation>氨 (L)</translation>
+        </message>
+        <message>
+            <source>Acenaphthene</source>
+            <translation>苊</translation>
+        </message>
+        <message>
+            <source>Acetaldehyde</source>
+            <translation>乙醛</translation>
+        </message>
+        <message>
+            <source>Acetamide</source>
+            <translation>乙酰胺</translation>
+        </message>
+        <message>
+            <source>Acetic acid</source>
+            <translation>乙酸</translation>
+        </message>
+        <message>
+            <source>Acetylene</source>
+            <translation>乙炔</translation>
+        </message>
+        <message>
+            <source>Adamantane</source>
+            <translation>金刚烷</translation>
+        </message>
+        <message>
+            <source>Adenine</source>
+            <translation>腺嘌呤</translation>
+        </message>
+        <message>
+            <source>Alcohol</source>
+            <translation>醇</translation>
+        </message>
+        <message>
+            <source>Alcohols</source>
+            <translation>醇类</translation>
+        </message>
+        <message>
+            <source>Aldehyde</source>
+            <translation>醛</translation>
+        </message>
+        <message>
+            <source>Aldehydes</source>
+            <translation>醛类</translation>
+        </message>
+        <message>
+            <source>Alkanes</source>
+            <translation>烷烃</translation>
+        </message>
+        <message>
+            <source>Alkenes</source>
+            <translation>烯烃</translation>
+        </message>
+        <message>
+            <source>Alkynes</source>
+            <translation>炔烃</translation>
+        </message>
+        <message>
+            <source>Amide-C</source>
+            <translation>酰胺（C 位）</translation>
+        </message>
+        <message>
+            <source>Amide-N</source>
+            <translation>酰胺（N 位）</translation>
+        </message>
+        <message>
+            <source>Amides</source>
+            <translation>酰胺类</translation>
+        </message>
+        <message>
+            <source>Amine</source>
+            <translation>胺</translation>
+        </message>
+        <message>
+            <source>Amines</source>
+            <translation>胺类</translation>
+        </message>
+        <message>
+            <source>Amino Acids</source>
+            <translation>氨基酸</translation>
+        </message>
+        <message>
+            <source>Aniline</source>
+            <translation>苯胺</translation>
+        </message>
+        <message>
+            <source>Anisole</source>
+            <translation>苯甲醚</translation>
+        </message>
+        <message>
+            <source>Annulene</source>
+            <translation>轮烯</translation>
+        </message>
+        <message>
+            <source>Anthracene</source>
+            <translation>蒽</translation>
+        </message>
+        <message>
+            <source>Aromatics</source>
+            <translation>芳烃</translation>
+        </message>
+        <message>
+            <source>Azepane</source>
+            <translation>氮杂环庚烷</translation>
+        </message>
+        <message>
+            <source>Azulene</source>
+            <translation>薁</translation>
+        </message>
+        <message>
+            <source>BENZENE (L)</source>
+            <translation>苯 (L)</translation>
+        </message>
+        <message>
+            <source>Benz-a-anthracene</source>
+            <translation>苯并[a]蒽</translation>
+        </message>
+        <message>
+            <source>Benzaldehyde</source>
+            <translation>苯甲醛</translation>
+        </message>
+        <message>
+            <source>Benzo-c-phenanthrene</source>
+            <translation>苯并[c]菲</translation>
+        </message>
+        <message>
+            <source>Benzofuran</source>
+            <translation>苯并呋喃</translation>
+        </message>
+        <message>
+            <source>Benzoic acid</source>
+            <translation>苯甲酸</translation>
+        </message>
+        <message>
+            <source>Benzothiophene</source>
+            <translation>苯并噻吩</translation>
+        </message>
+        <message>
+            <source>Benzoyl chloride</source>
+            <translation>苯甲酰氯</translation>
+        </message>
+        <message>
+            <source>Boron Groups</source>
+            <translation>硼基团</translation>
+        </message>
+        <message>
+            <source>Boronic Acid</source>
+            <translation>硼酸</translation>
+        </message>
+        <message>
+            <source>Buckminsterfullerene</source>
+            <translation>巴基敏斯特富勒烯</translation>
+        </message>
+        <message>
+            <source>But-1-ene</source>
+            <translation>1-丁烯</translation>
+        </message>
+        <message>
+            <source>Butanoic acid</source>
+            <translation>丁酸</translation>
+        </message>
+        <message>
+            <source>Butanone</source>
+            <translation>丁酮</translation>
+        </message>
+        <message>
+            <source>CCL4 (L)</source>
+            <translation>四氯化碳 (L)</translation>
+        </message>
+        <message>
+            <source>CYTOSINE C1 (L)</source>
+            <translation>胞嘧啶 C1 (L)</translation>
+        </message>
+        <message>
+            <source>CYTOSINE C2A (L)</source>
+            <translation>胞嘧啶 C2A (L)</translation>
+        </message>
+        <message>
+            <source>CYTOSINE C2B (L)</source>
+            <translation>胞嘧啶 C2B (L)</translation>
+        </message>
+        <message>
+            <source>CYTOSINE C3A (L)</source>
+            <translation>胞嘧啶 C3A (L)</translation>
+        </message>
+        <message>
+            <source>CYTOSINE C3B (L)</source>
+            <translation>胞嘧啶 C3B (L)</translation>
+        </message>
+        <message>
+            <source>Caffeine</source>
+            <translation>咖啡因</translation>
+        </message>
+        <message>
+            <source>Calix-4-arene</source>
+            <translation>杯[4]芳烃</translation>
+        </message>
+        <message>
+            <source>Carbamides</source>
+            <translation>氨基甲酸酯类</translation>
+        </message>
+        <message>
+            <source>Carbohydrates</source>
+            <translation>糖类</translation>
+        </message>
+        <message>
+            <source>Carboxylate</source>
+            <translation>羧酸根</translation>
+        </message>
+        <message>
+            <source>Carboxylic Acid</source>
+            <translation>羧酸</translation>
+        </message>
+        <message>
+            <source>Carboxylic Acids</source>
+            <translation>羧酸类</translation>
+        </message>
+        <message>
+            <source>Cholesterol</source>
+            <translation>胆固醇</translation>
+        </message>
+        <message>
+            <source>Chrysene</source>
+            <translation>䓛</translation>
+        </message>
+        <message>
+            <source>Circumcoronene</source>
+            <translation>周晕苯</translation>
+        </message>
+        <message>
+            <source>Citric acid</source>
+            <translation>柠檬酸</translation>
+        </message>
+        <message>
+            <source>Coordination</source>
+            <translation>配位化合物</translation>
+        </message>
+        <message>
+            <source>Corannulene</source>
+            <translation>碗烯</translation>
+        </message>
+        <message>
+            <source>Coronene</source>
+            <translation>晕苯</translation>
+        </message>
+        <message>
+            <source>Cubane</source>
+            <translation>立方烷</translation>
+        </message>
+        <message>
+            <source>Cucurbit-4-uril</source>
+            <translation>葫芦[4]脲</translation>
+        </message>
+        <message>
+            <source>Cucurbit-5-uril</source>
+            <translation>葫芦[5]脲</translation>
+        </message>
+        <message>
+            <source>Cucurbit-6-uril</source>
+            <translation>葫芦[6]脲</translation>
+        </message>
+        <message>
+            <source>Cucurbit-7-uril</source>
+            <translation>葫芦[7]脲</translation>
+        </message>
+        <message>
+            <source>Cucurbit-8-uril</source>
+            <translation>葫芦[8]脲</translation>
+        </message>
+        <message>
+            <source>Cyanate</source>
+            <translation>氰酸酯</translation>
+        </message>
+        <message>
+            <source>Cyclic Alkanes</source>
+            <translation>环烷烃</translation>
+        </message>
+        <message>
+            <source>Cyclic Alkenes</source>
+            <translation>环烯烃</translation>
+        </message>
+        <message>
+            <source>Cyclic Sugars</source>
+            <translation>环状糖</translation>
+        </message>
+        <message>
+            <source>Cyclobutane</source>
+            <translation>环丁烷</translation>
+        </message>
+        <message>
+            <source>Cycloheptane</source>
+            <translation>环庚烷</translation>
+        </message>
+        <message>
+            <source>Cyclohexane</source>
+            <translation>环己烷</translation>
+        </message>
+        <message>
+            <source>Cyclopentane</source>
+            <translation>环戊烷</translation>
+        </message>
+        <message>
+            <source>Cyclopropane</source>
+            <translation>环丙烷</translation>
+        </message>
+        <message>
+            <source>Cytosine</source>
+            <translation>胞嘧啶</translation>
+        </message>
+        <message>
+            <source>D-Alanine</source>
+            <translation>D-丙氨酸</translation>
+        </message>
+        <message>
+            <source>D-Allo-threonine</source>
+            <translation>D-别苏氨酸</translation>
+        </message>
+        <message>
+            <source>D-Allose</source>
+            <translation>D-阿洛糖</translation>
+        </message>
+        <message>
+            <source>D-Altrose</source>
+            <translation>D-阿卓糖</translation>
+        </message>
+        <message>
+            <source>D-Arabinose</source>
+            <translation>D-阿拉伯糖</translation>
+        </message>
+        <message>
+            <source>D-Arginine</source>
+            <translation>D-精氨酸</translation>
+        </message>
+        <message>
+            <source>D-Asparagine</source>
+            <translation>D-天冬酰胺</translation>
+        </message>
+        <message>
+            <source>D-Aspartic acid</source>
+            <translation>D-天冬氨酸</translation>
+        </message>
+        <message>
+            <source>D-Cysteine</source>
+            <translation>D-半胱氨酸</translation>
+        </message>
+        <message>
+            <source>D-Erythrose</source>
+            <translation>D-赤藓糖</translation>
+        </message>
+        <message>
+            <source>D-Erythrulose</source>
+            <translation>D-赤藓酮糖</translation>
+        </message>
+        <message>
+            <source>D-Fructose</source>
+            <translation>D-果糖</translation>
+        </message>
+        <message>
+            <source>D-Galactose</source>
+            <translation>D-半乳糖</translation>
+        </message>
+        <message>
+            <source>D-Glucose</source>
+            <translation>D-葡萄糖</translation>
+        </message>
+        <message>
+            <source>D-Glutamic acid</source>
+            <translation>D-谷氨酸</translation>
+        </message>
+        <message>
+            <source>D-Glutamine</source>
+            <translation>D-谷氨酰胺</translation>
+        </message>
+        <message>
+            <source>D-Glyceraldehyde</source>
+            <translation>D-甘油醛</translation>
+        </message>
+        <message>
+            <source>D-Gulose</source>
+            <translation>D-古洛糖</translation>
+        </message>
+        <message>
+            <source>D-Histidine</source>
+            <translation>D-组氨酸</translation>
+        </message>
+        <message>
+            <source>D-Idose</source>
+            <translation>D-艾杜糖</translation>
+        </message>
+        <message>
+            <source>D-Isoleucine</source>
+            <translation>D-异亮氨酸</translation>
+        </message>
+        <message>
+            <source>D-Lactic acid</source>
+            <translation>D-乳酸</translation>
+        </message>
+        <message>
+            <source>D-Leucine</source>
+            <translation>D-亮氨酸</translation>
+        </message>
+        <message>
+            <source>D-Lysine</source>
+            <translation>D-赖氨酸</translation>
+        </message>
+        <message>
+            <source>D-Lyxose</source>
+            <translation>D-来苏糖</translation>
+        </message>
+        <message>
+            <source>D-Malic acid</source>
+            <translation>D-苹果酸</translation>
+        </message>
+        <message>
+            <source>D-Mannose</source>
+            <translation>D-甘露糖</translation>
+        </message>
+        <message>
+            <source>D-Methionine</source>
+            <translation>D-甲硫氨酸</translation>
+        </message>
+        <message>
+            <source>D-Phenylalanine</source>
+            <translation>D-苯丙氨酸</translation>
+        </message>
+        <message>
+            <source>D-Proline</source>
+            <translation>D-脯氨酸</translation>
+        </message>
+        <message>
+            <source>D-Psicose</source>
+            <translation>D-阿洛酮糖</translation>
+        </message>
+        <message>
+            <source>D-Ribose</source>
+            <translation>D-核糖</translation>
+        </message>
+        <message>
+            <source>D-Ribulose</source>
+            <translation>D-核酮糖</translation>
+        </message>
+        <message>
+            <source>D-Serine</source>
+            <translation>D-丝氨酸</translation>
+        </message>
+        <message>
+            <source>D-Sorbose</source>
+            <translation>D-山梨糖</translation>
+        </message>
+        <message>
+            <source>D-Tagatose</source>
+            <translation>D-塔格糖</translation>
+        </message>
+        <message>
+            <source>D-Talose</source>
+            <translation>D-塔罗糖</translation>
+        </message>
+        <message>
+            <source>D-Tartaric acid</source>
+            <translation>D-酒石酸</translation>
+        </message>
+        <message>
+            <source>D-Threonine</source>
+            <translation>D-苏氨酸</translation>
+        </message>
+        <message>
+            <source>D-Threose</source>
+            <translation>D-苏糖</translation>
+        </message>
+        <message>
+            <source>D-Tryptophan</source>
+            <translation>D-色氨酸</translation>
+        </message>
+        <message>
+            <source>D-Tyrosine</source>
+            <translation>D-酪氨酸</translation>
+        </message>
+        <message>
+            <source>D-Valine</source>
+            <translation>D-缬氨酸</translation>
+        </message>
+        <message>
+            <source>D-Xylulose</source>
+            <translation>D-木酮糖</translation>
+        </message>
+        <message>
+            <source>D-Zylose</source>
+            <translation>D-木糖</translation>
+        </message>
+        <message>
+            <source>DCM (L)</source>
+            <translation>二氯甲烷 (L)</translation>
+        </message>
+        <message>
+            <source>DMSO (L)</source>
+            <translation>二甲基亚砜 (L)</translation>
+        </message>
+        <message>
+            <source>Decanoic acid</source>
+            <translation>癸酸</translation>
+        </message>
+        <message>
+            <source>Di-tert-butylether</source>
+            <translation>二叔丁醚</translation>
+        </message>
+        <message>
+            <source>Diamond Nanoparticles</source>
+            <translation>金刚石纳米颗粒</translation>
+        </message>
+        <message>
+            <source>Dibutylether</source>
+            <translation>二丁醚</translation>
+        </message>
+        <message>
+            <source>Diethylether</source>
+            <translation>乙醚</translation>
+        </message>
+        <message>
+            <source>Dihydroxyacetone</source>
+            <translation>二羟基丙酮</translation>
+        </message>
+        <message>
+            <source>Diisopropylether</source>
+            <translation>二异丙醚</translation>
+        </message>
+        <message>
+            <source>Dimethyl sulfoxide</source>
+            <translation>二甲基亚砜</translation>
+        </message>
+        <message>
+            <source>Dimethylether</source>
+            <translation>二甲醚</translation>
+        </message>
+        <message>
+            <source>Dipropylether</source>
+            <translation>二丙醚</translation>
+        </message>
+        <message>
+            <source>Estradiol</source>
+            <translation>雌二醇</translation>
+        </message>
+        <message>
+            <source>Ethane</source>
+            <translation>乙烷</translation>
+        </message>
+        <message>
+            <source>Ethanethiol</source>
+            <translation>乙硫醇</translation>
+        </message>
+        <message>
+            <source>Ethanol</source>
+            <translation>乙醇</translation>
+        </message>
+        <message>
+            <source>Ethelene Glycol</source>
+            <translation>乙二醇</translation>
+        </message>
+        <message>
+            <source>Ethene</source>
+            <translation>乙烯</translation>
+        </message>
+        <message>
+            <source>Ethers</source>
+            <translation>醚类</translation>
+        </message>
+        <message>
+            <source>Ethyl carbamate</source>
+            <translation>氨基甲酸乙酯</translation>
+        </message>
+        <message>
+            <source>Ethylamine</source>
+            <translation>乙胺</translation>
+        </message>
+        <message>
+            <source>Ethylmethylether</source>
+            <translation>甲乙醚</translation>
+        </message>
+        <message>
+            <source>Fatty Acids</source>
+            <translation>脂肪酸</translation>
+        </message>
+        <message>
+            <source>Ferrocene</source>
+            <translation>二茂铁</translation>
+        </message>
+        <message>
+            <source>Fluorene</source>
+            <translation>芴</translation>
+        </message>
+        <message>
+            <source>Formaldehyde</source>
+            <translation>甲醛</translation>
+        </message>
+        <message>
+            <source>Formic acid</source>
+            <translation>甲酸</translation>
+        </message>
+        <message>
+            <source>Fullerenes</source>
+            <translation>富勒烯</translation>
+        </message>
+        <message>
+            <source>Functional Groups</source>
+            <translation>官能团</translation>
+        </message>
+        <message>
+            <source>Furan</source>
+            <translation>呋喃</translation>
+        </message>
+        <message>
+            <source>GUANINE EN7 (L)</source>
+            <translation>鸟嘌呤 EN7 (L)</translation>
+        </message>
+        <message>
+            <source>GUANINE EN9 (L)</source>
+            <translation>鸟嘌呤 EN9 (L)</translation>
+        </message>
+        <message>
+            <source>GUANINE EN9RN7 (L)</source>
+            <translation>鸟嘌呤 EN9RN7 (L)</translation>
+        </message>
+        <message>
+            <source>GUANINE KN7 (L)</source>
+            <translation>鸟嘌呤 KN7 (L)</translation>
+        </message>
+        <message>
+            <source>GUANINE KN9 (L)</source>
+            <translation>鸟嘌呤 KN9 (L)</translation>
+        </message>
+        <message>
+            <source>Glycerol</source>
+            <translation>甘油</translation>
+        </message>
+        <message>
+            <source>Glycine</source>
+            <translation>甘氨酸</translation>
+        </message>
+        <message>
+            <source>Guanine</source>
+            <translation>鸟嘌呤</translation>
+        </message>
+        <message>
+            <source>Heptacene</source>
+            <translation>并七苯</translation>
+        </message>
+        <message>
+            <source>Heteroaromatics</source>
+            <translation>杂芳烃</translation>
+        </message>
+        <message>
+            <source>Hexacene</source>
+            <translation>并六苯</translation>
+        </message>
+        <message>
+            <source>Hexanoic acid</source>
+            <translation>己酸</translation>
+        </message>
+        <message>
+            <source>Host Guest</source>
+            <translation>主客体</translation>
+        </message>
+        <message>
+            <source>Isobutyric acid</source>
+            <translation>异丁酸</translation>
+        </message>
+        <message>
+            <source>Isocyanate</source>
+            <translation>异氰酸酯</translation>
+        </message>
+        <message>
+            <source>Isopropanol</source>
+            <translation>异丙醇</translation>
+        </message>
+        <message>
+            <source>Isothiocyanate</source>
+            <translation>异硫氰酸酯</translation>
+        </message>
+        <message>
+            <source>Kekulene</source>
+            <translation>凯库勒烯</translation>
+        </message>
+        <message>
+            <source>Ketones</source>
+            <translation>酮类</translation>
+        </message>
+        <message>
+            <source>L-4-Nitrophenylalanine</source>
+            <translation>L-4-硝基苯丙氨酸</translation>
+        </message>
+        <message>
+            <source>L-Alanine</source>
+            <translation>L-丙氨酸</translation>
+        </message>
+        <message>
+            <source>L-Allo-isoleucine</source>
+            <translation>L-别异亮氨酸</translation>
+        </message>
+        <message>
+            <source>L-Arginine</source>
+            <translation>L-精氨酸</translation>
+        </message>
+        <message>
+            <source>L-Ascorbic acid</source>
+            <translation>L-抗坏血酸</translation>
+        </message>
+        <message>
+            <source>L-Asparagine</source>
+            <translation>L-天冬酰胺</translation>
+        </message>
+        <message>
+            <source>L-Aspartic acid</source>
+            <translation>L-天冬氨酸</translation>
+        </message>
+        <message>
+            <source>L-Cysteine</source>
+            <translation>L-半胱氨酸</translation>
+        </message>
+        <message>
+            <source>L-Glutamic acid</source>
+            <translation>L-谷氨酸</translation>
+        </message>
+        <message>
+            <source>L-Glutamine</source>
+            <translation>L-谷氨酰胺</translation>
+        </message>
+        <message>
+            <source>L-Histidine</source>
+            <translation>L-组氨酸</translation>
+        </message>
+        <message>
+            <source>L-Isoleucine</source>
+            <translation>L-异亮氨酸</translation>
+        </message>
+        <message>
+            <source>L-Lactic acid</source>
+            <translation>L-乳酸</translation>
+        </message>
+        <message>
+            <source>L-Leucine</source>
+            <translation>L-亮氨酸</translation>
+        </message>
+        <message>
+            <source>L-Lysine</source>
+            <translation>L-赖氨酸</translation>
+        </message>
+        <message>
+            <source>L-Malic acid</source>
+            <translation>L-苹果酸</translation>
+        </message>
+        <message>
+            <source>L-Methionine</source>
+            <translation>L-甲硫氨酸</translation>
+        </message>
+        <message>
+            <source>L-Phenylalanine</source>
+            <translation>L-苯丙氨酸</translation>
+        </message>
+        <message>
+            <source>L-Proline</source>
+            <translation>L-脯氨酸</translation>
+        </message>
+        <message>
+            <source>L-Serine</source>
+            <translation>L-丝氨酸</translation>
+        </message>
+        <message>
+            <source>L-Tartaric acid</source>
+            <translation>L-酒石酸</translation>
+        </message>
+        <message>
+            <source>L-Threonine</source>
+            <translation>L-苏氨酸</translation>
+        </message>
+        <message>
+            <source>L-Tryptophan</source>
+            <translation>L-色氨酸</translation>
+        </message>
+        <message>
+            <source>L-Tyrosine</source>
+            <translation>L-酪氨酸</translation>
+        </message>
+        <message>
+            <source>L-Valine</source>
+            <translation>L-缬氨酸</translation>
+        </message>
+        <message>
+            <source>Lauric acid</source>
+            <translation>月桂酸</translation>
+        </message>
+        <message>
+            <source>Linoleic acid</source>
+            <translation>亚油酸</translation>
+        </message>
+        <message>
+            <source>METHANE (L)</source>
+            <translation>甲烷 (L)</translation>
+        </message>
+        <message>
+            <source>METHANOL (L)</source>
+            <translation>甲醇 (L)</translation>
+        </message>
+        <message>
+            <source>Macrocycles</source>
+            <translation>大环化合物</translation>
+        </message>
+        <message>
+            <source>Methanethiol</source>
+            <translation>甲硫醇</translation>
+        </message>
+        <message>
+            <source>Methanol</source>
+            <translation>甲醇</translation>
+        </message>
+        <message>
+            <source>Methoxy</source>
+            <translation>甲氧基</translation>
+        </message>
+        <message>
+            <source>Methyl</source>
+            <translation>甲基</translation>
+        </message>
+        <message>
+            <source>Methylamine</source>
+            <translation>甲胺</translation>
+        </message>
+        <message>
+            <source>N N-Dimethylacetamide</source>
+            <translation>N,N-二甲基乙酰胺</translation>
+        </message>
+        <message>
+            <source>N N-Dimethylformamide</source>
+            <translation>N,N-二甲基甲酰胺</translation>
+        </message>
+        <message>
+            <source>Naphthalene</source>
+            <translation>萘</translation>
+        </message>
+        <message>
+            <source>Nitrate</source>
+            <translation>硝酸酯</translation>
+        </message>
+        <message>
+            <source>Nitrile</source>
+            <translation>腈</translation>
+        </message>
+        <message>
+            <source>Nitrite</source>
+            <translation>亚硝酸酯</translation>
+        </message>
+        <message>
+            <source>Nitro</source>
+            <translation>硝基</translation>
+        </message>
+        <message>
+            <source>Nitrobenzene</source>
+            <translation>硝基苯</translation>
+        </message>
+        <message>
+            <source>Nitrogen Groups</source>
+            <translation>氮基团</translation>
+        </message>
+        <message>
+            <source>Nitroso</source>
+            <translation>亚硝基</translation>
+        </message>
+        <message>
+            <source>Norbornane</source>
+            <translation>降冰片烷</translation>
+        </message>
+        <message>
+            <source>Nucleobases</source>
+            <translation>核碱基</translation>
+        </message>
+        <message>
+            <source>O2 (L)</source>
+            <translation>氧气 (L)</translation>
+        </message>
+        <message>
+            <source>Octanoic acid</source>
+            <translation>辛酸</translation>
+        </message>
+        <message>
+            <source>Oleic acid</source>
+            <translation>油酸</translation>
+        </message>
+        <message>
+            <source>Olympicene</source>
+            <translation>奥林匹克烯</translation>
+        </message>
+        <message>
+            <source>Organometalics</source>
+            <translation>有机金属化合物</translation>
+        </message>
+        <message>
+            <source>Ovalene</source>
+            <translation>卵烯</translation>
+        </message>
+        <message>
+            <source>Oxalic acid</source>
+            <translation>草酸</translation>
+        </message>
+        <message>
+            <source>Oxamide</source>
+            <translation>草酰胺</translation>
+        </message>
+        <message>
+            <source>PHENOL (L)</source>
+            <translation>苯酚 (L)</translation>
+        </message>
+        <message>
+            <source>Palmitic acid</source>
+            <translation>棕榈酸</translation>
+        </message>
+        <message>
+            <source>Pentacene</source>
+            <translation>并五苯</translation>
+        </message>
+        <message>
+            <source>Pentane-1-thiol</source>
+            <translation>1-戊硫醇</translation>
+        </message>
+        <message>
+            <source>Phenalene</source>
+            <translation>吩蒽</translation>
+        </message>
+        <message>
+            <source>Phenanthrene</source>
+            <translation>菲</translation>
+        </message>
+        <message>
+            <source>Phenol</source>
+            <translation>苯酚</translation>
+        </message>
+        <message>
+            <source>Phenyl</source>
+            <translation>苯基</translation>
+        </message>
+        <message>
+            <source>Phosphate</source>
+            <translation>磷酸酯</translation>
+        </message>
+        <message>
+            <source>Phosphine</source>
+            <translation>膦</translation>
+        </message>
+        <message>
+            <source>Phosphonic Acid</source>
+            <translation>膦酸</translation>
+        </message>
+        <message>
+            <source>Phosphorus Groups</source>
+            <translation>磷基团</translation>
+        </message>
+        <message>
+            <source>Pleaidene</source>
+            <translation>昴苯</translation>
+        </message>
+        <message>
+            <source>Polyaromatic Hydrocarbons</source>
+            <translation>多环芳烃</translation>
+        </message>
+        <message>
+            <source>Porphin</source>
+            <translation>卟吩</translation>
+        </message>
+        <message>
+            <source>Propan-1-ol</source>
+            <translation>1-丙醇</translation>
+        </message>
+        <message>
+            <source>Propane</source>
+            <translation>丙烷</translation>
+        </message>
+        <message>
+            <source>Propanoic acid</source>
+            <translation>丙酸</translation>
+        </message>
+        <message>
+            <source>Propyne</source>
+            <translation>丙炔</translation>
+        </message>
+        <message>
+            <source>Pyrene</source>
+            <translation>芘</translation>
+        </message>
+        <message>
+            <source>Pyridine</source>
+            <translation>吡啶</translation>
+        </message>
+        <message>
+            <source>Stearic acid</source>
+            <translation>硬脂酸</translation>
+        </message>
+        <message>
+            <source>Steroids</source>
+            <translation>甾体</translation>
+        </message>
+        <message>
+            <source>Sulfonic Acid</source>
+            <translation>磺酸</translation>
+        </message>
+        <message>
+            <source>Sulfoxide</source>
+            <translation>亚砜</translation>
+        </message>
+        <message>
+            <source>Sulfoxides</source>
+            <translation>亚砜类</translation>
+        </message>
+        <message>
+            <source>Sulfur Groups</source>
+            <translation>硫基团</translation>
+        </message>
+        <message>
+            <source>THYMINE (L)</source>
+            <translation>胸腺嘧啶 (L)</translation>
+        </message>
+        <message>
+            <source>TMS</source>
+            <translation>四甲基硅烷</translation>
+        </message>
+        <message>
+            <source>TOLUENE (L)</source>
+            <translation>甲苯 (L)</translation>
+        </message>
+        <message>
+            <source>Testosterone</source>
+            <translation>睾酮</translation>
+        </message>
+        <message>
+            <source>Tetrabenzoporphyrin</source>
+            <translation>四苯并卟啉</translation>
+        </message>
+        <message>
+            <source>Tetracene</source>
+            <translation>并四苯</translation>
+        </message>
+        <message>
+            <source>Tetrahydrofuran</source>
+            <translation>四氢呋喃</translation>
+        </message>
+        <message>
+            <source>Thial</source>
+            <translation>硫醛</translation>
+        </message>
+        <message>
+            <source>Thiocyanate</source>
+            <translation>硫氰酸酯</translation>
+        </message>
+        <message>
+            <source>Thiol</source>
+            <translation>硫醇</translation>
+        </message>
+        <message>
+            <source>Thiols</source>
+            <translation>硫醇类</translation>
+        </message>
+        <message>
+            <source>Thiophene</source>
+            <translation>噻吩</translation>
+        </message>
+        <message>
+            <source>Thymine</source>
+            <translation>胸腺嘧啶</translation>
+        </message>
+        <message>
+            <source>Toluene</source>
+            <translation>甲苯</translation>
+        </message>
+        <message>
+            <source>Triphenylene</source>
+            <translation>三亚苯</translation>
+        </message>
+        <message>
+            <source>Uracil</source>
+            <translation>尿嘧啶</translation>
+        </message>
+        <message>
+            <source>Urea</source>
+            <translation>尿素</translation>
+        </message>
+        <message>
+            <source>WATER (L)</source>
+            <translation>水 (L)</translation>
+        </message>
+        <message>
+            <source>Zethrene</source>
+            <translation>泽蒽烯</translation>
+        </message>
+</context>
     <context>
         <name>FreezingStringTab</name>
         <message>
@@ -2534,7 +3726,15 @@ QTextBrowser#content {
             <translation>相对强度</translation>
             <comment>预置：需配合源码补 tr() 后由 lupdate 匹配</comment>
         </message>
-    </context>
+            <message>
+            <source>Alpha</source>
+            <translation>Alpha</translation>
+        </message>
+        <message>
+            <source>Strength</source>
+            <translation>强度</translation>
+        </message>
+</context>
     <context>
         <name>IQmol::Configurator::Frequencies</name>
         <message>
@@ -2567,7 +3767,11 @@ QTextBrowser#content {
             <translation>相对强度</translation>
             <comment>预置：需配合源码补 tr() 后由 lupdate 匹配</comment>
         </message>
-    </context>
+            <message>
+            <source>Intensity</source>
+            <translation>强度</translation>
+        </message>
+</context>
     <context>
         <name>IQmol::Configurator::GeometryList</name>
         <message>
@@ -2580,7 +3784,11 @@ QTextBrowser#content {
             <translation>几何参数</translation>
             <comment>预置：需配合源码补 tr() 后由 lupdate 匹配</comment>
         </message>
-    </context>
+            <message>
+            <source>Energy</source>
+            <translation>能量</translation>
+        </message>
+</context>
     <context>
         <name>IQmol::Configurator::Isotopes</name>
         <message>
@@ -2606,7 +3814,19 @@ QTextBrowser#content {
             <source>Isovalue</source>
             <translation>等值</translation>
         </message>
-    </context>
+            <message>
+            <source>van der Waals</source>
+            <translation>范德华</translation>
+        </message>
+        <message>
+            <source>Promolecule</source>
+            <translation>原分子</translation>
+        </message>
+        <message>
+            <source>SID</source>
+            <translation>SID</translation>
+        </message>
+</context>
     <context>
         <name>IQmol::Configurator::Nmr</name>
         <message>
@@ -2633,7 +3853,11 @@ QTextBrowser#content {
             <translation>相对强度</translation>
             <comment>预置：需配合源码补 tr() 后由 lupdate 匹配</comment>
         </message>
-    </context>
+            <message>
+            <source>Shieldings</source>
+            <translation>屏蔽</translation>
+        </message>
+</context>
     <context>
         <name>IQmol::Configurator::Orbitals</name>
         <message>
@@ -2649,7 +3873,71 @@ QTextBrowser#content {
             <translation>占据数</translation>
             <comment>预置：需配合源码补 tr() 后由 lupdate 匹配</comment>
         </message>
-    </context>
+            <message>
+            <source>Basis Function</source>
+            <translation>基函数</translation>
+        </message>
+        <message>
+            <source>Alpha NTO</source>
+            <translation>Alpha NTO</translation>
+        </message>
+        <message>
+            <source>Beta NTO</source>
+            <translation>Beta NTO</translation>
+        </message>
+        <message>
+            <source>Alpha NBO</source>
+            <translation>Alpha NBO</translation>
+        </message>
+        <message>
+            <source>Beta NBO</source>
+            <translation>Beta NBO</translation>
+        </message>
+        <message>
+            <source>Dyson (Left)</source>
+            <translation>Dyson (左)</translation>
+        </message>
+        <message>
+            <source>Dyson (Right)</source>
+            <translation>Dyson (右)</translation>
+        </message>
+        <message>
+            <source>Orbital</source>
+            <translation>轨道</translation>
+        </message>
+        <message>
+            <source>Complex Alpha Orbital</source>
+            <translation>复 Alpha 轨道</translation>
+        </message>
+        <message>
+            <source>Complex Beta Orbital</source>
+            <translation>复 Beta 轨道</translation>
+        </message>
+        <message>
+            <source>Alpha Orbital</source>
+            <translation>Alpha 轨道</translation>
+        </message>
+        <message>
+            <source>Beta Orbital</source>
+            <translation>Beta 轨道</translation>
+        </message>
+        <message>
+            <source>Alpha</source>
+            <translation>Alpha</translation>
+        </message>
+        <message>
+            <source>Beta</source>
+            <translation>Beta</translation>
+        </message>
+        <message>
+            <source>Intensity</source>
+            <translation>强度</translation>
+        </message>
+        <message>
+            <source>Rel. Intensity</source>
+            <translation>相对强度</translation>
+        </message>
+</context>
     <context>
         <name>IQmol::Configurator::ScalarConstraint</name>
         <message>
@@ -2730,14 +4018,22 @@ QTextBrowser#content {
             <translation>导出 Cube 文件（反转相位）</translation>
             <comment>预置：需配合源码补 tr() 后由 lupdate 匹配</comment>
         </message>
-    </context>
+            <message>
+            <source>Delete</source>
+            <translation>删除</translation>
+        </message>
+</context>
     <context>
         <name>IQmol::Layer::Background</name>
         <message>
             <source>Background</source>
             <translation>背景</translation>
         </message>
-    </context>
+            <message>
+            <source>Edit Color</source>
+            <translation>编辑颜色</translation>
+        </message>
+</context>
     <context>
         <name>IQmol::Layer::Component</name>
         <message>
@@ -2751,7 +4047,15 @@ QTextBrowser#content {
             <source>Invalid</source>
             <translation>无效</translation>
         </message>
-    </context>
+            <message>
+            <source>Configure</source>
+            <translation>配置</translation>
+        </message>
+        <message>
+            <source>Delete</source>
+            <translation>删除</translation>
+        </message>
+</context>
     <context>
         <name>IQmol::Layer::GeminalOrbitalProperty</name>
         <message>
@@ -2817,7 +4121,111 @@ QTextBrowser#content {
             <source>Untitled</source>
             <translation>未命名</translation>
         </message>
-    </context>
+            <message>
+            <source>Info</source>
+            <translation>信息</translation>
+        </message>
+        <message>
+            <source>Configure</source>
+            <translation>配置</translation>
+        </message>
+        <message>
+            <source>Select All</source>
+            <translation>全选</translation>
+        </message>
+        <message>
+            <source>Reperceive Bonds</source>
+            <translation>重新识别键</translation>
+        </message>
+        <message>
+            <source>Add Hydrogens</source>
+            <translation>添加氢原子</translation>
+        </message>
+        <message>
+            <source>Duplicate Geometry</source>
+            <translation>复制几何结构</translation>
+        </message>
+        <message>
+            <source>Atomic Charges</source>
+            <translation>原子电荷</translation>
+        </message>
+        <message>
+            <source>Remove</source>
+            <translation>移除</translation>
+        </message>
+        <message>
+            <source>Save As</source>
+            <translation>另存为</translation>
+        </message>
+        <message>
+            <source>Gasteiger</source>
+            <translation>Gasteiger</translation>
+        </message>
+        <message>
+            <source>Mulliken</source>
+            <translation>Mulliken</translation>
+        </message>
+        <message>
+            <source>Multipole Derived</source>
+            <translation>多极展开</translation>
+        </message>
+        <message>
+            <source>CHELPG</source>
+            <translation>CHELPG</translation>
+        </message>
+        <message>
+            <source>Hirshfeld</source>
+            <translation>Hirshfeld</translation>
+        </message>
+        <message>
+            <source>Lowdin</source>
+            <translation>Löwdin</translation>
+        </message>
+        <message>
+            <source>Natural</source>
+            <translation>Natural</translation>
+        </message>
+        <message>
+            <source>Merz-Kollman ESP</source>
+            <translation>Merz-Kollman ESP</translation>
+        </message>
+        <message>
+            <source>Merz-Kollman RESP</source>
+            <translation>Merz-Kollman RESP</translation>
+        </message>
+        <message>
+            <source>Atoms</source>
+            <translation>原子</translation>
+        </message>
+        <message>
+            <source>Bonds</source>
+            <translation>键</translation>
+        </message>
+        <message>
+            <source>Charges</source>
+            <translation>电荷</translation>
+        </message>
+        <message>
+            <source>Files</source>
+            <translation>文件</translation>
+        </message>
+        <message>
+            <source>Constraints</source>
+            <translation>约束</translation>
+        </message>
+        <message>
+            <source>Isotopes</source>
+            <translation>同位素</translation>
+        </message>
+        <message>
+            <source>Scan Coordinates</source>
+            <translation>扫描坐标</translation>
+        </message>
+        <message>
+            <source>Groups</source>
+            <translation>基团</translation>
+        </message>
+</context>
     <context>
         <name>IQmol::Layer::Solvent</name>
         <message>
@@ -2835,7 +4243,23 @@ QTextBrowser#content {
             <source>Molecule</source>
             <translation>分子</translation>
         </message>
-    </context>
+            <message>
+            <source>Info</source>
+            <translation>信息</translation>
+        </message>
+        <message>
+            <source>Box System</source>
+            <translation>加框系统</translation>
+        </message>
+        <message>
+            <source>Export PDB</source>
+            <translation>导出 PDB</translation>
+        </message>
+        <message>
+            <source>Remove System</source>
+            <translation>移除系统</translation>
+        </message>
+</context>
     <context>
         <name>IQmol::LogMessageDialog</name>
         <message>
@@ -3318,7 +4742,11 @@ QTextBrowser#content {
             <translation>隐藏分子</translation>
             <comment>预置：需配合源码补 tr() 后由 lupdate 匹配</comment>
         </message>
-    </context>
+            <message>
+            <source>New Molecule From Selection</source>
+            <translation>从选区新建分子</translation>
+        </message>
+</context>
     <context>
         <name>InfoConfigurator</name>
         <message>
@@ -3460,7 +4888,51 @@ p, li { white-space: pre-wrap; }
             <source>Open File</source>
             <translation>打开文件</translation>
         </message>
-    </context>
+            <message>
+            <source>Are you sure you want to delete all generated input?</source>
+            <translation>确定要删除所有已生成的输入吗？</translation>
+        </message>
+        <message>
+            <source>Close</source>
+            <translation>关闭</translation>
+        </message>
+        <message>
+            <source>Copy</source>
+            <translation>复制</translation>
+        </message>
+        <message>
+            <source>Cut</source>
+            <translation>剪切</translation>
+        </message>
+        <message>
+            <source>Delete input?</source>
+            <translation>删除输入？</translation>
+        </message>
+        <message>
+            <source>Paste</source>
+            <translation>粘贴</translation>
+        </message>
+        <message>
+            <source>Save As</source>
+            <translation>另存为</translation>
+        </message>
+        <message>
+            <source>Singlets</source>
+            <translation>单重态</translation>
+        </message>
+        <message>
+            <source>Submit</source>
+            <translation>提交</translation>
+        </message>
+        <message>
+            <source>Triplets</source>
+            <translation>三重态</translation>
+        </message>
+        <message>
+            <source>Alpha</source>
+            <translation>Alpha</translation>
+        </message>
+</context>
     <context>
         <name>InsertMoleculeDialog</name>
         <message>
@@ -6782,7 +8254,7 @@ QToolButton:pressed {
             <location filename="../src/Main/PeriodicTable.ui" line="1136" />
             <location filename="../src/Main/PeriodicTableMac.ui" line="1101" />
             <source>No</source>
-            <translation>否</translation>
+            <translation>No</translation>
         </message>
         <message>
             <location filename="../src/Main/PeriodicTable.ui" line="1146" />
@@ -6896,7 +8368,23 @@ QToolButton:pressed {
             <source>Reset</source>
             <translation>重置</translation>
         </message>
-    </context>
+            <message>
+            <source>界面语言:</source>
+            <translation>界面语言：</translation>
+        </message>
+        <message>
+            <source>中文</source>
+            <translation>中文</translation>
+        </message>
+        <message>
+            <source>English</source>
+            <translation>English</translation>
+        </message>
+        <message>
+            <source>跟随系统</source>
+            <translation>跟随系统</translation>
+        </message>
+</context>
     <context>
         <name>PrimaryBasisTab</name>
         <message>
@@ -7143,7 +8631,47 @@ in the run file template</source>
             <translation>删除约束？</translation>
             <comment>预置：需配合源码补 tr() 后由 lupdate 匹配</comment>
         </message>
-    </context>
+            <message>
+            <source>Stretch</source>
+            <translation>伸缩</translation>
+        </message>
+        <message>
+            <source>Bend</source>
+            <translation>弯曲</translation>
+        </message>
+        <message>
+            <source>Out Of Plane</source>
+            <translation>面外</translation>
+        </message>
+        <message>
+            <source>Dihedral</source>
+            <translation>二面角</translation>
+        </message>
+        <message>
+            <source>Coplanar</source>
+            <translation>共面</translation>
+        </message>
+        <message>
+            <source>Perpendicular</source>
+            <translation>垂直</translation>
+        </message>
+        <message>
+            <source>Fixed</source>
+            <translation>固定</translation>
+        </message>
+        <message>
+            <source>Dummy - Plane Normal</source>
+            <translation>虚拟原子 - 平面法线</translation>
+        </message>
+        <message>
+            <source>Dummy - Angle Bisector</source>
+            <translation>虚拟原子 - 角平分线</translation>
+        </message>
+        <message>
+            <source>Connect</source>
+            <translation>连接</translation>
+        </message>
+</context>
     <context>
         <name>Qui::GeometryConstraint::Dialog</name>
         <message>
@@ -7181,7 +8709,15 @@ in the run file template</source>
             <translation>重复约束</translation>
             <comment>预置：需配合源码补 tr() 后由 lupdate 匹配</comment>
         </message>
-    </context>
+            <message>
+            <source>Are you sure you want to delete the selected constraint?</source>
+            <translation>确定要删除所选约束吗？</translation>
+        </message>
+        <message>
+            <source>Delete Constraint?</source>
+            <translation>删除约束？</translation>
+        </message>
+</context>
     <context>
         <name>Qui::InputDialog</name>
         <message>
@@ -7840,7 +9376,51 @@ Use Web for HTTP/HTTPS servers</source>
             <source>OK</source>
             <translation>确定</translation>
         </message>
-    </context>
+            <message>
+            <source>Chrome</source>
+            <translation>铬</translation>
+        </message>
+        <message>
+            <source>Crumpled</source>
+            <translation>褶皱</translation>
+        </message>
+        <message>
+            <source>Rippled</source>
+            <translation>波纹</translation>
+        </message>
+        <message>
+            <source>Rough</source>
+            <translation>粗糙</translation>
+        </message>
+        <message>
+            <source>Marble</source>
+            <translation>大理石</translation>
+        </message>
+        <message>
+            <source>BlackMarble</source>
+            <translation>黑色大理石</translation>
+        </message>
+        <message>
+            <source>Skin</source>
+            <translation>皮肤</translation>
+        </message>
+        <message>
+            <source>Swirl</source>
+            <translation>漩涡</translation>
+        </message>
+        <message>
+            <source>Bubble</source>
+            <translation>气泡</translation>
+        </message>
+        <message>
+            <source>Shattered</source>
+            <translation>破碎</translation>
+        </message>
+        <message>
+            <source>Mesh</source>
+            <translation>网格</translation>
+        </message>
+</context>
     <context>
         <name>SnapshotImageDialog</name>
         <message>
@@ -8963,7 +10543,11 @@ p, li { white-space: pre-wrap; }
             <source>Remove </source>
             <translation>移除</translation>
         </message>
-    </context>
+            <message>
+            <source>Load file %1</source>
+            <translation>加载文件 %1</translation>
+        </message>
+</context>
     <context>
         <name>VectorConstraintConfigurator</name>
         <message>
@@ -9101,4 +10685,385 @@ p, li { white-space: pre-wrap; }
             <translation>关闭</translation>
         </message>
     </context>
+    <context>
+        <name>IQmol::Data::SurfaceType</name>
+        <message>
+            <source>Alpha</source>
+            <translation>Alpha</translation>
+        </message>
+        <message>
+            <source>Beta</source>
+            <translation>Beta</translation>
+        </message>
+        <message>
+            <source>Total Density</source>
+            <translation>总密度</translation>
+        </message>
+        <message>
+            <source>Spin Density</source>
+            <translation>自旋密度</translation>
+        </message>
+        <message>
+            <source>Alpha Density</source>
+            <translation>Alpha 密度</translation>
+        </message>
+        <message>
+            <source>Beta Density</source>
+            <translation>Beta 密度</translation>
+        </message>
+        <message>
+            <source>User Defined Density</source>
+            <translation>用户自定义密度</translation>
+        </message>
+        <message>
+            <source>Cube Data</source>
+            <translation>立方体数据</translation>
+        </message>
+        <message>
+            <source>van der Waals</source>
+            <translation>范德华</translation>
+        </message>
+        <message>
+            <source>Promolecule</source>
+            <translation>原分子</translation>
+        </message>
+        <message>
+            <source>Solvent Excluded</source>
+            <translation>溶剂排除</translation>
+        </message>
+        <message>
+            <source>SID</source>
+            <translation>SID</translation>
+        </message>
+        <message>
+            <source>Electrostatic Potential</source>
+            <translation>静电势</translation>
+        </message>
+        <message>
+            <source>Geminal</source>
+            <translation>孪位</translation>
+        </message>
+        <message>
+            <source>Correlated Density</source>
+            <translation>相关密度</translation>
+        </message>
+        <message>
+            <source>Custom Density</source>
+            <translation>自定义密度</translation>
+        </message>
+        <message>
+            <source>Basis Function</source>
+            <translation>基函数</translation>
+        </message>
+        <message>
+            <source>Dyson (left)</source>
+            <translation>Dyson (左)</translation>
+        </message>
+        <message>
+            <source>Dyson (right)</source>
+            <translation>Dyson (右)</translation>
+        </message>
+        <message>
+            <source>Mulliken Atomic</source>
+            <translation>Mulliken 原子</translation>
+        </message>
+        <message>
+            <source>Mulliken Diatomic</source>
+            <translation>Mulliken 双原子</translation>
+        </message>
+        <message>
+            <source>Orbital</source>
+            <translation>轨道</translation>
+        </message>
+        <message>
+            <source>Ribbon</source>
+            <translation>带状</translation>
+        </message>
+        <message>
+            <source>Alpha Real Orbital</source>
+            <translation>Alpha 实轨道</translation>
+        </message>
+        <message>
+            <source>Alpha Imaginary Orbital</source>
+            <translation>Alpha 虚轨道</translation>
+        </message>
+        <message>
+            <source>Beta Real Orbital</source>
+            <translation>Beta 实轨道</translation>
+        </message>
+        <message>
+            <source>Beta Imaginary Orbital</source>
+            <translation>Beta 虚轨道</translation>
+        </message>
+    </context>
+    <context>
+        <name>IQmol::Parser::OpenBabel</name>
+        <message>
+            <source>Energy</source>
+            <translation>能量</translation>
+        </message>
+    </context>
+    <context>
+        <name>IQmol::Qui::LJParametersSection</name>
+        <message>
+            <source>LJ Parameter Error</source>
+            <translation>LJ 参数错误</translation>
+        </message>
+    </context>
+    <context>
+        <name>IQmol::Qui::MoleculeSection</name>
+        <message>
+            <source>Problem reading $molecule section: 
+</source>
+            <translation>读取 $molecule 段时出现问题：
+</translation>
+        </message>
+        <message>
+            <source>Parse Error</source>
+            <translation>解析错误</translation>
+        </message>
+    </context>
+    <context>
+        <name>IQmol::Qui::RemSection</name>
+        <message>
+            <source>An error occured when parsing the following options:
+</source>
+            <translation>解析以下选项时出错：
+</translation>
+        </message>
+        <message>
+            <source>Input File Error</source>
+            <translation>输入文件错误</translation>
+        </message>
+    </context>
+    <context>
+        <name>IQmol::Color::Dialog</name>
+        <message>
+            <source>Custom</source>
+            <translation>自定义</translation>
+        </message>
+        <message>
+            <source>Default</source>
+            <translation>默认</translation>
+        </message>
+        <message>
+            <source>Spectrum</source>
+            <translation>谱</translation>
+        </message>
+            <message>
+            <source>Primary Spectrum</source>
+            <translation>主色谱</translation>
+        </message>
+        <message>
+            <source>Reflected Default</source>
+            <translation>反射默认</translation>
+        </message>
+        <message>
+            <source>Reflected Spectrum</source>
+            <translation>反射谱</translation>
+        </message>
+</context>
+    <context>
+        <name>IQmol::Configurator::Vibronic</name>
+        <message>
+            <source>Electronic Transition</source>
+            <translation>电子跃迁</translation>
+        </message>
+        <message>
+            <source>Intensity</source>
+            <translation>强度</translation>
+        </message>
+    </context>
+    <context>
+        <name>IQmol::Layer::Atom</name>
+        <message>
+            <source>Atom</source>
+            <translation>原子</translation>
+        </message>
+    </context>
+    <context>
+        <name>IQmol::ShaderDialog</name>
+        <message>
+            <source>Black</source>
+            <translation>黑色</translation>
+        </message>
+        <message>
+            <source>Default</source>
+            <translation>默认</translation>
+        </message>
+        <message>
+            <source>None</source>
+            <translation>无</translation>
+        </message>
+        <message>
+            <source>White</source>
+            <translation>白色</translation>
+        </message>
+    </context>
+    <context>
+        <name>IQmol::Layer::Axes</name>
+        <message>
+            <source>Configure</source>
+            <translation>配置</translation>
+        </message>
+    </context>
+    <context>
+        <name>IQmol::Layer::AxesMesh</name>
+        <message>
+            <source>Configure</source>
+            <translation>配置</translation>
+        </message>
+    </context>
+    <context>
+        <name>IQmol::Layer::CubeData</name>
+        <message>
+            <source>Surface Animator</source>
+            <translation>表面动画器</translation>
+        </message>
+            <message>
+            <source>Cube Data</source>
+            <translation>Cube 数据</translation>
+        </message>
+</context>
+    <context>
+        <name>IQmol::Layer::GeminalOrbitals</name>
+        <message>
+            <source>Show Grid Info</source>
+            <translation>显示网格信息</translation>
+        </message>
+            <message>
+            <source>Edit Bounding Box</source>
+            <translation>编辑包围盒</translation>
+        </message>
+        <message>
+            <source>Geminal Orbitals</source>
+            <translation>成对轨道</translation>
+        </message>
+</context>
+    <context>
+        <name>IQmol::Layer::GeometryList</name>
+        <message>
+            <source>Remove</source>
+            <translation>移除</translation>
+        </message>
+            <message>
+            <source>Copy Geometry</source>
+            <translation>复制几何结构</translation>
+        </message>
+</context>
+    <context>
+        <name>IQmol::Layer::Group</name>
+        <message>
+            <source>Add Hydrogens</source>
+            <translation>添加氢原子</translation>
+        </message>
+            <message>
+            <source>Reperceive Bonds</source>
+            <translation>重新识别键</translation>
+        </message>
+</context>
+    <context>
+        <name>IQmol::Layer::Orbitals</name>
+        <message>
+            <source>Show Grid Info</source>
+            <translation>显示网格信息</translation>
+        </message>
+            <message>
+            <source>Edit Bounding Box</source>
+            <translation>编辑包围盒</translation>
+        </message>
+</context>
+    <context>
+        <name>IQmol::Layer::Surface</name>
+        <message>
+            <source>Show Vertex Normals</source>
+            <translation>显示顶点法线</translation>
+        </message>
+            <message>
+            <source>Show Face Normals</source>
+            <translation>显示面法线</translation>
+        </message>
+        <message>
+            <source>Decimate</source>
+            <translation>抽稀</translation>
+        </message>
+        <message>
+            <source>Print Mesh Info</source>
+            <translation>打印网格信息</translation>
+        </message>
+</context>
+    <context>
+        <name>IQmol::Layer::Dipole</name>
+        <message>
+            <source>Dipole</source>
+            <translation>偶极</translation>
+        </message>
+    </context>
+    <context>
+        <name>IQmol::Layer::EfpFragmentList</name>
+        <message>
+            <source>EFP Fragments</source>
+            <translation>EFP 片段</translation>
+        </message>
+    </context>
+    <context>
+        <name>IQmol::Layer::ExcitedStates</name>
+        <message>
+            <source>Excited States</source>
+            <translation>激发态</translation>
+        </message>
+    </context>
+    <context>
+        <name>IQmol::Layer::Frequencies</name>
+        <message>
+            <source>Frequencies</source>
+            <translation>频率</translation>
+        </message>
+    </context>
+    <context>
+        <name>IQmol::Layer::MacroMolecule</name>
+        <message>
+            <source>Residues</source>
+            <translation>残基</translation>
+        </message>
+    </context>
+    <context>
+        <name>IQmol::Layer::Nmr</name>
+        <message>
+            <source>NMR</source>
+            <translation>核磁共振（NMR）</translation>
+        </message>
+    </context>
+    <context>
+        <name>IQmol::Layer::Octree</name>
+        <message>
+            <source>Octree Box</source>
+            <translation>八叉树盒</translation>
+        </message>
+    </context>
+    <context>
+        <name>IQmol::Layer::Symmetry</name>
+        <message>
+            <source>Symmetry</source>
+            <translation>对称性</translation>
+        </message>
+    </context>
+    <context>
+        <name>IQmol::Layer::Vibronic</name>
+        <message>
+            <source>Vibronic</source>
+            <translation>振动电子</translation>
+        </message>
+    </context>
+    <context>
+        <name>IQmol::Configurator::GeminalOrbitals</name>
+        <message>
+            <source>Geminal</source>
+            <translation>成对</translation>
+        </message>
+            <message>
+            <source>Geminal Correlation</source>
+            <translation>成对相关</translation>
+        </message>
+</context>
 </TS>
