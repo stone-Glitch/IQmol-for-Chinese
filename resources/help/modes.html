@@ -5,131 +5,115 @@
 
 <body>
 
-   <center> <h1> Viewer Modes <br> </h1> </center><p></p>
- 
+   <center> <h1> 查看器模式 <br> </h1> </center><p></p>
 
-   <p> IQmol operates in one of four modes that change the behavior of the mouse
-   actions.  Modes are selected by clicking on the appropriate tool from the
-   Tool Bar.  In addition, some modes can be activated whilst in the manipulate
-   mode using hot keys.
+
+   <p> IQmol 有四种模式，不同的模式对应不同的鼠标行为。点击工具栏上相应的工具即可切换模式。
+   此外，在操作模式下，部分模式还可以通过快捷键激活。
 
 
 
    <br>
-   <h3><a name="manipulate"></a>Manipulate Mode</h3>
+   <h3><a name="manipulate"></a>操作模式</h3>
        <img src="images/buttons/Manipulate.png">
-         
-   <p> Activating this mode changes the cursor to 
-   <img src="images/cursors/open_hand.png">.  This is the default mode for the
-   viewer and allows the molecule to be rotated and zoomed.
 
-   <p>The manipulate mode implements the following mouse functions:
-    
+   <p> 激活此模式后，光标变为
+   <img src="images/cursors/open_hand.png">。这是查看器的默认模式，
+   用于旋转和缩放分子。
+
+   <p>操作模式下的鼠标功能：
+
    <ul>
-      <li> <B>Left click and drag:</B> Rotate the view of the molecule.  Cursor changes 
-           to <img src="images/cursors/closed_hand.png"> <br>
-      <li> <B>Middle click and drag:</B> Zoom in and out.  Cursor changes 
-           to <img src="images/cursors/zoom.png"> <br>
-      <li> <B>Right click and drag:</B> Translate the view of the molecule. Cursor
-           changes to <img src="images/cursors/translate.png"> <br>
+      <li> <B>左键点击并拖动：</B> 旋转分子视图。光标变为
+           <img src="images/cursors/closed_hand.png"> <br>
+      <li> <B>中键点击并拖动：</B> 缩放视图。光标变为
+           <img src="images/cursors/zoom.png"> <br>
+      <li> <B>右键点击并拖动：</B> 平移分子视图。光标变为
+           <img src="images/cursors/translate.png"> <br>
    </ul>
 
 
 
    <br>
-   <h3><a name="build"></a>Build Mode</h3>
-       <img src="images/buttons/Equipment.png"> 
+   <h3><a name="build"></a>构建模式</h3>
+       <img src="images/buttons/Equipment.png">
 
-   <p> Activating this mode changes the cursor to 
-   <img src="images/cursors/build.png">.  This mode can also be
-   activated using the <i>alt</i> modifier when in manipulate mode.
+   <p> 激活此模式后，光标变为
+   <img src="images/cursors/build.png">。在操作模式下按住 <i>alt</i> 键
+   也可进入此模式。
 
-   <p>Build mode is used to add either atoms or fragments to the molecule
-   depending on if the build atom or build fragment Toolbar button is selected.
-   Fragments can either be functional groups, EFPs or entire molecules.
+   <p>构建模式用于向分子中添加原子或片段，具体取决于工具栏上选中的是"构建原子"还是"构建片段"按钮。
+   片段可以是官能团、EFP 或完整分子。
 
-   For adding atoms and functional groups, the build mode implements the
-   following mouse functions:
-    
+   添加原子和官能团时，构建模式下的鼠标功能：
+
    <ul>
-	  <li> <B>Left click:</B> If no atoms exist, creates an atom. Clicking on
-		   an existing atom will convert it to the current build element or
-           group.<br>
-      <li> <B>Click and drag:</B> If the click originates on an atom, this
-		   will create a bond and a new atom or group.  If the drag occurs
-		   between two existing atoms, then a bond is created (if a bond
-		   already exists then the bond order is increased). If the click does
-		   not originate on an atom, then this action rotates the molecule as
-		   in manipulate mode. <br> 
-       <li> <B>Right click:</B> Deletes any atom or bond under the cursor.
+	  <li> <B>左键点击：</B> 若当前没有原子，则创建一个原子。点击已有原子会把它转换为当前构建元素或
+           官能团。<br>
+      <li> <B>点击并拖动：</B> 若从某个原子上开始点击，将创建一个键以及新的原子或官能团。若在两个
+		   已有原子之间拖动，则创建一个键（若已有键则键级加一）。若点击的起点不在原子上，
+		   则此操作与操作模式一样，只会旋转分子。<br>
+       <li> <B>右键点击：</B> 删除光标下的原子或键。
    </ul>
 
-   For adding EFPs or molecules, the build mode implements the following mouse
-   functions:
-    
+   添加 EFP 或分子时，构建模式下的鼠标功能：
+
    <ul>
-	  <li> <B>Left click:</B> Creates a new EFP or molecule. <br>
-      <li> <B>Click and drag:</B> Creates a new EFP or molecule, and rotates
-           it about its center of mass. <br>
-	   <li> <B>Right click and drag:</B> Rotates the entire system about the
-			coordinate center.  This is similar to a left click and drag in
-            manipulate mode.
+	  <li> <B>左键点击：</B> 创建新的 EFP 或分子。<br>
+      <li> <B>点击并拖动：</B> 创建新的 EFP 或分子，并使其绕质心旋转。<br>
+	   <li> <B>右键点击并拖动：</B> 使整个体系绕坐标中心旋转。
+			效果与操作模式下的左键点击拖动类似。
    </ul>
 
 
 
 
    <br>
-   <h3><a name="select"></a>Select Mode</h3>
+   <h3><a name="select"></a>选择模式</h3>
        <img src="images/buttons/MagicWand.png">
 
-   <p> Activating this mode changes the cursor to 
-   <img src="images/cursors/select.png">.  This mode can also be activated
-   using the <i>shift key</i> when in manipulate mode.
+   <p> 激活此模式后，光标变为
+   <img src="images/cursors/select.png">。在操作模式下按住 <i>shift 键</i>
+   也可进入此模式。
 
-   <p>The select mode implements the following mouse functions:
-    
-   <ul>
-      <li> <B>Left click:</B> Adds atom or bond to selection. <br>
-      <li> <B>Click and drag:</B> Creates a selection rectangle, all atoms and bonds
-           within the selection rectangle are added to the selection. <br>
-      <li> <B>Right click:</B> Removes atom or bond from selection.
-   </ul>
-
-   <p>If the following items are selected, appropriate geometric information is
-   displayed in the bottom left of the viewer window:
+   <p>选择模式下的鼠标功能：
 
    <ul>
-      <li> <B>Atom:</B> Element type <br>
-      <li> <B>Bond:</B> Bond length <br>
-      <li> <B>Two atoms:</B> Inter-atomic distance<br>
-      <li> <B>Three atoms:</B> Bond angle<br>
-      <li> <B>Four atoms:</B> Torsion angle<br>
+      <li> <B>左键点击：</B> 将原子或键加入选区。<br>
+      <li> <B>点击并拖动：</B> 框选一个矩形区域，矩形内的所有原子和键都会加入选区。<br>
+      <li> <B>右键点击：</B> 将原子或键移出选区。
    </ul>
 
-   <p>The selected geometric parameter can be constrained using the menu option
-   Build&rarr;Fix Constraint.  This will fix the value of this parameter when
-   the <img src="images/buttons/Minimize.png"> button is pressed.
-      
+   <p>若选中以下对象，查看器窗口左下角会显示相应的几何信息：
+
+   <ul>
+      <li> <B>原子：</B> 元素类型 <br>
+      <li> <B>键：</B> 键长 <br>
+      <li> <B>两个原子：</B> 原子间距离<br>
+      <li> <B>三个原子：</B> 键角<br>
+      <li> <B>四个原子：</B> 二面角<br>
+   </ul>
+
+   <p>选中的几何参数可通过菜单 构建&rarr;固定约束 加以约束。这样按下
+   <img src="images/buttons/Minimize.png"> 按钮做最小化时，该参数的值将保持不变。
+
 
 
    <br>
-   <h3><a name="manipulateSelection"></a>Manipulate Selection Mode</h3>
+   <h3><a name="manipulateSelection"></a>操作所选模式</h3>
 
-   <p> Activating this mode changes the cursor to 
-   <img src="images/cursors/open_hand_select.png">.  This mode
-   manipulates only the selected atoms, and can only be activated using the
-   <i>ctrl</i> modifier (&#8984; key on Mac).  This mode is useful for moving
-   and orienting separate fragments in the molecule.
+   <p> 激活此模式后，光标变为
+   <img src="images/cursors/open_hand_select.png">。此模式
+   只对选中的原子进行操作，且只能通过 <i>ctrl</i> 修饰键（Mac 上为 &#8984; 键）激活。
+   该模式适合移动和调整分子中独立片段的方位。
 
-   <p>The manipulate selection mode implements the following mouse functions:
+   <p>操作所选模式下的鼠标功能：
 
    <ul>
-	  <li> <B>Left click and drag:</B> Rotate the selected atoms about their
-           center. Cursor changes to
+	  <li> <B>左键点击并拖动：</B> 使选中的原子绕其中心旋转。光标变为
            <img src="images/cursors/closed_hand_select.png"> <br>
-      <li> <B>Right click and drag:</B> Translate the selected atoms.  Cursor changes
-           to <img src="images/cursors/translate_selection.png"> <br>
+      <li> <B>右键点击并拖动：</B> 平移选中的原子。光标变为
+           <img src="images/cursors/translate_selection.png"> <br>
    </ul>
 
 

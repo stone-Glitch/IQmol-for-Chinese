@@ -5,45 +5,34 @@
 
 <body>
 
-   <center> <h1> Making Movies<br> </h1> </center><p></p>
- 
-   <p> Some of the animations in IQmol can be recorded to make movie files that
-   can be displayed using video software.  On OS X IQmol can use the built-in
-   system support for QuickTime to generate a .mov file.  For Linux and
-   Windows IQmol will simply save the individual image files and these will
-   need to be compiled into a movie file using third party software.
+   <center> <h1> 制作视频<br> </h1> </center><p></p>
 
-   The animations that can be recorded are:
+   <p> IQmol 中的部分动画可以录制为视频文件，供视频软件播放。在 OS X 上，IQmol 可以
+   利用系统内置的 QuickTime 支持生成 .mov 文件。在 Linux 和 Windows 上，IQmol 只会
+   保存单张图像文件，需要用第三方软件把它们合成为视频。
+
+   可以录制的动画有：
    <ul>
-      <li> Vibrational frequencies
-      <li> Pathways (optmization and IRC)
-      <li> Symmetrization of structures
-      <li> Adding hydrogens
-      <li> Translation to center
+      <li> 振动频率
+      <li> 反应路径（优化和 IRC）
+      <li> 结构对称化
+      <li> 加氢
+      <li> 平移至中心
    </ul>
 
-   <p> To record an animation, click the Record Animation Tool Bar button,
-   <img width=28 src="images/buttons/Movie.png"> Tool Bar button.  You will be
-   prompted for a either the name of the movie file (OS X) or the base name for
-   the image files (Linux and Windows - individual image files will be numbered
-   sequentially).  The Tool Bar button will begin to flash showing that the
-   images are being recorded and you may notice a slow down in the animation
-   speed as the files are written to disk.  All animations will continue to be
-   recorded until the Record Animation Tool Bar button is pressed again to end
-   the recording.  On OS X the image files will then be compiled into a .mov 
-   file and you may notice a slight delay while this is happening, depending on
-   the length of the movie.
+   <p> 要录制动画，请点击工具栏上的"录制动画"按钮
+   <img width=28 src="images/buttons/Movie.png">。系统会提示你输入视频文件名
+   （OS X），或图像文件的基本名（Linux 和 Windows——单张图像文件会按顺序编号）。
+   之后工具栏按钮会开始闪烁，表示正在录制图像；由于要写盘，动画速度可能变慢。
+   所有动画会一直录制，直到再次点击"录制动画"按钮结束录制。在 OS X 上，
+   图像文件随后会被合成为 .mov 文件，根据视频长短，这一步可能有短暂的延迟。
 
-   <p> When recording, only the auto-update frames are recorded.  If you
-   manually rotate or otherwise manipulate the molecule while recording you may
-   not get what you expected.  If no animation is active, then no frames are
-   recorded even if the Tool Bar button is flashing.  So a pause between
-   animating two frequencies, for example, will not give rise to a pause in the
-   final movie.
+   <p> 录制时只录制自动更新的帧。如果录制期间手动旋转或以其他方式操作分子，
+   结果可能与你预期的不符。如果没有动画在播放，即使工具栏按钮在闪烁，
+   也不会录制任何帧。因此，例如在两个振动频率的动画之间暂停，最终视频里不会出现暂停。
 
-   <p> For recordings of vibrational frequencies and pathways it is recommended
-   that the Loop checkbox that appears in the configurators is unchecked to
-   prevent multiple cycles from being recorded.
+   <p> 录制振动频率和反应路径时，建议取消勾选配置器中出现的"循环"（Loop）复选框，
+   以免录制到多个循环周期。
 
 </body>
 
