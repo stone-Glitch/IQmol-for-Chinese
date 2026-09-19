@@ -189,6 +189,50 @@ else()
    endif()
 
    add_subdirectory(modules/openbabel  EXCLUDE_FROM_ALL)
+
+   #----------------------------------------------------------------
+   # 补齐 OpenBabel 静态构建漏编的"格式附加源" (per-format _additional_sources)
+   #
+   # OpenBabel 的 src/formats/formats.cmake 可为每个格式定义可选的
+   # ${format}_additional_sources, 里面放着该格式真正需要的实现, 例如:
+   #   asciiformat  -> ../depict/asciipainter.cpp   (OpenBabel::ASCIIPainter)
+   #   painterformat-> ../depict/commandpainter.cpp (OpenBabel::CommandPainter)
+   #   wlnformat    -> wln-nextmove.cpp             (NMReadWLN)
+   # 然而 OpenBabel 的 src/CMakeLists.txt 在静态构建分支 (BUILD_SHARED=OFF) 只做了
+   #   foreach(format ${formats})  set(openbabel_srcs ... formats/${format}.cpp)
+   # 完全忽略了 ${format}_additional_sources, 导致这些 .cpp 根本没被编进
+   # libopenbabel.a。最终链 IQmol.exe 时报 undefined reference:
+   #   ASCIIPainter / CommandPainter / NMReadWLN
+   # (共享构建走 add_subdirectory(formats) 会正确带上 additional_sources, 故仅
+   #  静态构建踩坑。)
+   #
+   # 修复: 在 IQmol 侧把漏掉的源显式补进 openbabel 目标, 随其一起编入静态库。
+   # 只补"始终启用"的格式所需源; png2format 的 cairopainter.cpp 仅在 CAIRO_FOUND
+   # 时才需要(本构建默认不带 Cairo, 故此处不加); inchiformat 的附加源由 openbabel
+   # 自己在 WITH_STATIC_INCHI 分支处理, 亦不在此列。
+   #
+   # 文件存在性用 EXISTS 探一下, 避免将来 openbabel 升版改了路径导致 configure 失败。
+   #----------------------------------------------------------------
+   if (TARGET openbabel)
+      set(_ob_missing_srcs "")
+      foreach(_ob_src
+            modules/openbabel/src/depict/asciipainter.cpp
+            modules/openbabel/src/depict/commandpainter.cpp
+            modules/openbabel/src/formats/wln-nextmove.cpp)
+         if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/${_ob_src}")
+            list(APPEND _ob_missing_srcs "${_ob_src}")
+         endif()
+      endforeach()
+      if (_ob_missing_srcs)
+         target_sources(openbabel PRIVATE ${_ob_missing_srcs})
+         message(STATUS "[IQmol] 已为静态 openbabel 补齐漏编的附加源: ${_ob_missing_srcs}")
+      else()
+         message(WARNING
+            "[IQmol] 未能找到 openbabel 的 asciipainter/commandpainter/wln-nextmove 附加源, "
+            "若启用 asciiformat/painterformat/wlnformat, 链接期可能报 ASCIIPainter/CommandPainter/NMReadWLN undefined reference")
+      endif()
+      unset(_ob_missing_srcs)
+   endif()
 endif()
 
 
@@ -431,15 +475,37 @@ target_link_libraries (${targetName}
 #   保证 --whole-archive 紧贴 openbabel 路径, 不惧排序。要求 cmake >= 3.24
 #   (本项目 build_windows.sh 自带 3.31.6, 满足)。
 #-------------------------------------------------------------------
+#-------------------------------------------------------------------
+# $<LINK_LIBRARY:WHOLE_ARCHIVE,...> 需要 CMake >= 3.24。
+# 本项目 cmake_minimum_required 为 3.14.4, 低于该版本时该生成器表达式
+# 会直接报错(不是被忽略), 故这里先探测一次, 低版本自动降级为裸旗标,
+# 避免老环境上"配置期就挂掉"。
+if (CMAKE_VERSION VERSION_GREATER_EQUAL 3.24)
+   set(IQMOL_HAVE_LINK_LIBRARY TRUE)
+else()
+   set(IQMOL_HAVE_LINK_LIBRARY FALSE)
+   message(STATUS
+      "[IQmol] CMake ${CMAKE_VERSION} < 3.24, WHOLE_ARCHIVE 将降级为裸旗标; "
+      "静态构建下力场插件自注册可能失效, 建议升级 CMake")
+endif()
+
+
 if (WIN32 AND NOT BUILD_SHARED_LIBS)
    if (TARGET openbabel)
       # 用 CMake 官方封装 $<LINK_LIBRARY:WHOLE_ARCHIVE,openbabel> 而非裸
       # -Wl,--whole-archive: 裸旗标会被 CMake 在生成 link.txt 时与库名拆开重排,
       # 错误地套到 IQmol 自己的 objects.a 上。官方封装保证 --whole-archive 紧贴
       # openbabel 路径, 并保留目标依赖跟踪(无需手写 $<TARGET_FILE:...> 路径)。
-      target_link_libraries (${targetName}
-         $<LINK_LIBRARY:WHOLE_ARCHIVE,openbabel>
-      )
+      if (IQMOL_HAVE_LINK_LIBRARY)
+         target_link_libraries (${targetName}
+            $<LINK_LIBRARY:WHOLE_ARCHIVE,openbabel>
+         )
+      else()
+         # 低版本 CMake 降级：裸旗标顺序不保证, 但至少不中断配置
+         target_link_libraries (${targetName}
+            -Wl,--whole-archive openbabel -Wl,--no-whole-archive
+         )
+      endif()
       # 双保险：显式声明依赖, 确保 openbabel 在链接前被构建
       # (openbabel 经 EXCLUDE_FROM_ALL 引入, 不属于默认 all 目标)
       add_dependencies(${targetName} openbabel)
@@ -449,18 +515,50 @@ if (WIN32 AND NOT BUILD_SHARED_LIBS)
       message(WARNING "[IQmol] 未找到 openbabel 目标, 直接按名称链接")
    endif()
 else()
-   # 非 Windows 静态构建 (Linux/其他平台): 同样需要整体保留, 否则力场等插件
-   # 在部分链接器配置下也会被丢弃。动态构建时 WHOLE_ARCHIVE 无副作用。
-   # 统一用官方封装, 由 CMake 保证 --whole-archive 紧贴 openbabel。
-   if (NOT BUILD_SHARED_LIBS AND TARGET openbabel)
-      target_link_libraries (${targetName}
-         $<LINK_LIBRARY:WHOLE_ARCHIVE,openbabel>
-      )
-      add_dependencies(${targetName} openbabel)
-      message(STATUS "[IQmol] 已对 openbabel 启用 --whole-archive (非 Windows 静态构建)")
-   else()
-      target_link_libraries (${targetName} openbabel)
+   # 非 Windows 分支。
+   #
+   # 这里要区分两种 openbabel：
+   #   (a) 嵌入式静态构建 —— openbabel 是本地源码编译出的 STATIC 库目标。
+   #       其插件(力场/格式/描述符)靠全局对象自注册, 静态库成员会因"无符号
+   #       引用"被链接器丢弃, 必须整体保留。
+   #   (b) 系统包构建 —— Linux 下 find_package(OpenBabel3) 返回的是 IMPORTED
+   #       目标, 指向 libopenbabel.so。它本身是共享库, 根本不存在"成员被丢弃"
+   #       的问题, 却在实体上又经依赖链被链接了一次。此时再叠加 WHOLE_ARCHIVE
+   #       会让 CMake 报错：
+   #         Impossible to link target 'IQmol' because the link item 'openbabel'
+   #         ... has already occurred with the feature 'WHOLE_ARCHIVE'
+   #       因为同一链接项不能同时以"无特性"和"WHOLE_ARCHIVE 特性"出现。
+   # 故仅对 (a) 启用 WHOLE_ARCHIVE; (b) 按普通链接处理。
+   set(_iqmol_ob_is_imported FALSE)
+   if (TARGET openbabel)
+      get_target_property(_iqmol_ob_is_imported openbabel IMPORTED)
    endif()
+
+   if (NOT BUILD_SHARED_LIBS AND TARGET openbabel AND NOT _iqmol_ob_is_imported)
+      if (IQMOL_HAVE_LINK_LIBRARY)
+         target_link_libraries (${targetName}
+            $<LINK_LIBRARY:WHOLE_ARCHIVE,openbabel>
+         )
+      else()
+         target_link_libraries (${targetName}
+            -Wl,--whole-archive openbabel -Wl,--no-whole-archive
+         )
+      endif()
+      add_dependencies(${targetName} openbabel)
+      message(STATUS "[IQmol] 已对嵌入式静态 openbabel 启用 --whole-archive")
+   else()
+      if (NOT TARGET openbabel)
+         # 没有任何 openbabel 目标：按名称链接, 交给链接器解析(系统库场景)
+         target_link_libraries (${targetName} openbabel)
+         message(STATUS "[IQmol] openbabel 按库名链接 (系统包)")
+      elseif (_iqmol_ob_is_imported)
+         # IMPORTED(系统共享库): 不重复链接, 沿用依赖链中的那一份。
+         message(STATUS "[IQmol] openbabel 为系统共享库, 已由依赖链链接, 跳过 WHOLE_ARCHIVE")
+      else()
+         target_link_libraries (${targetName} openbabel)
+      endif()
+   endif()
+   unset(_iqmol_ob_is_imported)
 endif()
 
 # maeparser 是 OpenBabel 捆绑的独立静态库(MAE 格式: schrodinger::mae 命名空间),
@@ -469,9 +567,15 @@ endif()
 # 否则由 openbabel 的 PRIVATE 依赖传递链入(此时已被 openbabel 的 WHOLE_ARCHIVE
 # 覆盖, 无需重复)。
 if (TARGET maeparser)
-   target_link_libraries (${targetName}
-      $<LINK_LIBRARY:WHOLE_ARCHIVE,maeparser>
-   )
+   if (IQMOL_HAVE_LINK_LIBRARY)
+      target_link_libraries (${targetName}
+         $<LINK_LIBRARY:WHOLE_ARCHIVE,maeparser>
+      )
+   else()
+      target_link_libraries (${targetName}
+         -Wl,--whole-archive maeparser -Wl,--no-whole-archive
+      )
+   endif()
    add_dependencies(${targetName} maeparser)
    message(STATUS "[IQmol] 已对 maeparser 启用 --whole-archive")
 endif()
