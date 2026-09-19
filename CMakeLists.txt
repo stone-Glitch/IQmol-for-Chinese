@@ -212,8 +212,17 @@ else()
    # 自己在 WITH_STATIC_INCHI 分支处理, 亦不在此列。
    #
    # 文件存在性用 EXISTS 探一下, 避免将来 openbabel 升版改了路径导致 configure 失败。
+   #
+   # 注意: 仅对内嵌的"本地" openbabel 目标补源。Linux 等平台走
+   # find_package(OpenBabel3) 时 openbabel 是 IMPORTED 目标(指向系统 .so),
+   # CMake 禁止给 IMPORTED 目标追加源(target_sources 会直接报错), 且系统库本身
+   # 已编好, 无需也不可能补源。故这里先排除 IMPORTED 场景。
    #----------------------------------------------------------------
+   set(_ob_is_imported FALSE)
    if (TARGET openbabel)
+      get_target_property(_ob_is_imported openbabel IMPORTED)
+   endif()
+   if (TARGET openbabel AND NOT _ob_is_imported)
       set(_ob_missing_srcs "")
       foreach(_ob_src
             modules/openbabel/src/depict/asciipainter.cpp
@@ -233,6 +242,7 @@ else()
       endif()
       unset(_ob_missing_srcs)
    endif()
+   unset(_ob_is_imported)
 endif()
 
 
