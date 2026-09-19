@@ -195,7 +195,18 @@ else(BUILD_SHARED)
     # 例外：inchiformat 的 additional_sources(getinchi.cpp ../ops/unique.cpp)
     # 已由下方 WITH_STATIC_INCHI 分支显式加入，此处跳过以免重复。
     if(NOT format STREQUAL "inchiformat")
-      set(openbabel_srcs ${openbabel_srcs} ${${format}_additional_sources})
+      foreach(_ob_add_src ${${format}_additional_sources})
+        # [IQmol 修复] formats.cmake 里 ${format}_additional_sources 的路径
+        # 以 src/formats/ 为基准(如 asciiformat 为 ../depict/asciipainter.cpp,
+        # wlnformat 为 wln-nextmove.cpp)。但本循环在 src/CMakeLists.txt 中,
+        # CMAKE_CURRENT_SOURCE_DIR = .../src, 直接追加会被当成相对 src/ 而解析到
+        # 错误目录(../depict/ -> .../depict/, 而非 .../src/depict/), 导致
+        # "Cannot find source file: ../depict/asciipainter.cpp"。
+        # 统一按相对 src/formats/ 解析成绝对路径后再追加, 兼容各格式附加源。
+        get_filename_component(_ob_add_src_abs
+          "${CMAKE_CURRENT_SOURCE_DIR}/formats/${_ob_add_src}" ABSOLUTE)
+        set(openbabel_srcs ${openbabel_srcs} ${_ob_add_src_abs})
+      endforeach()
     endif()
   endforeach(format ${formats})
 
