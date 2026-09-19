@@ -26,7 +26,7 @@
         <message>
             <location filename="../src/Main/AboutDialog.ui" line="175" />
             <source>Copyright ©</source>
-            <translation>版权 ©</translation>
+            <translation>版权所有 ©</translation>
         </message>
         <message>
             <location filename="../src/Main/AboutDialog.ui" line="182" />
@@ -78,7 +78,7 @@
         <message>
             <location filename="../src/Qui/AdcTab.ui" line="29" />
             <source>Spin-Orbit Coupling</source>
-            <translation>自旋轨道耦合</translation>
+            <translation>自旋-轨道耦合</translation>
         </message>
         <message>
             <location filename="../src/Qui/AdcTab.ui" line="36" />
@@ -114,7 +114,7 @@
         <message>
             <location filename="../src/Qui/AdcTab.ui" line="110" />
             <source>State-to-State Properties</source>
-            <translation>态间性质</translation>
+            <translation>态-态性质</translation>
         </message>
         <message>
             <location filename="../src/Qui/AdcTab.ui" line="117" />
@@ -148,7 +148,7 @@
         <message>
             <location filename="../src/Qui/AimdTab.ui" line="49" />
             <source>Time Step</source>
-            <translation>时间步</translation>
+            <translation>时间步长</translation>
         </message>
         <message>
             <location filename="../src/Qui/AimdTab.ui" line="66" />
@@ -318,7 +318,7 @@
         <message>
             <location filename="../src/Configurator/AxesMeshConfigurator.ui" line="133" />
             <source>Step</source>
-            <translation>步</translation>
+            <translation>步长</translation>
         </message>
         <message>
             <location filename="../src/Configurator/AxesMeshConfigurator.ui" line="143" />
@@ -380,12 +380,12 @@ QToolButton:pressed {
         <message>
             <location filename="../src/Configurator/BackgroundConfigurator.ui" line="51" />
             <source>Foreground Color</source>
-            <translation>前景颜色</translation>
+            <translation>前景色</translation>
         </message>
         <message>
             <location filename="../src/Configurator/BackgroundConfigurator.ui" line="58" />
             <source>Background Color</source>
-            <translation>背景颜色</translation>
+            <translation>背景色</translation>
         </message>
         <message>
             <location filename="../src/Configurator/BackgroundConfigurator.ui" line="85" />
@@ -413,12 +413,12 @@ QToolButton:pressed {
         <message>
             <location filename="../src/Grid/BoundingBoxDialog.ui" line="22" />
             <source>Minimum</source>
-            <translation>最小</translation>
+            <translation>最小值</translation>
         </message>
         <message>
             <location filename="../src/Grid/BoundingBoxDialog.ui" line="29" />
             <source>Maximum</source>
-            <translation>最大</translation>
+            <translation>最大值</translation>
         </message>
         <message>
             <location filename="../src/Grid/BoundingBoxDialog.ui" line="46" />
@@ -461,7 +461,7 @@ QToolButton:pressed {
         <message>
             <location filename="../src/Viewer/CameraDialog.ui" line="47" />
             <source>Field of View</source>
-            <translation>视场</translation>
+            <translation>视场角</translation>
         </message>
         <message>
             <location filename="../src/Viewer/CameraDialog.ui" line="78" />
@@ -476,7 +476,7 @@ QToolButton:pressed {
         <message>
             <location filename="../src/Viewer/CameraDialog.ui" line="106" />
             <source>Bounce</source>
-            <translation>弹跳</translation>
+            <translation>往复</translation>
         </message>
         <message>
             <location filename="../src/Viewer/CameraDialog.ui" line="120" />
@@ -590,7 +590,7 @@ QToolButton:pressed {
         <message>
             <location filename="../src/Qui/CisTab.ui" line="83" />
             <source>Number of Roots</source>
-            <translation>根数量</translation>
+            <translation>根数</translation>
         </message>
         <message>
             <location filename="../src/Qui/CisTab.ui" line="90" />
@@ -807,7 +807,7 @@ QToolButton:pressed {
         <message>
             <location filename="../src/Util/ColorGradientDialog.ui" line="20" />
             <source>Color Gradient Editor</source>
-            <translation>颜色梯度编辑器</translation>
+            <translation>颜色渐变编辑器</translation>
         </message>
         <message>
             <location filename="../src/Util/ColorGradientDialog.ui" line="62" />
@@ -974,14 +974,14 @@ QToolButton:pressed {
         <message>
             <location filename="../src/Configurator/CubeDataConfigurator.ui" line="48" />
             <source>Isosurface Value:</source>
-            <translation>等值面值</translation>
+            <translation>等值面值：</translation>
         </message>
         <message>
             <location filename="../src/Configurator/CubeDataConfigurator.ui" line="91" />
             <source>A signed surface will disply both the 
 positive and negative isosurfaces.  
 Uncheck if only one surface is desired.</source>
-            <translation>带符号表面会同时显示正负等值面。若只需一个表面，请取消勾选。</translation>
+            <translation>带符号表面将同时显示正负等值面。若仅需单侧表面，请取消勾选。</translation>
         </message>
         <message>
             <location filename="../src/Configurator/CubeDataConfigurator.ui" line="96" />
@@ -1052,7 +1052,7 @@ Uncheck if only one surface is desired.</source>
             <location filename="../src/Qui/GeometryConstraintDialog.ui" line="122" />
             <location filename="../src/Qui/GeometryConstraintDialog.ui" line="260" />
             <source>Type:</source>
-            <translation>类型</translation>
+            <translation>类型：</translation>
         </message>
         <message>
             <location filename="../src/Qui/GeometryConstraintDialog.ui" line="130" />
@@ -1143,7 +1143,7 @@ Uncheck if only one surface is desired.</source>
         <message>
             <location filename="../src/Qui/GeometryConstraintDialog.ui" line="414" />
             <source>Atom Number:</source>
-            <translation>原子序号：</translation>
+            <translation>原子编号：</translation>
         </message>
         <message>
             <location filename="../src/Qui/GeometryConstraintDialog.ui" line="451" />
@@ -1386,7 +1386,7 @@ Uncheck if only one surface is desired.</source>
         <message>
             <location filename="../src/Configurator/EfpFragmentListConfigurator.ui" line="39" />
             <source>Tubes</source>
-            <translation>管</translation>
+            <translation>管状</translation>
         </message>
         <message>
             <location filename="../src/Configurator/EfpFragmentListConfigurator.ui" line="49" />
@@ -1536,7 +1536,7 @@ QToolButton:pressed {
         <message>
             <location filename="../src/Configurator/ExcitedStatesConfigurator.ui" line="84" />
             <source>Energy (eV)</source>
-            <translation>能量(eV)</translation>
+            <translation>能量（eV）</translation>
         </message>
         <message>
             <location filename="../src/Configurator/ExcitedStatesConfigurator.ui" line="89" />
@@ -1688,12 +1688,12 @@ QToolButton:pressed {
         <message>
             <location filename="../src/Main/FragmentTable.ui" line="154" />
             <source>Oxygen (O2)</source>
-            <translation>氧 O2</translation>
+            <translation>氧气（O2）</translation>
         </message>
         <message>
             <location filename="../src/Main/FragmentTable.ui" line="160" />
             <source>Bases</source>
-            <translation>碱基</translation>
+            <translation>碱</translation>
         </message>
         <message>
             <location filename="../src/Main/FragmentTable.ui" line="182" />
@@ -2936,17 +2936,17 @@ QToolButton:pressed {
         <message>
             <location filename="../src/Configurator/FrequenciesConfigurator.ui" line="118" />
             <source>Freq. (cm⁻¹)</source>
-            <translation>频率(cm⁻¹)</translation>
+            <translation>频率（cm⁻¹）</translation>
         </message>
         <message>
             <location filename="../src/Configurator/FrequenciesConfigurator.ui" line="123" />
             <source>Intens. (km/mol)</source>
-            <translation>强度(km/mol)</translation>
+            <translation>强度（km/mol）</translation>
         </message>
         <message>
             <location filename="../src/Configurator/FrequenciesConfigurator.ui" line="128" />
             <source>Raman (Å4 amu⁻¹)</source>
-            <translation>拉曼(Å⁴·amu⁻¹)</translation>
+            <translation>拉曼（Å⁴·amu⁻¹）</translation>
         </message>
         <message>
             <location filename="../src/Configurator/FrequenciesConfigurator.ui" line="136" />
@@ -2956,7 +2956,7 @@ QToolButton:pressed {
         <message>
             <location filename="../src/Configurator/FrequenciesConfigurator.ui" line="145" />
             <source>Move to previous frequency</source>
-            <translation>移到上一频率</translation>
+            <translation>上一频率</translation>
         </message>
         <message>
             <location filename="../src/Configurator/FrequenciesConfigurator.ui" line="148" />
@@ -2968,7 +2968,7 @@ QToolButton:pressed {
         <message>
             <location filename="../src/Configurator/FrequenciesConfigurator.ui" line="165" />
             <source>Start and stop animation</source>
-            <translation>开始与停止动画</translation>
+            <translation>播放/暂停动画</translation>
         </message>
         <message>
             <location filename="../src/Configurator/FrequenciesConfigurator.ui" line="168" />
@@ -2982,7 +2982,7 @@ QToolButton:pressed {
         <message>
             <location filename="../src/Configurator/FrequenciesConfigurator.ui" line="194" />
             <source>Move to next frequency</source>
-            <translation>移到下一频率</translation>
+            <translation>下一频率</translation>
         </message>
         <message>
             <location filename="../src/Configurator/FrequenciesConfigurator.ui" line="230" />
@@ -3002,7 +3002,7 @@ QToolButton:pressed {
         <message>
             <location filename="../src/Configurator/FrequenciesConfigurator.ui" line="276" />
             <source>This slider controls the magnitude of both the displacement vectors and animation.</source>
-            <translation>此滑块控制位移矢量和动画的大小。</translation>
+            <translation>此滑块调节位移矢量与动画的幅度。</translation>
         </message>
         <message>
             <location filename="../src/Configurator/FrequenciesConfigurator.ui" line="295" />
@@ -3012,7 +3012,7 @@ QToolButton:pressed {
         <message>
             <location filename="../src/Configurator/FrequenciesConfigurator.ui" line="314" />
             <source>Controls the speed of animation</source>
-            <translation>控制动画速度</translation>
+            <translation>调节动画速度</translation>
         </message>
         <message>
             <location filename="../src/Configurator/FrequenciesConfigurator.ui" line="339" />
@@ -3080,7 +3080,7 @@ QToolButton:pressed {
         <message>
             <location filename="../src/Qui/FrequenciesTab.ui" line="34" />
             <source>Project Out Translational And Rotational Degrees Of Freedom</source>
-            <translation>投影掉平移与转动自由度</translation>
+            <translation>投影消除平动与转动自由度</translation>
         </message>
         <message>
             <location filename="../src/Qui/FrequenciesTab.ui" line="41" />
@@ -3261,27 +3261,27 @@ QToolButton:pressed {
         <message>
             <location filename="../src/Configurator/GenerateConformersDialog.ui" line="26" />
             <source>Energy (Low)</source>
-            <translation>能量(低)</translation>
+            <translation>能量（低）</translation>
         </message>
         <message>
             <location filename="../src/Configurator/GenerateConformersDialog.ui" line="36" />
             <source>RMSD (High)</source>
-            <translation>RMSD(高)</translation>
+            <translation>RMSD（高）</translation>
         </message>
         <message>
             <location filename="../src/Configurator/GenerateConformersDialog.ui" line="61" />
             <source>Number of Conformers</source>
-            <translation>构象数量</translation>
+            <translation>构象数</translation>
         </message>
         <message>
             <location filename="../src/Configurator/GenerateConformersDialog.ui" line="68" />
             <source>No breaky bonds</source>
-            <translation>无断裂键</translation>
+            <translation>禁止断键</translation>
         </message>
         <message>
             <location filename="../src/Configurator/GenerateConformersDialog.ui" line="91" />
             <source>Number of Children</source>
-            <translation>子项数量</translation>
+            <translation>子代数量</translation>
         </message>
         <message>
             <location filename="../src/Configurator/GenerateConformersDialog.ui" line="98" />
@@ -3291,7 +3291,7 @@ QToolButton:pressed {
         <message>
             <location filename="../src/Configurator/GenerateConformersDialog.ui" line="128" />
             <source>Mutability</source>
-            <translation>可变性</translation>
+            <translation>变异率</translation>
         </message>
     </context>
     <context>
@@ -3309,7 +3309,7 @@ QToolButton:pressed {
         <message>
             <location filename="../src/Configurator/GeometryListConfigurator.ui" line="106" />
             <source>Show previous conformer</source>
-            <translation>显示上一构象</translation>
+            <translation>上一构象</translation>
         </message>
         <message>
             <location filename="../src/Configurator/GeometryListConfigurator.ui" line="109" />
@@ -3321,7 +3321,7 @@ QToolButton:pressed {
         <message>
             <location filename="../src/Configurator/GeometryListConfigurator.ui" line="126" />
             <source>Start and stop animation</source>
-            <translation>开始与停止动画</translation>
+            <translation>播放/暂停动画</translation>
         </message>
         <message>
             <location filename="../src/Configurator/GeometryListConfigurator.ui" line="129" />
@@ -3335,7 +3335,7 @@ QToolButton:pressed {
         <message>
             <location filename="../src/Configurator/GeometryListConfigurator.ui" line="155" />
             <source>Show next conformer</source>
-            <translation>显示下一构象</translation>
+            <translation>下一构象</translation>
         </message>
         <message>
             <location filename="../src/Configurator/GeometryListConfigurator.ui" line="195" />
@@ -3345,12 +3345,12 @@ QToolButton:pressed {
         <message>
             <location filename="../src/Configurator/GeometryListConfigurator.ui" line="205" />
             <source>Reverses the loop at the end</source>
-            <translation>在循环末尾反转</translation>
+            <translation>循环至末端后反向</translation>
         </message>
         <message>
             <location filename="../src/Configurator/GeometryListConfigurator.ui" line="208" />
             <source>Bounce</source>
-            <translation>弹跳</translation>
+            <translation>往复</translation>
         </message>
         <message>
             <location filename="../src/Configurator/GeometryListConfigurator.ui" line="215" />
@@ -3370,7 +3370,7 @@ QToolButton:pressed {
         <message>
             <location filename="../src/Configurator/GeometryListConfigurator.ui" line="254" />
             <source>Controls the speed of animation</source>
-            <translation>控制动画速度</translation>
+            <translation>调节动画速度</translation>
         </message>
         <message>
             <location filename="../src/Configurator/GeometryListConfigurator.ui" line="313" />
@@ -3416,12 +3416,12 @@ QToolButton:pressed {
         <message>
             <location filename="../src/Grid/GridInfoDialog.ui" line="90" />
             <source>Data Size (kB)</source>
-            <translation>数据大小(kB)</translation>
+            <translation>数据大小（kB）</translation>
         </message>
         <message>
             <location filename="../src/Grid/GridInfoDialog.ui" line="95" />
             <source>Step Size</source>
-            <translation>步大小</translation>
+            <translation>步长</translation>
         </message>
         <message>
             <location filename="../src/Grid/GridInfoDialog.ui" line="100" />
@@ -3439,7 +3439,7 @@ QToolButton:pressed {
         <message>
             <location filename="../src/Gromacs/GromacsConfigDialog.ui" line="14" />
             <source>Gromacs Server</source>
-            <translation>Gromacs 服务器</translation>
+            <translation>GROMACS 服务器</translation>
         </message>
         <message>
             <location filename="../src/Gromacs/GromacsConfigDialog.ui" line="20" />
@@ -3472,7 +3472,7 @@ QToolButton:pressed {
         <message>
             <location filename="../src/Gromacs/GromacsDialog.ui" line="14" />
             <source>Gromacs Control</source>
-            <translation>Gromacs 控制</translation>
+            <translation>GROMACS 控制</translation>
         </message>
         <message>
             <location filename="../src/Gromacs/GromacsDialog.ui" line="29" />
@@ -3492,17 +3492,17 @@ QToolButton:pressed {
         <message>
             <location filename="../src/Gromacs/GromacsDialog.ui" line="54" />
             <source>Truncated Octahedron</source>
-            <translation>截断八面体</translation>
+            <translation>截角八面体</translation>
         </message>
         <message>
             <location filename="../src/Gromacs/GromacsDialog.ui" line="61" />
             <source>Hexagonal Prism</source>
-            <translation>六角棱柱</translation>
+            <translation>六方棱柱</translation>
         </message>
         <message>
             <location filename="../src/Gromacs/GromacsDialog.ui" line="68" />
             <source>Rhombic Dodecahedron</source>
-            <translation>菱十二面体</translation>
+            <translation>菱形十二面体</translation>
         </message>
         <message>
             <location filename="../src/Gromacs/GromacsDialog.ui" line="79" />
@@ -3546,7 +3546,7 @@ QToolButton:pressed {
         <message>
             <location filename="../src/Gromacs/GromacsServerDialog.ui" line="14" />
             <source>Gromacs Server</source>
-            <translation>Gromacs 服务器</translation>
+            <translation>GROMACS 服务器</translation>
         </message>
         <message>
             <location filename="../src/Gromacs/GromacsServerDialog.ui" line="20" />
@@ -3661,7 +3661,7 @@ QTextBrowser#content {
         <message>
             <location filename="../src/Main/HelpBrowser.ui" line="71" />
             <source>Back</source>
-            <translation>返回</translation>
+            <translation>后退</translation>
         </message>
         <message>
             <location filename="../src/Main/HelpBrowser.ui" line="74" />
@@ -4331,7 +4331,7 @@ QTextBrowser#content {
         </message>
         <message>
             <source>Open Recent</source>
-            <translation>打开最近</translation>
+            <translation>最近打开</translation>
         </message>
         <message>
             <source>Close Viewer</source>
@@ -4467,7 +4467,7 @@ QTextBrowser#content {
         </message>
         <message>
             <source>Fill Valencies With Hydrogens</source>
-            <translation>用氢原子填充化合价</translation>
+            <translation>用氢饱和化合价</translation>
         </message>
         <message>
             <source>Reperceive Bonds</source>
@@ -4527,15 +4527,15 @@ QTextBrowser#content {
         </message>
         <message>
             <source>Gromacs Setup</source>
-            <translation>Gromacs 设置</translation>
+            <translation>GROMACS 设置</translation>
         </message>
         <message>
             <source>Edit Gromacs Config</source>
-            <translation>编辑 Gromacs 配置</translation>
+            <translation>编辑 GROMACS 配置</translation>
         </message>
         <message>
             <source>Edit Gomacs Server</source>
-            <translation>编辑 Gromacs 服务器</translation>
+            <translation>编辑 GROMACS 服务器</translation>
         </message>
         <message>
             <source>Edit Amber Config</source>
@@ -4555,7 +4555,7 @@ QTextBrowser#content {
         </message>
         <message>
             <source>Network access available</source>
-            <translation>网络连接可用</translation>
+            <translation>网络可用</translation>
         </message>
         <message>
             <source>Open File</source>
@@ -4571,7 +4571,7 @@ QTextBrowser#content {
         </message>
         <message>
             <source>Only one molecule can be visible when reindexing atoms.</source>
-            <translation>原子重新编号时只能显示一个分子。</translation>
+            <translation>重新编号原子时仅可显示一个分子。</translation>
         </message>
         <message>
             <source>Clear List</source>
@@ -4579,7 +4579,7 @@ QTextBrowser#content {
         </message>
         <message>
             <source>Use &lt;esc&gt; to exit full screen mode</source>
-            <translation>按 Esc 退出全屏模式</translation>
+            <translation>按 Esc 退出全屏</translation>
         </message>
         <message>
             <source>Wonky molecule detected</source>
@@ -4770,7 +4770,7 @@ QTextBrowser#content {
         <message>
             <location filename="../src/Configurator/InfoConfigurator.ui" line="29" />
             <source>Multiplicity:</source>
-            <translation>多重态</translation>
+            <translation>多重度：</translation>
         </message>
         <message>
             <location filename="../src/Configurator/InfoConfigurator.ui" line="36" />
@@ -4790,12 +4790,12 @@ QTextBrowser#content {
         <message>
             <location filename="../src/Configurator/InfoConfigurator.ui" line="57" />
             <source>Molecular mass:</source>
-            <translation>分子质量</translation>
+            <translation>分子质量：</translation>
         </message>
         <message>
             <location filename="../src/Configurator/InfoConfigurator.ui" line="64" />
             <source>Energy:</source>
-            <translation>能量</translation>
+            <translation>能量：</translation>
         </message>
         <message>
             <location filename="../src/Configurator/InfoConfigurator.ui" line="71" />
@@ -5157,7 +5157,7 @@ p, li { white-space: pre-wrap; }
         <message>
             <location filename="../src/Util/LogMessageDialog.ui" line="36" />
             <source>Trace</source>
-            <translation>迹</translation>
+            <translation>跟踪</translation>
         </message>
         <message>
             <location filename="../src/Util/LogMessageDialog.ui" line="41" />
@@ -5243,7 +5243,7 @@ p, li { white-space: pre-wrap; }
         <message>
             <location filename="../src/Qui/InputDialog.ui" line="205" />
             <source>Multiplicity</source>
-            <translation>自旋多重度</translation>
+            <translation>多重度</translation>
             <comment>自旋多重度 2S+1；multiplet 才是多重态。</comment>
         </message>
         <message>
@@ -5426,7 +5426,7 @@ QToolButton:checked {
             <location filename="../src/Qui/InputDialog.ui" line="490" />
             <location filename="../src/Qui/InputDialog.ui" line="4729" />
             <source>Guess</source>
-            <translation>猜测</translation>
+            <translation>初始猜测</translation>
         </message>
         <message>
             <location filename="../src/Qui/InputDialog.ui" line="516" />
@@ -5442,12 +5442,12 @@ QToolButton:checked {
         <message>
             <location filename="../src/Qui/InputDialog.ui" line="523" />
             <source>Complex SCF</source>
-            <translation>复合 SCF</translation>
+            <translation>复数 SCF</translation>
         </message>
         <message>
             <location filename="../src/Qui/InputDialog.ui" line="530" />
             <source>Guess Mix</source>
-            <translation>猜测混合</translation>
+            <translation>初始猜测混合</translation>
         </message>
         <message>
             <location filename="../src/Qui/InputDialog.ui" line="543" />
@@ -5457,7 +5457,7 @@ QToolButton:checked {
         <message>
             <location filename="../src/Qui/InputDialog.ui" line="553" />
             <source>Generalized Hartree-Fock</source>
-            <translation>Generalized Hartree-Fock</translation>
+            <translation>广义 Hartree-Fock</translation>
         </message>
         <message>
             <location filename="../src/Qui/InputDialog.ui" line="560" />
@@ -5467,7 +5467,7 @@ QToolButton:checked {
         <message>
             <location filename="../src/Qui/InputDialog.ui" line="567" />
             <source>Open-shell Singlet ROSCF</source>
-            <translation>开壳单重态 ROSCF</translation>
+            <translation>开壳层单重态 ROSCF</translation>
         </message>
         <message>
             <location filename="../src/Qui/InputDialog.ui" line="574" />
@@ -5488,7 +5488,7 @@ QToolButton:checked {
         <message>
             <location filename="../src/Qui/InputDialog.ui" line="631" />
             <source>Complex Mix</source>
-            <translation>复合混合</translation>
+            <translation>复数混合</translation>
         </message>
         <message>
             <location filename="../src/Qui/InputDialog.ui" line="638" />
@@ -5591,7 +5591,7 @@ QToolButton:checked {
         <message>
             <location filename="../src/Qui/InputDialog.ui" line="816" />
             <source>Post Hartree Fock</source>
-            <translation>后哈特里-福克</translation>
+            <translation>后 Hartree-Fock</translation>
         </message>
         <message>
             <location filename="../src/Qui/InputDialog.ui" line="820" />
@@ -5698,7 +5698,7 @@ QToolButton:checked {
         <message>
             <location filename="../src/Qui/InputDialog.ui" line="975" />
             <source>Incremental Fock</source>
-            <translation>增量福克</translation>
+            <translation>增量 Fock</translation>
         </message>
         <message>
             <location filename="../src/Qui/InputDialog.ui" line="1005" />
@@ -6183,7 +6183,7 @@ QToolButton:checked {
         <message>
             <location filename="../src/Qui/InputDialog.ui" line="2755" />
             <source>Include Orbital Relaxation</source>
-            <translation>包含轨道松弛</translation>
+            <translation>包含轨道弛豫</translation>
         </message>
         <message>
             <location filename="../src/Qui/InputDialog.ui" line="2775" />
@@ -6244,13 +6244,13 @@ QToolButton:checked {
         <message>
             <location filename="../src/Qui/InputDialog.ui" line="2992" />
             <source>Restricted Open-Shell Kohn-Sham</source>
-            <translation>限制性开壳层 Kohn-Sham</translation>
+            <translation>限制开壳层 Kohn-Sham</translation>
             <comment>restricted=限制性，open-shell=开壳层。</comment>
         </message>
         <message>
             <location filename="../src/Qui/InputDialog.ui" line="3001" />
             <source>Level Shift</source>
-            <translation>能级移动</translation>
+            <translation>能级平移</translation>
             <comment>SCF 收敛技巧 level shift。</comment>
         </message>
         <message>
@@ -6263,13 +6263,13 @@ QToolButton:checked {
             <location filename="../src/Qui/InputDialog.ui" line="3083" />
             <location filename="../src/Qui/InputDialog.ui" line="3195" />
             <source>Singles Guess Vectors</source>
-            <translation>单激发猜测向量</translation>
+            <translation>单激发初始猜测向量</translation>
         </message>
         <message>
             <location filename="../src/Qui/InputDialog.ui" line="3093" />
             <location filename="../src/Qui/InputDialog.ui" line="3205" />
             <source>Doubles Guess Vectors</source>
-            <translation>双激发猜测向量</translation>
+            <translation>双激发初始猜测向量</translation>
             <comment>Doubles 指双激发，与 Singles 单激发对应。</comment>
         </message>
         <message>
@@ -6326,8 +6326,7 @@ QToolButton:checked {
 just forms a container for the 
 various EOM state specification 
 widgets.</source>
-            <translation>此面板从不显示，它只是
-tarious EOM 态定义控件的容器。</translation>
+            <translation>此面板从不显示，仅作为各种 EOM 态定义控件的容器。</translation>
         </message>
         <message>
             <location filename="../src/Qui/InputDialog.ui" line="3468" />
@@ -6342,7 +6341,7 @@ tarious EOM 态定义控件的容器。</translation>
         <message>
             <location filename="../src/Qui/InputDialog.ui" line="3502" />
             <source>Search for Seam Only</source>
-            <translation>仅搜索接缝</translation>
+            <translation>仅搜索交叉缝</translation>
         </message>
         <message>
             <location filename="../src/Qui/InputDialog.ui" line="3535" />
@@ -6429,7 +6428,7 @@ tarious EOM 态定义控件的容器。</translation>
         <message>
             <location filename="../src/Qui/InputDialog.ui" line="4060" />
             <source>Fock Extrapolation Order</source>
-            <translation>福克外推阶</translation>
+            <translation>Fock 外推阶</translation>
         </message>
         <message>
             <location filename="../src/Qui/InputDialog.ui" line="4102" />
@@ -6494,7 +6493,7 @@ tarious EOM 态定义控件的容器。</translation>
         <message>
             <location filename="../src/Qui/InputDialog.ui" line="4419" />
             <source>Use QChem/CHARMM Interface</source>
-            <translation>使用 QChem/CHARMM 接口</translation>
+            <translation>使用 Q-Chem/CHARMM 接口</translation>
         </message>
         <message>
             <location filename="../src/Qui/InputDialog.ui" line="4426" />
@@ -6666,7 +6665,7 @@ tarious EOM 态定义控件的容器。</translation>
         <message>
             <location filename="../src/Qui/InputDialog.ui" line="5145" />
             <source>Symmetry Tolerance</source>
-            <translation>对称容差</translation>
+            <translation>对称性容差</translation>
         </message>
         <message>
             <location filename="../src/Qui/InputDialog.ui" line="5170" />
@@ -6681,7 +6680,7 @@ tarious EOM 态定义控件的容器。</translation>
         <message>
             <location filename="../src/Qui/InputDialog.ui" line="5223" />
             <source>Total Memory</source>
-            <translation>总计内存</translation>
+            <translation>总内存</translation>
         </message>
         <message>
             <location filename="../src/Qui/InputDialog.ui" line="5233" />
@@ -6699,7 +6698,7 @@ tarious EOM 态定义控件的容器。</translation>
         <message>
             <location filename="../src/Qui/InputDialog.ui" line="5254" />
             <source>Max File Number</source>
-            <translation>最大文件序号</translation>
+            <translation>最大文件数</translation>
         </message>
         <message>
             <location filename="../src/Qui/InputDialog.ui" line="5261" />
@@ -6712,10 +6711,7 @@ tarious EOM 态定义控件的容器。</translation>
 and is included as a container for 
 controls that are set by other rems.
 Eventually this should go.</source>
-            <translation>此页面对用户不可见，
-它作为容器，包含
-由其他 rem 设置的控件。
-将来应移除。</translation>
+            <translation>此页面对用户不可见，仅作为容器，包含由其他 rem 设置的控件。将来应移除。</translation>
         </message>
         <message>
             <location filename="../src/Qui/InputDialog.ui" line="5327" />
@@ -6862,12 +6858,12 @@ QToolButton:pressed {
         <message>
             <location filename="../src/Configurator/MolecularSurfacesConfigurator.ui" line="155" />
             <source>Quality:</source>
-            <translation>质量</translation>
+            <translation>质量：</translation>
         </message>
         <message>
             <location filename="../src/Configurator/MolecularSurfacesConfigurator.ui" line="162" />
             <source>Opacity:</source>
-            <translation>不透明度</translation>
+            <translation>不透明度：</translation>
         </message>
         <message>
             <location filename="../src/Configurator/MolecularSurfacesConfigurator.ui" line="169" />
@@ -6892,12 +6888,12 @@ QToolButton:pressed {
         <message>
             <location filename="../src/Configurator/MolecularSurfacesConfigurator.ui" line="336" />
             <source>Isovalue:</source>
-            <translation>等值</translation>
+            <translation>等值面值：</translation>
         </message>
         <message>
             <location filename="../src/Configurator/MolecularSurfacesConfigurator.ui" line="349" />
             <source>Type:</source>
-            <translation>类型</translation>
+            <translation>类型：</translation>
         </message>
     </context>
     <context>
@@ -7032,37 +7028,37 @@ QToolButton:pressed {
         <message>
             <location filename="../src/Configurator/NmrConfigurator.ui" line="164" />
             <source>Proton (1H)</source>
-            <translation>质子 1H</translation>
+            <translation>质子（1H）</translation>
         </message>
         <message>
             <location filename="../src/Configurator/NmrConfigurator.ui" line="169" />
             <source>Boron (11B)</source>
-            <translation>硼(11B)</translation>
+            <translation>硼（11B）</translation>
         </message>
         <message>
             <location filename="../src/Configurator/NmrConfigurator.ui" line="174" />
             <source>Carbon (13C)</source>
-            <translation>碳(13C)</translation>
+            <translation>碳（13C）</translation>
         </message>
         <message>
             <location filename="../src/Configurator/NmrConfigurator.ui" line="179" />
             <source>Nitrogen (15N)</source>
-            <translation>氮 15N</translation>
+            <translation>氮（15N）</translation>
         </message>
         <message>
             <location filename="../src/Configurator/NmrConfigurator.ui" line="184" />
             <source>Flourine (19F)</source>
-            <translation>氟(19F)</translation>
+            <translation>氟（19F）</translation>
         </message>
         <message>
             <location filename="../src/Configurator/NmrConfigurator.ui" line="189" />
             <source>Silicon (29Si)</source>
-            <translation>硅(29Si)</translation>
+            <translation>硅（29Si）</translation>
         </message>
         <message>
             <location filename="../src/Configurator/NmrConfigurator.ui" line="194" />
             <source>Phosphorous (31P)</source>
-            <translation>磷(31P)</translation>
+            <translation>磷（31P）</translation>
         </message>
         <message>
             <location filename="../src/Configurator/NmrConfigurator.ui" line="202" />
@@ -7153,12 +7149,12 @@ QToolButton:pressed {
         <message>
             <location filename="../src/Qui/OptimizeTab.ui" line="43" />
             <source>Allow Molecular Re-orientation</source>
-            <translation>允许分子重新定向</translation>
+            <translation>允许分子重新取向</translation>
         </message>
         <message>
             <location filename="../src/Qui/OptimizeTab.ui" line="50" />
             <source>Print Geometry at Each Step</source>
-            <translation>每步打印几何</translation>
+            <translation>每步打印几何结构</translation>
         </message>
         <message>
             <location filename="../src/Qui/OptimizeTab.ui" line="79" />
@@ -7179,7 +7175,7 @@ QToolButton:pressed {
         <message>
             <location filename="../src/Qui/OptimizeTab.ui" line="119" />
             <source>Re-generate SCF Guess at Each Step</source>
-            <translation>每步重新生成 SCF 猜测</translation>
+            <translation>每步重新生成 SCF 初始猜测</translation>
         </message>
         <message>
             <location filename="../src/Qui/OptimizeTab.ui" line="126" />
@@ -7272,7 +7268,7 @@ QToolButton:pressed {
         <message>
             <location filename="../src/Qui/OptionDatabaseForm.ui" line="232" />
             <source>Real</source>
-            <translation>实部</translation>
+            <translation>实数</translation>
         </message>
         <message>
             <location filename="../src/Qui/OptionDatabaseForm.ui" line="237" />
@@ -7307,7 +7303,7 @@ QToolButton:pressed {
         <message>
             <location filename="../src/Qui/OptionDatabaseForm.ui" line="356" />
             <source>Line edit</source>
-            <translation>线编辑</translation>
+            <translation>单行编辑</translation>
         </message>
         <message>
             <location filename="../src/Qui/OptionDatabaseForm.ui" line="361" />
@@ -7365,12 +7361,12 @@ QToolButton:pressed {
         <message>
             <location filename="../src/Qui/OptionListEditor.ui" line="109" />
             <source>Move Up</source>
-            <translation>移动上</translation>
+            <translation>上移</translation>
         </message>
         <message>
             <location filename="../src/Qui/OptionListEditor.ui" line="122" />
             <source>Move Down</source>
-            <translation>移动下</translation>
+            <translation>下移</translation>
         </message>
         <message>
             <location filename="../src/Qui/OptionListEditor.ui" line="148" />
@@ -7398,12 +7394,12 @@ QToolButton:pressed {
         <message>
             <location filename="../src/Qui/OptionNumberEditor.ui" line="74" />
             <source>Minimum</source>
-            <translation>最小</translation>
+            <translation>最小值</translation>
         </message>
         <message>
             <location filename="../src/Qui/OptionNumberEditor.ui" line="81" />
             <source>Maximum</source>
-            <translation>最大</translation>
+            <translation>最大值</translation>
         </message>
         <message>
             <location filename="../src/Qui/OptionNumberEditor.ui" line="88" />
@@ -7413,7 +7409,7 @@ QToolButton:pressed {
         <message>
             <location filename="../src/Qui/OptionNumberEditor.ui" line="95" />
             <source>Step size</source>
-            <translation>步大小</translation>
+            <translation>步长</translation>
         </message>
         <message>
             <location filename="../src/Qui/OptionNumberEditor.ui" line="149" />
@@ -7510,7 +7506,7 @@ QToolButton:pressed {
         <message>
             <location filename="../src/Configurator/OrbitalsConfigurator.ui" line="177" />
             <source>Quality:</source>
-            <translation>质量</translation>
+            <translation>质量：</translation>
         </message>
         <message>
             <location filename="../src/Configurator/OrbitalsConfigurator.ui" line="184" />
@@ -7525,12 +7521,12 @@ QToolButton:pressed {
         <message>
             <location filename="../src/Configurator/OrbitalsConfigurator.ui" line="261" />
             <source>Opacity:</source>
-            <translation>不透明度</translation>
+            <translation>不透明度：</translation>
         </message>
         <message>
             <location filename="../src/Configurator/OrbitalsConfigurator.ui" line="274" />
             <source>Type:</source>
-            <translation>类型</translation>
+            <translation>类型：</translation>
         </message>
         <message>
             <location filename="../src/Configurator/OrbitalsConfigurator.ui" line="284" />
@@ -7585,7 +7581,7 @@ QToolButton:pressed {
         <message>
             <location filename="../src/Configurator/OrbitalsConfigurator.ui" line="459" />
             <source>Isovalue</source>
-            <translation>等值</translation>
+            <translation>等值面值</translation>
         </message>
         <message>
             <location filename="../src/Configurator/OrbitalsConfigurator.ui" line="501" />
@@ -7608,7 +7604,7 @@ QToolButton:pressed {
         <message>
             <location filename="../src/Amber/ParametrizeMoleculeDialog.ui" line="71" />
             <source>Multiplicity</source>
-            <translation>自旋多重度</translation>
+            <translation>多重度</translation>
             <comment>自旋多重度 2S+1；multiplet 才是多重态。</comment>
         </message>
         <message>
@@ -7619,7 +7615,7 @@ QToolButton:pressed {
         <message>
             <location filename="../src/Amber/ParametrizeMoleculeDialog.ui" line="138" />
             <source>Output:</source>
-            <translation>输出</translation>
+            <translation>输出：</translation>
         </message>
         <message>
             <source>Parametrize </source>
@@ -8291,17 +8287,17 @@ QToolButton:pressed {
         <message>
             <location filename="../src/Main/PreferencesBrowser.ui" line="132" />
             <source>Changes to the log file location require IQmol to be restarted</source>
-            <translation>日志文件位置更改后需重启 IQmol</translation>
+            <translation>更改日志文件位置后需重启 IQmol</translation>
         </message>
         <message>
             <location filename="../src/Main/PreferencesBrowser.ui" line="139" />
             <source>Fragment Directory:</source>
-            <translation>片段目录</translation>
+            <translation>片段目录：</translation>
         </message>
         <message>
             <location filename="../src/Main/PreferencesBrowser.ui" line="146" />
             <source>Log File:</source>
-            <translation>日志文件</translation>
+            <translation>日志文件：</translation>
         </message>
         <message>
             <location filename="../src/Main/PreferencesBrowser.ui" line="159" />
@@ -8349,7 +8345,7 @@ QToolButton:pressed {
         <message>
             <location filename="../src/Main/PreferencesBrowser.ui" line="247" />
             <source>Maximum Undo Level:</source>
-            <translation>最大撤销级别：</translation>
+            <translation>最大撤销级数：</translation>
         </message>
         <message>
             <location filename="../src/Main/PreferencesBrowser.ui" line="263" />
@@ -8359,12 +8355,12 @@ QToolButton:pressed {
         <message>
             <location filename="../src/Main/PreferencesBrowser.ui" line="270" />
             <source>Logging Enabled</source>
-            <translation>已启用日志</translation>
+            <translation>已启用日志记录</translation>
         </message>
         <message>
             <location filename="../src/Main/PreferencesBrowser.ui" line="292" />
             <source>QChem Database File</source>
-            <translation>QChem 数据库文件</translation>
+            <translation>Q-Chem 数据库文件</translation>
         </message>
         <message>
             <location filename="../src/Main/PreferencesBrowser.ui" line="306" />
@@ -8411,7 +8407,7 @@ QToolButton:pressed {
         <message>
             <location filename="../src/Util/ProgressDialog.ui" line="22" />
             <source>TextLabel</source>
-            <translation>文字标签</translation>
+            <translation>文本标签</translation>
         </message>
         <message>
             <location filename="../src/Util/ProgressDialog.ui" line="66" />
@@ -8544,8 +8540,7 @@ p, li { white-space: pre-wrap; }
             <location filename="../src/Process/QueueOptionsDialog.ui" line="145" />
             <source>Maximum number of concurrent jobs.
 Note this is ignored on PBS servers.</source>
-            <translation>最大并发任务数。
-注意：在 PBS 服务器上此设置被忽略。</translation>
+            <translation>最大并发任务数。注意：在 PBS 服务器上此设置被忽略。</translation>
         </message>
     </context>
     <context>
@@ -8564,7 +8559,7 @@ Note this is ignored on PBS servers.</source>
             <location filename="../src/Process/QueueResourcesDialog.ui" line="53" />
             <source>This value can be accessed by ${WALLTIME}
 in the run file template</source>
-            <translation>此值可在运行文件模板中通过 ${WALLTIME} 访问</translation>
+            <translation>可在运行文件模板中通过 ${WALLTIME} 访问此值</translation>
         </message>
         <message>
             <location filename="../src/Process/QueueResourcesDialog.ui" line="57" />
@@ -8580,7 +8575,7 @@ in the run file template</source>
             <location filename="../src/Process/QueueResourcesDialog.ui" line="122" />
             <source>This value can be accessed by ${MEMORY}
 in the run file template</source>
-            <translation>此值可在运行文件模板中通过 ${MEMORY} 访问</translation>
+            <translation>可在运行文件模板中通过 ${MEMORY} 访问此值</translation>
         </message>
         <message>
             <location filename="../src/Process/QueueResourcesDialog.ui" line="126" />
@@ -8607,13 +8602,13 @@ in the run file template</source>
             <location filename="../src/Process/QueueResourcesDialog.ui" line="172" />
             <source>This value can be accessed by ${NCPUS}
 in the run file template</source>
-            <translation>此值可在运行文件模板中通过 ${NCPUS} 访问</translation>
+            <translation>可在运行文件模板中通过 ${NCPUS} 访问此值</translation>
         </message>
         <message>
             <location filename="../src/Process/QueueResourcesDialog.ui" line="207" />
             <source>This value can be accessed by ${SCRATCH}
 in the run file template</source>
-            <translation>此值可在运行文件模板中通过 ${SCRATCH} 访问</translation>
+            <translation>可在运行文件模板中通过 ${SCRATCH} 访问此值</translation>
         </message>
         <message>
             <location filename="../src/Process/QueueResourcesDialog.ui" line="230" />
@@ -8624,7 +8619,7 @@ in the run file template</source>
             <location filename="../src/Process/QueueResourcesDialog.ui" line="239" />
             <source>This value can be accessed by ${QUEUE}
 in the run file template</source>
-            <translation>此值可在运行文件模板中通过 ${QUEUE} 访问</translation>
+            <translation>可在运行文件模板中通过 ${QUEUE} 访问此值</translation>
         </message>
     </context>
     <context>
@@ -8852,7 +8847,7 @@ in the run file template</source>
         <message>
             <location filename="../src/Configurator/ScalarConstraintConfigurator.ui" line="86" />
             <source>To</source>
-            <translation>To</translation>
+            <translation>到</translation>
         </message>
         <message>
             <location filename="../src/Configurator/ScalarConstraintConfigurator.ui" line="103" />
@@ -8896,12 +8891,7 @@ You will be prompted for additional resource limits when
 submitting a job.
 
 Use Web for HTTP/HTTPS servers</source>
-            <translation>基本模式直接在服务器上运行 qchem 命令。
-
-若服务器有队列系统，请使用 PBS 或 SGE。
-提交任务时会提示您设置额外的资源限制。
-
-对 HTTP/HTTPS 服务器请使用 Web。</translation>
+            <translation>基本模式直接在服务器上运行 qchem 命令。若服务器有队列系统，请使用 PBS 或 SGE。提交任务时会提示您设置额外的资源限制。对 HTTP/HTTPS 服务器请使用 Web。</translation>
         </message>
         <message>
             <location filename="../src/Process/ServerConfigurationDialog.ui" line="119" />
@@ -9114,7 +9104,7 @@ Use Web for HTTP/HTTPS servers</source>
         <message>
             <location filename="../src/Process/ServerConfigurationListDialog.ui" line="120" />
             <source>Add new server</source>
-            <translation>添加新建服务器</translation>
+            <translation>添加新服务器</translation>
         </message>
         <message>
             <location filename="../src/Process/ServerConfigurationListDialog.ui" line="123" />
@@ -9167,32 +9157,32 @@ Use Web for HTTP/HTTPS servers</source>
         <message>
             <location filename="../src/Viewer/ShaderDialog.ui" line="89" />
             <source>Label0</source>
-            <translation>标签</translation>
+            <translation>标签 0</translation>
         </message>
         <message>
             <location filename="../src/Viewer/ShaderDialog.ui" line="96" />
             <source>Label1</source>
-            <translation>标签</translation>
+            <translation>标签 1</translation>
         </message>
         <message>
             <location filename="../src/Viewer/ShaderDialog.ui" line="103" />
             <source>Label2</source>
-            <translation>标签</translation>
+            <translation>标签 2</translation>
         </message>
         <message>
             <location filename="../src/Viewer/ShaderDialog.ui" line="110" />
             <source>Label3</source>
-            <translation>标签</translation>
+            <translation>标签 3</translation>
         </message>
         <message>
             <location filename="../src/Viewer/ShaderDialog.ui" line="159" />
             <source>Label4</source>
-            <translation>标签</translation>
+            <translation>标签 4</translation>
         </message>
         <message>
             <location filename="../src/Viewer/ShaderDialog.ui" line="179" />
             <source>Lable6</source>
-            <translation>Lable6</translation>
+            <translation>Label6</translation>
         </message>
         <message>
             <location filename="../src/Viewer/ShaderDialog.ui" line="214" />
@@ -9454,7 +9444,7 @@ Use Web for HTTP/HTTPS servers</source>
         <message>
             <location filename="../src/Viewer/SnapshotImageDialog.ui" line="82" />
             <source>TextLabel</source>
-            <translation>文字标签</translation>
+            <translation>文本标签</translation>
         </message>
     </context>
     <context>
@@ -9492,7 +9482,7 @@ Use Web for HTTP/HTTPS servers</source>
         <message>
             <location filename="../src/Viewer/SnapshotVideoDialog.ui" line="53" />
             <source>TextLabel</source>
-            <translation>文字标签</translation>
+            <translation>文本标签</translation>
         </message>
         <message>
             <location filename="../src/Viewer/SnapshotVideoDialog.ui" line="61" />
@@ -9557,8 +9547,7 @@ Use Web for HTTP/HTTPS servers</source>
             <source>Location of the SSH public key file.  Typically this is the 
 same file name as for the private key, but with .pub 
 appended.</source>
-            <translation>SSH 公钥文件位置。通常
-与私钥文件名相同，但附加 .pub 后缀。</translation>
+            <translation>SSH 公钥文件位置。通常与私钥文件名相同，并附加 .pub 后缀。</translation>
         </message>
         <message>
             <location filename="../src/Process/SshFileDialog.ui" line="37" />
@@ -9570,9 +9559,7 @@ appended.</source>
             <source>Location of the SSH identity file.  For protocol 1 this is usually 
 located in $HOME/.ssh/identity. For protocol 2 this is usually 
 located in either $HOME/.ssh/id_rsa or $HOME/.ssh/id_dsa.</source>
-            <translation>SSH 身份文件位置。对于协议 1，通常位于
-$HOME/.ssh/identity；对于协议 2，通常位于
-$HOME/.ssh/id_rsa 或 $HOME/.ssh/id_dsa。</translation>
+            <translation>SSH 身份文件位置。对于协议 1，通常位于 $HOME/.ssh/identity；对于协议 2，通常位于 $HOME/.ssh/id_rsa 或 $HOME/.ssh/id_dsa。</translation>
         </message>
         <message>
             <location filename="../src/Process/SshFileDialog.ui" line="53" />
@@ -9583,8 +9570,7 @@ $HOME/.ssh/id_rsa 或 $HOME/.ssh/id_dsa。</translation>
             <location filename="../src/Process/SshFileDialog.ui" line="60" />
             <source>This is the location of the known_hosts file.
 Typically this is in $HOME/.ssh/known_hosts</source>
-            <translation>这是 known_hosts 文件的位置。
-通常位于 $HOME/.ssh/known_hosts</translation>
+            <translation>这是 known_hosts 文件的位置。通常位于 $HOME/.ssh/known_hosts</translation>
         </message>
         <message>
             <location filename="../src/Process/SshFileDialog.ui" line="68" />
@@ -9768,7 +9754,7 @@ QToolTip {
         <message>
             <location filename="../src/Configurator/SurfaceAnimatorDialog.ui" line="172" />
             <source>Move selection up</source>
-            <translation>将选区上移</translation>
+            <translation>将所选上移</translation>
         </message>
         <message>
             <location filename="../src/Configurator/SurfaceAnimatorDialog.ui" line="175" />
@@ -9778,7 +9764,7 @@ QToolTip {
         <message>
             <location filename="../src/Configurator/SurfaceAnimatorDialog.ui" line="192" />
             <source>Move selection down</source>
-            <translation>将选区下移</translation>
+            <translation>将所选下移</translation>
         </message>
         <message>
             <location filename="../src/Configurator/SurfaceAnimatorDialog.ui" line="195" />
@@ -9803,7 +9789,7 @@ QToolTip {
         <message>
             <location filename="../src/Configurator/SurfaceAnimatorDialog.ui" line="239" />
             <source>Isovalue</source>
-            <translation>等值</translation>
+            <translation>等值面值</translation>
         </message>
         <message>
             <location filename="../src/Configurator/SurfaceAnimatorDialog.ui" line="282" />
@@ -9843,7 +9829,7 @@ QToolTip {
         <message>
             <location filename="../src/Configurator/SurfaceAnimatorDialog.ui" line="439" />
             <source>Use mesh decimation to reduce the complexity of the surface mesh</source>
-            <translation>使用网格抽稀以降低表面网格的复杂度</translation>
+            <translation>使用网格抽稀以降低表面网格复杂度</translation>
         </message>
         <message>
             <location filename="../src/Configurator/SurfaceAnimatorDialog.ui" line="442" />
@@ -9960,7 +9946,7 @@ QToolTip {
         <message>
             <location filename="../src/Configurator/SurfaceAnimatorDialog.ui" line="534" />
             <source>Start and stop animation</source>
-            <translation>开始与停止动画</translation>
+            <translation>播放/暂停动画</translation>
         </message>
         <message>
             <location filename="../src/Configurator/SurfaceAnimatorDialog.ui" line="537" />
@@ -9984,12 +9970,12 @@ QToolTip {
         <message>
             <location filename="../src/Configurator/SurfaceAnimatorDialog.ui" line="610" />
             <source>Reverses the loop at the end</source>
-            <translation>在循环末尾反转</translation>
+            <translation>循环至末端后反向</translation>
         </message>
         <message>
             <location filename="../src/Configurator/SurfaceAnimatorDialog.ui" line="613" />
             <source>Bounce</source>
-            <translation>弹跳</translation>
+            <translation>往复</translation>
         </message>
         <message>
             <location filename="../src/Configurator/SurfaceAnimatorDialog.ui" line="620" />
@@ -10107,7 +10093,7 @@ QToolTip {
         <message>
             <location filename="../src/Configurator/SurfaceConfigurator.ui" line="309" />
             <source>Center Gradient</source>
-            <translation>中心梯度</translation>
+            <translation>中心渐变</translation>
         </message>
         <message>
             <location filename="../src/Configurator/SurfaceConfigurator.ui" line="368" />
@@ -10138,7 +10124,7 @@ QToolTip {
         <message>
             <location filename="../src/Viewer/SymmetryToleranceDialog.ui" line="14" />
             <source>Symmetry Tolerance</source>
-            <translation>对称容差</translation>
+            <translation>对称性容差</translation>
         </message>
         <message>
             <location filename="../src/Viewer/SymmetryToleranceDialog.ui" line="20" />
@@ -10311,12 +10297,12 @@ p, li { white-space: pre-wrap; }
         <message>
             <location filename="../src/Amber/SystemBuilderDialog.ui" line="368" />
             <source>Ion1</source>
-            <translation>离子</translation>
+            <translation>离子 1</translation>
         </message>
         <message>
             <location filename="../src/Amber/SystemBuilderDialog.ui" line="375" />
             <source>Ion2</source>
-            <translation>离子</translation>
+            <translation>离子 2</translation>
         </message>
         <message>
             <location filename="../src/Amber/SystemBuilderDialog.ui" line="443" />
@@ -10344,8 +10330,7 @@ p, li { white-space: pre-wrap; }
         <message>
             <source>The manual edits will be lost.
 Are you sure you want to continue?</source>
-            <translation>手动编辑将丢失。
-确定要继续吗？</translation>
+            <translation>手动编辑将丢失。确定要继续吗？</translation>
         </message>
         <message>
             <source>Parametrize</source>
@@ -10427,7 +10412,7 @@ Are you sure you want to continue?</source>
         <message>
             <location filename="../src/Main/ToolBar.ui" line="196" />
             <source>Build Mode (Alt)</source>
-            <translation>构建模式(Alt)</translation>
+            <translation>构建模式（Alt）</translation>
         </message>
         <message>
             <location filename="../src/Main/ToolBar.ui" line="242" />
@@ -10470,13 +10455,13 @@ p, li { white-space: pre-wrap; }
         <message>
             <location filename="../src/Main/ToolBar.ui" line="361" />
             <source>Select Mode (Shift)</source>
-            <translation>选择模式 (Shift)</translation>
+            <translation>选择模式（Shift）</translation>
             <comment>Shift 是快捷键名，应保留；原译误作“位移”。</comment>
         </message>
         <message>
             <location filename="../src/Main/ToolBar.ui" line="387" />
             <source>Delete Selection</source>
-            <translation>删除选区</translation>
+            <translation>删除所选</translation>
         </message>
         <message>
             <location filename="../src/Main/ToolBar.ui" line="417" />
@@ -10486,7 +10471,7 @@ p, li { white-space: pre-wrap; }
         <message>
             <location filename="../src/Main/ToolBar.ui" line="440" />
             <source>Record animation</source>
-            <translation>记录动画</translation>
+            <translation>录制动画</translation>
         </message>
         <message>
             <location filename="../src/Main/ToolBar.ui" line="466" />
@@ -10566,7 +10551,7 @@ p, li { white-space: pre-wrap; }
         <message>
             <location filename="../src/Configurator/VectorConstraintConfigurator.ui" line="25" />
             <source>Set position of atom 1:</source>
-            <translation>设置原子 1 位置：</translation>
+            <translation>设置原子 1 的位置：</translation>
         </message>
         <message>
             <location filename="../src/Configurator/VectorConstraintConfigurator.ui" line="36" />
@@ -10610,7 +10595,7 @@ p, li { white-space: pre-wrap; }
         <message>
             <location filename="../src/Configurator/VibronicConfigurator.ui" line="20" />
             <source>Vibronic Analysis</source>
-            <translation>电子振动分析</translation>
+            <translation>振动电子分析</translation>
         </message>
         <message>
             <location filename="../src/Configurator/VibronicConfigurator.ui" line="75" />
@@ -10640,12 +10625,12 @@ p, li { white-space: pre-wrap; }
         <message>
             <location filename="../src/Configurator/VibronicConfigurator.ui" line="160" />
             <source>Initial / (cm⁻¹)</source>
-            <translation>初始 /(cm⁻¹)</translation>
+            <translation>初始 /（cm⁻¹）</translation>
         </message>
         <message>
             <location filename="../src/Configurator/VibronicConfigurator.ui" line="165" />
             <source>Final / (cm⁻¹)</source>
-            <translation>最终 /(cm⁻¹)</translation>
+            <translation>最终 /（cm⁻¹）</translation>
         </message>
         <message>
             <location filename="../src/Configurator/VibronicConfigurator.ui" line="170" />
@@ -10660,7 +10645,7 @@ p, li { white-space: pre-wrap; }
         <message>
             <location filename="../src/Configurator/VibronicConfigurator.ui" line="190" />
             <source>Show None</source>
-            <translation>显示无</translation>
+            <translation>全不显示</translation>
         </message>
         <message>
             <location filename="../src/Configurator/VibronicConfigurator.ui" line="210" />
