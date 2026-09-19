@@ -13,6 +13,7 @@
 #include <QtDebug>
 
 
+#include <QCoreApplication>
 namespace Qui {
 
 
@@ -73,7 +74,9 @@ void LJParametersSection::generateData(QString const& geometry)
       QString msg("The molecule contains atoms for which there are no inbuilt "
                   "Lennard-Jones parameters:");
       msg += notFound;
-      QMessageBox::warning(0, tr("LJ Parameter Error"),msg);
+      // [i18n] KeywordSection 不是 QObject，本类无 tr() 可用
+      QMessageBox::warning(0, QCoreApplication::translate(
+         "IQmol::Qui::LJParametersSection", "LJ Parameter Error"), msg);
   
    }
  

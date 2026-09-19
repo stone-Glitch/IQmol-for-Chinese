@@ -36,6 +36,7 @@
 #include "Util/QsLog.h"
 #include "Util/Preferences.h"
 
+#include <QCoreApplication>
 #include <QFileInfo>
 #include <QRegularExpression>
 #include <cmath>
@@ -352,7 +353,11 @@ bool OpenBabel::appendGeometries(::OpenBabel::OBMol& obMol, Data::GeometryList& 
           haveGeometryEnergy = true;
        }else if (!haveGeometryEnergy && std::abs(obMol.GetEnergy()) > 1.0e-12) {
           geometryEnergy = obMol.GetEnergy();
-          geometryEnergyLabel = "Energy";
+          // [i18n] 此处是"文件里没给标签时的兜底显示名"，故需要翻译。
+          // 注意：本类继承 Parser::Base（普通 C++ 类，非 QObject），
+          // 没有 tr() 可用，必须用 QCoreApplication::translate 显式指定上下文。
+          geometryEnergyLabel = QCoreApplication::translate(
+             "IQmol::Parser::OpenBabel", "Energy");
           haveGeometryEnergy = true;
        }
 

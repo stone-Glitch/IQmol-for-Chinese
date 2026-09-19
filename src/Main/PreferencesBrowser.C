@@ -82,9 +82,10 @@ void Browser::init()
 
    // 语言切换逃生舱: 0=中文, 1=English, 2=跟随系统
    // 未设置(首次运行)按"中文"项显示, 与汉化默认行为一致
+   // 注意: 变量名不能复用上面的 idx, 同作用域重复声明会编译失败
    QString lang(Language());
-   int idx(lang == "en" ? 1 : (lang == "system" ? 2 : 0));
-   m_preferencesBrowser.languageComboBox->setCurrentIndex(idx);
+   int langIdx(lang == "en" ? 1 : (lang == "system" ? 2 : 0));
+   m_preferencesBrowser.languageComboBox->setCurrentIndex(langIdx);
 }
 
 

@@ -18,6 +18,7 @@
 #include <QtDebug>
 
 
+#include <QCoreApplication>
 namespace Qui {
 
 
@@ -52,9 +53,12 @@ void MoleculeSection::read(QString const& input)
    // TODO: This should really load a molecule object so that the coordinate
    // conversion can be done.
    if (!okay) {
-      QString msg(tr("Problem reading $molecule section: \n"));
+      // [i18n] KeywordSection 不是 QObject，本类无 tr() 可用
+      QString msg(QCoreApplication::translate(
+         "IQmol::Qui::MoleculeSection", "Problem reading $molecule section: \n"));
       msg += input;
-      QMessageBox::warning(0, tr("Parse Error"), msg);
+      QMessageBox::warning(0, QCoreApplication::translate(
+         "IQmol::Qui::MoleculeSection", "Parse Error"), msg);
    }
 }
 
