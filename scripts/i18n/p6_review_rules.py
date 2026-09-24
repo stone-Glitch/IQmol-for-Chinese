@@ -85,7 +85,7 @@ def score_A(row):
 # 否则 `functional` 会先命中 `Functional Group`。
 B_TERMS = [
     ('functional group', r'\bfunctional groups?\b',              '官能团'),
-    ('geminal',          r'\bgeminals?\b',                       '对偶'),
+    ('geminal',          r'\bgeminals?\b',                       '成对'),
     ('spin-only',        r'spin[- ]only',                        '纯自旋'),
     ('basis function',   r'\bbasis functions?\b',                '基函数'),
     ('basis set',        r'\bbasis sets?\b',                     '基组'),
@@ -121,7 +121,7 @@ B_FATAL = [
     (r'^猜测',  10, 'guess 应为「初始猜测」'),
     (r'等值线面|等值曲面', 1, 'isosurface 宜统一为「等值面」'),
     # geminal 的历史误译：同一条目在库中出现 4 种译法，属严重级术语不一致
-    (r'孪位|孪生|双生轨道', 10, 'geminal 应为「对偶」系列，勿用「孪位/孪生/双生」'),
+    (r'孪位|孪生|双生轨道', 10, 'geminal 应为「成对」系列，勿用「孪位/孪生/双生」'),
 ]
 
 
@@ -176,11 +176,11 @@ def selftest():
         ({'原文': 'Some Text',    '当前译文': '错误：：参数'},    'A', 10),
         ({'原文': 'SCF Guess Print', '当前译文': 'SCF 猜测打印'}, 'A', 1),
         # geminal 的 4 种历史误译，B 侧必须逐一抓到
-        ({'原文': 'Geminal',         '当前译文': '成对'},          'B', 1),
+        ({'原文': 'Geminal',         '当前译文': '对偶'},          'B', 1),
         ({'原文': 'Geminal',         '当前译文': '孪位'},          'B', 10),
         ({'原文': 'Geminal Alpha %1', '当前译文': '孪生 Alpha %1'}, 'B', 10),
         ({'原文': 'Geminal(s):',     '当前译文': '双生轨道：'},     'B', 10),
-        ({'原文': 'Geminal Orbitals', '当前译文': '成对轨道'},      'B', 1),
+        ({'原文': 'Geminal Orbitals', '当前译文': '对偶轨道'},      'B', 1),
         # 数学梯度仍必须抓到（排除逻辑不能把真阳性一起放掉）
         ({'原文': 'Gradient',         '当前译文': '渐变'},          'B', 1),
         # 真标签带句号仍须抓到（反向验证句号排除逻辑没放过头）
@@ -194,11 +194,11 @@ def selftest():
         ({'原文': 'Basis',            '当前译文': '基组'},        'B'),
         ({'原文': 'Basis Function',   '当前译文': '基函数'},      'B'),
         # 定稿译法不得被自己的规则误伤
-        ({'原文': 'Geminal',          '当前译文': '对偶'},        'B'),
-        ({'原文': 'Geminal Correlation', '当前译文': '对偶相关'},  'B'),
-        ({'原文': 'Geminal Orbitals', '当前译文': '对偶轨道'},     'B'),
-        ({'原文': 'Geminal Alpha %1', '当前译文': '对偶 Alpha %1'}, 'B'),
-        ({'原文': 'Geminal(s):',      '当前译文': '对偶轨道：'},    'B'),
+        ({'原文': 'Geminal',          '当前译文': '成对'},        'B'),
+        ({'原文': 'Geminal Correlation', '当前译文': '成对相关'},  'B'),
+        ({'原文': 'Geminal Orbitals', '当前译文': '成对轨道'},     'B'),
+        ({'原文': 'Geminal Alpha %1', '当前译文': '成对 Alpha %1'}, 'B'),
+        ({'原文': 'Geminal(s):',      '当前译文': '成对轨道：'},    'B'),
         # 颜色渐变 ≠ 数学梯度：gradient 规则必须放行颜色语境
         # （曾被全库回归抓到假阳性，见 2026-09-24 审校记录）
         ({'原文': 'Center Gradient',  '当前译文': '中心渐变'},     'B'),

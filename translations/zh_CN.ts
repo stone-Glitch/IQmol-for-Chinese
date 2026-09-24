@@ -3182,7 +3182,7 @@ QToolButton:pressed {
     <message>
         <location filename="../src/Configurator/GeminalOrbitalsConfigurator.ui" line="51"/>
         <source>Geminal(s):</source>
-        <translation>对偶轨道：</translation>
+        <translation>成对轨道：</translation>
     </message>
     <message>
         <location filename="../src/Configurator/GeminalOrbitalsConfigurator.ui" line="78"/>
@@ -3893,12 +3893,12 @@ QTextBrowser#content {
     <message>
         <location filename="../src/Configurator/GeminalOrbitalsConfigurator.C" line="45"/>
         <source>Geminal</source>
-        <translation>对偶</translation>
+        <translation>成对</translation>
     </message>
     <message>
         <location filename="../src/Configurator/GeminalOrbitalsConfigurator.C" line="46"/>
         <source>Geminal Correlation</source>
-        <translation>对偶相关</translation>
+        <translation>成对相关</translation>
     </message>
 </context>
 <context>
@@ -4301,7 +4301,7 @@ QTextBrowser#content {
     <message>
         <location filename="../src/Data/SurfaceType.C" line="166"/>
         <source>Geminal</source>
-        <translation>对偶</translation>
+        <translation>成对</translation>
     </message>
     <message>
         <location filename="../src/Data/SurfaceType.C" line="167"/>
@@ -4518,22 +4518,22 @@ QTextBrowser#content {
     <message>
         <source>Geminal Alpha %1</source>
         <comment>预置：需配合源码补 tr() 后由 lupdate 匹配</comment>
-        <translation>对偶 Alpha %1</translation>
+        <translation>成对 Alpha %1</translation>
     </message>
     <message>
         <source>Geminal Beta %1</source>
         <comment>预置：需配合源码补 tr() 后由 lupdate 匹配</comment>
-        <translation>对偶 Beta %1</translation>
+        <translation>成对 Beta %1</translation>
     </message>
     <message>
         <location filename="../src/Layer/GeminalOrbitalsLayer.C" line="812"/>
         <source>Geminal Alpha %1</source>
-        <translation>对偶 Alpha %1</translation>
+        <translation>成对 Alpha %1</translation>
     </message>
     <message>
         <location filename="../src/Layer/GeminalOrbitalsLayer.C" line="815"/>
         <source>Geminal Beta %1</source>
-        <translation>对偶 Beta %1</translation>
+        <translation>成对 Beta %1</translation>
     </message>
 </context>
 <context>
@@ -4551,7 +4551,7 @@ QTextBrowser#content {
     <message>
         <location filename="../src/Layer/GeminalOrbitalsLayer.C" line="56"/>
         <source>Geminal Orbitals</source>
-        <translation>对偶轨道</translation>
+        <translation>成对轨道</translation>
     </message>
 </context>
 <context>
