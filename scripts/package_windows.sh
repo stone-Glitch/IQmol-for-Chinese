@@ -102,6 +102,14 @@ if [ -n "$_sys" ]; then
   exit 1
 fi
 echo "    OK: 关键运行库齐全，且无系统 DLL 污染"
+# SQLite 驱动插件必检：缺它打开 Q-Chem 选项数据库报 Driver not loaded
+if [ ! -f "$STAGE/lib/plugins/sqldrivers/qsqlite.dll" ]; then
+  echo "ERROR: 分发包缺少 Qt SQLite 驱动 (lib/plugins/sqldrivers/qsqlite.dll)" >&2
+  echo "       缺它则启动后报 \"QSqlDatabase Error: Driver not loaded\"。" >&2
+  echo "       请更新 deploy_windows.sh（已含 sqldrivers 同步与兜底）后重跑。" >&2
+  exit 1
+fi
+echo "    OK: SQLite 驱动 (qsqlite.dll) 已就位"
 # 目录嵌套自检：share/share、bin/bin 任一存在即报错
 for _n in share/share bin/bin lib/lib; do
   [ -e "$STAGE/$_n" ] && { echo "ERROR: 检测到目录嵌套 $STAGE/$_n，部署脚本需重跑清洗"; exit 1; }

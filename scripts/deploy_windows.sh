@@ -145,7 +145,9 @@ fi
 #--------------------------------------------------------------------
 echo "==> 同步 Qt 插件到 lib/ (与源码 addLibraryPath 对齐)"
 mkdir -p "$BUILD_DIR/lib/plugins"
-for sub in platforms styles imageformats iconengines platforminputcontexts; do
+# sqldrivers 必须同步：Q-Chem 选项数据库 qchem_option.db 走 QSQLITE，
+# 缺 qsqlite.dll 会报 "QSqlDatabase Error: Driver not loaded"
+for sub in platforms styles imageformats iconengines platforminputcontexts sqldrivers; do
   for srcroot in "$BIN_DIR" "$MINGW_PREFIX/share/qt5/plugins" \
                  "$MINGW_PREFIX/lib/qt5/plugins"; do
     if [ -d "$srcroot/$sub" ]; then
@@ -154,6 +156,33 @@ for sub in platforms styles imageformats iconengines platforminputcontexts; do
     fi
   done
 done
+
+#--------------------------------------------------------------------
+# 1c. SQLite 驱动插件（必须；否则打开 qchem_option.db 报
+#     "QSqlDatabase Error: Driver not loaded, Available drivers:" 空）
+#--------------------------------------------------------------------
+_QSQLITE="$BUILD_DIR/lib/plugins/sqldrivers/qsqlite.dll"
+if [ ! -f "$_QSQLITE" ]; then
+  echo "==> 补装 Qt sqldrivers 插件"
+  for cand in "$MINGW_PREFIX/share/qt5/plugins/sqldrivers" \
+              "$MINGW_PREFIX/lib/qt5/plugins/sqldrivers"; do
+    if [ -d "$cand" ]; then
+      mkdir -p "$BUILD_DIR/lib/sqldrivers" "$BUILD_DIR/lib/plugins/sqldrivers"
+      cp -rf "$cand/." "$BUILD_DIR/lib/sqldrivers/" 2>/dev/null
+      cp -rf "$cand/." "$BUILD_DIR/lib/plugins/sqldrivers/" 2>/dev/null
+      break
+    fi
+  done
+fi
+if [ ! -f "$_QSQLITE" ]; then
+  echo ""
+  echo "ERROR: 未找到 Qt SQLite 驱动插件 (qsqlite.dll)"
+  echo "  缺它则打开 Q-Chem 选项数据库报 Driver not loaded。"
+  echo "  修复: pacman -S mingw-w64-x86_64-qt5-base  (提供 plugins/sqldrivers/qsqlite.dll)"
+  echo "  装完重跑本脚本。"
+  exit 1
+fi
+echo "    SQLite 驱动已就位: $_QSQLITE"
 
 #--------------------------------------------------------------------
 # 2. Qt 平台插件（必须；否则报 "could not find or load the Qt platform plugin windows"）
