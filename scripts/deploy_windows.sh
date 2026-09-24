@@ -156,6 +156,10 @@ for sub in platforms styles imageformats iconengines platforminputcontexts sqldr
     fi
   done
 done
+# 排除 qtvirtualkeyboard 插件：依赖 Qt5Qml/Qt5Quick，windeployqt 已刻意跳过
+# （其 deps 被禁用），桌面分子查看无需；留着会让下方闭包扫描拉入无用的
+# Qt5Qml/Qt5Quick/Qt5VirtualKeyboard，徒增体积。
+find "$BUILD_DIR/lib" "$BUILD_DIR/lib/plugins" -name 'qtvirtualkeyboard*.dll' -delete 2>/dev/null
 
 #--------------------------------------------------------------------
 # 1c. SQLite 驱动插件（必须；否则打开 qchem_option.db 报
@@ -279,6 +283,10 @@ if command -v objdump >/dev/null 2>&1; then
       [ -e "$_f" ] || continue
       for _dll in $(objdump -p "$_f" 2>/dev/null | sed -n 's/[[:space:]]*DLL Name: //p'); do
         [ -e "$BIN_DIR/$_dll" ] && continue
+        # Qt 框架 DLL 由 windeployqt 负责部署，这里不自动补——避免拉入
+        # Qt5Qml/Qt5Quick/Qt5VirtualKeyboard 等 windeployqt 刻意跳过的模块，
+        # 造成无谓的体积膨胀（如 qtvirtualkeyboard 插件的 Qt 依赖链）
+        [[ "$_dll" == Qt5*.dll || "$_dll" == Qt6*.dll ]] && continue
         src=$(_find_dll "$_dll")
         if [ -n "$src" ]; then
           copy_item "$src" "$BIN_DIR/"
@@ -314,11 +322,11 @@ if [ -n "$_missing_crit" ]; then
   echo "  装完确认 $MINGW_PREFIX/bin/ 下有上述 DLL。"
   exit 1
 fi
-# qsqlite.dll 依赖系统 sqlite3.dll（MSYS2 Qt 以 -system-sqlite 编译），
-# 由闭包扫描补入 bin/；若没补上则插件加载必失败（Driver not loaded）
-if [ -f "$BUILD_DIR/lib/plugins/sqldrivers/qsqlite.dll" ] && [ ! -f "$BIN_DIR/sqlite3.dll" ]; then
+# qsqlite.dll 依赖系统 sqlite3（MSYS2 Qt 以 -system-sqlite 编译，文件名为
+# libsqlite3-0.dll），由闭包扫描补入 bin/；若没补上则插件加载必失败（Driver not loaded）
+if [ -f "$BUILD_DIR/lib/plugins/sqldrivers/qsqlite.dll" ] && [ ! -f "$BIN_DIR/libsqlite3-0.dll" ]; then
   echo ""
-  echo "ERROR: qsqlite.dll 的运行依赖 sqlite3.dll 未进 bin/"
+  echo "ERROR: qsqlite.dll 的运行依赖 libsqlite3-0.dll 未进 bin/"
   echo "  插件虽在但加载会失败（Driver not loaded）。"
   echo "  修复: pacman -S mingw-w64-x86_64-sqlite3 后重跑本脚本。"
   exit 1

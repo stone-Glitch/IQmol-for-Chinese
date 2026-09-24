@@ -110,6 +110,15 @@ if [ ! -f "$STAGE/lib/plugins/sqldrivers/qsqlite.dll" ]; then
   exit 1
 fi
 echo "    OK: SQLite 驱动 (qsqlite.dll) 已就位"
+# qsqlite.dll 以系统 sqlite 编译，运行依赖 libsqlite3-0.dll（MSYS2 文件名）；
+# 缺它插件加载失败（Driver not loaded）
+if [ ! -f "$STAGE/bin/libsqlite3-0.dll" ]; then
+  echo "ERROR: 分发包缺少 sqlite3 运行库 (bin/libsqlite3-0.dll)" >&2
+  echo "       缺它则 Q-Chem 选项数据库加载报 Driver not loaded。" >&2
+  echo "       请更新 deploy_windows.sh（闭包扫描已覆盖插件目录）后重跑。" >&2
+  exit 1
+fi
+echo "    OK: sqlite3 运行库 (libsqlite3-0.dll) 已就位"
 # 目录嵌套自检：share/share、bin/bin 任一存在即报错
 for _n in share/share bin/bin lib/lib; do
   [ -e "$STAGE/$_n" ] && { echo "ERROR: 检测到目录嵌套 $STAGE/$_n，部署脚本需重跑清洗"; exit 1; }
