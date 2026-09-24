@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.14.4)
 
 set(targetName IQmol)
-project(${targetName} VERSION 3.1.1 LANGUAGES CXX C Fortran)
+project(${targetName} VERSION 3.2.3 LANGUAGES CXX C Fortran)
 
 include(FortranCInterface)
 #FortranCInterface_VERIFY(CXX)
