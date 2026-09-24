@@ -240,7 +240,7 @@ fi
 # 3c. 关键运行库终检：缺任何一个，没装 MSYS2 的机器上都会报"找不到 DLL"
 #--------------------------------------------------------------------
 _missing_crit=""
-for dll in libstdc++-6.dll libgcc_s_seh-1.dll libwinpthread-1.dll \
+for dll in libstdc++-6.dll libgcc_s_seh-1.dll libwinpthread-1.dll libssp-0.dll \
            libgfortran-5.dll libquadmath-0.dll libgomp-1.dll; do
   [ -f "$BIN_DIR/$dll" ] || _missing_crit="$_missing_crit $dll"
 done
@@ -249,6 +249,7 @@ if [ -n "$_missing_crit" ]; then
   echo "ERROR: 关键运行库缺失:$_missing_crit"
   echo "  这些 DLL 由 MSYS2 提供，缺了分发包在别人机器上无法启动。"
   echo "  修复: 在 MSYS2 MINGW64 终端安装对应包后重跑本脚本:"
+  echo "    pacman -S mingw-w64-x86_64-libssp       # 提供 libssp-0.dll"
   echo "    pacman -S mingw-w64-x86_64-libgomp      # 提供 libgomp-1.dll"
   echo "    pacman -S mingw-w64-x86_64-gcc-fortran  # 提供 libgfortran-5/libquadmath-0.dll"
   echo "  装完确认 $MINGW_PREFIX/bin/ 下有上述 DLL。"
@@ -375,10 +376,12 @@ fi
 #--------------------------------------------------------------------
 if [ -n "$STAGE_DIR" ]; then
   echo "==> 整理分发包到 $STAGE_DIR/IQmol"
+  # 先清空再拷，并用 "/." 形式复制，杜绝 build/ 残留导致 IQmol/share/share 嵌套
+  rm -rf "$STAGE_DIR/IQmol"
   mkdir -p "$STAGE_DIR/IQmol"
-  cp -rf "$BIN_DIR" "$STAGE_DIR/IQmol/bin"
-  [ -d "$BUILD_DIR/share" ] && cp -rf "$BUILD_DIR/share" "$STAGE_DIR/IQmol/share"
-  [ -d "$BUILD_DIR/lib" ]   && cp -rf "$BUILD_DIR/lib"   "$STAGE_DIR/IQmol/lib"
+  cp -rf "$BIN_DIR/." "$STAGE_DIR/IQmol/bin"
+  [ -d "$BUILD_DIR/share" ] && cp -rf "$BUILD_DIR/share/." "$STAGE_DIR/IQmol/share/"
+  [ -d "$BUILD_DIR/lib" ]   && cp -rf "$BUILD_DIR/lib/."   "$STAGE_DIR/IQmol/lib/"
   echo "    完成：$STAGE_DIR/IQmol/  （bin/ share/ lib/）"
 fi
 
