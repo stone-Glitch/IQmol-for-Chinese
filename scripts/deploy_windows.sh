@@ -418,6 +418,27 @@ elif [ -f "$TS" ]; then
 fi
 
 #--------------------------------------------------------------------
+# 5.5 Qt 标准翻译（Cancel/OK 等标准按钮的中文）
+#     windeployqt 以 --no-translations 跳过 Qt 自带翻译, 这里从 MSYS2
+#     Qt 安装目录把 qt_zh_CN.qm / qtbase_zh_CN.qm 复制到 bin/translations/。
+#     IQmolApplication 会优先从 程序目录/translations/ 加载它们。
+#--------------------------------------------------------------------
+QT_TRANS_DIR="$MINGW_PREFIX/share/qt5/translations"
+mkdir -p "$QM_DIR"
+_qt_qm=""
+for _name in qt_zh_CN.qm qtbase_zh_CN.qm; do
+  if [ -f "$QT_TRANS_DIR/$_name" ]; then
+    cp -f "$QT_TRANS_DIR/$_name" "$QM_DIR/" && _qt_qm="$_qt_qm $_name"
+  fi
+done
+if [ -n "$_qt_qm" ]; then
+  echo "==> Qt 标准翻译已复制:$_qt_qm"
+else
+  echo "    警告: 未找到 Qt 标准翻译 ($QT_TRANS_DIR/qt*_zh_CN.qm),"
+  echo "          标准按钮(Cancel/OK 等)将显示英文。可安装 qt5-translations 后重跑。"
+fi
+
+#--------------------------------------------------------------------
 # 6. OpenBabel 插件目录
 #
 # 项目采用静态内联 OpenBabel（顶层 BUILD_SHARED_LIBS=OFF，并已强制

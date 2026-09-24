@@ -22,6 +22,7 @@
 
 #include "JobInfo.h"
 #include "QMapRange.h"
+#include <QCoreApplication>
 #include <QDate>
 
 
@@ -31,17 +32,19 @@ namespace Process {
 
 QString JobInfo::toString(Status const status) 
 {
+   // 仅用于界面显示与日志; AWS 查询协议的序列化由 AwsConnection 独立
+   // 生成英文字符串, fromString 解析不受此处翻译影响。
    QString s;
    switch (status) {
-      case NotRunning:  s = "Not Running";  break;
-      case Queued:      s = "Queued";       break;
-      case Running:     s = "Running";      break;
-      case Suspended:   s = "Suspended";    break;
-      case Killed:      s = "Killed";       break;
-      case Error:       s = "Error";        break;
-      case Finished:    s = "Finished";     break;
-      case Copying:     s = "Copying";      break;
-      default:          s = "Unknown";      break;
+      case NotRunning:  s = QCoreApplication::translate("JobInfo", "Not Running");  break;
+      case Queued:      s = QCoreApplication::translate("JobInfo", "Queued");       break;
+      case Running:     s = QCoreApplication::translate("JobInfo", "Running");      break;
+      case Suspended:   s = QCoreApplication::translate("JobInfo", "Suspended");    break;
+      case Killed:      s = QCoreApplication::translate("JobInfo", "Killed");       break;
+      case Error:       s = QCoreApplication::translate("JobInfo", "Error");        break;
+      case Finished:    s = QCoreApplication::translate("JobInfo", "Finished");     break;
+      case Copying:     s = QCoreApplication::translate("JobInfo", "Copying");      break;
+      default:          s = QCoreApplication::translate("JobInfo", "Unknown");      break;
    }   
    return s;
 }

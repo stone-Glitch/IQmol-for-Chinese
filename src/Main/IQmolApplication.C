@@ -86,10 +86,24 @@ void IQmolApplication::loadTranslations()
       locale = QString("zh_CN");   // 首次运行: 汉化默认
    }
 
-   // Qt 基础翻译（标准对话框按钮等），跟随最终 locale
+   // Qt 基础翻译（标准对话框按钮等），跟随最终 locale。
+   // 部署包中 Qt 安装目录不存在, 优先从程序目录 translations/ 加载
+   // 随包分发的 qt_zh_CN.qm / qtbase_zh_CN.qm（由 deploy_windows.sh 复制）,
+   // 开发环境再回退 Qt 安装目录。
    m_qtTranslator = new QTranslator(this);
    QString qtBasePath = QLibraryInfo::location(QLibraryInfo::TranslationsPath);
-   if (m_qtTranslator->load("qt_" + locale, qtBasePath)) {
+   QStringList qtSearchPaths;
+   qtSearchPaths << QApplication::applicationDirPath() + "/translations"
+                 << qtBasePath;
+   bool qtLoaded(false);
+   foreach (QString const& path, qtSearchPaths) {
+      if (m_qtTranslator->load("qt_" + locale, path) ||
+          m_qtTranslator->load("qtbase_" + locale, path)) {
+         qtLoaded = true;
+         break;
+      }
+   }
+   if (qtLoaded) {
       installTranslator(m_qtTranslator);
    }
 

@@ -16,7 +16,7 @@
 | 翻译总条数（本阶段完成后，历史快照） | 1514 条（1473 + 41） |
 | 全量 qm 验证（本阶段） | 1514 通过, 0 失败 |
 
-> **当前（HEAD）全量译文**：2035 条 / 151 个 context，0 unfinished、0 vanished（见 `translations/zh_CN.ts`）。
+> **当前主分支全量译文**：2106 条 / 153 个 context，0 unfinished、0 vanished（见 `translations/zh_CN.ts`）。
 
 ## 逐项对照（文件 / 行号 / 原文 / 译文 / 修改理由 / 责任人）
 
@@ -71,7 +71,7 @@
 ## 验证方式
 
 1. `lupdate @filelist.txt -ts zh_CN_full.ts` 重新提取 → 1514 条源串（37 new + 3 UndoCommand 修正后共 41 新增）。
-2. `translate_iqmol.py` 注入译文 → 1514 条全部 finished，0 unfinished。（注：此为第 2 阶段验证时数值；当前 HEAD 全量为 2035 条）
+2. `translate_iqmol.py` 注入译文 → 1514 条全部 finished，0 unfinished。（注：此为第 2 阶段验证时数值；当前 HEAD 全量为 2106 条）
 3. `lrelease` 编译 `zh_CN.qm` → 1514 finished。
 4. `cmake --build` 重编 IQmol 可执行文件（含新 tr 代码）→ 0 错误。
 5. `verify_ext.cpp` 按真实 `(context, source)` 全量核对 qm → **1514 通过, 0 失败**。`

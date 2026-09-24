@@ -187,8 +187,7 @@ qDebug() << "Surface type requested:" << type.toString();
        // Run Evaluators
 
        if (!basisFunctions.isEmpty() && !m_terminate) {
-          QString s("Computing basis functions on grid ");
-          s += QString::number(sizeCount);
+          QString s(tr("Computing basis functions on grid %1").arg(sizeCount));
           progressLabelText(s);
 
           QLOG_TRACE() << "MGE: Computing" << basisFunctions.size() << "basis function grids";
@@ -200,8 +199,7 @@ qDebug() << "Surface type requested:" << type.toString();
        }
 
        if (!alphaOrbitals.isEmpty() && !m_terminate) {
-          QString s("Computing alpha orbitals on grid ");
-          s += QString::number(sizeCount);
+          QString s(tr("Computing alpha orbitals on grid %1").arg(sizeCount));
           progressLabelText(s);
 
           QLOG_TRACE() << "MGE: Computing" << alphaOrbitals.size() << "alpha orbital grids";
@@ -213,8 +211,7 @@ qDebug() << "Surface type requested:" << type.toString();
        }
 
        if (!betaOrbitals.isEmpty() && !m_terminate) {
-          QString s("Computing beta orbitals on grid ");
-          s += QString::number(sizeCount);
+          QString s(tr("Computing beta orbitals on grid %1").arg(sizeCount));
           progressLabelText(s);
 
           OrbitalEvaluator evaluator(betaGrids, m_shellList, m_betaCoefficients, 
@@ -225,8 +222,7 @@ qDebug() << "Surface type requested:" << type.toString();
        }
 
        if (!densityGrids.isEmpty() && !m_terminate) {
-          QString s("Computing density on grid ");
-          s += QString::number(sizeCount);
+          QString s(tr("Computing density on grid %1").arg(sizeCount));
           progressLabelText(s);
 
           QLOG_TRACE() << "MGE: Computing" << densityVectors.size() << "density grids";
@@ -238,8 +234,7 @@ qDebug() << "Surface type requested:" << type.toString();
 
 
        if (!alphaComplexOrbitals.isEmpty() && !m_terminate) {
-          QString s("Computing complex alpha orbitals on grid ");
-          s += QString::number(sizeCount);
+          QString s(tr("Computing complex alpha orbitals on grid %1").arg(sizeCount));
           progressLabelText(s);
 
           ComplexOrbitalEvaluator evaluator(alphaRealGrids, alphaImaginaryGrids, m_shellList, 
@@ -250,8 +245,7 @@ qDebug() << "Surface type requested:" << type.toString();
        }
 
        if (!betaComplexOrbitals.isEmpty() && !m_terminate) {
-          QString s("Computing complex beta orbitals on grid ");
-          s += QString::number(sizeCount);
+          QString s(tr("Computing complex beta orbitals on grid %1").arg(sizeCount));
           progressLabelText(s);
 
           ComplexOrbitalEvaluator evaluator(betaRealGrids, betaImaginaryGrids, m_shellList, 
