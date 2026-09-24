@@ -185,6 +185,26 @@ fi
 echo "    SQLite 驱动已就位: $_QSQLITE"
 
 #--------------------------------------------------------------------
+# 1d. sqldrivers 瘦身：只保留 qsqlite.dll
+#     IQmol 仅用 QSQLITE。其余驱动(mysql/psql/odbc/ibase/tds)各自依赖
+#     libmysqlclient/libpq 等 MSYS2 客户端库，随包也无从加载，徒增体积；
+#     官方发行版同样只带 qsqlite.dll。
+#     注意：MSYS2 的 Qt 以系统 sqlite3 编译，qsqlite.dll 依赖 sqlite3.dll，
+#     该依赖由下方依赖闭包扫描（已覆盖插件目录）自动补入 bin/。
+#--------------------------------------------------------------------
+for _sqdir in "$BUILD_DIR/lib/sqldrivers" "$BUILD_DIR/lib/plugins/sqldrivers" \
+              "$BIN_DIR/sqldrivers"; do
+  [ -d "$_sqdir" ] || continue
+  for _f in "$_sqdir"/*.dll; do
+    [ -e "$_f" ] || continue
+    case "$(basename "$_f")" in
+      qsqlite.dll) ;;
+      *) rm -f "$_f" ;;
+    esac
+  done
+done
+
+#--------------------------------------------------------------------
 # 2. Qt 平台插件（必须；否则报 "could not find or load the Qt platform plugin windows"）
 #    正常情况下 windeployqt 已复制，这里兜底确保存在。
 #--------------------------------------------------------------------
@@ -253,7 +273,9 @@ if command -v objdump >/dev/null 2>&1; then
   echo "==> 扫描依赖闭包，自动补缺 MinGW 运行库"
   for _round in 1 2 3 4 5; do
     _added=0
-    for _f in "$BIN_DIR"/*.exe "$BIN_DIR"/*.dll; do
+    for _f in "$BIN_DIR"/*.exe "$BIN_DIR"/*.dll \
+           "$BIN_DIR"/*/*.dll \
+           "$BUILD_DIR"/lib/*/*.dll "$BUILD_DIR"/lib/plugins/*/*.dll; do
       [ -e "$_f" ] || continue
       for _dll in $(objdump -p "$_f" 2>/dev/null | sed -n 's/[[:space:]]*DLL Name: //p'); do
         [ -e "$BIN_DIR/$_dll" ] && continue
@@ -290,6 +312,15 @@ if [ -n "$_missing_crit" ]; then
   echo "    pacman -S mingw-w64-x86_64-gcc-libs      # 提供 libstdc++/libgcc/libgomp/libquadmath 等"
   echo "    pacman -S mingw-w64-x86_64-gcc-fortran   # 提供 libgfortran-5.dll"
   echo "  装完确认 $MINGW_PREFIX/bin/ 下有上述 DLL。"
+  exit 1
+fi
+# qsqlite.dll 依赖系统 sqlite3.dll（MSYS2 Qt 以 -system-sqlite 编译），
+# 由闭包扫描补入 bin/；若没补上则插件加载必失败（Driver not loaded）
+if [ -f "$BUILD_DIR/lib/plugins/sqldrivers/qsqlite.dll" ] && [ ! -f "$BIN_DIR/sqlite3.dll" ]; then
+  echo ""
+  echo "ERROR: qsqlite.dll 的运行依赖 sqlite3.dll 未进 bin/"
+  echo "  插件虽在但加载会失败（Driver not loaded）。"
+  echo "  修复: pacman -S mingw-w64-x86_64-sqlite3 后重跑本脚本。"
   exit 1
 fi
 
