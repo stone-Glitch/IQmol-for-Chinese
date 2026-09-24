@@ -13,9 +13,22 @@ IQmol version 3
 > | 子模块下载不动（国内网络） | 本文「子模块离线包」章节 |
 > | 学会用这个软件 | [中文用户手册](doc/IQmolUserGuide.pdf)（34 页） |
 > | 维护/更新翻译 | 本文「简体中文本地化」章节 + `scripts/update_translations.sh` |
-> | 上游发新版了，怎么升级合并 | [docs/上游升级迁移指南.md](docs/上游升级迁移指南.md) |
+> | 上游发新版了，怎么升级合并（★ 一键迁移） | [docs/上游升级迁移指南.md](docs/上游升级迁移指南.md) |
 > | 想彻底降低升级冲突（长期治理方案） | [docs/改动面最小化方案（第三层）.md](docs/改动面最小化方案（第三层）.md) |
 > | 翻译包裹怎么在上游升级后一键重建 | [docs/第三层-重放机制说明.md](docs/第三层-重放机制说明.md) |
+>
+> **上游升级迁移**：本仓库已实现**两条可验证的迁移路线**，实测在干净上游树上
+> 源码 **69/69 文件 100% 复现**：
+>
+> ```bash
+> # 路线 B（推荐，一条命令）：在干净上游检出上重放全部汉化
+> bash scripts/migrate_to_upstream.sh --check --target /path/to/upstream   # 预检
+> bash scripts/migrate_to_upstream.sh --apply --target /path/to/upstream   # 执行
+>
+> # 路线 A：在本仓库内用 git merge 吸收上游更新
+> bash scripts/sync_upstream.sh --status   # 看差距
+> bash scripts/sync_upstream.sh --merge    # 合并
+> ```
 
 This is IQmol, a molecular builder and visualization package written by Andrew
 Gilbert.  IQmol is able to build molecules, set up and submit input for Q-Chem

@@ -1,0 +1,1309 @@
+diff --git a/src/Configurator/ConstraintConfigurator.C b/src/Configurator/ConstraintConfigurator.C
+index 2376636..7fd7269 100644
+--- a/src/Configurator/ConstraintConfigurator.C
++++ b/src/Configurator/ConstraintConfigurator.C
+@@ -52,7 +52,7 @@ VectorConstraint::VectorConstraint(Layer::Constraint& constraint) : Constraint(c
+ void VectorConstraint::init()
+ {
+    QString atoms(QString::number(m_constraint.m_atoms[0]->getIndex()));
+-   m_constraintConfigurator.label->setText("Set position of atom " + atoms);
++   m_constraintConfigurator.label->setText(tr("Set position of atom %1").arg(atoms));
+    m_constraint.setText("Position " + atoms);
+ }
+ 
+@@ -138,7 +138,7 @@ void ScalarConstraint::initDistance()
+    QString atoms(QString::number(m_constraint.m_atoms[0]->getIndex()) + "-" +
+                  QString::number(m_constraint.m_atoms[1]->getIndex()));
+ 
+-   m_constraintConfigurator.label->setText("Distance between atoms " + atoms);
++   m_constraintConfigurator.label->setText(tr("Distance between atoms %1").arg(atoms));
+    m_constraint.setText("Distance " + atoms);
+ }
+ 
+@@ -160,7 +160,7 @@ void ScalarConstraint::initAngle()
+                  QString::number(m_constraint.m_atoms[1]->getIndex()) + "-" +
+                  QString::number(m_constraint.m_atoms[2]->getIndex()));
+ 
+-   m_constraintConfigurator.label->setText("Angle between atoms " + atoms);
++   m_constraintConfigurator.label->setText(tr("Angle between atoms %1").arg(atoms));
+    m_constraint.setText("Angle " + atoms);
+ }
+ 
+diff --git a/src/Configurator/GeminalOrbitalsConfigurator.C b/src/Configurator/GeminalOrbitalsConfigurator.C
+index de81b95..1042175 100644
+--- a/src/Configurator/GeminalOrbitalsConfigurator.C
++++ b/src/Configurator/GeminalOrbitalsConfigurator.C
+@@ -41,6 +41,7 @@ GeminalOrbitals::GeminalOrbitals(Layer::GeminalOrbitals& geminalOrbitals)
+       m_configurator.orbitalRangeMax, SLOT(setCurrentIndex(int)));
+ 
+    m_configurator.surfaceType->clear();
++   // [i18n] 显示文本走 tr()，逻辑读 itemData(index)（见本文件 282 行），不受译文影响。
+    m_configurator.surfaceType->addItem(tr("Geminal"), Geminal);
+    m_configurator.surfaceType->addItem(tr("Geminal Correlation"), Correlation);
+    m_configurator.surfaceType->setCurrentIndex(0); 
+diff --git a/src/Configurator/MolecularSurfacesConfigurator.C b/src/Configurator/MolecularSurfacesConfigurator.C
+index 0d20c87..81cfe5a 100644
+--- a/src/Configurator/MolecularSurfacesConfigurator.C
++++ b/src/Configurator/MolecularSurfacesConfigurator.C
+@@ -34,6 +34,7 @@ MolecularSurfaces::MolecularSurfaces()
+    m_configurator.setupUi(this);
+ 
+    m_configurator.surfaceType->clear();
++   // [i18n] 显示文本走 tr()，逻辑一律读 itemData(index)，不受译文影响。
+    m_configurator.surfaceType->addItem(tr("van der Waals"), Data::SurfaceType::VanDerWaals);
+    m_configurator.surfaceType->addItem(tr("Promolecule"),   Data::SurfaceType::Promolecule);
+    m_configurator.surfaceType->addItem(tr("SID"),           Data::SurfaceType::SID);
+diff --git a/src/Configurator/MullikenDecompositionsDialog.C b/src/Configurator/MullikenDecompositionsDialog.C
+index 4a6f084..021c6c7 100644
+--- a/src/Configurator/MullikenDecompositionsDialog.C
++++ b/src/Configurator/MullikenDecompositionsDialog.C
+@@ -32,7 +32,7 @@ MullikenDecompositionsDialog::MullikenDecompositionsDialog(Data::ShellList const
+    m_shellList(shellList), m_density(density)
+ {
+    m_dialog.setupUi(this);
+-   setWindowTitle("Mulliken decomposition for " + m_density.label());
++   setWindowTitle(tr("Mulliken decomposition for %1").arg(m_density.label()));
+ }
+ 
+ 
+diff --git a/src/Configurator/OrbitalsConfigurator.C b/src/Configurator/OrbitalsConfigurator.C
+index 0d7f20a..470dd6f 100644
+--- a/src/Configurator/OrbitalsConfigurator.C
++++ b/src/Configurator/OrbitalsConfigurator.C
+@@ -44,6 +44,31 @@ void Orbitals::on_densityMatrixButton_clicked(bool)
+ }
+ 
+ 
++//---------------------------------------------------------------------------
++// [i18n] 把"界面显示名"与"数据键"分开存放的小工具。
++//
++// 背景：surfaceType 下拉框既用于显示，又被逻辑当成数据键使用 ——
++// on_mullikenDecompositionsButton_clicked() 里有句注释写着
++// "A little dodge, we use the label to match the density"，即拿下拉框
++// 当前文本去和 Data::Density::label()（来自解析器的英文标签）比对。
++// 一旦把显示文本翻成中文，这个比对就会失配。
++//
++// 因此：显示文本走 tr()，英文原文另存到 itemData(Qt::UserRole+1)，
++// 所有逻辑读取都改走 itemData，译文怎么变都不会影响匹配。
++//
++// 注意这里必须显式写出每一条 tr("...") 字面量，不能用宏拼接 ——
++// lupdate 是在宏展开前的源码上做静态扫描的，宏里的 tr() 提取不到。
++//---------------------------------------------------------------------------
++namespace {
++   void addSurfaceType(QComboBox* combo, QString const& text,
++                       int kind, QString const& translated)
++   {
++      combo->addItem(translated, kind);
++      combo->setItemData(combo->count()-1, text, Qt::UserRole+1);
++   }
++}
++
++
+ Orbitals::Orbitals(Layer::Orbitals& orbitals)
+   : m_orbitals(orbitals), m_nAlpha(0), m_nBeta(0), m_nOrbitals(0), m_customPlot(0)
+ {
+@@ -52,27 +77,33 @@ qDebug() << "Orbital Type in configurator: " << Data::Orbitals::toString(m_orbit
+ 
+    m_configurator.surfaceType->clear();
+    // Watch the ordering of these affects the index selection below
+-   m_configurator.surfaceType->addItem(tr("Basis Function"), Data::SurfaceType::BasisFunction);
++   // [i18n] 显示名 = tr() 译文，数据键 = 英文原文(存在 UserRole+1)，
++   // 详见文件上方 addSurfaceType() 的说明。
++   QComboBox* surfaceType(m_configurator.surfaceType);
++   addSurfaceType(surfaceType, "Basis Function", Data::SurfaceType::BasisFunction,
++                  tr("Basis Function"));
+   
+    if (m_orbitals.m_orbitals.orbitalType() == Data::Orbitals::NaturalTransition) {
+-      m_configurator.surfaceType->addItem(tr("Alpha NTO"),  Data::SurfaceType::AlphaOrbital);
+-      m_configurator.surfaceType->addItem(tr("Beta NTO"),   Data::SurfaceType::BetaOrbital);
+-    //m_configurator.surfaceType->addItem(tr("Transition Density"), TotalDensity);
++      addSurfaceType(surfaceType, "Alpha NTO", Data::SurfaceType::AlphaOrbital, tr("Alpha NTO"));
++      addSurfaceType(surfaceType, "Beta NTO",  Data::SurfaceType::BetaOrbital,  tr("Beta NTO"));
++    //addSurfaceType(surfaceType, "Transition Density", TotalDensity, tr("Transition Density"));
+    }else if (m_orbitals.m_orbitals.orbitalType() == Data::Orbitals::NaturalBond) {
+-      m_configurator.surfaceType->addItem(tr("Alpha NBO"),  Data::SurfaceType::AlphaOrbital);
+-      m_configurator.surfaceType->addItem(tr("Beta NBO"), Data::SurfaceType::BetaOrbital);
++      addSurfaceType(surfaceType, "Alpha NBO", Data::SurfaceType::AlphaOrbital, tr("Alpha NBO"));
++      addSurfaceType(surfaceType, "Beta NBO",  Data::SurfaceType::BetaOrbital,  tr("Beta NBO"));
+    }else if (m_orbitals.m_orbitals.orbitalType() == Data::Orbitals::Dyson) {
+-      m_configurator.surfaceType->addItem(tr("Dyson (Left)"),  Data::SurfaceType::DysonLeft);
+-      m_configurator.surfaceType->addItem(tr("Dyson (Right)"), Data::SurfaceType::DysonRight);
++      addSurfaceType(surfaceType, "Dyson (Left)",  Data::SurfaceType::DysonLeft,  tr("Dyson (Left)"));
++      addSurfaceType(surfaceType, "Dyson (Right)", Data::SurfaceType::DysonRight, tr("Dyson (Right)"));
+    }else if (m_orbitals.m_orbitals.orbitalType() == Data::Orbitals::Generic) {
+-      m_configurator.surfaceType->addItem(tr("Orbital"),  Data::SurfaceType::GenericOrbital);
++      addSurfaceType(surfaceType, "Orbital", Data::SurfaceType::GenericOrbital, tr("Orbital"));
+ 
+    }else if (m_orbitals.m_orbitals.orbitalType() == Data::Orbitals::Complex) {
+-      m_configurator.surfaceType->addItem(tr("Complex Alpha Orbital"),  Data::SurfaceType::AlphaRealOrbital);
+-      m_configurator.surfaceType->addItem(tr("Complex Beta Orbital"),   Data::SurfaceType::BetaRealOrbital);
++      addSurfaceType(surfaceType, "Complex Alpha Orbital",
++                     Data::SurfaceType::AlphaRealOrbital, tr("Complex Alpha Orbital"));
++      addSurfaceType(surfaceType, "Complex Beta Orbital",
++                     Data::SurfaceType::BetaRealOrbital,  tr("Complex Beta Orbital"));
+    }else {
+-      m_configurator.surfaceType->addItem(tr("Alpha Orbital"),  Data::SurfaceType::AlphaOrbital);
+-      m_configurator.surfaceType->addItem(tr("Beta Orbital"),   Data::SurfaceType::BetaOrbital);
++      addSurfaceType(surfaceType, "Alpha Orbital", Data::SurfaceType::AlphaOrbital, tr("Alpha Orbital"));
++      addSurfaceType(surfaceType, "Beta Orbital",  Data::SurfaceType::BetaOrbital,  tr("Beta Orbital"));
+    }
+ 
+    setIsovalueUnits(m_configurator.atomicUnits->isChecked());
+@@ -507,7 +538,10 @@ void Orbitals::setNegativeColor(QColor const& color)
+ void Orbitals::on_mullikenDecompositionsButton_clicked(bool)
+ {
+    // A little dodge, we use the label to match the density
+-   QString label(m_configurator.surfaceType->currentText());
++   // [i18n] 必须取英文数据键(UserRole+1)，不能用已翻译的 currentText()，
++   // 否则与 Data::Density::label() 的英文标签匹配不上。见 addSurfaceType()。
++   QString label(m_configurator.surfaceType->itemData(
++                    m_configurator.surfaceType->currentIndex(), Qt::UserRole+1).toString());
+ 
+    Data::DensityList& densities(m_orbitals.m_availableDensities);
+    Data::DensityList::iterator density;
+@@ -718,7 +752,9 @@ void Orbitals::on_addToQueueButton_clicked(bool)
+       case Data::SurfaceType::CustomDensity: {
+          info.setIsSigned(false);
+          info.type().setKind(Data::SurfaceType::Custom);
+-         info.type().setLabel(m_configurator.surfaceType->currentText());
++         // [i18n] 同上，取英文数据键而非显示译文
++         info.type().setLabel(m_configurator.surfaceType->itemData(
++            m_configurator.surfaceType->currentIndex(), Qt::UserRole+1).toString());
+          queueSurface(info);
+       } break;
+ 
+diff --git a/src/Configurator/SurfaceAnimatorDialog.C b/src/Configurator/SurfaceAnimatorDialog.C
+index bc972b6..3ae904a 100644
+--- a/src/Configurator/SurfaceAnimatorDialog.C
++++ b/src/Configurator/SurfaceAnimatorDialog.C
+@@ -368,8 +368,8 @@ void SurfaceAnimatorDialog::computeMultiGridAnimation()
+ 
+            surface = calculateSurface(t, isovalue);
+            frames.append(new Animator::Combo::Data(geomT, surface));
+-           label = (j == 0) ? "Cube Data " + QString::number(i) 
+-                            : "Interpolation Frame " + QString::number(j);
++           label = (j == 0) ? tr("Cube Data %1").arg(i) 
++                            : tr("Interpolation Frame %1").arg(j);
+            surface->setText(label);
+            cube->appendLayer(surface);
+ 
+@@ -391,7 +391,7 @@ void SurfaceAnimatorDialog::computeMultiGridAnimation()
+ 
+    // Take care of the final reference frame
+    surface = calculateSurface(*B, isovalue);
+-   surface->setText("Cube Data " + QString::number(m_referenceFrames));
++   surface->setText(tr("Cube Data %1").arg(m_referenceFrames));
+    cube->appendLayer(surface);
+ 
+    frames.append(new Animator::Combo::Data(cube->cubeData().geometry(), surface));
+diff --git a/src/Data/SurfaceType.C b/src/Data/SurfaceType.C
+index 6d00f40..4c22e9d 100644
+--- a/src/Data/SurfaceType.C
++++ b/src/Data/SurfaceType.C
+@@ -21,8 +21,8 @@
+ ********************************************************************************/
+ 
+ #include "SurfaceType.h"
+-#include <QDebug>
+ #include <QCoreApplication>
++#include <QDebug>
+ 
+ 
+ namespace IQmol {
+@@ -93,34 +93,34 @@ QString SurfaceType::toString() const
+    QString label;
+    switch (m_kind) {
+       case Custom:                 label = m_label;                   break;
+-      case AlphaOrbital:           label = QCoreApplication::translate("IQmol::Data::SurfaceType", "Alpha");                   break;
+-      case BetaOrbital:            label = QCoreApplication::translate("IQmol::Data::SurfaceType", "Beta");                    break;
+-      case TotalDensity:           label = QCoreApplication::translate("IQmol::Data::SurfaceType", "Total Density");           break;
+-      case SpinDensity:            label = QCoreApplication::translate("IQmol::Data::SurfaceType", "Spin Density");            break;
+-      case AlphaDensity:           label = QCoreApplication::translate("IQmol::Data::SurfaceType", "Alpha Density");           break;
+-      case BetaDensity:            label = QCoreApplication::translate("IQmol::Data::SurfaceType", "Beta Density");            break;
+-      case DensityCombo:           label = QCoreApplication::translate("IQmol::Data::SurfaceType", "User Defined Density");    break;
+-      case CubeData:               label = QCoreApplication::translate("IQmol::Data::SurfaceType", "Cube Data");               break;
+-      case VanDerWaals:            label = QCoreApplication::translate("IQmol::Data::SurfaceType", "van der Waals");           break;
+-      case Promolecule:            label = QCoreApplication::translate("IQmol::Data::SurfaceType", "Promolecule");             break;
+-      case SolventExcluded:        label = QCoreApplication::translate("IQmol::Data::SurfaceType", "Solvent Excluded");        break;
+-      case SID:                    label = QCoreApplication::translate("IQmol::Data::SurfaceType", "SID");                     break;
+-      case ElectrostaticPotential: label = QCoreApplication::translate("IQmol::Data::SurfaceType", "Electrostatic Potential"); break;
+-      case Geminal:                label = QCoreApplication::translate("IQmol::Data::SurfaceType", "Geminal");                 break;
+-      case Correlation:            label = QCoreApplication::translate("IQmol::Data::SurfaceType", "Correlated Density");      break;
+-      case CustomDensity:          label = QCoreApplication::translate("IQmol::Data::SurfaceType", "Custom Density");          break;
+-      case BasisFunction:          label = QCoreApplication::translate("IQmol::Data::SurfaceType", "Basis Function");          break;
+-      case DysonLeft:              label = QCoreApplication::translate("IQmol::Data::SurfaceType", "Dyson (left)");            break;
+-      case DysonRight:             label = QCoreApplication::translate("IQmol::Data::SurfaceType", "Dyson (right)");           break;
+-      case MullikenAtomic:         label = QCoreApplication::translate("IQmol::Data::SurfaceType", "Mulliken Atomic");         break;
+-      case MullikenDiatomic:       label = QCoreApplication::translate("IQmol::Data::SurfaceType", "Mulliken Diatomic");       break;
+-      case GenericOrbital:         label = QCoreApplication::translate("IQmol::Data::SurfaceType", "Orbital");                 break;
+-      case Ribbon:                 label = QCoreApplication::translate("IQmol::Data::SurfaceType", "Ribbon");                  break;
+-
+-      case AlphaRealOrbital:       label = QCoreApplication::translate("IQmol::Data::SurfaceType", "Alpha Real Orbital");      break;
+-      case AlphaImaginaryOrbital:  label = QCoreApplication::translate("IQmol::Data::SurfaceType", "Alpha Imaginary Orbital"); break;
+-      case BetaRealOrbital:        label = QCoreApplication::translate("IQmol::Data::SurfaceType", "Beta Real Orbital");       break;
+-      case BetaImaginaryOrbital:   label = QCoreApplication::translate("IQmol::Data::SurfaceType", "Beta Imaginary Orbital");  break;
++      case AlphaOrbital:           label = "Alpha";                   break;
++      case BetaOrbital:            label = "Beta";                    break;
++      case TotalDensity:           label = "Total Density";           break;
++      case SpinDensity:            label = "Spin Density";            break;
++      case AlphaDensity:           label = "Alpha Density";           break;
++      case BetaDensity:            label = "Beta Density";            break;
++      case DensityCombo:           label = "User Defined Density";    break;
++      case CubeData:               label = "Cube Data";               break;
++      case VanDerWaals:            label = "van der Waals";           break;
++      case Promolecule:            label = "Promolecule";             break;
++      case SolventExcluded:        label = "Solvent Excluded";        break;
++      case SID:                    label = "SID";                     break;
++      case ElectrostaticPotential: label = "Electrostatic Potential"; break;
++      case Geminal:                label = "Geminal";                 break;
++      case Correlation:            label = "Correlated Density";      break;
++      case CustomDensity:          label = "Custom Density";          break;
++      case BasisFunction:          label = "Basis Function";          break;
++      case DysonLeft:              label = "Dyson (left)";            break;
++      case DysonRight:             label = "Dyson (right)";           break;
++      case MullikenAtomic:         label = "Mulliken Atomic";         break;
++      case MullikenDiatomic:       label = "Mulliken Diatomic";       break;
++      case GenericOrbital:         label = "Orbital";                 break;
++      case Ribbon:                 label = "Ribbon";                  break;
++
++      case AlphaRealOrbital:       label = "Alpha Real Orbital";      break;
++      case AlphaImaginaryOrbital:  label = "Alpha Imaginary Orbital"; break;
++      case BetaRealOrbital:        label = "Beta Real Orbital";       break;
++      case BetaImaginaryOrbital:   label = "Beta Imaginary Orbital";  break;
+    }
+ 
+    if (isIndexed()) label += " " + QString::number(m_index+1);
+@@ -128,6 +128,64 @@ QString SurfaceType::toString() const
+ }
+ 
+ 
++QString SurfaceType::toDisplayString() const
++{
++   // [i18n] 界面显示名 = 数据键的译文。数据键本身保持不变，
++   // 以保证 operator==、文件名、图层比较等逻辑不受语言影响。
++   //
++   // 注意：SurfaceType 继承自 Data::Base（普通 C++ 类，非 QObject），
++   // 没有 tr() 可用，必须用 QCoreApplication::translate 并显式指定
++   // 上下文 IQmol::Data::SurfaceType。
++   QString label(toString());
++   QString suffix;
++   if (isIndexed() && m_index >= 0) {
++      // 先摘掉尾部编号（如 "Alpha 1" 的 " 1"）再翻译，稍后加回
++      suffix = " " + QString::number(m_index+1);
++      label.chop(suffix.length());
++   }
++
++   // 数据键 -> 已翻译显示名。QCoreApplication::translate 用完整上下文取词，
++   // 上下文与 translations/zh_CN.ts 中 IQmol::Data::SurfaceType 一致。
++   //
++   // 每条字面量都显式写出，不用宏拼接 —— lupdate 在宏展开前的源码上
++   // 做静态扫描，宏里的 translate() 参数提取不到。
++   QString translated;
++   if      (label == "Alpha")                   translated = QCoreApplication::translate("IQmol::Data::SurfaceType", "Alpha");
++   else if (label == "Beta")                    translated = QCoreApplication::translate("IQmol::Data::SurfaceType", "Beta");
++   else if (label == "Total Density")           translated = QCoreApplication::translate("IQmol::Data::SurfaceType", "Total Density");
++   else if (label == "Spin Density")            translated = QCoreApplication::translate("IQmol::Data::SurfaceType", "Spin Density");
++   else if (label == "Alpha Density")           translated = QCoreApplication::translate("IQmol::Data::SurfaceType", "Alpha Density");
++   else if (label == "Beta Density")            translated = QCoreApplication::translate("IQmol::Data::SurfaceType", "Beta Density");
++   else if (label == "User Defined Density")    translated = QCoreApplication::translate("IQmol::Data::SurfaceType", "User Defined Density");
++   else if (label == "Cube Data")               translated = QCoreApplication::translate("IQmol::Data::SurfaceType", "Cube Data");
++   else if (label == "van der Waals")           translated = QCoreApplication::translate("IQmol::Data::SurfaceType", "van der Waals");
++   else if (label == "Promolecule")             translated = QCoreApplication::translate("IQmol::Data::SurfaceType", "Promolecule");
++   else if (label == "Solvent Excluded")        translated = QCoreApplication::translate("IQmol::Data::SurfaceType", "Solvent Excluded");
++   else if (label == "SID")                     translated = QCoreApplication::translate("IQmol::Data::SurfaceType", "SID");
++   else if (label == "Electrostatic Potential") translated = QCoreApplication::translate("IQmol::Data::SurfaceType", "Electrostatic Potential");
++   else if (label == "Geminal")                 translated = QCoreApplication::translate("IQmol::Data::SurfaceType", "Geminal");
++   else if (label == "Correlated Density")      translated = QCoreApplication::translate("IQmol::Data::SurfaceType", "Correlated Density");
++   else if (label == "Custom Density")          translated = QCoreApplication::translate("IQmol::Data::SurfaceType", "Custom Density");
++   else if (label == "Basis Function")          translated = QCoreApplication::translate("IQmol::Data::SurfaceType", "Basis Function");
++   else if (label == "Dyson (left)")            translated = QCoreApplication::translate("IQmol::Data::SurfaceType", "Dyson (left)");
++   else if (label == "Dyson (right)")           translated = QCoreApplication::translate("IQmol::Data::SurfaceType", "Dyson (right)");
++   else if (label == "Mulliken Atomic")         translated = QCoreApplication::translate("IQmol::Data::SurfaceType", "Mulliken Atomic");
++   else if (label == "Mulliken Diatomic")       translated = QCoreApplication::translate("IQmol::Data::SurfaceType", "Mulliken Diatomic");
++   else if (label == "Orbital")                 translated = QCoreApplication::translate("IQmol::Data::SurfaceType", "Orbital");
++   else if (label == "Ribbon")                  translated = QCoreApplication::translate("IQmol::Data::SurfaceType", "Ribbon");
++   else if (label == "Alpha Real Orbital")      translated = QCoreApplication::translate("IQmol::Data::SurfaceType", "Alpha Real Orbital");
++   else if (label == "Alpha Imaginary Orbital") translated = QCoreApplication::translate("IQmol::Data::SurfaceType", "Alpha Imaginary Orbital");
++   else if (label == "Beta Real Orbital")       translated = QCoreApplication::translate("IQmol::Data::SurfaceType", "Beta Real Orbital");
++   else if (label == "Beta Imaginary Orbital")  translated = QCoreApplication::translate("IQmol::Data::SurfaceType", "Beta Imaginary Orbital");
++   else {
++      // Custom 类型的 label 是用户/解析器给的名字，原样返回
++      return toString();
++   }
++
++   return translated + suffix;
++}
++
++
+ bool SurfaceType::operator==(SurfaceType const& that) const
+ {
+    bool same(m_kind == that.m_kind && m_index == that.m_index);
+diff --git a/src/Data/SurfaceType.h b/src/Data/SurfaceType.h
+index 02955b1..1ef789a 100644
+--- a/src/Data/SurfaceType.h
++++ b/src/Data/SurfaceType.h
+@@ -55,8 +55,13 @@ namespace Data {
+          SurfaceType(Kind const kind = Custom, unsigned index = 0) 
+           : m_kind(kind), m_index(index) { }
+ 
++         // [i18n] toString() 返回稳定的英文数据键，供程序内部比较与
++         // 文件输出使用，切勿翻译；界面显示请用 toDisplayString()。
+          QString toString() const;
+ 
++         // 返回已翻译的界面显示名，用于列表、图表标题等展示场景
++         QString toDisplayString() const;
++
+          Kind const& kind() const { return m_kind; }
+          void setKind(Kind const kind) { m_kind = kind; }
+ 
+diff --git a/src/Grid/MolecularGridEvaluator.C b/src/Grid/MolecularGridEvaluator.C
+index 50c88f2..d2cc494 100644
+--- a/src/Grid/MolecularGridEvaluator.C
++++ b/src/Grid/MolecularGridEvaluator.C
+@@ -187,8 +187,7 @@ qDebug() << "Surface type requested:" << type.toString();
+        // Run Evaluators
+ 
+        if (!basisFunctions.isEmpty() && !m_terminate) {
+-          QString s("Computing basis functions on grid ");
+-          s += QString::number(sizeCount);
++          QString s(tr("Computing basis functions on grid %1").arg(sizeCount));
+           progressLabelText(s);
+ 
+           QLOG_TRACE() << "MGE: Computing" << basisFunctions.size() << "basis function grids";
+@@ -200,8 +199,7 @@ qDebug() << "Surface type requested:" << type.toString();
+        }
+ 
+        if (!alphaOrbitals.isEmpty() && !m_terminate) {
+-          QString s("Computing alpha orbitals on grid ");
+-          s += QString::number(sizeCount);
++          QString s(tr("Computing alpha orbitals on grid %1").arg(sizeCount));
+           progressLabelText(s);
+ 
+           QLOG_TRACE() << "MGE: Computing" << alphaOrbitals.size() << "alpha orbital grids";
+@@ -213,8 +211,7 @@ qDebug() << "Surface type requested:" << type.toString();
+        }
+ 
+        if (!betaOrbitals.isEmpty() && !m_terminate) {
+-          QString s("Computing beta orbitals on grid ");
+-          s += QString::number(sizeCount);
++          QString s(tr("Computing beta orbitals on grid %1").arg(sizeCount));
+           progressLabelText(s);
+ 
+           OrbitalEvaluator evaluator(betaGrids, m_shellList, m_betaCoefficients, 
+@@ -225,8 +222,7 @@ qDebug() << "Surface type requested:" << type.toString();
+        }
+ 
+        if (!densityGrids.isEmpty() && !m_terminate) {
+-          QString s("Computing density on grid ");
+-          s += QString::number(sizeCount);
++          QString s(tr("Computing density on grid %1").arg(sizeCount));
+           progressLabelText(s);
+ 
+           QLOG_TRACE() << "MGE: Computing" << densityVectors.size() << "density grids";
+@@ -238,8 +234,7 @@ qDebug() << "Surface type requested:" << type.toString();
+ 
+ 
+        if (!alphaComplexOrbitals.isEmpty() && !m_terminate) {
+-          QString s("Computing complex alpha orbitals on grid ");
+-          s += QString::number(sizeCount);
++          QString s(tr("Computing complex alpha orbitals on grid %1").arg(sizeCount));
+           progressLabelText(s);
+ 
+           ComplexOrbitalEvaluator evaluator(alphaRealGrids, alphaImaginaryGrids, m_shellList, 
+@@ -250,8 +245,7 @@ qDebug() << "Surface type requested:" << type.toString();
+        }
+ 
+        if (!betaComplexOrbitals.isEmpty() && !m_terminate) {
+-          QString s("Computing complex beta orbitals on grid ");
+-          s += QString::number(sizeCount);
++          QString s(tr("Computing complex beta orbitals on grid %1").arg(sizeCount));
+           progressLabelText(s);
+ 
+           ComplexOrbitalEvaluator evaluator(betaRealGrids, betaImaginaryGrids, m_shellList, 
+diff --git a/src/Layer/CubeDataLayer.C b/src/Layer/CubeDataLayer.C
+index 5dd0ca9..54dd5cc 100644
+--- a/src/Layer/CubeDataLayer.C
++++ b/src/Layer/CubeDataLayer.C
+@@ -36,14 +36,15 @@
+ namespace IQmol {
+ namespace Layer {
+ 
+-CubeData::CubeData(Data::CubeData const& cube) : Base(tr("Cube Data")), m_configurator(*this),
++CubeData::CubeData(Data::CubeData const& cube) : Base("Cube Data"), m_configurator(*this),
+    m_cube(cube), m_molecule(0)
+ {
++   // [i18n] 初始化列表中的标签为裸字符串，界面显示用下面这条带 label 的格式串。
+    connect(&m_configurator, SIGNAL(calculateSurface(Data::SurfaceInfo const&)),
+       this, SLOT(calculateSurface(Data::SurfaceInfo const&)));
+    setConfigurator(&m_configurator);
+    setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled | Qt::ItemIsEditable);
+-   setText("Cube Data (" + m_cube.label() + ")");
++   setText(tr("Cube Data") + " (" + m_cube.label() + ")");
+ }
+ 
+ 
+diff --git a/src/Layer/DipoleLayer.C b/src/Layer/DipoleLayer.C
+index 9f588c6..e76a515 100644
+--- a/src/Layer/DipoleLayer.C
++++ b/src/Layer/DipoleLayer.C
+@@ -34,10 +34,14 @@ namespace Layer {
+ 
+ const QColor softCyan(179,235,242);
+ 
+-Dipole::Dipole(qglviewer::Vec const& dipoleMoment) : GLObject(tr("Dipole")), 
++Dipole::Dipole(qglviewer::Vec const& dipoleMoment) : GLObject("Dipole"), 
+    m_color(softCyan), m_scale(0.25), m_configurator(*this), m_dipoleMoment(dipoleMoment), 
+    m_sceneRadius(Preferences::DefaultSceneRadius())
+ {
++   // [i18n] 初始化列表中的标签为裸字符串，此处覆盖为译文，
++   // 使 lupdate 可提取、界面显示中文。
++   setText(tr("Dipole"));
++
+    setFlags(Qt::ItemIsEnabled | Qt::ItemIsUserCheckable);
+    setCheckState(Qt::Unchecked);
+    setConfigurator(&m_configurator);
+diff --git a/src/Layer/EfpFragmentListLayer.C b/src/Layer/EfpFragmentListLayer.C
+index c9f9992..d65aaee 100644
+--- a/src/Layer/EfpFragmentListLayer.C
++++ b/src/Layer/EfpFragmentListLayer.C
+@@ -30,9 +30,13 @@ namespace IQmol {
+ namespace Layer {
+ 
+ 
+-EfpFragmentList::EfpFragmentList(Layer::Base* parent) : Base(tr("EFP Fragments")), m_atomScale(0.5),
++EfpFragmentList::EfpFragmentList(Layer::Base* parent) : Base("EFP Fragments"), m_atomScale(0.5),
+    m_bondScale(0.5), m_drawMode(Primitive::Tubes), m_configurator(*this) 
+ {
++   // [i18n] 初始化列表中的标签为裸字符串，此处覆盖为译文，
++   // 使 lupdate 可提取、界面显示中文。
++   setText(tr("EFP Fragments"));
++
+    setConfigurator(&m_configurator);
+    setPersistentParent(parent);
+    setProperty(RemoveWhenChildless);
+diff --git a/src/Layer/ExcitedStatesLayer.C b/src/Layer/ExcitedStatesLayer.C
+index 2e6337a..71ab2c8 100644
+--- a/src/Layer/ExcitedStatesLayer.C
++++ b/src/Layer/ExcitedStatesLayer.C
+@@ -29,9 +29,13 @@ namespace IQmol {
+ namespace Layer {
+ 
+ 
+-ExcitedStates::ExcitedStates(Data::ExcitedStates const& states) : Base(tr("Excited States")),
++ExcitedStates::ExcitedStates(Data::ExcitedStates const& states) : Base("Excited States"),
+    m_excitedStates(states), m_configurator(0)
+ {
++   // [i18n] 初始化列表中的标签为裸字符串，此处覆盖为译文，
++   // 使 lupdate 可提取、界面显示中文。
++   setText(tr("Excited States"));
++
+ }
+ 
+ 
+diff --git a/src/Layer/FrequenciesLayer.C b/src/Layer/FrequenciesLayer.C
+index 87d4324..bf12130 100644
+--- a/src/Layer/FrequenciesLayer.C
++++ b/src/Layer/FrequenciesLayer.C
+@@ -33,10 +33,14 @@ namespace IQmol {
+ namespace Layer {
+ 
+ 
+-Frequencies::Frequencies(Data::Frequencies const& frequencies) : Base(tr("Frequencies")), 
++Frequencies::Frequencies(Data::Frequencies const& frequencies) : Base("Frequencies"), 
+    m_frequencies(frequencies), m_configurator(*this), m_play(false), m_loop(-1.0), 
+    m_speed(0.0625), m_scale(0.25), m_displayModeVector(true), m_activeMode(0), m_molecule(0)
+ {
++   // [i18n] 初始化列表中的标签为裸字符串，此处覆盖为译文，
++   // 使 lupdate 可提取、界面显示中文。
++   setText(tr("Frequencies"));
++
+    Data::VibrationalModeList::const_iterator iter;
+    Data::VibrationalModeList const& modes(m_frequencies.modes());
+ 
+diff --git a/src/Layer/GeminalOrbitalsLayer.C b/src/Layer/GeminalOrbitalsLayer.C
+index 60f253d..616ca87 100644
+--- a/src/Layer/GeminalOrbitalsLayer.C
++++ b/src/Layer/GeminalOrbitalsLayer.C
+@@ -34,6 +34,7 @@
+ #include "Util/QsLog.h"
+ 
+ #include "QGLViewer/vec.h"
++#include <QCoreApplication>
+ #include <QElapsedTimer>
+ #include <QProgressDialog>
+ #include <cmath>
+@@ -48,8 +49,12 @@ namespace IQmol {
+ namespace Layer {
+ 
+ GeminalOrbitals::GeminalOrbitals(Data::GeminalOrbitals& molecularOrbitals)
+- : Base(tr("Geminal Orbitals")), m_configurator(*this), m_geminalOrbitals(molecularOrbitals)
++ : Base("Geminal Orbitals"), m_configurator(*this), m_geminalOrbitals(molecularOrbitals)
+ {
++   // [i18n] 初始化列表中的标签为裸字符串，此处覆盖为译文，
++   // 使 lupdate 可提取、界面显示中文。
++   setText(tr("Geminal Orbitals"));
++
+    connect(&m_configurator, SIGNAL(queueSurface(Data::SurfaceInfo const&)),
+       this, SLOT(addToQueue(Data::SurfaceInfo const&)));
+ 
+@@ -800,10 +805,15 @@ GeminalOrbitalProperty::GeminalOrbitalProperty(Data::GeminalOrbitals const& gemi
+   
+   //QList<unsigned> const& Limits(geminalOrbitals.geminalOrbitalLimits());
+   
++  // [i18n] GeminalOrbitalProperty 继承自 Property::Spatial -> Property::Base，
++  // 是普通 C++ 类（非 QObject），没有 tr() 可用，必须用
++  // QCoreApplication::translate 并显式指定上下文。
+   if(index < geminalOrbitals.nAlpha()){
+-   setText("Geminal Alpha " + QString::number(index+1));
++   setText(QCoreApplication::translate("IQmol::Layer::GeminalOrbitalProperty",
++      "Geminal Alpha %1").arg(index+1));
+   } else {
+-    setText("Geminal Beta " + QString::number(index+1-geminalOrbitals.nAlpha()));
++   setText(QCoreApplication::translate("IQmol::Layer::GeminalOrbitalProperty",
++      "Geminal Beta %1").arg(index+1-geminalOrbitals.nAlpha()));
+  }
+   m_function = std::bind(&GeminalOrbitalProperty::orbital, this, 
+      std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
+diff --git a/src/Layer/MolecularSurfacesLayer.C b/src/Layer/MolecularSurfacesLayer.C
+index fcf5eb3..91e34c3 100644
+--- a/src/Layer/MolecularSurfacesLayer.C
++++ b/src/Layer/MolecularSurfacesLayer.C
+@@ -98,7 +98,11 @@ void MolecularSurfaces::processSurfaceQueue()
+              connect(surfaceLayer, SIGNAL(updated()), this, SIGNAL(updated()));
+              surfaceLayer->setFrame(m_molecule.getReferenceFrame());
+ 
+-             QString text((*iter).type().toString());
++             // [i18n] 图层显示名用译文；同时把英文数据键存入
++             // Qt::UserRole，供需要区分类别的逻辑使用
++             QString key((*iter).type().toString());
++             surfaceLayer->setData(key, Qt::UserRole);
++             QString text((*iter).type().toDisplayString());
+              surfaceLayer->setText(text);
+              text += "\nScale = " + QString::number((*iter).isovalue());
+              surfaceLayer->setToolTip(text);
+diff --git a/src/Layer/MoleculeLayer.C b/src/Layer/MoleculeLayer.C
+index 8eff1cf..22c69ac 100644
+--- a/src/Layer/MoleculeLayer.C
++++ b/src/Layer/MoleculeLayer.C
+@@ -109,7 +109,7 @@ namespace Layer {
+ 
+ bool Molecule::s_autoDetectSymmetry = false;
+ 
+-Molecule::Molecule(QObject* parent) : Component(DefaultMoleculeName, parent),
++Molecule::Molecule(QObject* parent) : Component(tr("Untitled"), parent),
+    m_drawMode(Primitive::BallsAndSticks), 
+    m_atomScale(1.0), m_bondScale(1.0), m_chargeScale(1.0), 
+    m_smallerHydrogens(true), 
+@@ -119,19 +119,30 @@ Molecule::Molecule(QObject* parent) : Component(DefaultMoleculeName, parent),
+    m_surfaceAnimator(0),
+    m_parametrizeMolecule(0),
+    m_info(this),
+-   m_atomList(this, tr("Atoms")), 
+-   m_bondList(this, tr("Bonds")), 
+-   m_chargesList(this, tr("Charges")), 
+-   m_fileList(this, tr("Files")), 
+-   m_constraintList(this, tr("Constraints")), 
+-   m_isotopesList(this, tr("Isotopes")), 
+-   m_scanList(this, tr("Scan Coordinates")), 
+-   m_groupList(this, tr("Groups")), 
++   m_atomList(this, "Atoms"), 
++   m_bondList(this, "Bonds"), 
++   m_chargesList(this, "Charges"), 
++   m_fileList(this, "Files"), 
++   m_constraintList(this, "Constraints"), 
++   m_isotopesList(this, "Isotopes"), 
++   m_scanList(this, "Scan Coordinates"), 
++   m_groupList(this, "Groups"), 
+    m_efpFragmentList(this),
+    m_molecularSurfaces(*this),
+    m_currentGeometry(0), 
+    m_chargeType(Data::Type::GasteigerCharge)
+ {
++   // [i18n] 初始化列表中的标签为裸字符串，此处覆盖为译文，
++   // 使 lupdate 可提取、界面显示中文。
++   m_atomList.setText(tr("Atoms"));
++   m_bondList.setText(tr("Bonds"));
++   m_chargesList.setText(tr("Charges"));
++   m_fileList.setText(tr("Files"));
++   m_constraintList.setText(tr("Constraints"));
++   m_isotopesList.setText(tr("Isotopes"));
++   m_scanList.setText(tr("Scan Coordinates"));
++   m_groupList.setText(tr("Groups"));
++
+    setFlags(Qt::ItemIsSelectable | Qt::ItemIsDropEnabled | 
+       Qt::ItemIsUserCheckable | Qt::ItemIsEnabled | Qt::ItemIsEditable);
+ 
+@@ -2006,7 +2017,7 @@ Process::JobInfo Molecule::qchemJobInfo()
+ 
+ void Molecule::jobInfoChanged(Process::JobInfo const& jobInfo)
+ { 
+-   if (text() == DefaultMoleculeName) {
++   if (text() == DefaultMoleculeName || text() == tr("Untitled")) {
+       setText(jobInfo.get<QString>("BaseName"));
+       m_info.setCharge(jobInfo.get<int>("Charge"));
+       m_info.setMultiplicity(jobInfo.get<int>("Multiplicity"));
+diff --git a/src/Layer/NmrLayer.C b/src/Layer/NmrLayer.C
+index 5da0e5d..837ad16 100644
+--- a/src/Layer/NmrLayer.C
++++ b/src/Layer/NmrLayer.C
+@@ -29,8 +29,12 @@
+ namespace IQmol {
+ namespace Layer {
+ 
+-Nmr::Nmr(Data::Nmr& data) : Base(tr("NMR")), m_data(data), m_configurator(0), m_molecule(0)
++Nmr::Nmr(Data::Nmr& data) : Base("NMR"), m_data(data), m_configurator(0), m_molecule(0)
+ {
++   // [i18n] 初始化列表中的标签为裸字符串，此处覆盖为译文，
++   // 使 lupdate 可提取、界面显示中文。
++   setText(tr("NMR"));
++
+ }
+ 
+ 
+diff --git a/src/Layer/OctreeLayer.C b/src/Layer/OctreeLayer.C
+index 7029402..a80ecb2 100644
+--- a/src/Layer/OctreeLayer.C
++++ b/src/Layer/OctreeLayer.C
+@@ -45,9 +45,13 @@ double Octree::s_lineWidth  = 2.5;
+ GLfloat Octree::s_selectionColor[] = {0.0, 0.8, 1.0, 0.2};
+ 
+ 
+-Octree::Octree(AtomList const& atoms) : GLObject(tr("Octree Box")), m_atomList(atoms),
++Octree::Octree(AtomList const& atoms) : GLObject("Octree Box"), m_atomList(atoms),
+    m_configurator(*this), m_selectionRadius(0.0)
+ {
++   // [i18n] 初始化列表中的标签为裸字符串，此处覆盖为译文，
++   // 使 lupdate 可提取、界面显示中文。
++   setText(tr("Octree Box"));
++
+    setFlags(Qt::ItemIsUserCheckable | Qt::ItemIsEnabled);
+    setCheckState(Qt::Checked);
+    setConfigurator(&m_configurator);
+diff --git a/src/Layer/SurfaceLayer.C b/src/Layer/SurfaceLayer.C
+index c5f1014..6152934 100644
+--- a/src/Layer/SurfaceLayer.C
++++ b/src/Layer/SurfaceLayer.C
+@@ -98,8 +98,11 @@ void Surface::setComponent(Component* component)
+ bool Surface::isVdW() const
+ {
+    //hack
++   // [i18n] 不可比较 text()（已翻译的显示名），改用存放于
++   // Qt::UserRole 的英文数据键
+    Data::SurfaceType type(Data::SurfaceType::VanDerWaals);
+-   return text() == type.toString();
++   QString key(data(Qt::UserRole).toString());
++   return key == type.toString();
+ }
+ 
+ 
+diff --git a/src/Layer/SymmetryLayer.C b/src/Layer/SymmetryLayer.C
+index 0da09f1..69b6ddc 100644
+--- a/src/Layer/SymmetryLayer.C
++++ b/src/Layer/SymmetryLayer.C
+@@ -26,9 +26,13 @@
+ namespace IQmol {
+ namespace Layer {
+ 
+-Symmetry::Symmetry(Data::PointGroup const& pointGroup) : Base(tr("Symmetry")), 
++Symmetry::Symmetry(Data::PointGroup const& pointGroup) : Base("Symmetry"), 
+    m_configurator(*this), m_pointGroup(pointGroup)
+ {
++   // [i18n] 初始化列表中的标签为裸字符串，此处覆盖为译文，
++   // 使 lupdate 可提取、界面显示中文。
++   setText(tr("Symmetry"));
++
+    setConfigurator(&m_configurator);
+ }
+ 
+diff --git a/src/Layer/VibronicLayer.C b/src/Layer/VibronicLayer.C
+index ab07841..4cb6043 100644
+--- a/src/Layer/VibronicLayer.C
++++ b/src/Layer/VibronicLayer.C
+@@ -32,9 +32,13 @@ namespace IQmol {
+ namespace Layer {
+ 
+ 
+-Vibronic::Vibronic(Data::Vibronic const& vibronic) : Base(tr("Vibronic")), 
++Vibronic::Vibronic(Data::Vibronic const& vibronic) : Base("Vibronic"), 
+    m_vibronic(vibronic), m_configurator(*this), m_initialFrequencies(0), m_finalFrequencies(0)
+ {
++   // [i18n] 初始化列表中的标签为裸字符串，此处覆盖为译文，
++   // 使 lupdate 可提取、界面显示中文。
++   setText(tr("Vibronic"));
++
+    m_configurator.load();
+    setConfigurator(&m_configurator);
+ }
+diff --git a/src/Main/FragmentTable.C b/src/Main/FragmentTable.C
+index 85c584b..6e25ffe 100644
+--- a/src/Main/FragmentTable.C
++++ b/src/Main/FragmentTable.C
+@@ -22,12 +22,22 @@
+ 
+ #include "FragmentTable.h"
+ #include "Preferences.h"
++#include <QCoreApplication>
+ #include <QHeaderView>
+ 
+ #include "QsLog.h"
+ 
+ namespace IQmol {
+ 
++// [i18n] 片段名由目录/文件名派生（如 "Carboxylic_Acid" -> "Carboxylic Acid"），
++// 是运行时变量，lupdate 无法提取，因此用显式上下文查表。
++// 对应译文以 <context><name>FragmentTable</name> 手工维护在 translations/zh_CN.ts。
++// 查不到时 translate() 原样返回英文，行为安全。
++static QString fragmentLabel(QString const& name)
++{
++   return QCoreApplication::translate("FragmentTable", name.toUtf8().constData());
++}
++
+ int FragmentTable::s_fileRole  = Qt::UserRole+1;
+ int FragmentTable::s_imageRole = Qt::UserRole+2;
+ 
+@@ -106,9 +116,12 @@ QList<QTreeWidgetItem*> FragmentTable::loadFragments(QDir const& dir, QTreeWidge
+        name = name.replace(".xyz", " ", Qt::CaseInsensitive);
+        name = name.replace("_L", " (L)");
+        name = name.replace("_", " ");
++       name = name.trimmed();
++       // [i18n] 显示名走翻译表；文件名/路径仍用原始 name 取数据，互不影响。
++       QString label(fragmentLabel(name));
+  
+        if (info.isDir()) {
+-          item = new QTreeWidgetItem(parent, QStringList(name));
++          item = new QTreeWidgetItem(parent, QStringList(label));
+           loadFragments(QDir(info.filePath()), item);
+           items.append(item);
+           item->setData(0, s_fileRole, s_invalidFile);
+@@ -118,10 +131,10 @@ QList<QTreeWidgetItem*> FragmentTable::loadFragments(QDir const& dir, QTreeWidge
+                  info.suffix().contains("xyz", Qt::CaseInsensitive) ) {
+ 
+           if (parent == 0) {
+-             item = new QTreeWidgetItem(QStringList(name));
++             item = new QTreeWidgetItem(QStringList(label));
+              items.append(item);
+           }else {
+-             item = new QTreeWidgetItem(parent, QStringList(name));
++             item = new QTreeWidgetItem(parent, QStringList(label));
+           }
+ 
+           item->setData(0, s_fileRole, info.filePath());
+diff --git a/src/Main/HelpBrowser.C b/src/Main/HelpBrowser.C
+index 3dc0a4f..d02b444 100644
+--- a/src/Main/HelpBrowser.C
++++ b/src/Main/HelpBrowser.C
+@@ -190,7 +190,9 @@ QString HelpBrowser::createSearchResults(QString const& s)
+    results  = "<html>"
+               "<head><link href='style.css' rel='stylesheet' type='text/css' /></head>"
+               "<body>"
+-              "<center><h1>Search Results<br></h1></center>";
++              "<center><h1>" +
++              QCoreApplication::translate("HelpBrowser", "Search Results") +
++              "<br></h1></center>";
+ 
+    QString contents, list;
+    int index, start, finish;
+@@ -225,7 +227,7 @@ QString HelpBrowser::createSearchResults(QString const& s)
+    }
+ 
+    if (list.isEmpty()) {
+-      results += "<br>No results found.";
++      results += "<br>" + QCoreApplication::translate("HelpBrowser", "No results found.") + "";
+    }else {
+       results += "<ul>" + list + "</ul>";
+    }
+diff --git a/src/Main/IQmolApplication.C b/src/Main/IQmolApplication.C
+index 9f5f227..ad742ae 100644
+--- a/src/Main/IQmolApplication.C
++++ b/src/Main/IQmolApplication.C
+@@ -86,10 +86,24 @@ void IQmolApplication::loadTranslations()
+       locale = QString("zh_CN");   // 首次运行: 汉化默认
+    }
+ 
+-   // Qt 基础翻译（标准对话框按钮等），跟随最终 locale
++   // Qt 基础翻译（标准对话框按钮等），跟随最终 locale。
++   // 部署包中 Qt 安装目录不存在, 优先从程序目录 translations/ 加载
++   // 随包分发的 qt_zh_CN.qm / qtbase_zh_CN.qm（由 deploy_windows.sh 复制）,
++   // 开发环境再回退 Qt 安装目录。
+    m_qtTranslator = new QTranslator(this);
+    QString qtBasePath = QLibraryInfo::location(QLibraryInfo::TranslationsPath);
+-   if (m_qtTranslator->load("qt_" + locale, qtBasePath)) {
++   QStringList qtSearchPaths;
++   qtSearchPaths << QApplication::applicationDirPath() + "/translations"
++                 << qtBasePath;
++   bool qtLoaded(false);
++   foreach (QString const& path, qtSearchPaths) {
++      if (m_qtTranslator->load("qt_" + locale, path) ||
++          m_qtTranslator->load("qtbase_" + locale, path)) {
++         qtLoaded = true;
++         break;
++      }
++   }
++   if (qtLoaded) {
+       installTranslator(m_qtTranslator);
+    }
+ 
+diff --git a/src/Main/PreferencesBrowser.C b/src/Main/PreferencesBrowser.C
+index 2c7599a..d38867b 100644
+--- a/src/Main/PreferencesBrowser.C
++++ b/src/Main/PreferencesBrowser.C
+@@ -82,9 +82,10 @@ void Browser::init()
+ 
+    // 语言切换逃生舱: 0=中文, 1=English, 2=跟随系统
+    // 未设置(首次运行)按"中文"项显示, 与汉化默认行为一致
++   // 注意: 变量名不能复用上面的 idx, 同作用域重复声明会编译失败
+    QString lang(Language());
+-   int idx(lang == "en" ? 1 : (lang == "system" ? 2 : 0));
+-   m_preferencesBrowser.languageComboBox->setCurrentIndex(idx);
++   int langIdx(lang == "en" ? 1 : (lang == "system" ? 2 : 0));
++   m_preferencesBrowser.languageComboBox->setCurrentIndex(langIdx);
+ }
+ 
+ 
+diff --git a/src/Parser/OpenBabelParser.C b/src/Parser/OpenBabelParser.C
+index 9a1bde6..7a74003 100644
+--- a/src/Parser/OpenBabelParser.C
++++ b/src/Parser/OpenBabelParser.C
+@@ -36,6 +36,7 @@
+ #include "Util/QsLog.h"
+ #include "Util/Preferences.h"
+ 
++#include <QCoreApplication>
+ #include <QFileInfo>
+ #include <QRegularExpression>
+ #include <cmath>
+@@ -352,7 +353,11 @@ bool OpenBabel::appendGeometries(::OpenBabel::OBMol& obMol, Data::GeometryList&
+           haveGeometryEnergy = true;
+        }else if (!haveGeometryEnergy && std::abs(obMol.GetEnergy()) > 1.0e-12) {
+           geometryEnergy = obMol.GetEnergy();
+-          geometryEnergyLabel = "Energy";
++          // [i18n] 此处是"文件里没给标签时的兜底显示名"，故需要翻译。
++          // 注意：本类继承 Parser::Base（普通 C++ 类，非 QObject），
++          // 没有 tr() 可用，必须用 QCoreApplication::translate 显式指定上下文。
++          geometryEnergyLabel = QCoreApplication::translate(
++             "IQmol::Parser::OpenBabel", "Energy");
+           haveGeometryEnergy = true;
+        }
+ 
+diff --git a/src/Process/JobInfo.C b/src/Process/JobInfo.C
+index 8314a84..e18cf21 100644
+--- a/src/Process/JobInfo.C
++++ b/src/Process/JobInfo.C
+@@ -22,8 +22,8 @@
+ 
+ #include "JobInfo.h"
+ #include "QMapRange.h"
+-#include <QDate>
+ #include <QCoreApplication>
++#include <QDate>
+ 
+ 
+ namespace IQmol {
+@@ -32,6 +32,8 @@ namespace Process {
+ 
+ QString JobInfo::toString(Status const status) 
+ {
++   // 仅用于界面显示与日志; AWS 查询协议的序列化由 AwsConnection 独立
++   // 生成英文字符串, fromString 解析不受此处翻译影响。
+    QString s;
+    switch (status) {
+       case NotRunning:  s = QCoreApplication::translate("JobInfo", "Not Running");  break;
+diff --git a/src/Qui/GeometryConstraint.C b/src/Qui/GeometryConstraint.C
+index 00cae37..7ed3bc6 100644
+--- a/src/Qui/GeometryConstraint.C
++++ b/src/Qui/GeometryConstraint.C
+@@ -6,6 +6,7 @@
+  */
+ 
+ #include <QtDebug>
++#include <QCoreApplication>
+ #include <QMessageBox>
+ #include "GeometryConstraint.h"
+ #include "OptSection.h"
+@@ -18,7 +19,6 @@
+ #include <QMenu>
+ #include <QRegularExpression>
+ #include <algorithm>
+-#include <QCoreApplication>
+ 
+ 
+ namespace Qui {
+@@ -26,18 +26,41 @@ namespace GeometryConstraint {
+ 
+ 
+ QString ToString(Type::ID const& type) {
++   // [i18n] 本函数处于 namespace 中，没有 tr() 可用，故使用
++   // QCoreApplication::translate；上下文沿用 ts 中已有的
++   // Qui::GeometryConstraint。
+    QString text;
+    switch (type) {
+-      case Type::Stretch:       { text = QCoreApplication::translate("Qui::GeometryConstraint", "Stretch");                } break;
+-      case Type::Bend:          { text = QCoreApplication::translate("Qui::GeometryConstraint", "Bend");                   } break;
+-      case Type::OutOfPlane:    { text = QCoreApplication::translate("Qui::GeometryConstraint", "Out Of Plane");           } break;
+-      case Type::Dihedral:      { text = QCoreApplication::translate("Qui::GeometryConstraint", "Dihedral");               } break;
+-      case Type::Coplanar:      { text = QCoreApplication::translate("Qui::GeometryConstraint", "Coplanar");               } break;
+-      case Type::Perpendicular: { text = QCoreApplication::translate("Qui::GeometryConstraint", "Perpendicular");          } break;
+-      case Type::Fixed:         { text = QCoreApplication::translate("Qui::GeometryConstraint", "Fixed");                  } break;
+-      case Type::DummyNormal:   { text = QCoreApplication::translate("Qui::GeometryConstraint", "Dummy - Plane Normal");   } break;
+-      case Type::DummyBisector: { text = QCoreApplication::translate("Qui::GeometryConstraint", "Dummy - Angle Bisector"); } break;
+-      case Type::Connect:       { text = QCoreApplication::translate("Qui::GeometryConstraint", "Connect");                } break;
++      case Type::Stretch:
++         text = QCoreApplication::translate("Qui::GeometryConstraint", "Stretch");
++         break;
++      case Type::Bend:
++         text = QCoreApplication::translate("Qui::GeometryConstraint", "Bend");
++         break;
++      case Type::OutOfPlane:
++         text = QCoreApplication::translate("Qui::GeometryConstraint", "Out Of Plane");
++         break;
++      case Type::Dihedral:
++         text = QCoreApplication::translate("Qui::GeometryConstraint", "Dihedral");
++         break;
++      case Type::Coplanar:
++         text = QCoreApplication::translate("Qui::GeometryConstraint", "Coplanar");
++         break;
++      case Type::Perpendicular:
++         text = QCoreApplication::translate("Qui::GeometryConstraint", "Perpendicular");
++         break;
++      case Type::Fixed:
++         text = QCoreApplication::translate("Qui::GeometryConstraint", "Fixed");
++         break;
++      case Type::DummyNormal:
++         text = QCoreApplication::translate("Qui::GeometryConstraint", "Dummy - Plane Normal");
++         break;
++      case Type::DummyBisector:
++         text = QCoreApplication::translate("Qui::GeometryConstraint", "Dummy - Angle Bisector");
++         break;
++      case Type::Connect:
++         text = QCoreApplication::translate("Qui::GeometryConstraint", "Connect");
++         break;
+    }
+    return text;
+ }
+@@ -118,8 +141,8 @@ void Dialog::addConstraintToTable(Constraint const& constraint) {
+    if (!constraint.isValid(m_nAtoms)) {
+       QString msg(tr("The following constraint is invalid:\n"));
+       msg += constraint.format() + "\n";
+-      msg += "Most likely this is because your atom numbers are not unique "
+-             "or out of range. Please correct this before proceeding.\n";
++      msg += tr("Most likely this is because your atom numbers are not unique "
++             "or out of range. Please correct this before proceeding.\n");
+       QMessageBox::warning(this, tr("Invalid Constraint"), msg);
+       return;
+    }else if (m_constraintKeys.find(constraint.key()) != m_constraintKeys.end()) {
+diff --git a/src/Qui/LJParametersSection.C b/src/Qui/LJParametersSection.C
+index a9aaa75..f749423 100644
+--- a/src/Qui/LJParametersSection.C
++++ b/src/Qui/LJParametersSection.C
+@@ -13,6 +13,7 @@
+ #include <QtDebug>
+ 
+ 
++#include <QCoreApplication>
+ namespace Qui {
+ 
+ 
+@@ -73,7 +74,9 @@ void LJParametersSection::generateData(QString const& geometry)
+       QString msg("The molecule contains atoms for which there are no inbuilt "
+                   "Lennard-Jones parameters:");
+       msg += notFound;
+-      QMessageBox::warning(0, "LJ Parameter Error",msg);
++      // [i18n] KeywordSection 不是 QObject，本类无 tr() 可用
++      QMessageBox::warning(0, QCoreApplication::translate(
++         "IQmol::Qui::LJParametersSection", "LJ Parameter Error"), msg);
+   
+    }
+  
+diff --git a/src/Qui/MoleculeSection.C b/src/Qui/MoleculeSection.C
+index ee593ed..b94c520 100644
+--- a/src/Qui/MoleculeSection.C
++++ b/src/Qui/MoleculeSection.C
+@@ -18,6 +18,7 @@
+ #include <QtDebug>
+ 
+ 
++#include <QCoreApplication>
+ namespace Qui {
+ 
+ 
+@@ -52,9 +53,12 @@ void MoleculeSection::read(QString const& input)
+    // TODO: This should really load a molecule object so that the coordinate
+    // conversion can be done.
+    if (!okay) {
+-      QString msg("Problem reading $molecule section: \n");
++      // [i18n] KeywordSection 不是 QObject，本类无 tr() 可用
++      QString msg(QCoreApplication::translate(
++         "IQmol::Qui::MoleculeSection", "Problem reading $molecule section: \n"));
+       msg += input;
+-      QMessageBox::warning(0, "Parse Error", msg);
++      QMessageBox::warning(0, QCoreApplication::translate(
++         "IQmol::Qui::MoleculeSection", "Parse Error"), msg);
+    }
+ }
+ 
+diff --git a/src/Qui/RemSection.C b/src/Qui/RemSection.C
+index eb5a468..69384de 100644
+--- a/src/Qui/RemSection.C
++++ b/src/Qui/RemSection.C
+@@ -17,6 +17,7 @@
+ #include <math.h>
+ 
+ 
++#include <QCoreApplication>
+ namespace Qui {
+ 
+ 
+@@ -116,9 +117,12 @@ void RemSection::read(QString const& input) {
+    }
+ 
+    if (invalidLines.count() > 0) {
+-      QString msg("An error occured when parsing the following options:\n");
++      // [i18n] KeywordSection 不是 QObject，本类无 tr() 可用
++      QString msg(QCoreApplication::translate("IQmol::Qui::RemSection",
++         "An error occured when parsing the following options:\n"));
+       msg += invalidLines.join("\n");
+-      QMessageBox::warning(0, "Input File Error", msg); 
++      QMessageBox::warning(0, QCoreApplication::translate(
++         "IQmol::Qui::RemSection", "Input File Error"), msg); 
+    }
+ }
+ 
+diff --git a/src/Util/ColorDialog.C b/src/Util/ColorDialog.C
+index b2eeb00..5082b31 100644
+--- a/src/Util/ColorDialog.C
++++ b/src/Util/ColorDialog.C
+@@ -157,6 +157,8 @@ void Dialog::init()
+    QComboBox* combo(m_dialog.gradientCombo);
+    combo->blockSignals(true);
+    combo->clear();
++   // [i18n] 这里仅作显示，逻辑一律通过 setCurrentIndex(index) 定位，
++   // 其中 index 由 Gradient 枚举映射而来，不依赖文本，故可安全翻译。
+    combo->addItem(tr("Custom"));
+    combo->addItem(tr("Default"));
+    combo->addItem(tr("Spectrum"));
+diff --git a/src/Viewer/ShaderDialog.C b/src/Viewer/ShaderDialog.C
+index 3f2f849..efba69a 100644
+--- a/src/Viewer/ShaderDialog.C
++++ b/src/Viewer/ShaderDialog.C
+@@ -25,6 +25,8 @@
+ #include "Preferences.h"
+ #include "QMsgBox.h"
+ 
++#include <QComboBox>
++#include <QCoreApplication>
+ #include <QDebug>
+ #include <QDir>
+ 
+@@ -99,10 +101,15 @@ void ShaderDialog::setupShaderTab()
+    }
+ 
+    QStringList shaderNames(m_shaderLibrary.availableShaders());
+-   m_dialog.shaderCombo->addItems(shaderNames);
++   for (QString const& shaderName : shaderNames) {
++      // 显示名走翻译, 数据键(原文)存入 userData, 供 findData/currentData 使用
++      m_dialog.shaderCombo->addItem(
++         QCoreApplication::translate("ShaderDialog", shaderName.toUtf8().constData()),
++         shaderName);
++   }
+ 
+-   int index(m_dialog.shaderCombo->findText(Preferences::DefaultShader()));
+-   if (index < 0) index = m_dialog.shaderCombo->findText(ShaderLibrary::NoShader);
++   int index(m_dialog.shaderCombo->findData(Preferences::DefaultShader()));
++   if (index < 0) index = m_dialog.shaderCombo->findData(ShaderLibrary::NoShader);
+ 
+    m_dialog.shaderCombo->setCurrentIndex(index);
+    on_shaderCombo_currentIndexChanged(index);
+@@ -134,7 +141,7 @@ void ShaderDialog::setupEffectsTab()
+ 
+ void ShaderDialog::on_shaderCombo_currentIndexChanged(int)
+ {
+-   QString name(m_dialog.shaderCombo->currentText());
++   QString name(m_dialog.shaderCombo->currentData().toString());
+ 
+    if (!m_shaderLibrary.bindShader(name)) {
+       QString msg("Shader not found: ");
+@@ -263,7 +270,7 @@ QVariantMap ShaderDialog::getParametersFromDialog()
+ 
+ void ShaderDialog::installShaderParameters(int)
+ {
+-   QString name(m_dialog.shaderCombo->currentText());
++   QString name(m_dialog.shaderCombo->currentData().toString());
+    m_shaderLibrary.setUniformVariables(name, getParametersFromDialog());
+    updated();
+ }
+@@ -271,14 +278,14 @@ void ShaderDialog::installShaderParameters(int)
+ 
+ void ShaderDialog::on_saveAsDefault_clicked(bool)
+ {
+-   qDebug() << "Setting Default Shader" << m_dialog.shaderCombo->currentText();
++   qDebug() << "Setting Default Shader" << m_dialog.shaderCombo->currentData().toString();
+    qDebug() << getParametersFromDialog();
+    qDebug() << "Setting Default Shader";
+    qDebug() << getFilterParametersFromDialog();
+    qDebug() << "Setting Default PovRay Parameters";
+    qDebug() << getPovRayParametersFromDialog();
+ 
+-   Preferences::DefaultShader(m_dialog.shaderCombo->currentText());
++   Preferences::DefaultShader(m_dialog.shaderCombo->currentData().toString());
+    Preferences::DefaultShaderParameters(getParametersFromDialog());
+    Preferences::DefaultFilterParameters(getFilterParametersFromDialog());
+    Preferences::DefaultPovRayParameters(getPovRayParametersFromDialog());
+@@ -345,28 +352,49 @@ void ShaderDialog::installFilterParameters()
+ 
+ void ShaderDialog::setupPovRayTab()
+ {
+-   QStringList textures;
+-   textures << tr("None")
+-            << "Chrome"
+-            << "Crumpled"
+-            << "Rippled"
+-            << "Rough"
+-            << "Marble"
+-            << "BlackMarble";
+-
+-   m_dialog.atomTexture->clear();
+-   m_dialog.atomTexture->addItems(textures);
+-   m_dialog.bondTexture->clear();
+-   m_dialog.bondTexture->addItems(textures);
+-
+-   textures << "Skin"
+-            << "Swirl"
+-            << "Bubble"
+-            << "Shattered"
+-            << "Mesh";
+-
+-   m_dialog.surfaceTexture->clear();
+-   m_dialog.surfaceTexture->addItems(textures);
++   // [i18n] "显示文本 / 数据键"分离：itemData 存英文原文（与 PovRayGen
++   // 约定的数据键），显示文本走 tr()。读取一律走 itemData，译文变化
++   // 不影响逻辑。
++   //
++   // 每条 tr("...") 都显式写出，不用循环里 tr(变量) ——
++   // lupdate 在源码上做静态扫描，参数是变量时提取不到，
++   // 译文不会进入 .ts 文件（运行时自然也就翻不出来）。
++   QComboBox* atomTexture(m_dialog.atomTexture);
++   QComboBox* bondTexture(m_dialog.bondTexture);
++   QComboBox* surfaceTexture(m_dialog.surfaceTexture);
++
++   atomTexture->clear();
++   bondTexture->clear();
++   surfaceTexture->clear();
++
++   // atom/bond 与 surface 共用的前 7 项
++   struct { char const* key; char const* label; } const common[] = {
++      { "None",        QT_TRANSLATE_NOOP("ShaderDialog", "None")        },
++      { "Chrome",      QT_TRANSLATE_NOOP("ShaderDialog", "Chrome")      },
++      { "Crumpled",    QT_TRANSLATE_NOOP("ShaderDialog", "Crumpled")    },
++      { "Rippled",     QT_TRANSLATE_NOOP("ShaderDialog", "Rippled")     },
++      { "Rough",       QT_TRANSLATE_NOOP("ShaderDialog", "Rough")       },
++      { "Marble",      QT_TRANSLATE_NOOP("ShaderDialog", "Marble")      },
++      { "BlackMarble", QT_TRANSLATE_NOOP("ShaderDialog", "BlackMarble") },
++   };
++   for (size_t i = 0; i < sizeof(common)/sizeof(common[0]); ++i) {
++      atomTexture->addItem(tr(common[i].label), QVariant(QString(common[i].key)));
++      bondTexture->addItem(tr(common[i].label), QVariant(QString(common[i].key)));
++      surfaceTexture->addItem(tr(common[i].label), QVariant(QString(common[i].key)));
++   }
++
++   // 仅 surface 可用的额外 5 项
++   struct { char const* key; char const* label; } const surfaceOnly[] = {
++      { "Skin",      QT_TRANSLATE_NOOP("ShaderDialog", "Skin")      },
++      { "Swirl",     QT_TRANSLATE_NOOP("ShaderDialog", "Swirl")     },
++      { "Bubble",    QT_TRANSLATE_NOOP("ShaderDialog", "Bubble")    },
++      { "Shattered", QT_TRANSLATE_NOOP("ShaderDialog", "Shattered") },
++      { "Mesh",      QT_TRANSLATE_NOOP("ShaderDialog", "Mesh")      },
++   };
++   for (size_t i = 0; i < sizeof(surfaceOnly)/sizeof(surfaceOnly[0]); ++i) {
++      surfaceTexture->addItem(tr(surfaceOnly[i].label),
++                              QVariant(QString(surfaceOnly[i].key)));
++   }
+ 
+    loadPovRayImages();
+ 
+@@ -380,15 +408,26 @@ void ShaderDialog::setupPovRayTab()
+ void ShaderDialog::on_background_currentIndexChanged(int index)
+ {
+    QPalette pal;
+-   QString label(m_dialog.background->currentText());
++   // [i18n] 不可依赖 currentText() 做判断：combo 中显示的是译文，
++   // 而 PovRayGen::setBackground() 以英文原文作为数据键。因此这里
++   // 改用索引判断，译文变化不影响逻辑。
++   QString key(m_dialog.background->itemData(index).toString());
++   if (key.isEmpty()) {
++      // 兜底：兼容 ui 中未设置 itemData 的旧行为
++      QString label(m_dialog.background->currentText());
++      if      (label == "None" || label == tr("None"))    key = "None";
++      else if (label == "Default" || label == tr("Default")) key = "Default";
++      else if (label == "White" || label == tr("White"))  key = "White";
++      else if (label == "Black" || label == tr("Black"))  key = "Black";
++   }
+ 
+-   if (label.contains("None")) {
++   if (key == "None") {
+       pal.setColor(QPalette::Window, Qt::lightGray);
+-   }else if (label.contains(tr("Default"))) {
++   }else if (key == "Default") {
+       pal.setColor(QPalette::Window, Preferences::BackgroundColor());
+-   }else if (label.contains(tr("White"))) {
++   }else if (key == "White") {
+       pal.setColor(QPalette::Window, Qt::white);
+-   }else if (label.contains(tr("Black"))) {
++   }else if (key == "Black") {
+       pal.setColor(QPalette::Window, Qt::black);
+    }
+ 
+@@ -401,7 +440,8 @@ void ShaderDialog::on_background_currentIndexChanged(int index)
+ 
+ void ShaderDialog::on_atomTexture_currentIndexChanged(int index)
+ {
+-   QString label(m_dialog.atomTexture->currentText());
++   // [i18n] 取数据键而非显示译文，见 setupPovRayTab 的说明
++   QString label(m_dialog.atomTexture->itemData(index).toString());
+    label += "-structure";
+    QString style("background-image: url(");
+    style += m_povRayImages[label] + ");";
+@@ -412,7 +452,8 @@ void ShaderDialog::on_atomTexture_currentIndexChanged(int index)
+ 
+ void ShaderDialog::on_surfaceTexture_currentIndexChanged(int index)
+ {
+-   QString label(m_dialog.surfaceTexture->currentText());
++   // [i18n] 取数据键而非显示译文，见 setupPovRayTab 的说明
++   QString label(m_dialog.surfaceTexture->itemData(index).toString());
+    label += "-surface";
+    QString style("background-image: url(");
+    style += m_povRayImages[label] + ");";
+@@ -465,10 +506,15 @@ QVariantMap ShaderDialog::getPovRayParametersFromDialog()
+ {
+    QVariantMap map;
+ 
+-   map.insert("background",     QVariant(m_dialog.background->currentText()));
+-   map.insert("atomTexture",    QVariant(m_dialog.atomTexture->currentText()));
+-   map.insert("bondTexture",    QVariant(m_dialog.bondTexture->currentText()));
+-   map.insert("surfaceTexture", QVariant(m_dialog.surfaceTexture->currentText()));
++   // [i18n] 一律输出英文数据键，PovRayGen 依赖这些字面量做分支判断
++   map.insert("background",     QVariant(m_dialog.background->itemData(
++                                      m_dialog.background->currentIndex()).toString()));
++   map.insert("atomTexture",    QVariant(m_dialog.atomTexture->itemData(
++                                      m_dialog.atomTexture->currentIndex()).toString()));
++   map.insert("bondTexture",    QVariant(m_dialog.bondTexture->itemData(
++                                      m_dialog.bondTexture->currentIndex()).toString()));
++   map.insert("surfaceTexture", QVariant(m_dialog.surfaceTexture->itemData(
++                                      m_dialog.surfaceTexture->currentIndex()).toString()));
+ 
+    map.insert("lightFront",     QVariant(m_dialog.povLightFront->isChecked()));
+    map.insert("lightHighlight", QVariant(m_dialog.povLightHighlight->isChecked()));
+diff --git a/src/Viewer/UndoCommands.C b/src/Viewer/UndoCommands.C
+index bd2a7bc..74b94fe 100644
+--- a/src/Viewer/UndoCommands.C
++++ b/src/Viewer/UndoCommands.C
+@@ -388,7 +388,9 @@ AddComponent::AddComponent(Layer::Component* component, QStandardItem* parent)
+          setText(QCoreApplication::translate("UndoCommands", "New system"));
+       }
+    }else {
+-      setText("Load file " + m_component->fileName());
++      // [i18n] QUndoCommand 不是 QObject，没有 tr() 可用
++      setText(QCoreApplication::translate("UndoCommands", "Load file %1")
++         .arg(m_component->fileName()));
+    }
+ }
+ 
