@@ -13,22 +13,40 @@
 # 重放由 replay_tr.py 执行，幂等：已包裹的不会被二次包裹。
 #
 # ---------------------------------------------------------------
-# 已知例外：以下 6 个文件的改动【超出机械包裹范围】，本规则表无法完整重放，
-# 上游升级后需人工核对（详见 docs/第三层-重放机制说明.md §4.1/§4.2）：
+# 重放能力边界（实测数据，2026-09-24 复核）
 #
-#   [拼接 → 占位符重构] 目的是让 Qt 翻译系统能处理变量插值
+# 覆盖：58 个文件 / 487 条规则，对 diff 中 343 处 tr() 覆盖率 100%。
+# 实测：对上游干净树重放可新增 323 处包裹，其中 45/58 个文件与成果版
+#       tr() 计数完全一致；幂等（对成果树重放新增 0 处）。
+#
+# 以下 13 个文件重放【不完整】，上游升级后需人工核对。分两类根因：
+#
+# 【类 A】上游字面量文本与我们的不同 —— 精确匹配必然落空
+#   典型：src/Grid/MolecularGridEvaluator.C
+#     上游:  QString s("Computing density on grid ");  s += ...;   （拼接式）
+#     我们:  QString s(tr("Computing density on grid %1")).arg(...);（占位符式）
+#   字面量由 "Computing density on grid " 变为 "Computing density on grid %1",
+#   规则表按原文精确查找，在上游文件中找不到该文本 → 无法包裹。
+#   同类（拼接 → 占位符重构）：
 #     src/Configurator/ConstraintConfigurator.C
 #     src/Configurator/MullikenDecompositionsDialog.C
 #     src/Configurator/SurfaceAnimatorDialog.C
 #     src/Layer/GeminalOrbitalsLayer.C
-#     src/Qui/GeometryConstraint.C        （跨行字符串拼接）
+#     src/Qui/GeometryConstraint.C
+#   同类（常量 → 可翻译字面量替换）：
+#     src/Layer/MoleculeLayer.C   （DefaultMoleculeName → "Untitled"）
 #
-#   [常量 → 可翻译字面量替换]
-#     src/Layer/MoleculeLayer.C           （DefaultMoleculeName → "Untitled"）
+# 【类 B】我们新增的代码行，上游根本不存在对应字面量 —— 无处可包
+#   典型：src/Viewer/ShaderDialog.C（数据/显示分离重构）
+#         src/Configurator/OrbitalsConfigurator.C
+#         src/Data/SurfaceType.C（translate: 形态，计数口径与 tr() 不同）
+#         src/Configurator/GeminalOrbitalsConfigurator.C / MolecularSurfacesConfigurator.C
+#         src/Layer/*Layer.C 若干（6 行级差异，多为 include/常量调整）
+#         src/Util/ColorDialog.C, src/Viewer/UndoCommands.C, src/Process/JobInfo.C
+#   这类改动属于【逻辑重构】而非机械包裹，须按 commit 迁移或人工重做。
 #
-# 注：src/Viewer/UndoCommands.C 曾属例外，现由 translate:<上下文> 形态覆盖，
-#     残余差异仅 1 行（同上『拼接 → 占位符重构』类）。
-# 其余 30 个文件可由本规则表 100% 精确重放。
+# 结论：规则表可覆盖绝大多数 tr() 包裹；上述 13 个文件的【逻辑改动】部分
+#       无法由规则表恢复，需配合 patches/ 与 commit 逐一 cherry-pick。
 # ---------------------------------------------------------------
 #
 # 另注：以下 6 个文件相对上游有改动但【不含任何翻译包裹】，属功能性补丁，
@@ -53,8 +71,11 @@ src/Configurator/ConstraintConfigurator.C	Set Position	bare	1
 src/Configurator/ConstraintConfigurator.C	Set Position	call:setWindowTitle	1
 src/Configurator/ConstraintConfigurator.C	Set position of atom %1	bare	1
 src/Configurator/ConstraintConfigurator.C	Set position of atom %1	call:m_constraintConfigurator.label->setText	1
-src/Configurator/ExcitedStatesConfigurator.C	Rel. Strength	bare	1
-src/Configurator/ExcitedStatesConfigurator.C	Rel. Strength	call:m_spectrum->yAxis->setLabel	1
+src/Configurator/ExcitedStatesConfigurator.C	Alpha	bare	1
+src/Configurator/ExcitedStatesConfigurator.C	Rel. Strength	bare	2
+src/Configurator/ExcitedStatesConfigurator.C	Rel. Strength	call:m_spectrum->yAxis->setLabel	2
+src/Configurator/ExcitedStatesConfigurator.C	Strength	bare	1
+src/Configurator/ExcitedStatesConfigurator.C	Strength	call:m_spectrum->yAxis->setLabel	1
 src/Configurator/FrequenciesConfigurator.C	Freq. (cm⁻¹)	bare	1
 src/Configurator/FrequenciesConfigurator.C	Freq. (cm⁻¹)	call:setText	1
 src/Configurator/FrequenciesConfigurator.C	Frequency	bare	1
@@ -63,16 +84,24 @@ src/Configurator/FrequenciesConfigurator.C	Frequency (cm⁻¹)	bare	1
 src/Configurator/FrequenciesConfigurator.C	Frequency (cm⁻¹)	call:setText	1
 src/Configurator/FrequenciesConfigurator.C	Intens. (km/mol)	bare	1
 src/Configurator/FrequenciesConfigurator.C	Intens. (km/mol)	call:setText	1
+src/Configurator/FrequenciesConfigurator.C	Intensity	bare	2
+src/Configurator/FrequenciesConfigurator.C	Intensity	call:m_spectrum->yAxis->setLabel	2
 src/Configurator/FrequenciesConfigurator.C	Intensity (km/mol)	bare	1
 src/Configurator/FrequenciesConfigurator.C	Intensity (km/mol)	call:setText	1
 src/Configurator/FrequenciesConfigurator.C	Raman (Å4/amu)	bare	1
 src/Configurator/FrequenciesConfigurator.C	Raman (Å4/amu)	call:setText	1
-src/Configurator/FrequenciesConfigurator.C	Rel. Intensity	bare	1
-src/Configurator/FrequenciesConfigurator.C	Rel. Intensity	call:m_spectrum->yAxis->setLabel	1
+src/Configurator/FrequenciesConfigurator.C	Rel. Intensity	bare	2
+src/Configurator/FrequenciesConfigurator.C	Rel. Intensity	call:m_spectrum->yAxis->setLabel	2
+src/Configurator/GeminalOrbitalsConfigurator.C	Geminal	bare	1
+src/Configurator/GeminalOrbitalsConfigurator.C	Geminal	call:m_configurator.surfaceType->addItem	1
+src/Configurator/GeminalOrbitalsConfigurator.C	Geminal Correlation	bare	1
+src/Configurator/GeminalOrbitalsConfigurator.C	Geminal Correlation	call:m_configurator.surfaceType->addItem	1
+src/Configurator/GeometryListConfigurator.C	Energy	bare	1
+src/Configurator/GeometryListConfigurator.C	Energy	call:m_customPlot->yAxis->setLabel	1
 src/Configurator/GeometryListConfigurator.C	Geometric Parameter	bare	1
 src/Configurator/GeometryListConfigurator.C	Geometric Parameter	call:m_customPlot->xAxis->setLabel	1
-src/Configurator/GeometryListConfigurator.C	Geometry	bare	1
-src/Configurator/GeometryListConfigurator.C	Geometry	call:m_customPlot->xAxis->setLabel	1
+src/Configurator/GeometryListConfigurator.C	Geometry	bare	2
+src/Configurator/GeometryListConfigurator.C	Geometry	call:m_customPlot->xAxis->setLabel	2
 src/Configurator/IsotopesConfigurator.C	Element	bare	1
 src/Configurator/IsotopesConfigurator.C	Element	call:setText	1
 src/Configurator/IsotopesConfigurator.C	Indicies	bare	1
@@ -81,8 +110,14 @@ src/Configurator/IsotopesConfigurator.C	Isotopic Mass	bare	1
 src/Configurator/IsotopesConfigurator.C	Isotopic Mass	call:setText	1
 src/Configurator/MolecularSurfacesConfigurator.C	Isovalue	bare	2
 src/Configurator/MolecularSurfacesConfigurator.C	Isovalue	call:m_configurator.isovalueLabel->setText	2
+src/Configurator/MolecularSurfacesConfigurator.C	Promolecule	bare	1
+src/Configurator/MolecularSurfacesConfigurator.C	Promolecule	call:m_configurator.surfaceType->addItem	1
+src/Configurator/MolecularSurfacesConfigurator.C	SID	bare	1
+src/Configurator/MolecularSurfacesConfigurator.C	SID	call:m_configurator.surfaceType->addItem	1
 src/Configurator/MolecularSurfacesConfigurator.C	Scale	bare	1
 src/Configurator/MolecularSurfacesConfigurator.C	Scale	call:m_configurator.isovalueLabel->setText	1
+src/Configurator/MolecularSurfacesConfigurator.C	van der Waals	bare	1
+src/Configurator/MolecularSurfacesConfigurator.C	van der Waals	call:m_configurator.surfaceType->addItem	1
 src/Configurator/MullikenDecompositionsDialog.C	Mulliken decomposition for %1	bare	1
 src/Configurator/MullikenDecompositionsDialog.C	Mulliken decomposition for %1	call:setWindowTitle	1
 src/Configurator/NmrConfigurator.C	Chemical Shift (ppm)	bare	1
@@ -95,42 +130,218 @@ src/Configurator/NmrConfigurator.C	Relative Intensity	bare	1
 src/Configurator/NmrConfigurator.C	Relative Intensity	call:m_plot->yAxis->setLabel	1
 src/Configurator/NmrConfigurator.C	Resolution	bare	1
 src/Configurator/NmrConfigurator.C	Resolution	call:m_ui->widthLabel->setText	1
+src/Configurator/NmrConfigurator.C	Shieldings	bare	1
+src/Configurator/NmrConfigurator.C	Shieldings	call:m_ui->isotopeCombo->addItem	1
+src/Configurator/OrbitalsConfigurator.C	...	bare	1
+src/Configurator/OrbitalsConfigurator.C	Alpha NBO	bare	1
+src/Configurator/OrbitalsConfigurator.C	Alpha NTO	bare	1
+src/Configurator/OrbitalsConfigurator.C	Alpha Orbital	bare	1
+src/Configurator/OrbitalsConfigurator.C	Basis Function	bare	1
+src/Configurator/OrbitalsConfigurator.C	Beta NBO	bare	1
+src/Configurator/OrbitalsConfigurator.C	Beta NTO	bare	1
+src/Configurator/OrbitalsConfigurator.C	Beta Orbital	bare	1
+src/Configurator/OrbitalsConfigurator.C	Complex Alpha Orbital	bare	1
+src/Configurator/OrbitalsConfigurator.C	Complex Beta Orbital	bare	1
+src/Configurator/OrbitalsConfigurator.C	Dyson (Left)	bare	1
+src/Configurator/OrbitalsConfigurator.C	Dyson (Right)	bare	1
 src/Configurator/OrbitalsConfigurator.C	Function(s):	bare	1
 src/Configurator/OrbitalsConfigurator.C	Function(s):	call:m_configurator.orbitalLabel->setText	1
 src/Configurator/OrbitalsConfigurator.C	Occupancy	bare	1
 src/Configurator/OrbitalsConfigurator.C	Occupancy	call:m_customPlot->yAxis->setLabel	1
+src/Configurator/OrbitalsConfigurator.C	Orbital	bare	1
 src/Configurator/OrbitalsConfigurator.C	Orbital(s):	bare	1
 src/Configurator/OrbitalsConfigurator.C	Orbital(s):	call:m_configurator.orbitalLabel->setText	1
+src/Configurator/OrbitalsConfigurator.C	Transition Density	bare	1
 src/Configurator/SurfaceAnimatorDialog.C	Cube Data %1	bare	2
 src/Configurator/SurfaceAnimatorDialog.C	Cube Data %1	call:surface->setText	2
 src/Configurator/SurfaceAnimatorDialog.C	Difference Surface	bare	1
 src/Configurator/SurfaceAnimatorDialog.C	Difference Surface	call:surface->setText	1
 src/Configurator/SurfaceAnimatorDialog.C	Interpolation Frame %1	bare	1
+src/Configurator/VibronicConfigurator.C	Electronic Transition	bare	1
+src/Configurator/VibronicConfigurator.C	Electronic Transition	call:graph->setName	1
+src/Configurator/VibronicConfigurator.C	Intensity	bare	1
+src/Configurator/VibronicConfigurator.C	Intensity	call:m_plotCanvas->yAxis->setLabel	1
+src/Data/SurfaceType.C	Alpha	translate:IQmol::Data::SurfaceType	1
+src/Data/SurfaceType.C	Alpha Density	translate:IQmol::Data::SurfaceType	1
+src/Data/SurfaceType.C	Alpha Imaginary Orbital	translate:IQmol::Data::SurfaceType	1
+src/Data/SurfaceType.C	Alpha Real Orbital	translate:IQmol::Data::SurfaceType	1
+src/Data/SurfaceType.C	Basis Function	translate:IQmol::Data::SurfaceType	1
+src/Data/SurfaceType.C	Beta	translate:IQmol::Data::SurfaceType	1
+src/Data/SurfaceType.C	Beta Density	translate:IQmol::Data::SurfaceType	1
+src/Data/SurfaceType.C	Beta Imaginary Orbital	translate:IQmol::Data::SurfaceType	1
+src/Data/SurfaceType.C	Beta Real Orbital	translate:IQmol::Data::SurfaceType	1
+src/Data/SurfaceType.C	Correlated Density	translate:IQmol::Data::SurfaceType	1
+src/Data/SurfaceType.C	Cube Data	translate:IQmol::Data::SurfaceType	1
+src/Data/SurfaceType.C	Custom Density	translate:IQmol::Data::SurfaceType	1
+src/Data/SurfaceType.C	Dyson (left)	translate:IQmol::Data::SurfaceType	1
+src/Data/SurfaceType.C	Dyson (right)	translate:IQmol::Data::SurfaceType	1
+src/Data/SurfaceType.C	Electrostatic Potential	translate:IQmol::Data::SurfaceType	1
+src/Data/SurfaceType.C	Geminal	translate:IQmol::Data::SurfaceType	1
+src/Data/SurfaceType.C	Mulliken Atomic	translate:IQmol::Data::SurfaceType	1
+src/Data/SurfaceType.C	Mulliken Diatomic	translate:IQmol::Data::SurfaceType	1
+src/Data/SurfaceType.C	Orbital	translate:IQmol::Data::SurfaceType	1
+src/Data/SurfaceType.C	Promolecule	translate:IQmol::Data::SurfaceType	1
+src/Data/SurfaceType.C	Ribbon	translate:IQmol::Data::SurfaceType	1
+src/Data/SurfaceType.C	SID	translate:IQmol::Data::SurfaceType	1
+src/Data/SurfaceType.C	Solvent Excluded	translate:IQmol::Data::SurfaceType	1
+src/Data/SurfaceType.C	Spin Density	translate:IQmol::Data::SurfaceType	1
+src/Data/SurfaceType.C	Total Density	translate:IQmol::Data::SurfaceType	1
+src/Data/SurfaceType.C	User Defined Density	translate:IQmol::Data::SurfaceType	1
+src/Data/SurfaceType.C	van der Waals	translate:IQmol::Data::SurfaceType	1
+src/Grid/GridInfoDialog.C	Delete	bare	1
+src/Grid/GridInfoDialog.C	Delete	call:menu.addAction	1
 src/Grid/GridInfoDialog.C	Export Cube File	bare	1
 src/Grid/GridInfoDialog.C	Export Cube File	call:menu.addAction	1
 src/Grid/GridInfoDialog.C	Export Cube File (Switch Phase)	bare	1
 src/Grid/GridInfoDialog.C	Export Cube File (Switch Phase)	call:menu.addAction	1
+src/Grid/MolecularGridEvaluator.C	Computing alpha orbitals on grid %1	bare	1
+src/Grid/MolecularGridEvaluator.C	Computing alpha orbitals on grid %1	call:s	1
+src/Grid/MolecularGridEvaluator.C	Computing basis functions on grid %1	bare	1
+src/Grid/MolecularGridEvaluator.C	Computing basis functions on grid %1	call:s	1
+src/Grid/MolecularGridEvaluator.C	Computing beta orbitals on grid %1	bare	1
+src/Grid/MolecularGridEvaluator.C	Computing beta orbitals on grid %1	call:s	1
+src/Grid/MolecularGridEvaluator.C	Computing complex alpha orbitals on grid %1	bare	1
+src/Grid/MolecularGridEvaluator.C	Computing complex alpha orbitals on grid %1	call:s	1
+src/Grid/MolecularGridEvaluator.C	Computing complex beta orbitals on grid %1	bare	1
+src/Grid/MolecularGridEvaluator.C	Computing complex beta orbitals on grid %1	call:s	1
+src/Grid/MolecularGridEvaluator.C	Computing density on grid %1	bare	1
+src/Grid/MolecularGridEvaluator.C	Computing density on grid %1	call:s	1
+src/Layer/AtomLayer.C	Atom	bare	1
+src/Layer/AxesLayer.C	Configure	bare	1
+src/Layer/AxesLayer.C	Configure	call:newAction	1
+src/Layer/AxesMeshLayer.C	Configure	bare	1
+src/Layer/AxesMeshLayer.C	Configure	call:newAction	1
 src/Layer/BackgroundLayer.C	Background	bare	1
 src/Layer/BackgroundLayer.C	Background	call:setText	1
+src/Layer/BackgroundLayer.C	Edit Color	bare	1
+src/Layer/BackgroundLayer.C	Edit Color	call:newAction	1
 src/Layer/ComponentLayer.C	Surfaces	bare	1
+src/Layer/ConstraintLayer.C	Configure	bare	1
+src/Layer/ConstraintLayer.C	Configure	call:newAction	1
+src/Layer/ConstraintLayer.C	Delete	bare	1
+src/Layer/ConstraintLayer.C	Delete	call:newAction	1
 src/Layer/ConstraintLayer.C	Invalid	bare	1
 src/Layer/ConstraintLayer.C	Invalid	call:setText	1
-src/Layer/GeminalOrbitalsLayer.C	Geminal Alpha %1	bare	1
-src/Layer/GeminalOrbitalsLayer.C	Geminal Alpha %1	call:setText	1
-src/Layer/GeminalOrbitalsLayer.C	Geminal Beta %1	bare	1
-src/Layer/GeminalOrbitalsLayer.C	Geminal Beta %1	call:setText	1
+src/Layer/CubeDataLayer.C	Cube Data	bare	1
+src/Layer/CubeDataLayer.C	Cube Data	call:setText	1
+src/Layer/CubeDataLayer.C	Surface Animator	bare	1
+src/Layer/CubeDataLayer.C	Surface Animator	call:newAction	1
+src/Layer/DipoleLayer.C	Dipole	bare	1
+src/Layer/DipoleLayer.C	Dipole	call:setText	1
+src/Layer/EfpFragmentListLayer.C	EFP Fragments	bare	1
+src/Layer/EfpFragmentListLayer.C	EFP Fragments	call:setText	1
+src/Layer/ExcitedStatesLayer.C	Excited States	bare	1
+src/Layer/ExcitedStatesLayer.C	Excited States	call:setText	1
+src/Layer/FrequenciesLayer.C	Frequencies	bare	1
+src/Layer/FrequenciesLayer.C	Frequencies	call:setText	1
+src/Layer/GeminalOrbitalsLayer.C	Edit Bounding Box	bare	1
+src/Layer/GeminalOrbitalsLayer.C	Edit Bounding Box	call:newAction	1
+src/Layer/GeminalOrbitalsLayer.C	Geminal Orbitals	bare	1
+src/Layer/GeminalOrbitalsLayer.C	Geminal Orbitals	call:setText	1
+src/Layer/GeminalOrbitalsLayer.C	Show Grid Info	bare	1
+src/Layer/GeminalOrbitalsLayer.C	Show Grid Info	call:newAction	1
+src/Layer/GeometryListLayer.C	Copy Geometry	bare	1
+src/Layer/GeometryListLayer.C	Copy Geometry	call:newAction	1
+src/Layer/GeometryListLayer.C	Remove	bare	2
+src/Layer/GeometryListLayer.C	Remove	call:geometry->newAction	2
+src/Layer/GeometryListLayer.C	Remove	call:layer->newAction	2
+src/Layer/GroupLayer.C	Add Hydrogens	bare	1
+src/Layer/GroupLayer.C	Add Hydrogens	call:newAction	1
+src/Layer/GroupLayer.C	Reperceive Bonds	bare	1
+src/Layer/GroupLayer.C	Reperceive Bonds	call:newAction	1
 src/Layer/InfoLayer.C	Info	bare	1
 src/Layer/InfoLayer.C	Info	call:setText	1
+src/Layer/MacroMoleculeLayer.C	Residues	bare	1
 src/Layer/MolecularSurfacesLayer.C	Surfaces	bare	1
 src/Layer/MolecularSurfacesLayer.C	Surfaces	call:Base	1
+src/Layer/MoleculeLayer.C	Add Hydrogens	bare	1
+src/Layer/MoleculeLayer.C	Add Hydrogens	call:newAction	1
+src/Layer/MoleculeLayer.C	Atomic Charges	bare	1
+src/Layer/MoleculeLayer.C	Atomic Charges	call:newAction	1
+src/Layer/MoleculeLayer.C	Atoms	bare	1
+src/Layer/MoleculeLayer.C	Atoms	call:m_atomList.setText	1
+src/Layer/MoleculeLayer.C	Bonds	bare	1
+src/Layer/MoleculeLayer.C	Bonds	call:m_bondList.setText	1
+src/Layer/MoleculeLayer.C	CHELPG	bare	1
+src/Layer/MoleculeLayer.C	CHELPG	call:menu->addAction	1
+src/Layer/MoleculeLayer.C	Charges	bare	1
+src/Layer/MoleculeLayer.C	Charges	call:m_chargesList.setText	1
+src/Layer/MoleculeLayer.C	Configure	bare	1
+src/Layer/MoleculeLayer.C	Configure	call:newAction	1
+src/Layer/MoleculeLayer.C	Constraints	bare	1
+src/Layer/MoleculeLayer.C	Constraints	call:m_constraintList.setText	1
+src/Layer/MoleculeLayer.C	Duplicate Geometry	bare	1
+src/Layer/MoleculeLayer.C	Duplicate Geometry	call:newAction	1
+src/Layer/MoleculeLayer.C	Files	bare	1
+src/Layer/MoleculeLayer.C	Files	call:m_fileList.setText	1
+src/Layer/MoleculeLayer.C	Gasteiger	bare	1
+src/Layer/MoleculeLayer.C	Gasteiger	call:menu->addAction	1
+src/Layer/MoleculeLayer.C	Groups	bare	1
+src/Layer/MoleculeLayer.C	Groups	call:m_groupList.setText	1
+src/Layer/MoleculeLayer.C	Hirshfeld	bare	1
+src/Layer/MoleculeLayer.C	Hirshfeld	call:menu->addAction	1
+src/Layer/MoleculeLayer.C	Info	bare	1
+src/Layer/MoleculeLayer.C	Isotopes	bare	1
+src/Layer/MoleculeLayer.C	Isotopes	call:m_isotopesList.setText	1
+src/Layer/MoleculeLayer.C	Lowdin	bare	2
+src/Layer/MoleculeLayer.C	Lowdin	call:menu->addAction	2
+src/Layer/MoleculeLayer.C	Merz-Kollman ESP	bare	1
+src/Layer/MoleculeLayer.C	Merz-Kollman ESP	call:menu->addAction	1
+src/Layer/MoleculeLayer.C	Merz-Kollman RESP	bare	1
+src/Layer/MoleculeLayer.C	Merz-Kollman RESP	call:menu->addAction	1
+src/Layer/MoleculeLayer.C	Mulliken	bare	1
+src/Layer/MoleculeLayer.C	Mulliken	call:menu->addAction	1
+src/Layer/MoleculeLayer.C	Multipole Derived	bare	1
+src/Layer/MoleculeLayer.C	Multipole Derived	call:menu->addAction	1
+src/Layer/MoleculeLayer.C	Natural	bare	1
+src/Layer/MoleculeLayer.C	Natural	call:menu->addAction	1
+src/Layer/MoleculeLayer.C	Remove	bare	1
+src/Layer/MoleculeLayer.C	Remove	call:newAction	1
+src/Layer/MoleculeLayer.C	Reperceive Bonds	bare	1
+src/Layer/MoleculeLayer.C	Reperceive Bonds	call:newAction	1
+src/Layer/MoleculeLayer.C	Save As	bare	1
+src/Layer/MoleculeLayer.C	Save As	call:newAction	1
+src/Layer/MoleculeLayer.C	Scan Coordinates	bare	1
+src/Layer/MoleculeLayer.C	Scan Coordinates	call:m_scanList.setText	1
+src/Layer/MoleculeLayer.C	Select All	bare	1
+src/Layer/MoleculeLayer.C	Select All	call:newAction	1
 src/Layer/MoleculeLayer.C	Untitled	bare	2
 src/Layer/MoleculeLayer.C	Untitled	call:Component	2
+src/Layer/NmrLayer.C	NMR	bare	1
+src/Layer/NmrLayer.C	NMR	call:setText	1
+src/Layer/OctreeLayer.C	Octree Box	bare	1
+src/Layer/OctreeLayer.C	Octree Box	call:setText	1
+src/Layer/OrbitalsLayer.C	Edit Bounding Box	bare	1
+src/Layer/OrbitalsLayer.C	Edit Bounding Box	call:newAction	1
+src/Layer/OrbitalsLayer.C	Show Grid Info	bare	1
+src/Layer/OrbitalsLayer.C	Show Grid Info	call:newAction	1
 src/Layer/SolventLayer.C	Solvent	bare	1
 src/Layer/SolventLayer.C	Solvent	call:setText	1
+src/Layer/SurfaceLayer.C	Decimate	bare	1
+src/Layer/SurfaceLayer.C	Decimate	call:newAction	1
+src/Layer/SurfaceLayer.C	Print Mesh Info	bare	1
+src/Layer/SurfaceLayer.C	Print Mesh Info	call:newAction	1
+src/Layer/SurfaceLayer.C	Show Face Normals	bare	1
+src/Layer/SurfaceLayer.C	Show Face Normals	call:newAction	1
+src/Layer/SurfaceLayer.C	Show Vertex Normals	bare	1
+src/Layer/SurfaceLayer.C	Show Vertex Normals	call:newAction	1
+src/Layer/SymmetryLayer.C	Symmetry	bare	1
+src/Layer/SymmetryLayer.C	Symmetry	call:setText	1
+src/Layer/SystemLayer.C	Box System	bare	1
+src/Layer/SystemLayer.C	Box System	call:newAction	1
+src/Layer/SystemLayer.C	Export PDB	bare	1
+src/Layer/SystemLayer.C	Export PDB	call:newAction	1
+src/Layer/SystemLayer.C	Info	bare	1
 src/Layer/SystemLayer.C	Molecule	bare	2
 src/Layer/SystemLayer.C	Molecule	call:molecule->setText	2
+src/Layer/SystemLayer.C	Remove System	bare	1
+src/Layer/SystemLayer.C	Remove System	call:newAction	1
 src/Layer/SystemLayer.C	Ribbons	bare	1
 src/Layer/SystemLayer.C	Ribbons	call:m_surfaceList.setText	1
+src/Layer/VibronicLayer.C	Vibronic	bare	1
+src/Layer/VibronicLayer.C	Vibronic	call:setText	1
+src/Main/HelpBrowser.C	No results found.	translate:HelpBrowser	1
+src/Main/HelpBrowser.C	Search Results	translate:HelpBrowser	1
 src/Main/MainWindow.C	(none)	bare	1
 src/Main/MainWindow.C	(none)	call:serverList.append	1
 src/Main/MainWindow.C	About	bare	1
@@ -228,6 +439,15 @@ src/Main/MainWindow.C	Wonky molecule detected	bare	1
 src/Main/MainWindow.C	Wonky molecule detected	call:mbox.setText	1
 src/Plot/CustomPlot.C	Save Image As	bare	1
 src/Plot/CustomPlot.C	Save Image As	call:menu->addAction	1
+src/Process/JobInfo.C	Copying	translate:JobInfo	1
+src/Process/JobInfo.C	Error	translate:JobInfo	1
+src/Process/JobInfo.C	Finished	translate:JobInfo	1
+src/Process/JobInfo.C	Killed	translate:JobInfo	1
+src/Process/JobInfo.C	Not Running	translate:JobInfo	1
+src/Process/JobInfo.C	Queued	translate:JobInfo	1
+src/Process/JobInfo.C	Running	translate:JobInfo	1
+src/Process/JobInfo.C	Suspended	translate:JobInfo	1
+src/Process/JobInfo.C	Unknown	translate:JobInfo	1
 src/Process/JobMonitor.C	Cancel Copy	bare	1
 src/Process/JobMonitor.C	Cancel Copy	call:menu->addAction	1
 src/Process/JobMonitor.C	Delete Job From Queue	bare	1
@@ -244,37 +464,70 @@ src/Qui/GeometryConstraint.C	A constraint involving the following atoms has alre
 src/Qui/GeometryConstraint.C	A constraint involving the following atoms has already been defined:\n	call:msg	1
 src/Qui/GeometryConstraint.C	Are you sure you want to delete the selected constraint?	bare	1
 src/Qui/GeometryConstraint.C	Are you sure you want to delete the selected constraint?	call:msg	1
+src/Qui/GeometryConstraint.C	Bend	translate:Qui::GeometryConstraint	1
+src/Qui/GeometryConstraint.C	Connect	translate:Qui::GeometryConstraint	1
+src/Qui/GeometryConstraint.C	Coplanar	translate:Qui::GeometryConstraint	1
 src/Qui/GeometryConstraint.C	Delete Constraint?	bare	1
+src/Qui/GeometryConstraint.C	Dihedral	translate:Qui::GeometryConstraint	1
+src/Qui/GeometryConstraint.C	Dummy - Angle Bisector	translate:Qui::GeometryConstraint	1
+src/Qui/GeometryConstraint.C	Dummy - Plane Normal	translate:Qui::GeometryConstraint	1
 src/Qui/GeometryConstraint.C	Duplicate Constraint	bare	1
+src/Qui/GeometryConstraint.C	Fixed	translate:Qui::GeometryConstraint	1
 src/Qui/GeometryConstraint.C	Invalid Constraint	bare	1
+src/Qui/GeometryConstraint.C	Out Of Plane	translate:Qui::GeometryConstraint	1
+src/Qui/GeometryConstraint.C	Perpendicular	translate:Qui::GeometryConstraint	1
+src/Qui/GeometryConstraint.C	Stretch	translate:Qui::GeometryConstraint	1
 src/Qui/GeometryConstraint.C	The following constraint is invalid:\n	bare	1
 src/Qui/GeometryConstraint.C	The following constraint is invalid:\n	call:msg	1
 src/Qui/InputDialog.C	Are you sure you want to delete all generated input?	bare	1
 src/Qui/InputDialog.C	Are you sure you want to delete all generated input?	call:msg	1
+src/Qui/InputDialog.C	Bigger	bare	1
+src/Qui/InputDialog.C	Close	bare	1
+src/Qui/InputDialog.C	Copy	bare	1
+src/Qui/InputDialog.C	Cut	bare	1
 src/Qui/InputDialog.C	Delete input?	bare	1
-src/Qui/LJParametersSection.C	LJ Parameter Error	bare	1
-src/Qui/MoleculeSection.C	Parse Error	bare	1
-src/Qui/MoleculeSection.C	Problem reading $molecule section: \n	bare	1
-src/Qui/MoleculeSection.C	Problem reading $molecule section: \n	call:msg	1
+src/Qui/InputDialog.C	New Job Section	bare	1
+src/Qui/InputDialog.C	Paste	bare	1
+src/Qui/InputDialog.C	Reset Input	bare	1
+src/Qui/InputDialog.C	Save As	bare	1
+src/Qui/InputDialog.C	Set Font	bare	1
+src/Qui/InputDialog.C	Smaller	bare	1
+src/Qui/InputDialog.C	Submit	bare	1
+src/Qui/InputDialogLogic.C	Alpha	bare	2
+src/Qui/InputDialogLogic.C	Singlets	bare	3
+src/Qui/InputDialogLogic.C	Triplets	bare	3
 src/Qui/OptionEditors.C	New option	bare	1
 src/Qui/OptionEditors.C	New option	call:item->setText	1
-src/Qui/RemSection.C	An error occured when parsing the following options:\n	bare	1
-src/Qui/RemSection.C	An error occured when parsing the following options:\n	call:msg	1
-src/Qui/RemSection.C	Input File Error	bare	1
+src/Util/ColorDialog.C	Custom	bare	1
+src/Util/ColorDialog.C	Custom	call:combo->addItem	1
+src/Util/ColorDialog.C	Default	bare	1
+src/Util/ColorDialog.C	Default	call:combo->addItem	1
+src/Util/ColorDialog.C	Primary Spectrum	bare	1
+src/Util/ColorDialog.C	Primary Spectrum	call:combo->addItem	1
+src/Util/ColorDialog.C	Reflected Default	bare	1
+src/Util/ColorDialog.C	Reflected Default	call:combo->addItem	1
+src/Util/ColorDialog.C	Reflected Spectrum	bare	1
+src/Util/ColorDialog.C	Reflected Spectrum	call:combo->addItem	1
 src/Util/ColorDialog.C	Select color	bare	1
 src/Util/ColorDialog.C	Select color	call:QAction	1
+src/Util/ColorDialog.C	Spectrum	bare	1
+src/Util/ColorDialog.C	Spectrum	call:combo->addItem	1
 src/Util/LogMessageDialog.C	Logging disabled	bare	1
 src/Util/LogMessageDialog.C	Logging disabled	call:m_logMessageDialog.logTextBrowser->setText	1
 src/Viewer/CameraDialog.C	Camera Position	bare	1
 src/Viewer/CameraDialog.C	Camera Position	call:setText	1
 src/Viewer/CameraDialog.C	Time (s)	bare	1
 src/Viewer/CameraDialog.C	Time (s)	call:setText	1
+src/Viewer/ShaderDialog.C	...	bare	1
+src/Viewer/ShaderDialog.C	Black	bare	1
+src/Viewer/ShaderDialog.C	Default	bare	1
+src/Viewer/ShaderDialog.C	None	bare	1
+src/Viewer/ShaderDialog.C	White	bare	1
 src/Viewer/UndoCommands.C	Add constraint	translate:UndoCommands	1
 src/Viewer/UndoCommands.C	Add scan coordinated	translate:UndoCommands	1
 src/Viewer/UndoCommands.C	Change atom type	translate:UndoCommands	1
 src/Viewer/UndoCommands.C	Change bond order	translate:UndoCommands	1
-src/Viewer/UndoCommands.C	Load file %1	bare	1
-src/Viewer/UndoCommands.C	Load file %1	call:setText	1
+src/Viewer/UndoCommands.C	Load file %1	translate:UndoCommands	1
 src/Viewer/UndoCommands.C	New molecule	translate:UndoCommands	1
 src/Viewer/UndoCommands.C	New system	translate:UndoCommands	1
 src/Viewer/UndoCommands.C	Remove 	translate:UndoCommands	1
@@ -287,5 +540,7 @@ src/Viewer/ViewerModelView.C	Hide Molecules	bare	1
 src/Viewer/ViewerModelView.C	Hide Molecules	call:QAction	1
 src/Viewer/ViewerModelView.C	Merge Molecules	bare	1
 src/Viewer/ViewerModelView.C	Merge Molecules	call:QAction	1
+src/Viewer/ViewerModelView.C	New Molecule From Selection	bare	1
+src/Viewer/ViewerModelView.C	New Molecule From Selection	call:QAction	1
 src/Viewer/ViewerModelView.C	Show Molecules	bare	1
 src/Viewer/ViewerModelView.C	Show Molecules	call:QAction	1
