@@ -5755,9 +5755,34 @@ p, li { white-space: pre-wrap; }
         <translation>任务</translation>
     </message>
     <message>
+        <location filename="../src/Qui/InputDialog.C" line="412"/>
+        <source>New Job Section</source>
+        <translation>新建作业段</translation>
+    </message>
+    <message>
+        <location filename="../src/Qui/InputDialog.C" line="418"/>
+        <source>Reset Input</source>
+        <translation>重置输入</translation>
+    </message>
+    <message>
         <location filename="../src/Qui/InputDialog.C" line="433"/>
         <source>Font</source>
         <translation>字体</translation>
+    </message>
+    <message>
+        <location filename="../src/Qui/InputDialog.C" line="436"/>
+        <source>Bigger</source>
+        <translation>放大</translation>
+    </message>
+    <message>
+        <location filename="../src/Qui/InputDialog.C" line="442"/>
+        <source>Smaller</source>
+        <translation>缩小</translation>
+    </message>
+    <message>
+        <location filename="../src/Qui/InputDialog.C" line="450"/>
+        <source>Set Font</source>
+        <translation>设置字体</translation>
     </message>
     <message>
         <location filename="../src/Qui/InputDialog.C" line="470"/>

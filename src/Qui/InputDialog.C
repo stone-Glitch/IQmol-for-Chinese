@@ -409,13 +409,13 @@ void InputDialog::initializeMenus()
    menu = menubar->addMenu(tr("Job"));
 
       // Job -> New Job Section
-      name = "New Job Section";
+      name = tr("New Job Section");
       action = menu->addAction(name);
       connect(action, SIGNAL(triggered()), this, SLOT(addNewJob()));
       action->setShortcut(QKeySequence::New);
 
       // Job -> Reset
-      name = "Reset Input";
+      name = tr("Reset Input");
       action = menu->addAction(name);
       connect(action, SIGNAL(triggered()), this, SLOT(resetInput()));
       action->setShortcut(Qt::CTRL | Qt::Key_R );
@@ -433,13 +433,13 @@ void InputDialog::initializeMenus()
    menu = menubar->addMenu(tr("Font"));
 
       // Font -> Bigger
-      name = "Bigger";
+      name = tr("Bigger");
       action = menu->addAction(name);
       connect(action, SIGNAL(triggered()), this, SLOT(fontBigger()));
       action->setShortcut(Qt::CTRL | Qt::Key_Plus);
 
       // Font -> Smaller 
-      name = "Smaller";
+      name = tr("Smaller");
       action = menu->addAction(name);
       connect(action, SIGNAL(triggered()), this, SLOT(fontSmaller()));
       action->setShortcut(Qt::CTRL | Qt::Key_Minus);
@@ -447,7 +447,7 @@ void InputDialog::initializeMenus()
       menu->addSeparator();
 
       // Font -> Set Font
-      name = "Set Font";
+      name = tr("Set Font");
       action = menu->addAction(name);
       connect(action, SIGNAL(triggered()), this, SLOT(setFont()));
       action->setShortcut(Qt::CTRL | Qt::Key_T);
