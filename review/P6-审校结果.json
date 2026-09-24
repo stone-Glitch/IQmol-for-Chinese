@@ -1,0 +1,12 @@
+{
+  "A_s": 0.0,
+  "n_reviewed": 240,
+  "n_none": 240,
+  "n_minor": 0,
+  "n_severe": 0,
+  "n_fatal": 0,
+  "undecided": 0,
+  "reviewer": "A:中文表达 / B:计算化学（第三人裁决）",
+  "reviewed_at": "2026-09-24",
+  "source_csv": "review/P6-审校工单.csv"
+}

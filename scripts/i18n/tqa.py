@@ -16,7 +16,11 @@ tqa.py —— IQmol 汉化版翻译质量量化评估（TQA）
     P1 源码—翻译漂移   P2 翻译资产完整率   P3 QM 交付有效度
     P4 术语一致性      P5 界面可用性(可自动部分)
 
-P6（语义质量）需人工/LLM 审校，本工具仅预留接口与占位，不臆造分数。
+P6（语义质量）由 `semantic_audit.py` 承担：
+    · 结构性语义缺陷（术语不一致、硬译参数名、占位符不匹配）→ 自动筛查
+    · 「这句话翻得对不对」→ 人工四级评分，产出 A_s
+    若仓库存在 review/P6-审校结果.json，本工具自动读取并计入 P6 权重；
+    否则 P6 保持「未测量」并从有效权重中剔除（不臆造分数）。
 
 关键设计：FragmentTable 等【工具注入】条目（无 <location>）不计入漂移，
 因为它们的源文本来自运行期片段库而非 lupdate 可扫描的源码。
@@ -36,6 +40,7 @@ TS = os.path.join(REPO, 'translations/zh_CN.ts')
 QM = os.path.join(REPO, 'translations/zh_CN.qm')
 SRC = os.path.join(REPO, 'src')
 TERMS = os.path.join(REPO, 'scripts/i18n/known_translations.json')
+P6_JSON = os.path.join(REPO, 'review/P6-审校结果.json')
 
 # ---------------------------------------------------------------- 权重
 WEIGHTS = {'P1': 20, 'P2': 20, 'P3': 15, 'P4': 15, 'P5': 15, 'P6': 15}
@@ -259,6 +264,40 @@ def measure_ui():
             'errors': fmt_err[:50]}
 
 
+# ================================================================ P6 语义
+def measure_semantic(path=P6_JSON):
+    """
+    读取人工审校结果（由 semantic_audit.py score --save 产出）。
+
+    约定：P6 分数不由本工具生成。若审校结果不存在，P6 = None，
+    并从有效权重中剔除 —— 宁可显示「未测量」，也不用虚假满分掩盖。
+    """
+    if not os.path.isfile(path):
+        return {'available': False,
+                'note': f'未找到审校结果 {os.path.relpath(path, REPO)}，'
+                        f'P6 记为未测量（运行 semantic_audit.py sample 生成工单）'}
+    try:
+        with open(path, encoding='utf-8') as f:
+            d = json.load(f)
+    except (OSError, ValueError) as exc:
+        return {'available': False, 'note': f'审校结果读取失败：{exc}'}
+
+    a = d.get('A_s')
+    if a is None:
+        return {'available': False, 'note': '审校结果中无 A_s 字段'}
+    return {
+        'available': True,
+        'A_s': float(a),
+        'n_reviewed': d.get('n_reviewed'),
+        'n_fatal': d.get('n_fatal', 0),
+        'n_severe': d.get('n_severe', 0),
+        'n_minor': d.get('n_minor', 0),
+        'undecided': d.get('undecided', 0),
+        'reviewed_at': d.get('reviewed_at', ''),
+        'reviewer': d.get('reviewer', ''),
+    }
+
+
 # ================================================================ 汇总
 def evaluate(allow_lupdate=True):
     drift = measure_drift(allow_lupdate)
@@ -266,13 +305,14 @@ def evaluate(allow_lupdate=True):
     qm = measure_qm()
     terms = measure_terms()
     ui = measure_ui()
+    sem = measure_semantic()
 
     P1 = drift['drift'] if drift['available'] else None
     P2 = 1 - asset['Q_asset'] / 100
     P3 = 1 - qm['G_qm']          # 只对"可自动测量的部分"计分
     P4 = terms['C_term'] if terms['available'] else None
     P5 = max(ui.get('n_format_error', 0) / ui['n_dynamic_checked'], 0) if ui['n_dynamic_checked'] else 0.0
-    P6 = None                    # 需人工/LLM 审校
+    P6 = sem['A_s'] if sem.get('available') else None
 
     parts = {'P1': P1, 'P2': P2, 'P3': P3, 'P4': P4, 'P5': P5, 'P6': P6}
     # 未测量的维度按"不扣分"处理，但同时把有效权重归一化，避免虚高
@@ -301,7 +341,7 @@ def evaluate(allow_lupdate=True):
         'unmeasured_dims': sorted(k for k, v in parts.items() if v is None),
         'gate_failures': gates,
         'detail': {'drift': drift, 'asset': asset, 'qm': qm,
-                   'terms': terms, 'ui': ui},
+                   'terms': terms, 'ui': ui, 'semantic': sem},
     }
 
 
@@ -336,7 +376,7 @@ def report(res):
     row('P3', 'QM 交付失效度', p['P3'], 15)
     row('P4', '术语冲突率', p['P4'], 15)
     row('P5', '界面动态文本错误率', p['P5'], 15)
-    row('P6', '语义质量(需人工)', p['P6'], 15)
+    row('P6', '语义质量', p['P6'], 15)
     L.append('')
 
     a = d['asset']
@@ -355,6 +395,16 @@ def report(res):
              f"（{q['size']} 字节，{q['qm_messages']} 条）")
     L.append(f"  动态文本检查 : {d['ui']['n_dynamic_checked']} 条，"
              f"错误 {d['ui']['n_format_error']} 条")
+    s = d.get('semantic', {})
+    if s.get('available'):
+        L.append(f"  语义审校     : {s['n_reviewed']} 条已评，"
+                 f"A_s={s['A_s']:.4f}"
+                 f"（无错误 {s.get('n_reviewed',0)-s.get('n_severe',0)-s.get('n_minor',0)-s.get('n_fatal',0)}"
+                 f" / 轻微 {s.get('n_minor',0)} / 严重 {s.get('n_severe',0)} / 致命 {s.get('n_fatal',0)}）")
+        if s.get('undecided'):
+            L.append(f"                ⚠ 其中 {s['undecided']} 条未裁决，建议补第三人/化学专业裁决")
+    else:
+        L.append(f"  语义审校     : 未测量 —— {s.get('note','')}")
     L.append('')
 
     L.append('-' * 66)
