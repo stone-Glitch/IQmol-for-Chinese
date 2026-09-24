@@ -111,12 +111,11 @@ TERM_CANON = [
     (r'\boccupied orbitals?\b', '占据轨道', 3, 'occupied orbital = 占据轨道', None),
     (r'\bpartial charge', '部分电荷', 3, 'partial charge = 部分电荷（原子电荷）', None),
     (r'\bcharge\b', '电荷', 3, 'charge = 电荷', r'(partial|point|formal)'),
-    # geminal = 双电子函数（GVB/APG/APSG/AP1roG/pCCD 语境），与「电子对」不是同一概念。
-    # 本项目定稿为「对偶」系列：对偶 / 对偶相关 / 对偶轨道 / 对偶 Alpha %1。
-    # 注：此处 sev 取 3（术语不一致），实际该缺陷在 6 处出现 4 种译法，
-    #     人工审校时按「严重」档（10）记分。
-    (r'\bgeminals?\b', '对偶', 3,
-     'geminal = 双电子函数，统一为「对偶」（非「成对/孪位/孪生/双生」）', None),
+    # geminal = 双电子函数（GVB/APG/APSG/AP1roG/pCCD 语境）。
+    # 本项目定稿为「成对」系列：成对 / 成对相关 / 成对轨道 / 成对 Alpha %1。
+    # 历史误译「孪位/孪生/双生」已由 FORBIDDEN 拦截。
+    (r'\bgeminals?\b', '成对', 3,
+     'geminal 统一为「成对」系列（勿用孪位/孪生/双生）', None),
 ]
 
 # 禁止译法：出现即为确定性缺陷
@@ -127,7 +126,7 @@ FORBIDDEN = [
     (r'^设定$', 'Set 在坐标语境下宜作「设定值」或保留', 1),
     (r'(?<![一二三四五六七八九十])自旋度', 'spin 相关术语应统一为「自旋」', 10),
     # geminal 的历史误译：曾出现 4 种译法并存，属严重级术语不一致
-    (r'孪位|孪生|双生轨道', 'geminal 应为「对偶」系列，勿用「孪位/孪生/双生」', 10),
+    (r'孪位|孪生|双生轨道', 'geminal 应为「成对」系列，勿用「孪位/孪生/双生」', 10),
 ]
 
 # 高风险上下文：这些 context 里的译文直接决定计算参数是否正确
