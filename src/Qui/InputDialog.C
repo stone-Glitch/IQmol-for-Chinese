@@ -82,7 +82,8 @@ InputDialog::InputDialog(QWidget* parent) : QMainWindow(parent),
    QFileInfo file(Preferences::LastFileAccessed());
    file.setFile(file.dir(),"untitled.inp");
    
-   setWindowTitle("QChem Input File Editor - " + file.fileName());
+   // [i18n] 窗口标题需翻译；文件名不参与翻译，故拼接在 tr() 之外。
+   setWindowTitle(tr("QChem Input File Editor") + " - " + file.fileName());
    m_ui.previewText->setCurrentFont(Preferences::PreviewFont());
 
    setStatusBar(&m_statusBar);
@@ -486,7 +487,8 @@ bool InputDialog::saveFile(bool prompt)
    }
 
    if (saved) {
-      setWindowTitle("QChem Input File Editor - " + file.fileName());
+      // [i18n] 同构造函数：标题翻译，文件名保留原样。
+      setWindowTitle(tr("QChem Input File Editor") + " - " + file.fileName());
    }else {
       QString msg("Could not write to file '");
       msg += tmp.fileName() + "'\nInput file not saved\n";
