@@ -119,6 +119,18 @@ if [ ! -f "$STAGE/bin/libsqlite3-0.dll" ]; then
   exit 1
 fi
 echo "    OK: sqlite3 运行库 (libsqlite3-0.dll) 已就位"
+# 翻译文件自检：zh_CN.qm 界面翻译 + Qt 标准翻译(标准按钮 Cancel/OK 等的中文)
+if [ ! -f "$STAGE/bin/translations/zh_CN.qm" ]; then
+  echo "ERROR: 分发包缺少界面翻译 (bin/translations/zh_CN.qm)" >&2
+  exit 1
+fi
+if ! ls "$STAGE"/bin/translations/qt*_zh_CN.qm >/dev/null 2>&1; then
+  echo "ERROR: 分发包缺少 Qt 标准翻译 (bin/translations/qt*_zh_CN.qm)" >&2
+  echo "       缺它则标准按钮(Cancel 等)显示英文。" >&2
+  echo "       请更新 deploy_windows.sh（已含 Qt 标准翻译复制段）后重跑。" >&2
+  exit 1
+fi
+echo "    OK: 翻译文件齐备 ($(cd "$STAGE/bin/translations" && ls | tr '\n' ' '))"
 # 目录嵌套自检：share/share、bin/bin 任一存在即报错
 for _n in share/share bin/bin lib/lib; do
   [ -e "$STAGE/$_n" ] && { echo "ERROR: 检测到目录嵌套 $STAGE/$_n，部署脚本需重跑清洗"; exit 1; }

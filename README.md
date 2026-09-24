@@ -50,7 +50,7 @@ make
 
 本仓库在原版 IQmol3 基础上完成了面向简体中文用户的全面本地化：
 
-- **界面翻译**：`translations/zh_CN.ts`（2035 条翻译，151 个 context，全部完成，0 未译），
+- **界面翻译**：`translations/zh_CN.ts`（2106 条翻译，153 个 context，全部完成，0 未译），
   构建时由 CMake 自动调用 lrelease 生成 `zh_CN.qm` 并随可执行文件输出到
   `translations/` 目录。系统需安装 Qt5 Linguist 工具（lupdate/lrelease，
   如 `qtbase5-dev-tools`、`qttools5-dev-tools`），缺失时构建仍可继续，但界面回退英文。
