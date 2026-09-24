@@ -64,7 +64,7 @@ make
 
 本仓库在原版 IQmol3 基础上完成了面向简体中文用户的全面本地化：
 
-- **界面翻译**：`translations/zh_CN.ts`（2111 条翻译，153 个 context，全部完成，0 未译），
+- **界面翻译**：`translations/zh_CN.ts`（2112 条翻译，153 个 context，全部完成，0 未译），
   构建时由 CMake 自动调用 lrelease 生成 `zh_CN.qm` 并随可执行文件输出到
   `translations/` 目录。系统需安装 Qt5 Linguist 工具（lupdate/lrelease，
   如 `qtbase5-dev-tools`、`qttools5-dev-tools`），缺失时构建仍可继续，但界面回退英文。
@@ -77,6 +77,11 @@ make
   ./scripts/build_docs.sh --clean  # 编译后清理 LaTeX 中间文件
   ```
   手册配图位于 `doc/figures/`，其中对话框截图为中文界面实拍。
+- **Linux 分发包**：`scripts/package_linux.sh` 一键收集可执行文件、Qt 运行库与插件、
+  OpenBabel 数据与运行期插件、着色器/片段库及精选示例分子（`samples/` 单文件
+  ≤ 1 MB，含说明），产出 `dist/IQmol-linux-x86_64.tar.gz`，解压后 `./run.sh` 即用。
+  翻译文件同时放置于包根 `translations/` 与 `bin/translations/`（双保险，修复
+  旧包"仅从包根启动才加载翻译"的缺陷，详见脚本头注释 reA22A）。
 - **翻译维护**：源码变更后运行以下命令更新翻译并生成 qm（脚本会自动修复
   lupdate 因 GLObject.h 解析错误而误标的 vanished 条目）：
   ```

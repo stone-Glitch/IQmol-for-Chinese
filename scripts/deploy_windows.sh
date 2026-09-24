@@ -136,14 +136,20 @@ else
 fi
 
 #--------------------------------------------------------------------
-# 1b. Qt 插件同步到 build/lib/ 与 build/lib/plugins/
+# 1b. Qt 插件同步到 build/lib/plugins/
 #     源码 IQmolApplication.C:115-116 对 Windows 显式执行:
 #        QApplication::addLibraryPath(path + "/lib")
 #        QApplication::addLibraryPath(path + "/lib/plugins")
-#     其中 path 为运行时根(=build/)。因此除 Qt 默认的 exe 同级目录外,
-#     再把这些插件复制一份到 lib/ 下与源码逻辑对齐, 双保险。
+#     其中 path 为运行时根(=build/)，Qt 会在每条 library path 下找
+#     <类别> 子目录，故 lib/plugins/<类别> 必被搜索到。
+#
+#     [reA22B 瘦身] 旧版把同一批插件同时铺到 lib/<类别> 与
+#     lib/plugins/<类别> 两份——内容完全相同、均可被搜索到，纯属冗余，
+#     使包体多出一份插件体积。现统一只保留 lib/plugins/ 一份（与 Linux
+#     分包 package_linux.sh 的布局一致，也与"官方布局"注释对齐）。
+#     平台插件另有 bin/platforms（windeployqt 标准布局、exe 同级）兜底。
 #--------------------------------------------------------------------
-echo "==> 同步 Qt 插件到 lib/ (与源码 addLibraryPath 对齐)"
+echo "==> 同步 Qt 插件到 lib/plugins/ (与源码 addLibraryPath 对齐)"
 mkdir -p "$BUILD_DIR/lib/plugins"
 # sqldrivers 必须同步：Q-Chem 选项数据库 qchem_option.db 走 QSQLITE，
 # 缺 qsqlite.dll 会报 "QSqlDatabase Error: Driver not loaded"
@@ -151,10 +157,13 @@ for sub in platforms styles imageformats iconengines platforminputcontexts sqldr
   for srcroot in "$BIN_DIR" "$MINGW_PREFIX/share/qt5/plugins" \
                  "$MINGW_PREFIX/lib/qt5/plugins"; do
     if [ -d "$srcroot/$sub" ]; then
-      cp -rf "$srcroot/$sub" "$BUILD_DIR/lib/" 2>/dev/null && \
       cp -rf "$srcroot/$sub" "$BUILD_DIR/lib/plugins/" 2>/dev/null
     fi
   done
+done
+# 清理历史残留：旧版遗留在 lib/ 下的同名插件副本
+for sub in platforms styles imageformats iconengines platforminputcontexts sqldrivers; do
+  [ -d "$BUILD_DIR/lib/$sub" ] && rm -rf "$BUILD_DIR/lib/$sub"
 done
 # 排除 qtvirtualkeyboard 插件：依赖 Qt5Qml/Qt5Quick，windeployqt 已刻意跳过
 # （其 deps 被禁用），桌面分子查看无需；留着会让下方闭包扫描拉入无用的
@@ -171,8 +180,13 @@ if [ ! -f "$_QSQLITE" ]; then
   for cand in "$MINGW_PREFIX/share/qt5/plugins/sqldrivers" \
               "$MINGW_PREFIX/lib/qt5/plugins/sqldrivers"; do
     if [ -d "$cand" ]; then
-      mkdir -p "$BUILD_DIR/lib/sqldrivers" "$BUILD_DIR/lib/plugins/sqldrivers"
-      cp -rf "$cand/." "$BUILD_DIR/lib/sqldrivers/" 2>/dev/null
+      # [reA22B] 只保留 lib/plugins/sqldrivers 一份。
+      # 源码 IQmolApplication 走 addLibraryPath(".../lib/plugins")，
+      # 故 lib/plugins/sqldrivers 是**官方布局**唯一必需副本；
+      # 旧版另拷 lib/sqldrivers 属冗余（两份内容相同，仅徒增体积）。
+      # 若历史上 build/lib/sqldrivers 已存在残留，这里一并清掉。
+      rm -rf "$BUILD_DIR/lib/sqldrivers"
+      mkdir -p "$BUILD_DIR/lib/plugins/sqldrivers"
       cp -rf "$cand/." "$BUILD_DIR/lib/plugins/sqldrivers/" 2>/dev/null
       break
     fi
@@ -196,8 +210,8 @@ echo "    SQLite 驱动已就位: $_QSQLITE"
 #     注意：MSYS2 的 Qt 以系统 sqlite3 编译，qsqlite.dll 依赖 sqlite3.dll，
 #     该依赖由下方依赖闭包扫描（已覆盖插件目录）自动补入 bin/。
 #--------------------------------------------------------------------
-for _sqdir in "$BUILD_DIR/lib/sqldrivers" "$BUILD_DIR/lib/plugins/sqldrivers" \
-              "$BIN_DIR/sqldrivers"; do
+# （lib/sqldrivers 冗余副本已在 1c 收敛删除，此处不再扫描）
+for _sqdir in "$BUILD_DIR/lib/plugins/sqldrivers" "$BIN_DIR/sqldrivers"; do
   [ -d "$_sqdir" ] || continue
   for _f in "$_sqdir"/*.dll; do
     [ -e "$_f" ] || continue
@@ -220,14 +234,15 @@ if [ ! -d "$BIN_DIR/platforms" ]; then
     [ -f "$cand" ] && copy_item "$cand" "$BIN_DIR/platforms/" && break
   done
 fi
-# 双保险：lib/ 下也要有
-if [ ! -f "$BUILD_DIR/lib/platforms/qwindows.dll" ]; then
+# 双保险：lib/plugins 下也要有（[reA22B] 旧版放 lib/platforms，与 1b 的
+# lib/plugins 布局重复，已统一收敛到 lib/plugins/platforms）
+if [ ! -f "$BUILD_DIR/lib/plugins/platforms/qwindows.dll" ]; then
   for cand in "$BIN_DIR/platforms/qwindows.dll" \
               "$MINGW_PREFIX/share/qt5/plugins/platforms/qwindows.dll" \
               "$MINGW_PREFIX/lib/qt5/plugins/platforms/qwindows.dll"; do
     if [ -f "$cand" ]; then
-      mkdir -p "$BUILD_DIR/lib/platforms"
-      copy_item "$cand" "$BUILD_DIR/lib/platforms/"
+      mkdir -p "$BUILD_DIR/lib/plugins/platforms"
+      copy_item "$cand" "$BUILD_DIR/lib/plugins/platforms/"
       break
     fi
   done
@@ -393,6 +408,28 @@ else
 fi
 
 #--------------------------------------------------------------------
+# 4.5 示例分子文件（reA22B）
+#     原 samples/ 共 56 MB（含 17 MB cube、16 MB fchk、14 MB acrolein 谱图目录），
+#     整目录随包会让分发包翻倍且绝大多数用户用不到。按「单文件 ≤ 1 MB +
+#     覆盖主要格式（pdb/fchk/out/inp/h5/inchi/dat）」精选，控制在 ~3 MB。
+#--------------------------------------------------------------------
+echo "==> 复制示例分子文件 samples/（精选）"
+if [ -d "$SRC_DIR/samples" ]; then
+  mkdir -p "$BUILD_DIR/samples"
+  _ns=0
+  while IFS= read -r _f; do
+    [ -n "$_f" ] || continue
+    _rel="${_f#$SRC_DIR/samples/}"
+    mkdir -p "$BUILD_DIR/samples/$(dirname "$_rel")"
+    cp "$_f" "$BUILD_DIR/samples/$_rel" 2>/dev/null && _ns=$((_ns+1))
+  done < <(find "$SRC_DIR/samples" -type f -size -1024k \
+             -not -path "*/acrolein.out.files/*" 2>/dev/null)
+  echo "    已复制 $_ns 个示例文件（$(du -sh "$BUILD_DIR/samples" 2>/dev/null | cut -f1)）"
+else
+  echo "    警告: 源树缺少 samples/（$SRC_DIR/samples）"
+fi
+
+#--------------------------------------------------------------------
 # 5. 中文翻译（build_windows.sh 的 POST_BUILD 已生成 zh_CN.qm 到 bin/translations/）
 #    这里兜底：若未生成且系统有 lrelease，则现场生成。
 #--------------------------------------------------------------------
@@ -477,9 +514,10 @@ if [ -n "$STAGE_DIR" ]; then
   rm -rf "$STAGE_DIR/IQmol"
   mkdir -p "$STAGE_DIR/IQmol"
   cp -rf "$BIN_DIR/." "$STAGE_DIR/IQmol/bin"
-  [ -d "$BUILD_DIR/share" ] && cp -rf "$BUILD_DIR/share/." "$STAGE_DIR/IQmol/share/"
-  [ -d "$BUILD_DIR/lib" ]   && cp -rf "$BUILD_DIR/lib/."   "$STAGE_DIR/IQmol/lib/"
-  echo "    完成：$STAGE_DIR/IQmol/  （bin/ share/ lib/）"
+  [ -d "$BUILD_DIR/share" ]   && cp -rf "$BUILD_DIR/share/."   "$STAGE_DIR/IQmol/share/"
+  [ -d "$BUILD_DIR/lib" ]     && cp -rf "$BUILD_DIR/lib/."     "$STAGE_DIR/IQmol/lib/"
+  [ -d "$BUILD_DIR/samples" ] && cp -rf "$BUILD_DIR/samples/." "$STAGE_DIR/IQmol/samples/"
+  echo "    完成：$STAGE_DIR/IQmol/  （bin/ share/ lib/ samples/）"
 fi
 
 #--------------------------------------------------------------------

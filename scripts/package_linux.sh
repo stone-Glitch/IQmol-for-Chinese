@@ -249,6 +249,44 @@ for _cand in "$BUILD_DIR/share/qchem_option.db" \
   fi
 done
 
+# [reA22B] 示例分子文件：给首次使用者提供可直接打开的数据
+#   原 samples/ 共 56 MB（含 17 MB cube、16 MB fchk、14 MB acrolein 谱图目录），
+#   整目录随包会让包体翻倍且绝大多数用户用不到。故按「单文件 ≤ 1 MB +
+#   覆盖主要格式（pdb/fchk/out/inp/h5/inchi/dat）」精选，控制在 ~3 MB。
+SAMPLE_LIMIT_KB=1024
+mkdir -p "$STAGE/samples"
+_copied=0
+while IFS= read -r _f; do
+   [ -n "$_f" ] || continue
+   _rel="${_f#$SRC_DIR/samples/}"
+   mkdir -p "$STAGE/samples/$(dirname "$_rel")"
+   cp "$_f" "$STAGE/samples/$_rel" 2>/dev/null && _copied=$((_copied+1))
+done < <(find "$SRC_DIR/samples" -type f -size -"${SAMPLE_LIMIT_KB}"k \
+           -not -path "*/acrolein.out.files/*" 2>/dev/null)
+echo "     samples <- $SRC_DIR/samples（精选 $_copied 个，$(du -sh "$STAGE/samples" | cut -f1)）"
+# 附上说明，方便中文用户理解每个示例能演示什么
+cat > "$STAGE/samples/示例说明.md" <<'SAMPLE'
+# 示例文件说明
+
+| 文件 | 类型 | 可演示的功能 |
+|---|---|---|
+| 3nir.pdb / 4hhb.pdb | 蛋白质结构 | 大分子载入、卡通/带状表示、二级结构着色 |
+| Dyson.fchk / Dyson.out | Q-Chem 输出 | 分子轨道、电子密度、Dyson 轨道可视化 |
+| LocalizedOrbitals.fchk | Q-Chem 输出 | 定域化轨道（NBO 类）显示 |
+| Water-RPA-NtoNbo.FChk | Q-Chem 输出 | NTO / NBO 分析结果显示 |
+| For_g.txt.fchk | Q-Chem 输出 | 频率与振动模式（配合 .out） |
+| Pyran-RingClosing.out | Q-Chem 输出 | 反应路径 / IRC 动画播放 |
+| L-cysteine-Opt.out | Q-Chem 输出 | 几何优化过程逐帧播放 |
+| Acetaldehyde-Freq.out | Q-Chem 输出 | 频率计算与红外谱图 |
+| ExcitedStates.out | Q-Chem 输出 | 激发态列表与吸收谱 |
+| fsm/fsm.out、esp/esp.inp.fchk | 子目录示例 | 从子目录打开文件（含表面数据） |
+| methane.inp.h5 / water.inp.h5 | Q-Chem 输入 | 输入文件语法高亮与提交 |
+| ethanol.inchi | InChI | 由标识符直接构建分子 |
+| fragments.inp、SecStruc.dat | 输入/数据 | 片段库、二级结构赋值 |
+
+> 说明：原仓库 samples/ 含多个十几 MB 的体数据文件（cube / 大 fchk / 谱图目录），
+> 为控制包体未随包分发，可从项目仓库单独获取。
+SAMPLE
 echo "==> 运行库: $(ls "$STAGE/lib" 2>/dev/null | wc -l) 个"
 echo "==> 插件目录: $(ls "$STAGE/lib/plugins" 2>/dev/null | wc -l) 个"
 
