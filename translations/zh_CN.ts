@@ -5740,6 +5740,12 @@ p, li { white-space: pre-wrap; }
 <context>
         <name>InputDialog</name>
     <message>
+        <location filename="../src/Qui/InputDialog.C" line="85"/>
+        <location filename="../src/Qui/InputDialog.C" line="489"/>
+        <source>QChem Input File Editor</source>
+        <translation>Q-Chem 输入文件编辑器</translation>
+    </message>
+    <message>
         <location filename="../src/Qui/InputDialog.C" line="370"/>
         <source>File</source>
         <translation>文件</translation>
