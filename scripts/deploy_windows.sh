@@ -184,9 +184,9 @@ fi
 # 3. MinGW 运行库（动态链接 libstdc++/libgcc/libwinpthread 时必须，
 #    否则在未装 MSYS2 的机器上双击会报缺少 DLL）
 #--------------------------------------------------------------------
-echo "==> 复制 MinGW 运行库"
+echo "==> 复制 MinGW 运行库（关键项，缺失会终止打包）"
 for dll in libstdc++-6.dll libgcc_s_seh-1.dll libwinpthread-1.dll \
-           libssp-0.dll libgfortran-5.dll libquadmath-0.dll \
+           libgfortran-5.dll libquadmath-0.dll \
            libgomp-1.dll; do
   src=$(_find_dll "$dll")
   if [ -n "$src" ]; then
@@ -195,6 +195,15 @@ for dll in libstdc++-6.dll libgcc_s_seh-1.dll libwinpthread-1.dll \
     echo "    警告: 全机未找到 $dll（缺 MSYS2 包?），未复制"
   fi
 done
+
+# libssp-0.dll 为栈保护运行时，IQmol 通常不链接它（本机无此 DLL 也能启动）；
+# 仅作为可选项：若存在则一并打包，缺失不阻塞打包。
+src=$(_find_dll "libssp-0.dll")
+if [ -n "$src" ]; then
+  copy_item "$src" "$BIN_DIR/"
+else
+  echo "    提示: 未找到 libssp-0.dll（可选，IQmol 一般不依赖，跳过不影响运行）"
+fi
 
 # 静态库内部可能引用的其他 DLL（存在则拷）
 for dll in zlib1.dll libzstd.dll libssl-3-x64.dll libcrypto-3-x64.dll \
@@ -240,18 +249,17 @@ fi
 # 3c. 关键运行库终检：缺任何一个，没装 MSYS2 的机器上都会报"找不到 DLL"
 #--------------------------------------------------------------------
 _missing_crit=""
-for dll in libstdc++-6.dll libgcc_s_seh-1.dll libwinpthread-1.dll libssp-0.dll \
+for dll in libstdc++-6.dll libgcc_s_seh-1.dll libwinpthread-1.dll \
            libgfortran-5.dll libquadmath-0.dll libgomp-1.dll; do
   [ -f "$BIN_DIR/$dll" ] || _missing_crit="$_missing_crit $dll"
 done
 if [ -n "$_missing_crit" ]; then
   echo ""
   echo "ERROR: 关键运行库缺失:$_missing_crit"
-  echo "  这些 DLL 由 MSYS2 提供，缺了分发包在别人机器上无法启动。"
-  echo "  修复: 在 MSYS2 MINGW64 终端安装对应包后重跑本脚本:"
-  echo "    pacman -S mingw-w64-x86_64-libssp       # 提供 libssp-0.dll"
-  echo "    pacman -S mingw-w64-x86_64-libgomp      # 提供 libgomp-1.dll"
-  echo "    pacman -S mingw-w64-x86_64-gcc-fortran  # 提供 libgfortran-5/libquadmath-0.dll"
+  echo "  这些 DLL 由 MSYS2 的 GCC 运行库提供，缺了分发包在别人机器上无法启动。"
+  echo "  修复: 在 MSYS2 MINGW64 终端安装/重装对应包后重跑本脚本:"
+  echo "    pacman -S mingw-w64-x86_64-gcc-libs      # 提供 libstdc++/libgcc/libgomp/libquadmath 等"
+  echo "    pacman -S mingw-w64-x86_64-gcc-fortran   # 提供 libgfortran-5.dll"
   echo "  装完确认 $MINGW_PREFIX/bin/ 下有上述 DLL。"
   exit 1
 fi

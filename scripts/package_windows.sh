@@ -82,7 +82,7 @@ fi
 # 3b. 发布前自检：分发包必须自包含，否则别人机器上无法“解压即用”
 #--------------------------------------------------------------------
 echo "==> 发布前自检：分发包自包含性"
-_crit="libstdc++-6.dll libgcc_s_seh-1.dll libwinpthread-1.dll libssp-0.dll libgfortran-5.dll libquadmath-0.dll libgomp-1.dll"
+_crit="libstdc++-6.dll libgcc_s_seh-1.dll libwinpthread-1.dll libgfortran-5.dll libquadmath-0.dll libgomp-1.dll"
 _missing=""
 for _d in $_crit; do
   [ -f "$STAGE/bin/$_d" ] || _missing="$_missing $_d"
@@ -90,7 +90,7 @@ done
 if [ -n "$_missing" ]; then
   echo "ERROR: 分发包 bin/ 缺失关键运行库:$_missing" >&2
   echo "       deploy 的终检应已拦截，若仍出现请确认在 MSYS2 MINGW64 终端运行且对应包已安装:" >&2
-  echo "         pacman -S mingw-w64-x86_64-libssp mingw-w64-x86_64-libgomp mingw-w64-x86_64-gcc-fortran" >&2
+  echo "         pacman -S mingw-w64-x86_64-gcc-libs mingw-w64-x86_64-gcc-fortran" >&2
   exit 1
 fi
 # 严禁随附 Windows 系统 DLL（每台机器自带，随附反而可能引发版本冲突）
