@@ -8,15 +8,17 @@ IQmol version 3
 >
 > | 你想做什么 | 看这里 |
 > |---|---|
-> | 了解目录结构、代码模块、汉化文件在哪 | [仓库结构说明.md](仓库结构说明.md) |
-> | 在 Windows 上编译出 IQmol.exe | [doc/构建说明-中文版.md](doc/构建说明-中文版.md) |
+> | 编译（Windows / Linux / macOS）、离线包、部署、排错 | [docs/构建与打包/构建与部署指南.md](docs/构建与打包/构建与部署指南.md) |
+> | 了解目录结构、代码模块、汉化文件在哪 | [docs/仓库结构.md](docs/仓库结构.md) |
+> | 找其它文档（汉化 / 审校 / 验证记录） | [docs/README.md](docs/README.md) |
+> | Linux 解压即用分发包 | [docs/构建与打包/Linux分发包.md](docs/构建与打包/Linux分发包.md) |
 > | 子模块下载不动（国内网络） | 本文「子模块离线包」章节 |
 > | 学会用这个软件 | [中文用户手册](doc/IQmolUserGuide.pdf)（34 页） |
 > | 维护/更新翻译 | 本文「简体中文本地化」章节 + `scripts/update_translations.sh` |
-> | 上游发新版了，怎么升级合并（★ 一键迁移） | [docs/上游升级迁移指南.md](docs/上游升级迁移指南.md) |
-> | 想彻底降低升级冲突（长期治理方案） | [docs/改动面最小化方案（第三层）.md](docs/改动面最小化方案（第三层）.md) |
-> | 翻译包裹怎么在上游升级后一键重建 | [docs/第三层-重放机制说明.md](docs/第三层-重放机制说明.md) |
-> | 汉化质量怎么量化评估（TQA 六维指标） | [docs/翻译质量量化评估方案.md](docs/翻译质量量化评估方案.md) |
+> | 上游发新版了，怎么升级合并（★ 一键迁移） | [docs/汉化工程/上游升级迁移指南.md](docs/汉化工程/上游升级迁移指南.md) |
+> | 想彻底降低升级冲突（长期治理方案） | [docs/汉化工程/改动面最小化方案（第三层）.md](docs/汉化工程/改动面最小化方案（第三层）.md) |
+> | 翻译包裹怎么在上游升级后一键重建 | [docs/汉化工程/第三层-重放机制说明.md](docs/汉化工程/第三层-重放机制说明.md) |
+> | 汉化质量怎么量化评估（TQA 六维指标） | [docs/汉化工程/翻译质量量化评估方案.md](docs/汉化工程/翻译质量量化评估方案.md) |
 >
 > **上游升级迁移**：本仓库已实现**两条可验证的迁移路线**，实测在干净上游树上
 > 源码 **69/69 文件 100% 复现**：
@@ -174,7 +176,7 @@ tar -xzf /d/IQmol/IQmol-openbabel-formats-fix.tar.gz
 四个包（子模块 / OpenBabel deps / OpenBabel fix / OpenBabel formats）都解压到位后，推荐用
 `scripts/build_windows.sh` 一键构建——默认**增量**：首次 configure + 编译，之后只要 `build/`
 目录还在，重跑脚本会跳过 configure 直接续编，不会从头再来。脚本会自动下载 CMake 3.31、补全
-缺失的 `modules/CMakeLists.txt`、检查 OpenBabel 依赖。具体命令见 `doc/编译-照着敲.md`。
+缺失的 `modules/CMakeLists.txt`、检查 OpenBabel 依赖。具体命令见 `docs/构建与打包/构建与部署指南.md`。
 
 编译成功后，**运行前还要执行一次部署**（复制 Qt 插件、运行库与资源）：
 
@@ -193,7 +195,7 @@ cd build/bin && ./IQmol.exe
 - **解压到仓库根目录**，不是 `modules` 里面——压缩包顶层就是 `modules/`。
 - **仓库放短路径**（如 `D:\IQmol`），Windows 260 字符路径上限会导致深层目录解压失败。
 - 解压后**不要**再运行 `git submodule update --init --recursive`，否则会重新联网克隆覆盖。
-- **CMake 必须用 3.x（3.31）**，不要用 4.x（详见 `doc/构建说明-中文版.md`）。
+- **CMake 必须用 3.x（3.31）**，不要用 4.x（详见 `docs/构建与打包/构建与部署指南.md`）。
 
 完整步骤见该分支下的 `submodules-package/使用说明.md`。
 
