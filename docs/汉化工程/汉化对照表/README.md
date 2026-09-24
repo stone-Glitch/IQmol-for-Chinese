@@ -62,8 +62,8 @@ UI 函数、因而 `lupdate` 扫不到的硬编码字符串。
 | 文档 | 说明 |
 |---|---|
 | [`doc/界面英文残留清单.md`](../界面英文残留清单.md) | 汉化完整性核查：约 71 处**尚未**包裹 `tr()` 的英文残留及处理建议 |
-| [`translations/zh_CN.ts`](../../translations/zh_CN.ts) | 翻译源文件（2111 条 / 153 个 context，全部完成） |
-| [`scripts/update_translations.sh`](../../scripts/update_translations.sh) | 翻译更新流程（lupdate + 防退化 + lrelease） |
+| [`translations/zh_CN.ts`](../../../translations/zh_CN.ts) | 翻译源文件（2111 条 / 153 个 context，全部完成） |
+| [`scripts/update_translations.sh`](../../../scripts/update_translations.sh) | 翻译更新流程（lupdate + 防退化 + lrelease） |
 
 ---
 

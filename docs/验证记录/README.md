@@ -1,33 +1,25 @@
-# 构建与验证记录（索引）
+# 验证记录（索引）
 
-本目录归档 IQmol 汉化版的**编译、运行验证、问题诊断与质量检查**记录，用于追溯
-每一条结论的依据。所有验证均基于真实编译 + 真实运行（非仅静态推演）。
+本目录归档 IQmol 汉化版的**问题诊断、方案验收与质量核查**记录，用于追溯每一条结论的依据。
+所有结论均基于真实编译 + 真实运行（非仅静态推演）。
+
+> 2026-09-25 整合：原 16 篇按日期命名的散记已按**主题**压缩合并为下面 3 篇
+> （信息零丢失，篇幅压缩至约 55%），每章末尾保留原始记录的文件名与日期便于溯源；
+> 需要看原始表述可从 git 历史取回（`git log --diff-filter=D --name-only -- docs/验证记录/`）。
 
 ---
 
-## 一、记录清单
+## 一、三篇合并记录
 
-| 文件 | 类型 | 说明 | 日期 |
+| 文件 | 主题 | 覆盖的原始记录 | 状态 |
 |---|---|---|---|
-| [`2026-09-13-编译与运行验证.md`](2026-09-13-编译与运行验证.md) | 运行验证 | Ubuntu 24.04 完整编译 + 真实运行 + 中文界面截图，2111 条译文 0 未译（轨迹：1519 → 1563 → 2111） | 2026-09-13 |
-| [`2026-09-13-OpenBabel插件加载失败诊断与修复.md`](2026-09-13-OpenBabel插件加载失败诊断与修复.md) | 问题诊断 | `Unable to find OpenBabel plugins` 根因（静态插件自注册被 ld 丢弃）与两层修复 | 2026-09-13 |
-| [`2026-09-13-OpenBabel-Windows静态链接undefined-reference诊断.md`](2026-09-13-OpenBabel-Windows静态链接undefined-reference诊断.md) | 问题诊断 | 链接期 undefined reference（maeparser `__imp_` 导入 + 静态库成员被丢弃）与修复 | 2026-09-13 |
-| [`2026-09-13-仓库整理报告.md`](2026-09-13-仓库整理报告.md) | 整理报告 | 文档过时路径修正、结构对齐、工作区归置 | 2026-09-13 |
-| [`2026-09-18-OpenBabel静态链接additional_sources与maeparser宏诊断.md`](2026-09-18-OpenBabel静态链接additional_sources与maeparser宏诊断.md) | 问题诊断 | 第二轮 undefined reference：openbabel 静态分支漏加 `additional_sources`（ASCIIPainter/CommandPainter/NMReadWLN）+ maeparser 宏名用错（应为 `STATIC_MAEPARSER`） | 2026-09-18 |
-| [`2026-09-18-第三方评测Qui.h完整性核查-已证伪.md`](2026-09-18-第三方评测Qui.h完整性核查-已证伪.md) | 澄清存档 | 第三方评测称 `src/Qui/Qui.h` 被清空致构建必败；双源实测证伪（1587 字节 / 60 行 / 6 符号全在） | 2026-09-18 |
-| [`2026-09-18-全链路静态检查报告.md`](2026-09-18-全链路静态检查报告.md) | 全量检查 | 子模块导出宏全扫描、源文件完整性、译文质量、脚本有效性；发现并修复"语言跟随系统"选项失效 | 2026-09-18 |
-| [`2026-09-18-仓库整理报告.md`](2026-09-18-仓库整理报告.md) | 整理报告 | 采纳反馈包后的文档一致性维护：条数口径统一、索引补全、断链修正、新特性入档 | 2026-09-18 |
-| [`2026-09-18-改动面基线.md`](2026-09-18-改动面基线.md) | 度量基线 | 相对上游 `af7ff60` 的改动面实测：65 改 / 147 增 / 0 删；36 文件 178 处 `tr()` 可脚本重放。作为第三层方案的对比基准 | 2026-09-18 |
-| [`2026-09-19-补丁未进入构建：configure跳过判定盲区.md`](2026-09-19-补丁未进入构建：configure跳过判定盲区.md) | 问题诊断 | 报错与上轮完全一致的真因：configure 跳过判定只看顶层 `CMakeLists.txt`，而补丁改的是 `modules/` 下文件 → 补丁"修了等于没修"。新增补丁指纹机制 | 2026-09-19 |
-| [`2026-09-19-tr包裹重放机制验收.md`](2026-09-19-tr包裹重放机制验收.md) | 方案验收 | 第三层 A 项：内容驱动规则表（250 条 / 36 文件）+ 幂等重放。端到端重建 **35/42 文件完全一致**，覆盖率 100%，幂等性双向验证。剩余 7 文件 / 24 行差异全部定性为语义级重构 | 2026-09-19 |
-| [`IQmol-i18n-构建验证指南.md`](IQmol-i18n-构建验证指南.md) | 构建指南 | 端到端翻译管线（tr → lupdate → ts → lrelease → QTranslator）打通说明；含环境要求、构建步骤、翻译加载逻辑 | 早期（2026-08-28，2026-09-13 补注） |
-| [`程序检查记录表.md`](程序检查记录表.md) | 质量检查 | 26 大类通用检查裁剪到本项目的全量核查表（构建/术语/文档/法律合规等），33 项全过 | 早期 |
-
----
+| [`OpenBabel构建故障排查.md`](OpenBabel构建故障排查.md) | OpenBabel 静态链接、插件加载、导出宏与 `additional_sources` 问题 | 09-13 undefined-reference 诊断、09-13 插件加载失败、09-18 静态构建风险全量核对、09-18 additional_sources 与 maeparser 宏 | 已修复，留作回归参考 |
+| [`构建与补丁问题排查.md`](构建与补丁问题排查.md) | 补丁未进入构建（configure 跳过判定盲区）、全链路静态检查、两轮仓库整理、编译运行验证、改动面基线 | 09-19 configure 盲区、09-18 全链路静态检查、09-13 / 09-18 仓库整理、09-13 编译与运行验证、09-18 改动面基线 | 已修复 / 基线数据长期有效 |
+| [`翻译与仓库核查.md`](翻译与仓库核查.md) | tr() 重放机制验收、Qui.h 完整性争议（已证伪）、Linux 分包中文加载失败定位（reA22A）、33 项质量检查、i18n 构建验证指南 | 09-19 tr 包裹重放验收、09-18 Qui.h 核查、09-24 reA22A 定位、程序检查记录表、i18n 构建验证指南 | 重放已验收；Qui.h 指控已证伪；reA22A 已于 2026-09-25 修复 |
 
 ## 二、验证截图
 
-运行时中文界面截图（与 `编译与运行验证.md` 配套）：
+运行时中文界面截图：
 
 | 截图 | 内容 |
 |---|---|
@@ -36,46 +28,21 @@
 | `03_显示菜单.png` | 显示菜单 |
 | `04_计算菜单.png` | 计算菜单 |
 
-> 对话框级中文截图另见仓库根 `dialog_screenshots/`（`AboutDialog.png`、`QUI.png`、
-> `ServerDialog.png` 等）与 `doc/figures/`。
+对话框级中文截图另见仓库根 `dialog_screenshots/`（`AboutDialog.png`、`QUI.png`、
+`ServerDialog.png` 等，说明见 [`../../dialog_screenshots/README.md`](../../dialog_screenshots/README.md)）
+与手册配图 `doc/figures/`。
 
----
+## 三、复现验证
 
-## 三、如何复现验证
+编译、运行与翻译资产校验的可执行命令见
+[`../构建与打包/构建与部署指南.md`](../构建与打包/构建与部署指南.md) 第七章「验证构建结果」，
+本文不再重复维护一份（避免两处口径漂移）。
 
-### 1. 编译（以 Linux 为例）
-
-```bash
-apt-get install -y gcc g++ cmake make qtbase5-dev qtbase5-dev-tools \
-  qttools5-dev libqt5opengl5-dev libqt5sql5-sqlite libboost-dev libssl-dev \
-  zlib1g-dev libglu1-mesa-dev libgl1-mesa-dev libxml2-dev libarchive-dev \
-  libssh2-1-dev libopenbabel-dev openbabel
-mkdir build_linux && cd build_linux
-cmake .. -DCMAKE_BUILD_TYPE=Release
-make -j$(nproc)
-```
-
-Windows 与 macOS 流程见仓库 `scripts/`（`build_windows.sh`、`mac_deploy.sh`）。
-
-### 2. 运行（无显示环境）
-
-```bash
-xvfb-run -a -s "-screen 0 1280x1024x24" env \
-  QT_QPA_PLATFORM=xcb BABEL_DATADIR=/usr/share/openbabel \
-  ./IQmol
-```
-
-启动后应看到日志 `[i18n] Loaded translation: "zh_CN"`。
-
-### 3. 校验翻译资产
-
-参见 [`scripts/i18n/README.md`](../../scripts/i18n/README.md)：用 `verify_qm.cpp` /
-`verify_ext.cpp` 核对 `zh_CN.qm` 可被 `QTranslator` 加载、且译文与 `zh_CN.ts` 一致。
-
----
+关键判定：启动日志出现 `[i18n] Loaded translation: "zh_CN"` 即中文翻译加载成功
+（该日志走 **stderr**，排查时记得 `2>&1`）。
 
 ## 四、翻译对照与术语
 
-- 逐条译法、修改理由、责任人见 [`doc/汉化对照表/`](../../doc/汉化对照表/)。
-- 汉化完整性核查（约 71 处英文残留及处理建议）见 [`doc/界面英文残留清单.md`](../../doc/界面英文残留清单.md)。
+- 逐条译法、修改理由、责任人见 [`../汉化工程/汉化对照表/`](../汉化工程/汉化对照表/)。
+- 汉化完整性核查见 [`../汉化工程/界面英文残留清单.md`](../汉化工程/界面英文残留清单.md)。
 - 术语遵循全国科学技术名词审定委员会官方译法，保持全表一致。
