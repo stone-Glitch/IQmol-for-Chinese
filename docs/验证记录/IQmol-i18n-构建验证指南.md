@@ -8,7 +8,7 @@
 
 > **更新说明（2026-09-13）**：本文为汉化早期（8 月）的构建与验证指南，记录了
 > 端到端打通翻译管线的关键步骤。其中部分数据已随后续工作更新，请以最新验证记录为准：
-> - 译文条数 **78 → 1519**（见 `2026-09-13-编译与运行验证.md`）；
+> - 译文条数 **78 → 1519 → 2035（当前 HEAD）**（见 `2026-09-13-编译与运行验证.md`）；
 > - OpenBabel 插件加载失败在 Windows 静态构建下已通过 `BUILD_SHARED=OFF` +
 >   `--whole-archive` 根治（见 `2026-09-13-OpenBabel插件加载失败诊断与修复.md`），
 >   本文的 `BABEL_LIBDIR` 环境变量兜底方案仍适用于系统 OpenBabel 场景。
@@ -52,7 +52,7 @@ cd IQmol3
 | `src/Main/IQmolApplication.h` | 声明 `loadTranslations()` 私有方法 |
 | `CMakeLists.txt` | 接入 `lrelease`，构建期自动生成 `zh_CN.qm` 并复制到可执行文件同级 `translations/` |
 | `src/Math/CMakeLists.txt` | 修正 Linux 下 QGLViewer 链接库名（`QGLViewer` → `${QGLVIEWER_LIBRARY}` = `QGLViewer-qt5`） |
-| `translations/zh_CN.ts` | 1519 条中文译文（`lupdate` 提取 + 手工填充，0 unfinished；早期版本为 78 条，随全量 UI 扩展增至 1519） |
+| `translations/zh_CN.ts` | 2035 条中文译文（`lupdate` 提取 + 手工填充，0 unfinished；早期 78 条 → 1519 → 2035，随全量 UI 扩展与审计修正递增） |
 | `translations/zh_CN.qm` | `lrelease` 编译产物 |
 
 **保留原文不译**：品牌名 `IQmol`、力场专有名词（`MMFF94`/`UFF`/`Gaff`/`Ghemical` 等，且被 `setData()` 用作数据键）、Qt 资源路径、注释块内文本。
@@ -120,7 +120,7 @@ xvfb-run -a -s "-screen 0 1280x1024x24" env \
 ## 七、验证结果
 
 1. **编译**：`make` 在 Ubuntu 24.04 完整通过，`[100%] Built target IQmol`（早期版本产物约 144 MB；后续验证记录为 11.9 MB，取决于链接方式）。
-2. **qm 生成**：构建期 `lrelease` 输出 `Generated 1519 translation(s) (1519 finished and 0 unfinished)`（早期版本为 78 条）。
+2. **qm 生成**：构建期 `lrelease` 输出 `Generated 2035 translation(s) (2035 finished and 0 unfinished)`（历史：早期 78 条 → 1519 → 2035）。
 3. **QTranslator 加载验证**：独立 Qt 程序用 `QTranslator::load()` 加载 `zh_CN.qm`，抽样 10 条（`File→文件`、`Save Changes?→保存更改？`、`Use <esc> to exit full screen mode→按 Esc 退出全屏模式` 等）全部正确。
 4. **运行时加载验证**：`xvfb-run` 启动 IQmol，日志输出 `[i18n] Loaded translation: "zh_CN"`，无 OpenBabel 错误、无崩溃。
 
