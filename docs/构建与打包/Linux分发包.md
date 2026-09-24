@@ -63,6 +63,31 @@ tar xzf IQmol-linux-x86_64.tar.gz
 
 ## 五、验证
 
+**推荐：一条命令做完整自检**（结构、翻译加载、BABEL 路径、力场，共 16 项，
+不需要显示器；有 FAIL 时退出码 1，可直接接 CI）：
+
+```bash
+bash scripts/verify_linux_pkg.sh                        # 验默认 dist/IQmol-linux-x86_64
+bash scripts/verify_linux_pkg.sh /opt/IQmol-linux-x86_64 # 验指定包目录
+bash scripts/verify_linux_pkg.sh --quick                 # 只做结构 + 翻译检查
+```
+
+典型输出：
+
+```
+[2/4] 翻译加载（换工作目录启动，reA22A 回归测试）
+  PASS  cwd=/ → 中文加载成功
+  PASS  cwd=/tmp → 中文加载成功
+  ...（6 个目录全部 PASS）
+[4/4] 打开示例分子（力场可用性）
+  PASS  水分子加载成功，力场计算正常（forcefield "UFF"）
+==========================================================
+ 通过 16 项，失败 0 项
+ 结论：该分发包可交付
+```
+
+**手工验证**（想看原始日志时）：
+
 ```bash
 # 从任意目录启动都应有这行日志（注意日志走 stderr）
 QT_QPA_PLATFORM=offscreen ./bin/IQmol zh_CN 2>&1 | grep '\[i18n\]'
@@ -72,6 +97,9 @@ QT_QPA_PLATFORM=offscreen ./bin/IQmol zh_CN 2>&1 | grep '\[i18n\]'
 ./run.sh samples/3nir.pdb
 # → DEBUG ... Computing energy with forcefield "UFF"
 ```
+
+> 自检脚本第 4 项用内置水分子而非 `samples/` 里的蛋白：offscreen 下
+> 3nir 这类大蛋白十余秒内跑不完力场，会误报失败。
 
 ## 六、已知事项
 
