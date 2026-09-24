@@ -36,6 +36,9 @@ qrc_*.cpp
 *.dll
 *.pyd
 
+# ---- Linux 分发包产物（package_linux.sh 输出，体积大勿提交）----
+/dist/
+
 # ---- 子模块离线包（体积大，勿误提交）----
 IQmol-submodules.zip
 IQmol-submodules.tar.gz

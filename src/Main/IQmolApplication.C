@@ -110,15 +110,34 @@ void IQmolApplication::loadTranslations()
    // 应用翻译（IQmol 界面字符串）
    m_appTranslator = new QTranslator(this);
 
-   // 依次尝试多个候选路径
+   // 依次尝试多个候选路径。
+   //
+   // [i18n] 注意 applicationDirPath() 是**可执行文件所在目录**，
+   //   而不同平台的打包布局不同，qm 的相对位置也不同：
+   //     Windows : bin/IQmol        + bin/translations/zh_CN.qm   （deploy_windows.sh）
+   //     Linux   : bin/IQmol        + translations/zh_CN.qm       （包根，run.sh 布局）
+   //   早期只搜 bin/translations 与 cwd，导致 Linux 包**只有恰好
+   //   从包根目录启动时才加载成功**（偶然命中 cwd/translations），
+   //   从桌面图标或 run.sh 之外的路径启动都会静默回退英文。
+   //   故这里显式补上「可执行文件上一级的 translations/」。
+   QString const appDir(QApplication::applicationDirPath());
    QStringList searchPaths;
-   searchPaths << QApplication::applicationDirPath() + "/translations"
-               << QApplication::applicationDirPath()
+   searchPaths << appDir + "/translations"            // Windows: bin/translations/
+               << appDir + "/../translations"         // Linux  : 包根 translations/
+               << appDir + "/../share/iqmol/translations"  // 系统安装布局兜底
+               << appDir
                << QDir::current().filePath("translations")
                << QDir::currentPath();
 
+   // 去重并剔除不存在的目录，避免 QTranslator 反复做无谓的 stat
+   QStringList probePaths;
+   foreach (QString const& p, searchPaths) {
+      QString clean(QDir::cleanPath(p));
+      if (!probePaths.contains(clean)) probePaths << clean;
+   }
+
    bool loaded(false);
-   foreach (QString const& path, searchPaths) {
+   foreach (QString const& path, probePaths) {
       if (m_appTranslator->load("IQmol_" + locale, path)) {
          loaded = true;
          break;
@@ -126,7 +145,7 @@ void IQmolApplication::loadTranslations()
    }
    // 也尝试不带前缀的文件名（与 lrelease 输出 zh_CN.qm 对应）
    if (!loaded) {
-      foreach (QString const& path, searchPaths) {
+      foreach (QString const& path, probePaths) {
          if (m_appTranslator->load(locale, path)) {
             loaded = true;
             break;
@@ -138,8 +157,11 @@ void IQmolApplication::loadTranslations()
       QLOG_INFO() << "Loaded translation:" << locale;
       qDebug() << "[i18n] Loaded translation:" << locale;
    } else {
-      QLOG_INFO() << "No translation file found for:" << locale;
+      // 加载失败时把搜过的路径一并打出来，便于用户/打包方自查
+      QLOG_INFO() << "No translation file found for:" << locale
+                  << "searched:" << probePaths.join(", ");
       qDebug() << "[i18n] No translation file found for:" << locale;
+      qDebug() << "[i18n] searched paths:" << probePaths;
    }
 }
 
@@ -213,7 +235,17 @@ void IQmolApplication::initOpenBabel()
    QString env(qgetenv("BABEL_LIBDIR"));
    if (env.isEmpty()) {
 #if defined(Q_OS_LINUX)
-      env = "/usr/lib/openbabel/3.1.1";
+      // [reA22A] 便携分发包布局：优先探测可执行文件旁边的 OpenBabel
+      // 插件目录（包根 lib/openbabel/<版本>/），解压即用、不依赖系统
+      // 安装；找不到再回退系统路径（deb 包布局），保持历史行为兜底。
+      QDir plugDir(path + "/../lib/openbabel");
+      if (plugDir.exists()) {
+         QStringList subs(plugDir.entryList(QDir::Dirs | QDir::NoDotAndDotDot));
+         env = subs.isEmpty() ? plugDir.absolutePath()
+                              : plugDir.absoluteFilePath(subs.first());
+      } else {
+         env = "/usr/lib/openbabel/3.1.1";
+      }
 #else
       env = path + "/lib/openbabel";
 #endif
@@ -226,8 +258,10 @@ void IQmolApplication::initOpenBabel()
    env = qgetenv("BABEL_DATADIR");
    if (env.isEmpty()) {
 #if defined(Q_OS_LINUX)
-      // Overide the above for the deb package installation.
-      env ="/usr/share/openbabel";
+      // [reA22A] 同上：便携包优先用包根 share/openbabel，
+      // 回退 deb 安装布局的系统路径。
+      QString dataDir(path + "/../share/openbabel");
+      env = QDir(dataDir).exists() ? dataDir : QString("/usr/share/openbabel");
 #else
       env = path + "/share/openbabel";
 #endif
