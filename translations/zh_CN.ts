@@ -3182,7 +3182,7 @@ QToolButton:pressed {
     <message>
         <location filename="../src/Configurator/GeminalOrbitalsConfigurator.ui" line="51"/>
         <source>Geminal(s):</source>
-        <translation>双生轨道：</translation>
+        <translation>对偶轨道：</translation>
     </message>
     <message>
         <location filename="../src/Configurator/GeminalOrbitalsConfigurator.ui" line="78"/>
@@ -3212,7 +3212,7 @@ QToolButton:pressed {
     <message>
         <location filename="../src/Configurator/GeminalOrbitalsConfigurator.ui" line="146"/>
         <source>Spin-Only Density</source>
-        <translation>仅自旋密度</translation>
+        <translation>纯自旋密度</translation>
     </message>
     <message>
         <location filename="../src/Configurator/GeminalOrbitalsConfigurator.ui" line="191"/>
@@ -3893,12 +3893,12 @@ QTextBrowser#content {
     <message>
         <location filename="../src/Configurator/GeminalOrbitalsConfigurator.C" line="45"/>
         <source>Geminal</source>
-        <translation>成对</translation>
+        <translation>对偶</translation>
     </message>
     <message>
         <location filename="../src/Configurator/GeminalOrbitalsConfigurator.C" line="46"/>
         <source>Geminal Correlation</source>
-        <translation>成对相关</translation>
+        <translation>对偶相关</translation>
     </message>
 </context>
 <context>
@@ -4301,7 +4301,7 @@ QTextBrowser#content {
     <message>
         <location filename="../src/Data/SurfaceType.C" line="166"/>
         <source>Geminal</source>
-        <translation>孪位</translation>
+        <translation>对偶</translation>
     </message>
     <message>
         <location filename="../src/Data/SurfaceType.C" line="167"/>
@@ -4518,22 +4518,22 @@ QTextBrowser#content {
     <message>
         <source>Geminal Alpha %1</source>
         <comment>预置：需配合源码补 tr() 后由 lupdate 匹配</comment>
-        <translation>孪生 Alpha %1</translation>
+        <translation>对偶 Alpha %1</translation>
     </message>
     <message>
         <source>Geminal Beta %1</source>
         <comment>预置：需配合源码补 tr() 后由 lupdate 匹配</comment>
-        <translation>孪生 Beta %1</translation>
+        <translation>对偶 Beta %1</translation>
     </message>
     <message>
         <location filename="../src/Layer/GeminalOrbitalsLayer.C" line="812"/>
         <source>Geminal Alpha %1</source>
-        <translation>孪生 Alpha %1</translation>
+        <translation>对偶 Alpha %1</translation>
     </message>
     <message>
         <location filename="../src/Layer/GeminalOrbitalsLayer.C" line="815"/>
         <source>Geminal Beta %1</source>
-        <translation>孪生 Beta %1</translation>
+        <translation>对偶 Beta %1</translation>
     </message>
 </context>
 <context>
@@ -4551,7 +4551,7 @@ QTextBrowser#content {
     <message>
         <location filename="../src/Layer/GeminalOrbitalsLayer.C" line="56"/>
         <source>Geminal Orbitals</source>
-        <translation>成对轨道</translation>
+        <translation>对偶轨道</translation>
     </message>
 </context>
 <context>
@@ -5376,7 +5376,7 @@ QTextBrowser#content {
     <message>
         <location filename="../src/Process/JobMonitor.C" line="743"/>
         <source>Delete Job From Queue</source>
-        <translation>从队列移除作业</translation>
+        <translation>从队列中删除任务</translation>
     </message>
     <message>
         <location filename="../src/Process/JobMonitor.C" line="746"/>
@@ -5386,7 +5386,7 @@ QTextBrowser#content {
     <message>
         <location filename="../src/Process/JobMonitor.C" line="749"/>
         <source>Kill Job</source>
-        <translation>终止作业</translation>
+        <translation>终止任务</translation>
     </message>
     <message>
         <location filename="../src/Process/JobMonitor.C" line="753"/>
@@ -5426,7 +5426,7 @@ QTextBrowser#content {
     <message>
         <source>Delete Job From Queue</source>
         <comment>预置：需配合源码补 tr() 后由 lupdate 匹配</comment>
-        <translation>从队列移除作业</translation>
+        <translation>从队列中删除任务</translation>
     </message>
     <message>
         <source>Cancel Copy</source>
@@ -5436,7 +5436,7 @@ QTextBrowser#content {
     <message>
         <source>Kill Job</source>
         <comment>预置：需配合源码补 tr() 后由 lupdate 匹配</comment>
-        <translation>终止作业</translation>
+        <translation>终止任务</translation>
     </message>
 </context>
 <context>
@@ -5757,7 +5757,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../src/Qui/InputDialog.C" line="412"/>
         <source>New Job Section</source>
-        <translation>新建作业段</translation>
+        <translation>新建任务段</translation>
     </message>
     <message>
         <location filename="../src/Qui/InputDialog.C" line="418"/>
@@ -6748,17 +6748,17 @@ QToolButton:checked {
     <message>
         <location filename="../src/Qui/InputDialog.ui" line="1219"/>
         <source>SCF Guess Print</source>
-        <translation>SCF 猜测打印</translation>
+        <translation>SCF 初始猜测输出</translation>
     </message>
     <message>
         <location filename="../src/Qui/InputDialog.ui" line="1226"/>
         <source>SCF Print</source>
-        <translation>SCF 打印</translation>
+        <translation>SCF 输出</translation>
     </message>
     <message>
         <location filename="../src/Qui/InputDialog.ui" line="1233"/>
         <source>SCF Final Print</source>
-        <translation>SCF 最终打印</translation>
+        <translation>SCF 末次输出</translation>
     </message>
     <message>
         <location filename="../src/Qui/InputDialog.ui" line="1240"/>
@@ -7066,7 +7066,7 @@ QToolButton:checked {
     <message>
         <location filename="../src/Qui/InputDialog.ui" line="2572"/>
         <source>Core Print</source>
-        <translation>核心打印</translation>
+        <translation>核心输出</translation>
     </message>
     <message>
         <location filename="../src/Qui/InputDialog.ui" line="2591"/>
@@ -7167,7 +7167,7 @@ QToolButton:checked {
     <message>
         <location filename="../src/Qui/InputDialog.ui" line="2883"/>
         <source>Guess Type</source>
-        <translation>猜测类型</translation>
+        <translation>初始猜测类型</translation>
     </message>
     <message>
         <location filename="../src/Qui/InputDialog.ui" line="2895"/>
@@ -7214,7 +7214,7 @@ QToolButton:checked {
         <location filename="../src/Qui/InputDialog.ui" line="3077"/>
         <location filename="../src/Qui/InputDialog.ui" line="3189"/>
         <source>Guess Options</source>
-        <translation>猜测选项</translation>
+        <translation>初始猜测选项</translation>
     </message>
     <message>
         <location filename="../src/Qui/InputDialog.ui" line="3083"/>
@@ -8569,7 +8569,7 @@ QToolButton:pressed {
     <message>
         <location filename="../src/Configurator/OrbitalsConfigurator.ui" line="299"/>
         <source>Spin-Only Density</source>
-        <translation>仅自旋密度</translation>
+        <translation>纯自旋密度</translation>
     </message>
     <message>
         <location filename="../src/Configurator/OrbitalsConfigurator.ui" line="307"/>

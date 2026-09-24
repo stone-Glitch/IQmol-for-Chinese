@@ -1,0 +1,422 @@
+﻿编号,分层,权重,上下文,原文,当前译文,审校者A评分,审校者A理由,审校者B评分,审校者B理由,裁决评分,裁决理由
+P6-0001,A-化学参数,3,AdcTab,Spin-Orbit Coupling,自旋-轨道耦合,0,,0,,0,
+P6-0002,A-化学参数,3,AimdTab,Method,方法,0,,0,,0,
+P6-0003,A-化学参数,3,AuxiliaryBasisTab,RI Fitting Basis,RI 拟合基组,0,,0,,0,
+P6-0004,A-化学参数,3,CisTab,Spin Flip,自旋翻转,0,,0,,0,
+P6-0005,A-化学参数,2,FragmentTable,Functional Group,官能团,0,,0,,0,
+P6-0006,A-化学参数,2,FragmentTable,Functional Group,官能团,0,,0,,0,
+P6-0007,A-化学参数,2,FragmentTable,Functional Groups,官能团,0,,0,,0,
+P6-0008,A-化学参数,3,FreezingStringTab,Opt Method,优化方法,0,,0,,0,
+P6-0009,A-化学参数,3,GeminalOrbitalsConfigurator,Spin Density,自旋密度,0,,0,,0,
+P6-0010,A-化学参数,3,GeminalOrbitalsConfigurator,Spin-Only Density,纯自旋密度,0,,0,,0,
+P6-0011,A-化学参数,3,IQmol::Configurator::Orbitals,Basis Function,基函数,0,,0,,0,
+P6-0012,A-化学参数,3,IQmol::Data::SurfaceType,Spin Density,自旋密度,0,,0,,0,
+P6-0013,A-化学参数,3,IQmol::Data::SurfaceType,Basis Function,基函数,0,,0,,0,
+P6-0014,A-化学参数,3,IQmol::MainWindow,Partial Charge,部分电荷,0,,0,,0,
+P6-0015,A-化学参数,3,IQmol::MainWindow,Spin Densities,自旋密度,0,,0,,0,
+P6-0016,A-化学参数,3,InfoConfigurator,Total charge:,总电荷：,0,,0,,0,
+P6-0017,A-化学参数,3,InfoConfigurator,Multiplicity:,多重度：,0,,0,,0,
+P6-0018,A-化学参数,3,MainWindow,Method,方法,0,,0,,0,
+P6-0019,A-化学参数,3,MainWindow,Basis,基组,0,,0,,0,
+P6-0020,A-化学参数,3,MainWindow,Multiplicity,多重度,0,,0,,0,
+P6-0021,A-化学参数,3,MainWindow,Charge,电荷,0,,0,,0,
+P6-0022,A-化学参数,3,MainWindow,Second Basis,第二基组,0,,0,,0,
+P6-0023,A-化学参数,3,MainWindow,Dual Basis Energy,双基组能量,0,,0,,0,
+P6-0024,A-化学参数,3,MainWindow,Basis Projection,基组投影,0,,0,,0,
+P6-0025,A-化学参数,3,MainWindow,MOM Method,MOM 方法,0,,0,,0,
+P6-0026,A-化学参数,3,MainWindow,Print General Basis,打印常规基组,0,,0,,0,
+P6-0027,A-化学参数,3,MainWindow,HFPT Basis,HFPT 基组,0,,0,,0,
+P6-0028,A-化学参数,3,MainWindow,PAO Method,PAO 方法,0,,0,,0,
+P6-0029,A-化学参数,3,MainWindow,Functional,泛函,0,,0,,0,
+P6-0030,A-化学参数,3,MainWindow,DIIS Method,DIIS 方法,0,,0,,0,
+P6-0031,A-化学参数,3,MainWindow,Multiplicity,多重度,0,,0,,0,
+P6-0032,A-化学参数,3,MainWindow,Solvent Method,溶剂方法,0,,0,,0,
+P6-0033,A-化学参数,3,MainWindow,Charge Convergence,电荷收敛,0,,0,,0,
+P6-0034,A-化学参数,2,MolecularGridEvaluator,Computing basis functions on grid %1,正在计算网格 %1 的基函数,0,,0,,0,
+P6-0035,A-化学参数,3,NmrConfigurator,Method,方法,0,,0,,0,
+P6-0036,A-化学参数,3,OrbitalsConfigurator,Spin Density,自旋密度,0,,0,,0,
+P6-0037,A-化学参数,3,OrbitalsConfigurator,Spin-Only Density,纯自旋密度,0,,0,,0,
+P6-0038,A-化学参数,3,ParametrizeMoleculeDialog,Charge,电荷,0,,0,,0,
+P6-0039,A-化学参数,3,ParametrizeMoleculeDialog,Multiplicity,多重度,0,,0,,0,
+P6-0040,A-化学参数,3,ParametrizeMoleculeDialog,Multiplicity,多重度,0,,0,,0,
+P6-0041,B-错误信息,3,IQmol::Layer::Constraint,Invalid,无效,0,,0,,0,
+P6-0042,B-错误信息,3,IQmol::Qui::LJParametersSection,LJ Parameter Error,LJ 参数错误,0,,0,,0,
+P6-0043,B-错误信息,3,IQmol::Qui::MoleculeSection,Parse Error,解析错误,0,,0,,0,
+P6-0044,B-错误信息,3,IQmol::Qui::RemSection,"An error occured when parsing the following options:
+","解析以下选项时出错：
+",0,,0,,0,
+P6-0045,B-错误信息,3,IQmol::Qui::RemSection,Input File Error,输入文件错误,0,,0,,0,
+P6-0046,B-错误信息,2,JobInfo,Error,错误,0,,0,,0,
+P6-0047,B-错误信息,2,LogMessageDialog,Error,错误,0,,0,,0,
+P6-0048,B-错误信息,1,ProgressDialog,Abort,中止,0,,0,,0,
+P6-0049,B-错误信息,3,Qui::GeometryConstraint::Dialog,"The following constraint is invalid:
+","以下约束无效：
+",0,,0,,0,
+P6-0050,B-错误信息,3,Qui::GeometryConstraint::Dialog,Invalid Constraint,无效约束,0,,0,,0,
+P6-0051,B-错误信息,3,Qui::GeometryConstraint::Dialog,"The following constraint is invalid:
+","以下约束无效：
+",0,,0,,0,
+P6-0052,B-错误信息,3,Qui::GeometryConstraint::Dialog,Invalid Constraint,无效约束,0,,0,,0,
+P6-0053,B-错误信息,3,Qui::LJParametersSection,LJ Parameter Error,LJ 参数错误,0,,0,,0,
+P6-0054,B-错误信息,3,Qui::MoleculeSection,Parse Error,解析错误,0,,0,,0,
+P6-0055,B-错误信息,3,Qui::RemSection,"An error occured when parsing the following options:
+","解析以下选项时出错：
+",0,,0,,0,
+P6-0056,B-错误信息,3,Qui::RemSection,Input File Error,输入文件错误,0,,0,,0,
+P6-0057,B-错误信息,3,SystemBuilderDialog,Warning,警告,0,,0,,0,
+P6-0058,E-对话框主体,2,MainWindow,Core Character,核心特征,0,,0,,0,
+P6-0059,H-常规界面,1,ShaderDialog,Ambient Occlusion,环境光遮蔽,0,,0,,0,
+P6-0060,E-对话框主体,2,NmrConfigurator,Flourine (19F),氟（19F）,0,,0,,0,
+P6-0061,E-对话框主体,2,IQmol::Data::SurfaceType,Total Density,总密度,0,,0,,0,
+P6-0062,E-对话框主体,2,IQmol::Configurator::MolecularSurfaces,Isovalue,等值,0,,0,,0,
+P6-0063,C-高后果操作,3,GeometryListConfigurator,Reset View,重置视图,0,,0,,0,
+P6-0064,E-对话框主体,2,MainWindow,Guess,初始猜测,0,,0,,0,
+P6-0065,H-常规界面,1,Qui::OptionListEditor,Edit Option List,编辑选项列表,0,,0,,0,
+P6-0066,H-常规界面,1,FragmentTable,Palmitic acid,棕榈酸,0,,0,,0,
+P6-0067,E-对话框主体,2,VibronicConfigurator,Intensity,强度,0,,0,,0,
+P6-0068,E-对话框主体,2,ClippingPlaneConfigurator,Y,Y,0,,0,,0,
+P6-0069,E-对话框主体,2,VibronicConfigurator,Final,最终,0,,0,,0,
+P6-0070,E-对话框主体,2,MainWindow,Points,点,0,,0,,0,
+P6-0071,H-常规界面,1,FragmentTable,Caffeine,咖啡因,0,,0,,0,
+P6-0072,E-对话框主体,2,GeminalOrbitalsConfigurator,Add Surface,添加表面,0,,0,,0,
+P6-0073,E-对话框主体,2,IQmol::Data::SurfaceType,User Defined Density,用户自定义密度,0,,0,,0,
+P6-0074,H-常规界面,1,LogMessageDialog,IQmol Log Messages,IQmol 日志消息,0,,0,,0,
+P6-0075,E-对话框主体,2,MainWindow,EPAO Weights,EPAO 权重,0,,0,,0,
+P6-0076,F-含数值/占位符,1,FragmentTable,3-Trigonal-planar,3-平面三角形,0,,0,,0,
+P6-0077,E-对话框主体,2,ServerConfigurationDialog,Account name on the server,服务器账户名,0,,0,,0,
+P6-0078,E-对话框主体,2,BackgroundConfigurator,Foreground Color,前景色,0,,0,,0,
+P6-0079,E-对话框主体,2,Qui::GeometryConstraint,Bend,弯曲,0,,0,,0,
+P6-0080,E-对话框主体,2,MainWindow,Wavefunction Analysis,波函数分析,0,,0,,0,
+P6-0081,H-常规界面,1,PeriodicTable,Y,Y,0,,0,,0,
+P6-0082,H-常规界面,1,FragmentTable,Amines,胺类,0,,0,,0,
+P6-0083,E-对话框主体,2,IQmol::MainWindow,Job Monitor,任务监视器,0,,0,,0,
+P6-0084,H-常规界面,1,IQmol::Layer::Axes,Configure,配置,0,,0,,0,
+P6-0085,H-常规界面,1,IQmol::Layer::Group,Add Hydrogens,添加氢原子,0,,0,,0,
+P6-0086,E-对话框主体,2,MainWindow,Cancel,取消,0,,0,,0,
+P6-0087,E-对话框主体,2,GeminalOrbitalsConfigurator,Positive,正,0,,0,,0,
+P6-0088,E-对话框主体,2,IQmol::Process::JobMonitor,Cancel Copy,取消复制,0,,0,,0,
+P6-0089,H-常规界面,1,FragmentTable,Anthracene,蒽,0,,0,,0,
+P6-0090,H-常规界面,1,ShaderDialog,Bond,键,0,,0,,0,
+P6-0091,E-对话框主体,2,VibronicConfigurator,Show All,显示全部,0,,0,,0,
+P6-0092,E-对话框主体,2,ReactionPathTab,Form,Form,0,,0,,0,
+P6-0093,E-对话框主体,2,IQmol::Configurator::VectorConstraint,Set position of atom %1,设置原子位置 %1,0,,0,,0,
+P6-0094,E-对话框主体,2,MainWindow,Compute Full QM/MM Hessian,计算完整 QM/MM 海森矩阵,0,,0,,0,
+P6-0095,H-常规界面,1,FragmentTable,Coordination,配位化合物,0,,0,,0,
+P6-0096,E-对话框主体,2,OrbitalsConfigurator,1st DM,一阶密度矩阵,0,,0,,0,
+P6-0097,E-对话框主体,2,MainWindow,Number of Grids,网格数量,0,,0,,0,
+P6-0098,E-对话框主体,2,Libopt3Tab,Max Stepsize,最大步长,0,,0,,0,
+P6-0099,H-常规界面,1,IQmol::Layer::Molecule,Add Hydrogens,添加氢原子,0,,0,,0,
+P6-0100,E-对话框主体,2,IQmol::Configurator::ScalarConstraint,Configure Distance,配置距离,0,,0,,0,
+P6-0101,E-对话框主体,2,AxesMeshConfigurator,X-Y Plane,X-Y 平面,0,,0,,0,
+P6-0102,H-常规界面,1,ShaderDialog,Label3,标签 3,0,,0,,0,
+P6-0103,H-常规界面,1,PeriodicTable,Sc,Sc,0,,0,,0,
+P6-0104,H-常规界面,1,FragmentTable,Anisole,苯甲醚,0,,0,,0,
+P6-0105,H-常规界面,1,FragmentTable,Ketones,酮类,0,,0,,0,
+P6-0106,E-对话框主体,2,IQmol::Layer::Surface,Show Face Normals,显示面法线,0,,0,,0,
+P6-0107,H-常规界面,1,InputDialog,Alpha,Alpha,0,,0,,0,
+P6-0108,H-常规界面,1,FragmentTable,Stearic acid,硬脂酸,0,,0,,0,
+P6-0109,E-对话框主体,2,IQmol::Configurator::Vibronic,Electronic Transition,电子跃迁,0,,0,,0,
+P6-0110,H-常规界面,1,AboutDialog,Version,版本,0,,0,,0,
+P6-0111,E-对话框主体,2,ExcitedStatesConfigurator,Strength,强度,0,,0,,0,
+P6-0112,E-对话框主体,2,ExcitedStatesConfigurator,&lt;S^2&gt;,&lt;S^2&gt;,0,,0,,0,
+P6-0113,E-对话框主体,2,ServerConfigurationDialog,Basic,基础,0,,0,,0,
+P6-0114,E-对话框主体,2,InfoConfigurator,Point group:,点群：,0,,0,,0,
+P6-0115,E-对话框主体,2,IQmol::Configurator::Frequencies,Frequency,频率,0,,0,,0,
+P6-0116,E-对话框主体,2,InfoConfigurator,mass,质量,0,,0,,0,
+P6-0117,C-高后果操作,3,MainWindow,MP2 Algorithm,MP2 算法,0,,0,,0,
+P6-0118,H-常规界面,1,PeriodicTable,Rb,Rb,0,,0,,0,
+P6-0119,E-对话框主体,2,MainWindow,Level 1,级别 1,0,,0,,0,
+P6-0120,E-对话框主体,2,NmrConfigurator,NMR Spectrum,核磁共振谱,0,,0,,0,
+P6-0121,H-常规界面,1,ShaderDialog,Effects,效果,0,,0,,0,
+P6-0122,H-常规界面,1,ShaderDialog,Right,右,0,,0,,0,
+P6-0123,E-对话框主体,2,ServerConfigurationDialog,Server mnemonic (does not have to match actual server name),服务器助记名（不必与真实服务器名一致）,0,,0,,0,
+P6-0124,H-常规界面,1,PeriodicTable,Ni,Ni,0,,0,,0,
+P6-0125,H-常规界面,1,FragmentTable,Frame,帧,0,,0,,0,
+P6-0126,H-常规界面,1,FragmentTable,Carboxylate,羧酸根,0,,0,,0,
+P6-0127,H-常规界面,1,FragmentTable,Acetylene,乙炔,0,,0,,0,
+P6-0128,H-常规界面,1,ShaderDialog,Rippled,波纹,0,,0,,0,
+P6-0129,E-对话框主体,2,MainWindow,Print Fragments,打印片段,0,,0,,0,
+P6-0130,E-对话框主体,2,QueueOptionsDialog,Submit,提交,0,,0,,0,
+P6-0131,D-文件与格式,2,ParametrizeMoleculeDialog,Amber directory not set,未设置 Amber 目录,0,,0,,0,
+P6-0132,E-对话框主体,2,OctreeConfigurator,Cancel,取消,0,,0,,0,
+P6-0133,E-对话框主体,2,ClippingPlaneConfigurator,&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;p&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;,&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;p&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;,0,,0,,0,
+P6-0134,H-常规界面,1,FragmentTable,Porphin,卟吩,0,,0,,0,
+P6-0135,H-常规界面,1,FragmentTable,Fluorene,芴,0,,0,,0,
+P6-0136,E-对话框主体,2,OrbitalsConfigurator,"QToolButton {
+   color: #333;
+   background-color: #666;
+   border-width: 2px;
+   border-color: #CCC;
+   border-style: solid;
+   border-radius: 5;
+   padding: 0px;
+   min-width: 50px;
+   max-width: 50px;
+   min-height: 30px;
+   max-height: 30px;
+}
+
+QToolButton:pressed {
+   border-color: #222;
+}
+","QToolButton {
+   color: #333;
+   background-color: #666;
+   border-width: 2px;
+   border-color: #CCC;
+   border-style: solid;
+   border-radius: 5;
+   padding: 0px;
+   min-width: 50px;
+   max-width: 50px;
+   min-height: 30px;
+   max-height: 30px;
+}
+
+QToolButton:pressed {
+   border-color: #222;
+}
+",0,,0,,0,
+P6-0137,D-文件与格式,1,SshFileDialog,"This is the location of the known_hosts file.
+Typically this is in $HOME/.ssh/known_hosts",这是 known_hosts 文件的位置。通常位于 $HOME/.ssh/known_hosts,0,,0,,0,
+P6-0138,E-对话框主体,2,ParametrizeMoleculeDialog,Parametrize Molecule,分子参数化,0,,0,,0,
+P6-0139,H-常规界面,1,AwsConfigurationDialog,Cognito User Pool ID,Cognito 用户池 ID,0,,0,,0,
+P6-0140,H-常规界面,1,FragmentTable,Amides,酰胺类,0,,0,,0,
+P6-0141,D-文件与格式,2,QueueOptionsDialog,Job File List,任务文件列表,0,,0,,0,
+P6-0142,E-对话框主体,2,MainWindow,Advanced,高级,0,,0,,0,
+P6-0143,E-对话框主体,2,MainWindow,Symmetry Decompositions:,对称性分解：,0,,0,,0,
+P6-0144,E-对话框主体,2,CisTab,Excited State Moments,激发态矩,0,,0,,0,
+P6-0145,H-常规界面,1,FragmentTable,Olympicene,奥林匹克烯,0,,0,,0,
+P6-0146,H-常规界面,1,FragmentTable,Propyne,丙炔,0,,0,,0,
+P6-0147,E-对话框主体,2,IQmol::MainWindow,Record Animation,录制动画,0,,0,,0,
+P6-0148,E-对话框主体,2,MainWindow,Lebedev Grid,Lebedev 网格,0,,0,,0,
+P6-0149,E-对话框主体,2,FrequenciesConfigurator,...,...,0,,0,,0,
+P6-0150,E-对话框主体,2,SurfaceConfigurator,OK,确定,0,,0,,0,
+P6-0151,E-对话框主体,2,MainWindow,Increase Printout,增加打印输出,0,,0,,0,
+P6-0152,H-常规界面,1,IQmol::Layer::Molecule,Z-matrix Input,Z 矩阵输入,0,,0,,0,
+P6-0153,E-对话框主体,2,ProteinConfigurator,Property,属性,0,,0,,0,
+P6-0154,E-对话框主体,2,CubeDataConfigurator,Cancel,取消,0,,0,,0,
+P6-0155,E-对话框主体,2,CisTab,Analyze Relaxed Density,分析弛豫密度,0,,0,,0,
+P6-0156,E-对话框主体,2,MainWindow,PAO,PAO,0,,0,,0,
+P6-0157,H-常规界面,1,Qui::OptionListEditor,New option,新建选项,0,,0,,0,
+P6-0158,E-对话框主体,2,ExcitedStatesConfigurator,Close,关闭,0,,0,,0,
+P6-0159,D-文件与格式,1,ConfigDialog,Amber directory,Amber 目录,0,,0,,0,
+P6-0160,E-对话框主体,2,MainWindow,Fast XC,快速 XC,0,,0,,0,
+P6-0161,H-常规界面,1,SnapshotVideoDialog,"1440p (QHD, 2K) ","1440p (QHD, 2K) ",0,,0,,0,
+P6-0162,E-对话框主体,2,MainWindow,Solvent,溶剂,0,,0,,0,
+P6-0163,H-常规界面,1,PeriodicTable,Re,Re,0,,0,,0,
+P6-0164,H-常规界面,1,ShaderDialog,checkBox1,checkBox1,0,,0,,0,
+P6-0165,E-对话框主体,2,OptionDatabaseForm,Real,实数,0,,0,,0,
+P6-0166,E-对话框主体,2,ExcitedStatesConfigurator,Impulse,冲量,0,,0,,0,
+P6-0167,H-常规界面,1,FragmentTable,Steroids,甾体,0,,0,,0,
+P6-0168,E-对话框主体,2,MolecularSurfacesConfigurator,Simplify Mesh,简化网格,0,,0,,0,
+P6-0169,H-常规界面,1,FragmentTable,Bases,碱,0,,0,,0,
+P6-0170,H-常规界面,1,IQmol::Layer::AxesMesh,Configure,配置,0,,0,,0,
+P6-0171,H-常规界面,1,PeriodicTable,Sb,Sb,0,,0,,0,
+P6-0172,F-含数值/占位符,1,FragmentTable,L-4-Nitrophenylalanine,L-4-硝基苯丙氨酸,0,,0,,0,
+P6-0173,H-常规界面,1,Dialog,JPG,JPG,0,,0,,0,
+P6-0174,C-高后果操作,3,MoleculeConfigurator,Reset,重置,0,,0,,0,
+P6-0175,H-常规界面,1,ToolBar,Add Hydrogens,添加氢原子,0,,0,,0,
+P6-0176,H-常规界面,1,SnapshotVideoDialog,JPEG,JPEG,0,,0,,0,
+P6-0177,E-对话框主体,2,ClippingPlaneConfigurator,OK,确定,0,,0,,0,
+P6-0178,H-常规界面,1,BoundingBoxDialog,X,X,0,,0,,0,
+P6-0179,E-对话框主体,2,ServerConfigurationDialog,SGE,SGE,0,,0,,0,
+P6-0180,H-常规界面,1,FragmentTable,D-Aspartic acid,D-天冬氨酸,0,,0,,0,
+P6-0181,E-对话框主体,2,ServerConfigurationDialog,Q-Cloud,Q-Cloud,0,,0,,0,
+P6-0182,E-对话框主体,2,NmrConfigurator,Shieldings,屏蔽,0,,0,,0,
+P6-0183,E-对话框主体,2,SystemBuilderDialog,Command,命令,0,,0,,0,
+P6-0184,H-常规界面,1,InsertMoleculeDialog,Insert Molecule,插入分子,0,,0,,0,
+P6-0185,D-文件与格式,1,PreferencesBrowser,Fragment Directory:,片段目录：,0,,0,,0,
+P6-0186,H-常规界面,1,FragmentTable,Aldehydes,醛类,0,,0,,0,
+P6-0187,H-常规界面,1,Dialog,Tree Sort,树排序,0,,0,,0,
+P6-0188,E-对话框主体,2,OrbitalsConfigurator,Quality:,质量：,0,,0,,0,
+P6-0189,E-对话框主体,2,SurfaceAnimatorDialog,Negative,负,0,,0,,0,
+P6-0190,E-对话框主体,2,OrbitalsConfigurator,Percentage,百分比,0,,0,,0,
+P6-0191,E-对话框主体,2,IQmol::Data::SurfaceType,Dyson (left),Dyson (左),0,,0,,0,
+P6-0192,C-高后果操作,3,MainWindow,Remove current section from input file,从输入文件移除当前段,0,,0,,0,
+P6-0193,D-文件与格式,1,PreferencesBrowser,FFmpeg Path,FFmpeg 路径,0,,0,,0,
+P6-0194,E-对话框主体,2,MainWindow,Open-shell Singlet ROSCF,开壳层单重态 ROSCF,0,,0,,0,
+P6-0195,E-对话框主体,2,ExcitedStatesConfigurator,Lorentzian,洛伦兹,0,,0,,0,
+P6-0196,H-常规界面,1,PeriodicTable,Po,Po,0,,0,,0,
+P6-0197,E-对话框主体,2,IQmol::Data::SurfaceType,Orbital,轨道,0,,0,,0,
+P6-0198,E-对话框主体,2,MainWindow,3-Body interactions,三体相互作用,0,,0,,0,
+P6-0199,C-高后果操作,2,IQmol::GridInfoDialog,Delete,删除,0,,0,,0,
+P6-0200,E-对话框主体,2,SurfaceAnimatorDialog,To,To,0,,0,,0,
+P6-0201,H-常规界面,1,Dialog,Plane Normal,平面法线,0,,0,,0,
+P6-0202,D-文件与格式,2,ServerConfigurationDialog,Working Directory,工作目录,0,,0,,0,
+P6-0203,E-对话框主体,2,ServerConfigurationDialog,"Basic simply runs the qchem command on the server.  
+
+Use PBS or SGE if there is a queue system on the server.  
+You will be prompted for additional resource limits when 
+submitting a job.
+
+Use Web for HTTP/HTTPS servers",基本模式直接在服务器上运行 qchem 命令。若服务器有队列系统，请使用 PBS 或 SGE。提交任务时会提示您设置额外的资源限制。对 HTTP/HTTPS 服务器请使用 Web。,0,,0,,0,
+P6-0204,H-常规界面,1,ToolBar,Select Mode (Shift),选择模式（Shift）,0,,0,,0,
+P6-0205,E-对话框主体,2,CubeDataConfigurator,Add Surface,添加表面,0,,0,,0,
+P6-0206,E-对话框主体,2,MainWindow,Include Orbital Relaxation,包含轨道弛豫,0,,0,,0,
+P6-0207,E-对话框主体,2,IQmol::MainWindow,About,关于,0,,0,,0,
+P6-0208,E-对话框主体,2,EfpFragmentListConfigurator,Balls and Sticks,球棍模型,0,,0,,0,
+P6-0209,H-常规界面,1,IQmol::Layer::Molecule,Select All,全选,0,,0,,0,
+P6-0210,H-常规界面,1,Dialog,Stretch,伸缩,0,,0,,0,
+P6-0211,E-对话框主体,2,IQmol::Configurator::Nmr,Relative Intensity,相对强度,0,,0,,0,
+P6-0212,E-对话框主体,2,OptionDatabaseForm,Default,默认,0,,0,,0,
+P6-0213,H-常规界面,1,GromacsDialog,Hexagonal Prism,六方棱柱,0,,0,,0,
+P6-0214,E-对话框主体,2,MainWindow,RCA Print Level,RCA 打印级别,0,,0,,0,
+P6-0215,E-对话框主体,2,SurfaceAnimatorDialog,Render,渲染,0,,0,,0,
+P6-0216,H-常规界面,1,FragmentTable,D-Threonine,D-苏氨酸,0,,0,,0,
+P6-0217,E-对话框主体,2,GeminalOrbitalsConfigurator,Geminal(s):,对偶轨道：,0,,0,,0,
+P6-0218,F-含数值/占位符,1,IQmol::MullikenDecompositionsDialog,Mulliken decomposition for %1,Mulliken 分解：%1,0,,0,,0,
+P6-0219,H-常规界面,1,ShaderDialog,Lable6,Label6,0,,0,,0,
+P6-0220,E-对话框主体,2,MainWindow,Disable Controls,禁用控件,0,,0,,0,
+P6-0221,E-对话框主体,2,MainWindow,Atoms,原子,0,,0,,0,
+P6-0222,E-对话框主体,2,SystemBuilderDialog,QSPCFWBOX,QSPCFWBOX,0,,0,,0,
+P6-0223,E-对话框主体,2,SurfaceAnimatorDialog,"QToolButton {
+   color: #333;
+   background-color: QLinearGradient( x1: 0, y1: 0, x2: 0, y2: 1, 
+          stop: 0 #fff,
+          stop: 0.5 #eee, 
+          stop: 1 #999);
+   border-width: 2px;
+   border-color: #333;
+   border-style: solid;
+   border-radius: 5;
+   padding: 0px;
+   font-size: 24px;
+   min-width: 34px;
+   max-width: 34px;
+   min-height: 34px;
+   max-height: 34px;
+}
+
+QToolButton:disabled {
+  background-color: QLinearGradient( x1: 0, y1: 0, x2: 0, y2: 1, 
+          stop: 0 #fff,
+          stop: 0.5 #eee, 
+          stop: 1 #bbb);
+   border-color: #aaa;
+   color: #aaa;
+}
+
+QToolButton:pressed {
+   background-color: QLinearGradient( x1: 0, y1: 0, x2: 0, y2: 1, 
+          stop: 0 #999,
+          stop: 0.5 #eee, 
+          stop: 1 #fff);
+}
+
+
+QToolButton:checked {
+   border-color: #b00;
+   background-color: QLinearGradient( x1: 0, y1: 0, x2: 0, y2: 1, 
+          stop: 0 #999,
+          stop: 0.5 #eee, 
+          stop: 1 #fff);
+}
+
+QToolTip {
+   border: 2px solid darkkhaki;
+   padding: 2px;
+   border-radius: 3px;
+   opacity: 500;
+   font-size: 12px;
+}","QToolButton {
+   color: #333;
+   background-color: QLinearGradient( x1: 0, y1: 0, x2: 0, y2: 1, 
+          stop: 0 #fff,
+          stop: 0.5 #eee, 
+          stop: 1 #999);
+   border-width: 2px;
+   border-color: #333;
+   border-style: solid;
+   border-radius: 5;
+   padding: 0px;
+   font-size: 24px;
+   min-width: 34px;
+   max-width: 34px;
+   min-height: 34px;
+   max-height: 34px;
+}
+
+QToolButton:disabled {
+  background-color: QLinearGradient( x1: 0, y1: 0, x2: 0, y2: 1, 
+          stop: 0 #fff,
+          stop: 0.5 #eee, 
+          stop: 1 #bbb);
+   border-color: #aaa;
+   color: #aaa;
+}
+
+QToolButton:pressed {
+   background-color: QLinearGradient( x1: 0, y1: 0, x2: 0, y2: 1, 
+          stop: 0 #999,
+          stop: 0.5 #eee, 
+          stop: 1 #fff);
+}
+
+
+QToolButton:checked {
+   border-color: #b00;
+   background-color: QLinearGradient( x1: 0, y1: 0, x2: 0, y2: 1, 
+          stop: 0 #999,
+          stop: 0.5 #eee, 
+          stop: 1 #fff);
+}
+
+QToolTip {
+   border: 2px solid darkkhaki;
+   padding: 2px;
+   border-radius: 3px;
+   opacity: 500;
+   font-size: 12px;
+}",0,,0,,0,
+P6-0224,H-常规界面,1,FragmentTable,Ammonia,氨,0,,0,,0,
+P6-0225,F-含数值/占位符,1,FragmentTable,Cucurbit-6-uril,葫芦[6]脲,0,,0,,0,
+P6-0226,H-常规界面,1,PeriodicTable,Cl,Cl,0,,0,,0,
+P6-0227,H-常规界面,1,ShaderDialog,Lights,光源,0,,0,,0,
+P6-0228,E-对话框主体,2,OptionDatabaseForm,Documentation,文档,0,,0,,0,
+P6-0229,F-含数值/占位符,1,FragmentTable,Propan-1-ol,1-丙醇,0,,0,,0,
+P6-0230,H-常规界面,1,PeriodicTable,In,In,0,,0,,0,
+P6-0231,E-对话框主体,2,MainWindow,Linear Dependence,线性依赖,0,,0,,0,
+P6-0232,E-对话框主体,2,SurfaceAnimatorDialog,"QToolButton {
+   color: #333;
+   background-color: #666;
+   border-width: 2px;
+   border-color: #CCC;
+   border-style: solid;
+   border-radius: 5;
+   padding: 0px;
+   min-width: 50px;
+   max-width: 50px;
+   min-height: 30px;
+   max-height: 30px;
+}
+
+QToolButton:pressed {
+   border-color: #222;
+}
+","QToolButton {
+   color: #333;
+   background-color: #666;
+   border-width: 2px;
+   border-color: #CCC;
+   border-style: solid;
+   border-radius: 5;
+   padding: 0px;
+   min-width: 50px;
+   max-width: 50px;
+   min-height: 30px;
+   max-height: 30px;
+}
+
+QToolButton:pressed {
+   border-color: #222;
+}
+",0,,0,,0,
+P6-0233,H-常规界面,1,GromacsDialog,Center Molecule,分子居中,0,,0,,0,
+P6-0234,E-对话框主体,2,SymmetryConfigurator,Notes:,备注：,0,,0,,0,
+P6-0235,H-常规界面,1,IQmol::Layer::Molecule,Charges,电荷,0,,0,,0,
+P6-0236,H-常规界面,1,HelpBrowser,Search Results,搜索结果,0,,0,,0,
+P6-0237,E-对话框主体,2,ServerConfigurationDialog,AWS Config,AWS 配置,0,,0,,0,
+P6-0238,E-对话框主体,2,MainWindow,Correlation,相关,0,,0,,0,
+P6-0239,E-对话框主体,2,OrbitalsConfigurator,Atomic Units,原子单位,0,,0,,0,
+P6-0240,E-对话框主体,2,Libopt3Tab,Use Cartesians on Failure,失败时使用笛卡尔坐标,0,,0,,0,
