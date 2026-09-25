@@ -17,6 +17,15 @@
 #   scripts/migrate_to_upstream.sh --check     # 只预检（默认），不落盘
 #   scripts/migrate_to_upstream.sh --apply     # 实际执行三步
 #   scripts/migrate_to_upstream.sh --apply --target /d/IQmol-new
+#   scripts/migrate_to_upstream.sh --apply --target /d/IQmol-new --selfcheck
+#                                              # 迁移后自动比对（推荐）
+#   scripts/migrate_to_upstream.sh --selfcheck-only --target /d/IQmol-new
+#                                              # 只比对，不执行迁移
+#
+# --selfcheck 干什么（rw4e6e）:
+#   迁移三步跑完后，把目标树的 69 个汉化相关源码文件与本仓库成果逐一 diff，
+#   输出「完全一致文件数 / 总文件数」，列出缺失与不一致文件及其差异行数；
+#   有一处不一致即以退出码 3 结束，避免上游大改时补丁静默失败/部分应用。
 #
 # 前置:
 #   目标树必须是【干净的上游检出】，且工作区无未提交改动。
@@ -40,13 +49,17 @@ RULES="$REPO_DIR/scripts/i18n/wrap_tr.rules"
 REPLAY="$REPO_DIR/scripts/i18n/replay_tr.py"
 TARGET="$REPO_DIR"
 DO_APPLY=0
+DO_SELFCHECK=0
+SELFCHECK_ONLY=0
 
 while [ $# -gt 0 ]; do
   case "$1" in
     --apply)  DO_APPLY=1; shift ;;
     --target) TARGET="${2:-}"; shift 2 ;;
     --check)  DO_APPLY=0; shift ;;
-    -h|--help) sed -n '2,40p' "$0"; exit 0 ;;
+    --selfcheck) DO_SELFCHECK=1; shift ;;
+    --selfcheck-only) SELFCHECK_ONLY=1; DO_SELFCHECK=1; shift ;;
+    -h|--help) sed -n '2,55p' "$0"; exit 0 ;;
     *) echo "未知参数: $1" >&2; exit 2 ;;
   esac
 done
@@ -54,6 +67,92 @@ done
 info() { printf '==> %s\n' "$*"; }
 warn() { printf 'WARN: %s\n' "$*" >&2; }
 die()  { printf 'ERROR: %s\n' "$*" >&2; exit 1; }
+
+#-----------------------------------------------------------------------------
+# 迁移影响文件清单（= 两个补丁涉及的文件 ∪ 规则表涉及的文件）
+#   这是「迁移后自动比对」的比对范围：只比汉化真正动过的文件，
+#   避免构建产物/第三方子模块造成的噪声。
+#-----------------------------------------------------------------------------
+migration_file_list() {
+  {
+    grep -h '^+++ b/' "$PATCH_LANG" "$PATCH_NONMECH" 2>/dev/null \
+      | sed -e 's|^+++ b/||' -e 's/[[:space:]].*$//'
+    grep -v '^#' "$RULES" 2>/dev/null | cut -f1
+  } | grep -v '^$' | sort -u
+}
+
+#-----------------------------------------------------------------------------
+# 迁移后自动比对（selfcheck）
+#   参考树 = 本仓库（汉化成果版）  目标树 = $TARGET
+#   输出吻合度；有缺失/不一致 → 退出码 3
+#-----------------------------------------------------------------------------
+selfcheck() {
+  local ref="$REPO_DIR" tgt="$TARGET"
+  local total=0 same=0 differ=0 missing=0 refmissing=0
+  local -a diff_files=() miss_files=()
+
+  if [ "$(cd "$ref" 2>/dev/null && pwd)" = "$(cd "$tgt" 2>/dev/null && pwd)" ]; then
+    warn "selfcheck: 目标树就是本仓库自身（TARGET=REPO_DIR），比对无意义。"
+    warn "            请用 --target <新上游树> 指定迁移后的目录再比对。"
+    return 3
+  fi
+
+  echo
+  info "迁移后自动比对（selfcheck）"
+  echo "    参考树（本仓库成果）: $ref"
+  echo "    目标树（迁移结果）  : $tgt"
+
+  while IFS= read -r f; do
+    [ -n "$f" ] || continue
+    total=$((total + 1))
+    if [ ! -f "$tgt/$f" ]; then
+      missing=$((missing + 1)); miss_files+=("$f"); continue
+    fi
+    if [ ! -f "$ref/$f" ]; then
+      refmissing=$((refmissing + 1)); continue
+    fi
+    if diff -q "$ref/$f" "$tgt/$f" >/dev/null 2>&1; then
+      same=$((same + 1))
+    else
+      local n
+      n="$(diff -u "$ref/$f" "$tgt/$f" 2>/dev/null \
+          | grep -c -E '^[+-][^+-]' || true)"
+      differ=$((differ + 1)); diff_files+=("$f (差异 $n 行)")
+    fi
+  done < <(migration_file_list)
+
+  echo "    --------------------------------------------"
+  echo "    比对文件总数    : $total"
+  echo "    完全一致        : $same"
+  echo "    不一致          : $differ"
+  echo "    目标树缺失      : $missing"
+  if [ "$refmissing" -gt 0 ]; then
+    echo "    参考树缺失(忽略) : $refmissing"
+  fi
+
+  if [ "$differ" -gt 0 ]; then
+    echo "    不一致明细:"
+    for x in "${diff_files[@]}"; do echo "      - $x"; done
+  fi
+  if [ "$missing" -gt 0 ]; then
+    echo "    缺失明细:"
+    for x in "${miss_files[@]}"; do echo "      - $x"; done
+  fi
+
+  if [ "$same" -eq "$total" ] && [ "$differ" -eq 0 ] && [ "$missing" -eq 0 ]; then
+    echo "    ✅ $same / $total 全部一致（100% 复现）"
+    return 0
+  fi
+  echo "    ❌ 吻合度 $same / $total —— 请按 docs/上游升级迁移指南.md「上游大改时怎么办」处理"
+  return 3
+}
+
+# 只比对、不迁移：selfcheck 只读，不要求目标树工作区干净
+if [ "$SELFCHECK_ONLY" = "1" ]; then
+  [ -d "$TARGET" ] || die "目标目录不存在: $TARGET"
+  selfcheck
+  exit $?
+fi
 
 #-----------------------------------------------------------------------------
 # 0. 前置检查
@@ -71,6 +170,7 @@ fi
 info "仓库    : $REPO_DIR"
 info "目标树  : $TARGET"
 info "模式    : $([ "$DO_APPLY" = "1" ] && echo 实际执行 || echo 预检-only)"
+[ "$DO_SELFCHECK" = "1" ] && info "自检    : 迁移后自动比对（selfcheck）"
 echo
 
 #-----------------------------------------------------------------------------
@@ -134,7 +234,21 @@ git apply "$PATCH_NONMECH"
 echo "    完成（35 个文件）"
 
 #-----------------------------------------------------------------------------
-# 3. 收尾提示
+# 3. 迁移后自动比对（--selfcheck）
+#-----------------------------------------------------------------------------
+if [ "$DO_SELFCHECK" = "1" ]; then
+  selfcheck
+  SC=$?
+  if [ "$SC" != "0" ]; then
+    echo
+    echo "提示：不一致通常意味着上游改动导致补丁上下文漂移（部分应用/静默失败）。"
+    echo "      恢复步骤见 docs/上游升级迁移指南.md「上游大改时怎么办」。"
+    exit "$SC"
+  fi
+fi
+
+#-----------------------------------------------------------------------------
+# 4. 收尾提示
 #-----------------------------------------------------------------------------
 echo
 echo "==================== 迁移完成 ===================="
