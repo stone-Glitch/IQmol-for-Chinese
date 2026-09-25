@@ -44,7 +44,7 @@ QPushButton:pressed {
 
 QToolButton {
    color: black;
-   font-size: 12px;
+   font-size: 12pt;
    border-width: 2px;
    border-color: #777;
    border-style: solid;

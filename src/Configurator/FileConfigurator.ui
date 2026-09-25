@@ -31,7 +31,7 @@
    border-style: solid;
    border-radius: 5;
    padding: 0px;
-   font-size: 24px;
+   font-size: 24pt;
    min-width: 28px;
    max-width: 28px;
    min-height: 28px;
@@ -65,7 +65,7 @@ QToolTip {
    padding: 2px;
    border-radius: 3px;
    opacity: 500;
-   font-size: 12px;
+   font-size: 12pt;
 }</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">

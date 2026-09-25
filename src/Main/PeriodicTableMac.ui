@@ -37,7 +37,7 @@ border-color: #777;
 border-style: solid;
 border-radius: 5;
 padding: 2px;
-font-size: 10px;
+font-size: 10pt;
 min-width: 18px;
 max-width: 18px;
 min-height: 18px;
@@ -49,7 +49,7 @@ QToolTip {
    padding: 2px;
    border-radius: 3px;
    opacity: 200;
-   font-size: 12px;
+   font-size: 12pt;
 }
 
 
