@@ -182,6 +182,9 @@ int main(int argc, char *argv[])
     signal(11, signalHandler);   // Invalid memory reference
     signal(13, signalHandler);   // Broken pipe
 
+    // 启用高 DPI 自适应缩放：修复高分屏下界面发虚/控件错位（Q06）
+    QApplication::setAttribute(Qt::AA_EnableHighDpiScaling, true);
+
     IQmol::IQmolApplication iqmol(argc, argv);
     Q_INIT_RESOURCE(IQmol);
 

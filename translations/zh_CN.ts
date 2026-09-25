@@ -4271,7 +4271,7 @@ QTextBrowser#content {
     <message>
         <location filename="../src/Data/SurfaceType.C" line="160"/>
         <source>Cube Data</source>
-        <translation>立方体数据</translation>
+        <translation>Cube 数据</translation>
     </message>
     <message>
         <location filename="../src/Data/SurfaceType.C" line="161"/>

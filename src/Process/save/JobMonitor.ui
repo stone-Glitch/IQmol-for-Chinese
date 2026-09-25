@@ -19,7 +19,7 @@
     padding: 2px;
     border-radius: 3px;
     opacity: 500;
-    font-size: 12px;
+    font-size: 12pt;
     color: #000;
     background-color: #EEE;
 }</string>

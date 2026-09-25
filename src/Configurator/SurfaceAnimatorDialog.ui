@@ -54,7 +54,7 @@ QToolButton:pressed {
    border-style: solid;
    border-radius: 5;
    padding: 0px;
-   font-size: 24px;
+   font-size: 24pt;
    min-width: 34px;
    max-width: 34px;
    min-height: 34px;
@@ -91,7 +91,7 @@ QToolTip {
    padding: 2px;
    border-radius: 3px;
    opacity: 500;
-   font-size: 12px;
+   font-size: 12pt;
 }</string>
      </property>
      <property name="title">
@@ -465,7 +465,7 @@ QToolTip {
    border-style: solid;
    border-radius: 5;
    padding: 0px;
-   font-size: 24px;
+   font-size: 24pt;
    min-width: 34px;
    max-width: 34px;
    min-height: 34px;
@@ -499,7 +499,7 @@ QToolTip {
    padding: 2px;
    border-radius: 3px;
    opacity: 500;
-   font-size: 10px;
+   font-size: 10pt;
 }</string>
      </property>
      <property name="title">
