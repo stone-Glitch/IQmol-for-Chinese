@@ -1,0 +1,135 @@
+name: i18n TQA（翻译质量门禁）
+#
+# 目的：把 scripts/i18n/tqa.py 变成**每次提交都会跑的硬门禁**，
+#       防止"改了源码忘了补翻译""译文被清空""术语与项目约定不一致"静默混入主干。
+#
+# 触发：push / PR / 手动。与 ubuntu-2404.yml（编译测试）并行，互不阻塞。
+#
+# 门禁项（tqa.py --gate，非 0 即失败）：
+#   · TS 未完成条目 > 0        · 空译文 > 0
+#   · zh_CN.qm 缺失            · 源码—翻译漂移率 > 5%
+#   · 致命术语错误 > 0
+#
+# 另跑 extract_tr_rules.py --verify：tr() 包裹规则表覆盖率必须 100%
+# （保证 patches/ 重放链路不会因规则缺失而丢翻译）。
+
+on:
+  push:
+    branches: [ '**' ]
+  pull_request:
+  workflow_dispatch:
+
+# 同一分支连续 push 时取消旧任务，省 runner 额度
+concurrency:
+  group: i18n-tqa-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  # 上游基线（nutjunkie/IQmol3 v3.2.3），汉化改动以此为 diff 起点
+  UPSTREAM_BASE: af7ff60c0fe56e77660f7ad42e58cd8fb4f9deb0
+  UPSTREAM_REPO: https://github.com/nutjunkie/IQmol3.git
+
+jobs:
+  tqa:
+    name: TQA 门禁 + 规则表校验
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4.2.2
+        with:
+          # 规则表校验需要 diff 历史，故取全量（仓库小，代价可接受）
+          fetch-depth: 0
+
+      - name: 准备 Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: 安装 Qt 工具（lupdate / P1 漂移检测所需）
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y qttools5-dev-tools
+          lupdate -version
+
+      - name: 拉取上游基线（用于规则表覆盖率校验）
+        # 上游不可达不应让汉化门禁误报失败，故允许失败后由下一步自行判断
+        continue-on-error: true
+        run: |
+          git fetch --depth 1 "$UPSTREAM_REPO" "$UPSTREAM_BASE" || \
+            echo "::warning::上游基线 $UPSTREAM_BASE 拉取失败，规则表校验将跳过"
+
+      - name: 运行 TQA（产出报告 + 机器可读结果）
+        run: |
+          mkdir -p tqa-artifacts
+          python3 scripts/i18n/tqa.py --save tqa-artifacts/tqa-result.json \
+            | tee tqa-artifacts/tqa-report.txt
+
+      - name: TQA 阻断项门禁
+        run: |
+          python3 scripts/i18n/tqa.py --gate
+
+      - name: 翻译部署链路静态自检（reA22A 防回退）
+        # 不构建、不需要 Qt：确认"qm 放两处 + 源码多路径搜索 + run.sh cd"三层修复都还在
+        run: |
+          python3 scripts/i18n/check_translation_deploy.py --json \
+            | tee tqa-artifacts/deploy-check.json
+
+      - name: tr() 规则表覆盖率校验（须 100%）
+        run: |
+          if git cat-file -e "${UPSTREAM_BASE}^{commit}" 2>/dev/null; then
+            python3 scripts/i18n/extract_tr_rules.py --base "$UPSTREAM_BASE" --verify
+          else
+            echo "::warning::本仓库历史不含基线 ${UPSTREAM_BASE:0:7}，跳过规则表校验（非汉化质量问题）"
+          fi
+
+      - name: 门禁有效性自测（人为注入阻断项必须被拦截）
+        # 验收要求：门禁不能是"永远绿"的摆设。
+        # 做法：临时把一条 finished 译文清空 → --gate 必须返回非 0；随后还原。
+        run: |
+          cp translations/zh_CN.ts /tmp/zh_CN.ts.bak
+          python3 - <<'PY'
+          import re
+          p = 'translations/zh_CN.ts'
+          s = open(p, encoding='utf-8').read()
+          # 把第一个已完成译文改成空（模拟"翻译丢失"）
+          pat = re.compile(r'(<translation>)(\s*[^<][^<]*?)(\s*</translation>)', re.S)
+          m = None
+          for cand in pat.finditer(s):
+              if cand.group(2).strip() and 'type="unfinished"' not in s[max(0,cand.start()-200):cand.start()]:
+                  m = cand
+                  break
+          assert m, '未找到可注入的已完成译文，无法自测'
+          s = s[:m.start()] + '<translation type="unfinished"></translation>' + s[m.end():]
+          open(p, 'w', encoding='utf-8').write(s)
+          print('已注入一条空译文用于门禁自测')
+          PY
+          if python3 scripts/i18n/tqa.py --gate --no-lupdate; then
+            echo "❌ 门禁失效：注入空译文后 --gate 仍返回 0"
+            cp /tmp/zh_CN.ts.bak translations/zh_CN.ts
+            exit 1
+          else
+            echo "✅ 门禁有效：注入的空译文已被拦截"
+          fi
+          cp /tmp/zh_CN.ts.bak translations/zh_CN.ts
+          # 还原后必须重新变绿，确认自测没有污染仓库
+          python3 scripts/i18n/tqa.py --gate --no-lupdate
+
+      - name: 写入任务摘要
+        if: always()
+        run: |
+          {
+            echo "## TQA 翻译质量门禁"
+            echo
+            echo '```'
+            sed -n '1,40p' tqa-artifacts/tqa-report.txt
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: 上传评估结果（供趋势对比）
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tqa-result-${{ github.sha }}
+          path: tqa-artifacts/
+          if-no-files-found: warn
