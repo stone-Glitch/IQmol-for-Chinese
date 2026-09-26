@@ -129,6 +129,24 @@ if echo "$CMAKE_VER" | grep -qE " 4\.[0-9]"; then
   echo "==> 改用 $CMAKE_VER"
 fi
 
+# ===== 1b. 自动解压子模块离线包（弱网用户无 git submodule update）=====
+# modules/ 是 git submodule，源码 zip 不含其内容；源码包自带
+# submodules-package/IQmol-submodules.tar.gz（完整子模块快照：OpenBabel/libssh2/
+# yaml-cpp/libxml2/libQGLViewer/libarchive 等全部源码）。若检出不到就自动解压，
+# 让「下载 zip → build_windows.sh」零手动即可拿到完整 modules/。
+SUB_TGZ="$SRC_DIR/submodules-package/IQmol-submodules.tar.gz"
+if [ ! -f "$MODULES_DIR/openbabel/CMakeLists.txt" ] && [ -f "$SUB_TGZ" ]; then
+  echo "==> 检测到 modules/ 未填充，自动解压子模块离线包（约 73M，仅解压一次）..."
+  tar -xzf "$SUB_TGZ" -C "$SRC_DIR" \
+    && echo "    已完成 modules/ 填充" \
+    || { echo "ERROR: 解压 $SUB_TGZ 失败，请手动执行: tar -xzf $SUB_TGZ -C $SRC_DIR" >&2; exit 1; }
+elif [ ! -f "$MODULES_DIR/openbabel/CMakeLists.txt" ]; then
+  echo "ERROR: modules/openbabel 源码缺失，且未找到离线包 $SUB_TGZ" >&2
+  echo "       请确认源码包完整（submodules-package/IQmol-submodules.tar.gz 应随包提供），" >&2
+  echo "       或执行 git submodule update --init --recursive" >&2
+  exit 1
+fi
+
 # ===== 2b. 检查/修复 openbabel/CMakeLists.txt 的 uninstall 目标保护 =====
 # yaml-cpp 先定义了 uninstall 目标，OpenBabel 774 行再定义就撞车（CMP0002），
 # configure 报: ADD_CUSTOM_TARGET cannot create target "uninstall"。
