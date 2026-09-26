@@ -179,10 +179,18 @@ if [ -f "$DATA_CML" ] && ! grep -q "pregen" "$DATA_CML"; then
   fi
 fi
 if [ -f "$DATA_CML" ] && grep -q "pregen" "$DATA_CML" && [ ! -d "$MODULES_DIR/openbabel/data/pregen" ]; then
-  echo "ERROR: 缺少预生成数据头目录 modules/openbabel/data/pregen/" >&2
-  echo "       请下载 IQmol-data-headers.tar.gz 并在源码根解压:" >&2
-  echo "       cd $SRC_DIR && tar -xzf /d/IQmol/IQmol-data-headers.tar.gz" >&2
-  exit 1
+  # 自动从 submodules-package/ 取离线包（源码 zip 自带，弱网无需重新下载）
+  PKG="$SRC_DIR/submodules-package/IQmol-data-headers.tar.gz"
+  if [ -f "$PKG" ]; then
+    echo "==> 自动从 submodules-package/ 解压预生成数据头..."
+    tar -xzf "$PKG" -C "$SRC_DIR"
+  fi
+  if [ ! -d "$MODULES_DIR/openbabel/data/pregen" ]; then
+    echo "ERROR: 缺少预生成数据头目录 modules/openbabel/data/pregen/" >&2
+    echo "       请下载 IQmol-data-headers.tar.gz 并在源码根解压:" >&2
+    echo "       cd $SRC_DIR && tar -xzf /d/IQmol/IQmol-data-headers.tar.gz" >&2
+    exit 1
+  fi
 fi
 
 # ===== 2d. 修复 openbabel/src/CMakeLists.txt 的 additional_sources 漏加 =====
@@ -226,14 +234,26 @@ for d in maeparser-v1.2.3 coordgen-master rapidjson-1.1.0; do
   [ -d "$OB_EXT/$d" ] || MISSING="$MISSING $d"
 done
 if [ -n "$MISSING" ]; then
-  echo "ERROR: OpenBabel external 依赖缺失:$MISSING" >&2
-  echo "" >&2
-  echo "  处理：把 IQmol-openbabel-deps.tar.gz 解压到 modules/openbabel/ 下，" >&2
-  echo "        解压后会生成 external/ 目录。命令示例（MINGW64）：" >&2
-  echo "        cd $MODULES_DIR/openbabel && tar -xzf /d/IQmol/IQmol-openbabel-deps.tar.gz" >&2
-  echo "" >&2
-  echo "  包的位置：GitHub submodules-package 分支 / 对话文件卡片均可下载。" >&2
-  exit 1
+  # 自动从 submodules-package/ 取离线包（源码 zip 自带，弱网无需重新下载）
+  PKG="$SRC_DIR/submodules-package/IQmol-openbabel-deps.tar.gz"
+  if [ -f "$PKG" ]; then
+    echo "==> 自动从 submodules-package/ 解压 OpenBabel external 依赖..."
+    tar -xzf "$PKG" -C "$MODULES_DIR/openbabel"
+    MISSING=""
+    for d in maeparser-v1.2.3 coordgen-master rapidjson-1.1.0; do
+      [ -d "$OB_EXT/$d" ] || MISSING="$MISSING $d"
+    done
+  fi
+  if [ -n "$MISSING" ]; then
+    echo "ERROR: OpenBabel external 依赖缺失:$MISSING" >&2
+    echo "" >&2
+    echo "  处理：把 IQmol-openbabel-deps.tar.gz 解压到 modules/openbabel/ 下，" >&2
+    echo "        解压后会生成 external/ 目录。命令示例（MINGW64）：" >&2
+    echo "        cd $MODULES_DIR/openbabel && tar -xzf /d/IQmol/IQmol-openbabel-deps.tar.gz" >&2
+    echo "" >&2
+    echo "  包的位置：GitHub submodules-package 分支 / 对话文件卡片均可下载。" >&2
+    exit 1
+  fi
 fi
 echo "==> OpenBabel external 依赖齐备"
 
