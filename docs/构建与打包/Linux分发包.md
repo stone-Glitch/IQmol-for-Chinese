@@ -1,3 +1,7 @@
+> 🏠 [项目首页](../../README.md) › [文档中心](../README.md)
+
+---
+
 # Linux 分发包
 
 `scripts/package_linux.sh` 把构建产物与全部运行期依赖收集成**解压即用**的
@@ -74,7 +78,7 @@ bash scripts/verify_linux_pkg.sh --quick                 # 只做结构 + 翻译
 
 典型输出：
 
-```
+```text
 [2/4] 翻译加载（换工作目录启动，reA22A 回归测试）
   PASS  cwd=/ → 中文加载成功
   PASS  cwd=/tmp → 中文加载成功
@@ -106,3 +110,7 @@ QT_QPA_PLATFORM=offscreen ./bin/IQmol zh_CN 2>&1 | grep '\[i18n\]'
 - 包体约 46 MB（`lib/` 收集了全量递归依赖，后续可按需裁剪）。
 - 将轨迹导出为视频需另行安装 ffmpeg 并加入 PATH（可选）。
 - 大体量示例数据（17 MB cube、16 MB fchk、14 MB 谱图目录）未随包，从仓库单独获取。
+
+---
+
+> 维护者：@stone-Glitch ｜ 最后整理：2026-10-01
