@@ -18,6 +18,9 @@ IQmol version 3
 > | 上游发新版了，怎么升级合并（★ 一键迁移） | [docs/汉化工程/上游升级迁移指南.md](docs/汉化工程/上游升级迁移指南.md) |
 > | 想彻底降低升级冲突（长期治理方案） | [docs/汉化工程/改动面最小化方案（第三层）.md](docs/汉化工程/改动面最小化方案（第三层）.md) |
 > | 翻译包裹怎么在上游升级后一键重建 | [docs/汉化工程/第三层-重放机制说明.md](docs/汉化工程/第三层-重放机制说明.md) |
+> | 想参与贡献 / 报告翻译问题 | [CONTRIBUTING.md](CONTRIBUTING.md) |
+> | 报告安全漏洞（请勿公开） | [SECURITY.md](SECURITY.md) |
+> | 了解版本变更 | [CHANGELOG.md](CHANGELOG.md) |
 > | 汉化质量怎么量化评估（TQA 六维指标） | [docs/汉化工程/翻译质量量化评估方案.md](docs/汉化工程/翻译质量量化评估方案.md) |
 >
 > **上游升级迁移**：本仓库已实现**两条可验证的迁移路线**，实测在干净上游树上
@@ -66,7 +69,7 @@ make
 
 本仓库在原版 IQmol3 基础上完成了面向简体中文用户的全面本地化：
 
-- **界面翻译**：`translations/zh_CN.ts`（2035 条翻译，153 个 context，全部完成，0 未译），
+- **界面翻译**：`translations/zh_CN.ts`（2112 条翻译，153 个 context，全部完成，0 未译），
   构建时由 CMake 自动调用 lrelease 生成 `zh_CN.qm` 并随可执行文件输出到
   `translations/` 目录。系统需安装 Qt5 Linguist 工具（lupdate/lrelease，
   如 `qtbase5-dev-tools`、`qttools5-dev-tools`），缺失时构建仍可继续，但界面回退英文。
@@ -101,15 +104,15 @@ make
 
 `modules/` 下的 9 个第三方库是 Git 子模块，上游仓库体积较大，国内网络克隆时常断连、
 卡在 6% 或直接 `Failed to connect to github.com:443`。为此本仓库在
-**`submodules-package` 分支**提供了打包好的完整子模块源码（共 49,335 个文件），
+**`submodules-package/` 目录**提供了打包好的完整子模块源码（共 49,335 个文件），
 版本与 `.gitmodules` 记录的 commit 完全一致，单文件 73 MB，无需合并：
 
 下载这两个文件放到同一目录：
 
 | 文件 | 大小 |
 |---|---|
-| [`IQmol-submodules.tar.gz`](https://github.com/stone-Glitch/IQmol-for-Chinese/raw/refs/heads/submodules-package/submodules-package/IQmol-submodules.tar.gz) | 73 MB |
-| [`extract_submodules.bat`](https://github.com/stone-Glitch/IQmol-for-Chinese/raw/refs/heads/submodules-package/submodules-package/extract_submodules.bat) | 3.5 KB |
+| [`IQmol-submodules.tar.gz`](https://github.com/stone-Glitch/IQmol-for-Chinese/raw/refs/heads/main/submodules-package/IQmol-submodules.tar.gz) | 73 MB |
+| [`extract_submodules.bat`](https://github.com/stone-Glitch/IQmol-for-Chinese/raw/refs/heads/main/submodules-package/extract_submodules.bat) | 3.5 KB |
 
 在 **cmd** 里带仓库路径运行（不是 PowerShell）：
 
@@ -143,16 +146,20 @@ cd /d D:\IQmol\modules\openbabel
 tar -xzf D:\Downloads\IQmol-openbabel-deps.tar.gz
 ```
 
-### OpenBabel 构建补丁（必看）
+### OpenBabel 构建补丁（旧版兼容，通常无需）
 
-子模块包解压后，OpenBabel 在 CMake 3.x 下还会因两类问题 configure 失败：
+> **基础包已完整**：当前 `IQmol-submodules.tar.gz` 已含 OpenBabel 全部源码
+> （含 `libinchi/`、`test/`、`src/formats/`），下面两个补丁包属于**旧版冗余包，通常无需下载**。
+> 仅当你使用旧版基础包、或从 `submodules-package/` 目录单独下载的老包时才需要补打。
+
+历史上 OpenBabel 在 CMake 3.x 下曾因两类问题 configure 失败：
 
 1. **文件缺失**：`src/formats/libinchi/`、`test/` 目录，以及 `src/formats/xml/`、
    `src/formats/json/` 下的部分源文件（报 `not an existing directory` 或
    `No SOURCES given to target: pubchem / xmlformat / ...`）；
 2. **目标重名**：OpenBabel 的 `ADD_CUSTOM_TARGET(uninstall)` 与 yaml-cpp 同名目标冲突（CMP0002）。
 
-本仓库额外提供两个补丁包，**都解压到 `modules/openbabel/`**：
+若确需补打，两个包**都解压到 `modules/openbabel/`**：
 
 | 文件 | 大小 | 说明 |
 |---|---|---|
@@ -170,10 +177,11 @@ tar -xzf /d/IQmol/IQmol-openbabel-formats-fix.tar.gz
 > 后者解 `.tar.gz` 会**静默丢文件**（本项目已连续两轮因此缺文件），且常只解出中间层 `.tar`。
 > 若不想补全 `test/` 单测目录，可加 `-DENABLE_TESTS=OFF`，但 `test/` 目录仍需存在。
 
-> ⚠️ **顺序陷阱**：重新解压完整子模块包会把 `openbabel/CMakeLists.txt` 覆盖回**未修版**，
-> uninstall 保护随之丢失、174 行冲突会复现。顺序必须是：**先完整包 → 再打上面两个补丁包**。
+> ⚠️ **顺序陷阱（仅旧版包适用）**：重新解压旧版完整子模块包会把 `openbabel/CMakeLists.txt`
+> 覆盖回**未修版**，uninstall 保护随之丢失、174 行冲突会复现。顺序必须是：
+> **先完整包 → 再打上面两个补丁包**。当前基础包已内置修复，无需此步。
 
-四个包（子模块 / OpenBabel deps / OpenBabel fix / OpenBabel formats）都解压到位后，推荐用
+基础包（子模块 / OpenBabel deps）解压到位后，推荐用
 `scripts/build_windows.sh` 一键构建——默认**增量**：首次 configure + 编译，之后只要 `build/`
 目录还在，重跑脚本会跳过 configure 直接续编，不会从头再来。脚本会自动下载 CMake 3.31、补全
 缺失的 `modules/CMakeLists.txt`、检查 OpenBabel 依赖。具体命令见 `docs/构建与打包/构建与部署指南.md`。
@@ -197,14 +205,14 @@ cd build/bin && ./IQmol.exe
 - 解压后**不要**再运行 `git submodule update --init --recursive`，否则会重新联网克隆覆盖。
 - **CMake 必须用 3.x（3.31）**，不要用 4.x（详见 `docs/构建与打包/构建与部署指南.md`）。
 
-完整步骤见该分支下的 `submodules-package/使用说明.md`。
+完整步骤见仓库 `submodules-package/使用说明.md`。
 
 ## 已知问题（源自上游）
 
 > 本节所列问题**源自 IQmol 上游本身**，并非本汉化引入；汉化仅覆盖界面 / 帮助 / Q-Chem 关键词文案。
 > 遇到疑似 bug 时，请先对照本节判断是否上游固有。
 
-- **部分运行期字符串仍为英文**：上游源码中未被 `tr()` 包裹的字符串（尤其较新上游版本新增的 UI 文本）无法被翻译体系识别，会保持英文显示。本版已覆盖 `translations/zh_CN.ts` 中 **2035 条**翻译；若发现未译项，多属上游未暴露该字符串，可在本仓库提 Issue 由维护者补充 `tr()` 包裹。
+- **部分运行期字符串仍为英文**：上游源码中未被 `tr()` 包裹的字符串（尤其较新上游版本新增的 UI 文本）无法被翻译体系识别，会保持英文显示。本版已覆盖 `translations/zh_CN.ts` 中 **2112 条**翻译；若发现未译项，多属上游未暴露该字符串，可在本仓库提 Issue 由维护者补充 `tr()` 包裹。
 - **OpenBabel 力场插件自注册**：静态构建下若 OpenBabel 的力场 / 格式插件未被整体保留，运行期会报 `Failed to load force field: UFF`。本仓库 `CMakeLists.txt` 已用 `$<LINK_LIBRARY:WHOLE_ARCHIVE,openbabel>` 修复；手工构建或旧包若未启用该修复则可能遇到。
 - **帮助文档内嵌截图为英文**：`doc/IQmolUserGuide.*` 中的部分配图为上游英文截图，汉化尚未重渲染（计划见待办：帮助文档截图汉化，下个版本处理）。
 - **MinGW-w64 为唯一验证工具链**：Windows 构建仅验证 MinGW-w64（Qt5 + MinGW），MSVC 路径未验证、未支持。

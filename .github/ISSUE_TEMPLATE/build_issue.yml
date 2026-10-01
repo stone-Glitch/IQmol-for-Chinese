@@ -1,0 +1,60 @@
+name: 🔧 构建 / 打包问题
+description: 反馈编译、依赖、离线包或打包方面的问题
+title: "[构建] "
+labels: ["build"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        构建问题**先看两处**，能省掉大部分排查：
+        - [`docs/构建与打包/构建与部署指南.md`](../../docs/构建与打包/构建与部署指南.md)
+        - [README「子模块离线包」](../../README.md#子模块离线包国内网络适用)
+  - type: dropdown
+    id: platform
+    attributes:
+      label: 构建平台
+      options:
+        - Windows（MSYS2 / MinGW-w64）
+        - Linux
+        - macOS
+    validations:
+      required: true
+  - type: input
+    id: qt
+    attributes:
+      label: Qt 版本
+      placeholder: 例如 Qt 5.15.2
+    validations:
+      required: true
+  - type: input
+    id: cmake
+    attributes:
+      label: CMake 版本
+      description: 必须用 3.x（推荐 3.31），4.x 不支持
+      placeholder: 例如 3.31.0
+    validations:
+      required: true
+  - type: dropdown
+    id: offline
+    attributes:
+      label: 是否使用离线包
+      options:
+        - 是，已使用 submodules-package 离线包
+        - 否，联网 git submodule update
+        - 部分使用
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: 构建日志（关键报错段）
+      description: 粘贴 configure / make 的报错片段。⚠️ 请脱敏，勿含密钥或私有路径。
+      render: text
+    validations:
+      required: true
+  - type: textarea
+    id: tried
+    attributes:
+      label: 已尝试的排查
+    validations:
+      required: false
