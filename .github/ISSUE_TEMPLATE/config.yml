@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 📖 构建与打包指南
+    url: https://github.com/stone-Glitch/IQmol-for-Chinese/blob/main/docs/构建与打包/构建与部署指南.md
+    about: 编译、依赖、离线包、部署与排错——构建问题请先读这里
+  - name: 🧭 项目文档中心
+    url: https://github.com/stone-Glitch/IQmol-for-Chinese/blob/main/docs/README.md
+    about: 按角色分类的全部文档入口（构建 / 汉化 / 审校 / 验证记录）
+  - name: 🔐 报告安全漏洞（请勿公开）
+    url: https://github.com/stone-Glitch/IQmol-for-Chinese/security/advisories/new
+    about: 涉及密钥、SSH、文件安全的问题请走私密渠道，见 SECURITY.md

@@ -1,0 +1,65 @@
+name: 🌏 翻译问题
+description: 反馈界面 / 帮助文档 / Q-Chem 关键词的中文翻译问题
+title: "[翻译] "
+labels: ["translation"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        感谢参与汉化！请尽量提供**原文 + 当前译文 + 建议译文**，方便维护者快速定位与修正。
+  - type: dropdown
+    id: area
+    attributes:
+      label: 问题类别
+      options:
+        - 未翻译（界面仍显示英文）
+        - 翻译不准确 / 语义偏差
+        - 术语不统一
+        - 排版 / 截断 / 显示异常
+        - 其它
+    validations:
+      required: true
+  - type: input
+    id: location
+    attributes:
+      label: 界面位置
+      description: 哪个对话框 / 菜单 / 选项卡
+      placeholder: 例如：Q-Chem 输入编辑器（QUI）→「高级选项」
+    validations:
+      required: true
+  - type: input
+    id: source
+    attributes:
+      label: 原文（英文）
+      placeholder: e.g. Spin-Orbit Coupling
+    validations:
+      required: true
+  - type: input
+    id: current
+    attributes:
+      label: 当前译文
+      placeholder: 例如：自旋轨道耦合
+    validations:
+      required: true
+  - type: input
+    id: suggested
+    attributes:
+      label: 建议译文
+      description: 请遵循全国科学技术名词审定委员会官方译法；不确定可留空并在下方说明
+      placeholder: 例如：自旋-轨道耦合
+    validations:
+      required: false
+  - type: textarea
+    id: reason
+    attributes:
+      label: 理由 / 依据
+      description: 术语依据、文献出处或上下文说明
+    validations:
+      required: false
+  - type: textarea
+    id: screenshot
+    attributes:
+      label: 截图
+      description: 拖入界面截图，最直观
+    validations:
+      required: false

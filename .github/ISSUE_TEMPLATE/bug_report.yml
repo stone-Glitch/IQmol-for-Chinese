@@ -1,0 +1,67 @@
+name: 🐞 Bug 报告
+description: 反馈软件运行、功能或打包方面的缺陷
+title: "[Bug] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        感谢反馈！请尽量填写完整，便于定位问题。
+        > ⚠️ 请先确认这不是**上游 IQmol 本身**的已知问题——见 [README「已知问题（源自上游）」](../../README.md#已知问题源自上游)。
+  - type: dropdown
+    id: platform
+    attributes:
+      label: 运行平台
+      options:
+        - Windows 10/11 x64
+        - Linux x86_64
+        - macOS
+        - 其它（请在描述中说明）
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: 版本 / 获取方式
+      description: 例如「Windows 预编译包 IQmol-win64-3.2.3-zh_CN.zip」或「自行编译，main 分支 <commit>」
+      placeholder: 3.2.3-zh_CN
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: 复现步骤
+      description: 从启动开始，一步步写清如何触发
+      placeholder: |
+        1. 打开 IQmol
+        2. 点击「构建」→「..."
+        3. ...
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: 期望行为
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: 实际行为
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: 日志 / 截图
+      description: 粘贴相关日志或拖入截图。⚠️ **请先脱敏**：不要上传密钥、主机名、用户名或完整输入文件。
+      render: text
+    validations:
+      required: false
+  - type: input
+    id: env
+    attributes:
+      label: 环境信息
+      description: 操作系统版本、显卡 / 驱动、是否启用 OpenMP 等
+    validations:
+      required: false
