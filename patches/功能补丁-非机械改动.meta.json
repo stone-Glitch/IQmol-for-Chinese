@@ -1,0 +1,21 @@
+{
+  "name": "功能补丁-非机械改动",
+  "file": "patches/功能补丁-非机械改动.patch",
+  "purpose": "收集无法由 replay_tr.py 规则表机械重放的 35 个源文件改动（字面量文本改写、我方新增代码行、构造初始化列表重构、常量→可翻译字面量、非 QObject 类 translate() 等），是「上游升级迁移」流程的第 ③ 步。",
+  "category": "non-mechanical",
+  "based_on_upstream": "af7ff60",
+  "apply_order": 3,
+  "applies_after": ["功能补丁-语言支持.patch", "tr() 包裹重放(replay_tr.py --apply)"],
+  "applies_before": [],
+  "covers_files": 35,
+  "verified": true,
+  "verification": "在上游 af7ff60 干净树上 ①→②→③ 后，69/69 个源码文件与成果版 100% 复现 ✅",
+  "covered_files_sample": [
+    "src/Configurator/OrbitalsConfigurator.C",
+    "src/Layer/MoleculeLayer.C",
+    "src/Main/HelpBrowser.C",
+    "src/Parser/OpenBabelParser.C",
+    "src/Viewer/ShaderDialog.C"
+  ],
+  "notes": "顺序不可颠倒：diff 上下文基于「上游 + ① + ②」的结果。普通「下载→构建→打包」路径不需要本补丁（改动已合入 main）。"
+}

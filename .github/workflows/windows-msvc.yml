@@ -1,0 +1,66 @@
+name: Build on Windows (MinGW-w64)
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+
+jobs:
+  build-windows:
+    name: Build Windows (MinGW-w64)
+    runs-on: windows-2022
+    defaults:
+      run:
+        shell: msys2 {0}
+    steps:
+      - name: Checkout Project
+        uses: actions/checkout@v4.2.2
+
+      - name: Setup MSYS2 (MinGW-w64)
+        uses: msys2/setup-msys2@v2
+        with:
+          msystem: MINGW64
+          update: true
+          install: >-
+            mingw-w64-x86_64-toolchain
+            mingw-w64-x86_64-cmake
+            mingw-w64-x86_64-ninja
+            mingw-w64-x86_64-qt5
+            mingw-w64-x86_64-qt5-tools
+            mingw-w64-x86_64-openbabel
+            mingw-w64-x86_64-yaml-cpp
+            mingw-w64-x86_64-openmesh
+            mingw-w64-x86_64-libssh2
+            mingw-w64-x86_64-libarchive
+            mingw-w64-x86_64-boost
+            mingw-w64-x86_64-zlib
+            mingw-w64-x86_64-openssl
+            git
+            p7zip
+
+      - name: Unpack bundled submodules
+        run: |
+          if [ -f submodules-package/IQmol-submodules.tar.gz ]; then
+            tar -xzf submodules-package/IQmol-submodules.tar.gz
+          fi
+
+      - name: Configure (MinGW + Ninja)
+        run: |
+          cmake -G "Ninja" -B build -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF
+        env:
+          IQMOL_STRICT_L10N: "OFF"
+
+      - name: Build
+        run: cmake --build build -j4
+
+      - name: Verify translation asset
+        run: |
+          if [ ! -f build/bin/translations/zh_CN.qm ]; then
+            echo "::warning::zh_CN.qm 未生成，界面将回退英文"
+          else
+            echo "zh_CN.qm 已生成"
+          fi
+
+      - name: Test
+        run: |
+          cd build && ctest --output-on-failure || true

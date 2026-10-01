@@ -199,3 +199,15 @@ cd build/bin && ./IQmol.exe
 
 完整步骤见该分支下的 `submodules-package/使用说明.md`。
 
+## 已知问题（源自上游）
+
+> 本节所列问题**源自 IQmol 上游本身**，并非本汉化引入；汉化仅覆盖界面 / 帮助 / Q-Chem 关键词文案。
+> 遇到疑似 bug 时，请先对照本节判断是否上游固有。
+
+- **部分运行期字符串仍为英文**：上游源码中未被 `tr()` 包裹的字符串（尤其较新上游版本新增的 UI 文本）无法被翻译体系识别，会保持英文显示。本版已覆盖 `translations/zh_CN.ts` 中 **2035 条**翻译；若发现未译项，多属上游未暴露该字符串，可在本仓库提 Issue 由维护者补充 `tr()` 包裹。
+- **OpenBabel 力场插件自注册**：静态构建下若 OpenBabel 的力场 / 格式插件未被整体保留，运行期会报 `Failed to load force field: UFF`。本仓库 `CMakeLists.txt` 已用 `$<LINK_LIBRARY:WHOLE_ARCHIVE,openbabel>` 修复；手工构建或旧包若未启用该修复则可能遇到。
+- **帮助文档内嵌截图为英文**：`doc/IQmolUserGuide.*` 中的部分配图为上游英文截图，汉化尚未重渲染（计划见待办：帮助文档截图汉化，下个版本处理）。
+- **MinGW-w64 为唯一验证工具链**：Windows 构建仅验证 MinGW-w64（Qt5 + MinGW），MSVC 路径未验证、未支持。
+- **Qt 静态 / 捆绑许可**：Windows 包为「双击即用」采用捆绑 / 静态链接 Qt，请按 Qt LGPL-3.0 或 GPL 条款评估合规，详见 [`THIRD_PARTY_LICENSES.md`](THIRD_PARTY_LICENSES.md)。
+- **未提供官方 Release 资产签名**：当前 Windows 包以 git LFS/Commit 形式分发，未做 GPG 签名；校验请使用发布说明中的 SHA256。
+
