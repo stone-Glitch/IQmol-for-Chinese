@@ -35,6 +35,20 @@
 
 包含 `PreferencesBrowser`、`JobMonitor`、`InputDialog`、`ToolBar`、各类 `*Tab` / `*Configurator`、以及 Aberration、Axes、Background、Camera、ClippingPlane、Color、CubeData、Dipole、EfpFragmentList、ExcitedStates、Frequencies、GeminalOrbitals、GenerateConformers、Geometry、GeometryConstraint、GeometryList、GridInfo、Gromacs*、HelpBrowser、Info、MolecularSurfaces、Mulliken、Nmr、Octree、Orbitals、ProteinChain、ScalarConstraint、Surface、SurfaceAnimator、Symmetry、VectorConstraint、Isotopes 等全部可渲染对话框与配置面板。
 
+### `cards/`：多卡片界面的逐卡片截图（73 张）
+
+IQmol 部分对话框用 `QTabWidget`（标签页）、`QToolBox`（折叠卡片）、`QStackedWidget`（堆叠页）把内容分成多张"卡片"，`all/` 里的整窗截图只能看到默认激活的第一张。`cards/` 把每张卡片单独渲染，便于逐卡核对中文。
+
+| 子目录 | 卡片数 | 说明 |
+|--------|--------|------|
+| `InputDialog/` | 54 | Q-Chem 输入文件编辑器：设置/高级 2 个标签页 + SCF 控制/波函数分析折叠卡 + 高级选项堆叠 36 页 + 溶剂 7 页 + 大分子 5 页 |
+| `SystemBuilderDialog/` | 8 | 体系构建器：输入/输出标签页 + 源/参数/溶剂/抗衡离子折叠卡 |
+| `ShaderDialog/` | 6 | 外观（着色器/效果/POV-Ray 标签页） |
+| `GromacsDialog/` | 4 | Gromacs：EditConf/溶剂化标签页 |
+| `GeometryTab/` | 1 | 几何选项卡的静态部分（其 `geomOptStack` 堆叠页由 C++ 运行时按单选按钮动态添加，静态渲染不可得，需真实 QUI 运行态） |
+
+文件命名：`{类型}{容器序号}_{容器objectName}_{页序}_{页标签}.png`。
+
 ## 仍未覆盖项
 
 | 目标 | 原因 |
