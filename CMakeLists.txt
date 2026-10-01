@@ -416,6 +416,11 @@ if (WIN32)
 endif (WIN32)
 
 
+# ---- 严格本地化开关（IQMOL_STRICT_L10N）----
+# 默认 OFF：仅打印未完成/空翻译统计，不中断构建。
+# 设为 ON：若存在未完成或空翻译，构建失败，禁止带未译发布。
+option(IQMOL_STRICT_L10N "Fail build if zh_CN.ts has unfinished/empty translations" OFF)
+
 # ---- 中文本地化：构建时用 lrelease 生成 .qm 并放到可执行文件同级的 translations/ 目录 ----
 find_program(LRELEASE_EXECUTABLE NAMES lrelease lrelease-qt5)
 set(IQMOL_TS_FILE ${CMAKE_CURRENT_SOURCE_DIR}/translations/zh_CN.ts)
@@ -426,7 +431,11 @@ if(LRELEASE_EXECUTABLE)
    add_custom_command(TARGET ${targetName} POST_BUILD
       COMMAND ${CMAKE_COMMAND} -E make_directory ${IQMOL_QM_DIR}
       COMMAND ${LRELEASE_EXECUTABLE} ${IQMOL_TS_FILE} -qm ${IQMOL_QM_FILE}
-      COMMENT "Generating ${IQMOL_QM_FILE} from ${IQMOL_TS_FILE}"
+      COMMAND ${CMAKE_COMMAND}
+              -DTS_FILE=${IQMOL_TS_FILE}
+              -DIQMOL_STRICT_L10N=${IQMOL_STRICT_L10N}
+              -P ${CMAKE_CURRENT_SOURCE_DIR}/scripts/i18n/check_l10n_strict.cmake
+      COMMENT "Generating ${IQMOL_QM_FILE} from ${IQMOL_TS_FILE} + 严格 l10n 检查"
    )
 else()
    message(WARNING

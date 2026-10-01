@@ -1,0 +1,13 @@
+{
+  "name": "功能补丁-语言支持",
+  "file": "patches/功能补丁-语言支持.patch",
+  "purpose": "在干净官方上游树上启用简体中文语言支持：loadTranslations 引导、Language 偏好项、GCC15 <cstdint> 缺失修复等功能性改动。",
+  "category": "mechanical-or-semi",
+  "based_on_upstream": "af7ff60",
+  "apply_order": 1,
+  "applies_after": [],
+  "applies_before": ["功能补丁-非机械改动.patch"],
+  "verified": true,
+  "verification": "在上游 af7ff60 干净树上 git apply 干净应用 ✅（见 patches/README.md 实测验证）",
+  "notes": "本补丁的 diff 上下文基于纯上游；须先于 tr() 重放(②)与非机械改动补丁(③)应用。"
+}
