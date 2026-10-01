@@ -1,3 +1,7 @@
+> 🏠 [项目首页](../../README.md) › [文档中心](../README.md)
+
+---
+
 # IQmol 鼠标悬浮提示（tooltip）功能说明
 
 > 面向：中文版使用者与汉化维护者
@@ -29,7 +33,7 @@ IQmol 中主要有三类：
 最常用的一处是 **Q-Chem 输入文件编辑器**：写 `$rem` 段时对某个关键词不确定，
 把光标压在关键词名上，浮窗会给出完整说明，例如：
 
-```
+```text
 SCF_ALGORITHM
   选择用于 SCF 收敛的算法。
   建议：
@@ -76,3 +80,7 @@ python3 scripts/i18n/qchem_db_translate.py verify
 | 提示是英文 | 数据库未随包更新 | Windows：`deploy_windows.sh` 会复制 `share/qchem_option.db`；Linux：`package_linux.sh` 同样随包，重打包即可 |
 | 提示框乱码 | HTML 头部的 charset 被破坏 | 用 `qchem_db_translate.py verify` 检查；不要手工改 HTML |
 | 按钮提示仍是英文 | `zh_CN.qm` 未加载（路径问题） | 见 `docs/验证记录/2026-09-24-Linux分发包中文翻译加载失败定位.md` |
+
+---
+
+> 维护者：@stone-Glitch ｜ 最后整理：2026-10-01

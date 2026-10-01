@@ -1,3 +1,7 @@
+> 🏠 [项目首页](../README.md) › [文档中心](../docs/README.md)
+
+---
+
 # IQmol 中文界面截图集
 
 本目录为中文用户手册 / 汉化验证提供 IQmol 界面截图。
@@ -60,3 +64,7 @@ IQmol 部分对话框用 `QTabWidget`（标签页）、`QToolBox`（折叠卡片
 - `zh_CN.ts` 共 **1517** 条字符串，0 未完成、0 空译文，`zh_CN.qm` 可正常加载（运行日志 `[i18n] Loaded translation: "zh_CN"`）。
 - 术语译法符合规范：Force Field→力场、Molecule→分子、Atom→原子、Energy→能量 等。
 - 约 335 条"译文=原文"均为合理的英文保留（软件名 IQmol、作者名、算法名如 DIIS/HFPT、物理量 a.u./K、变量 X/Y、CSS 代码、服务名 AWS 等），已排除 Designer 占位符（`Label4` / `Lable6` / `checkBox0` 等运行时由 C++ 动态覆盖，不会真正显示）。
+
+---
+
+> 维护者：@stone-Glitch ｜ 最后整理：2026-10-01

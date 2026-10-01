@@ -1,3 +1,7 @@
+> 🏠 [项目首页](../../../README.md) › [文档中心](../../README.md)
+
+---
+
 # Q-Chem 关键词说明（tooltip）汉化对照表
 
 > 来源：`share/qchem_option.db` → `options.Description`（Qt RichText HTML）
@@ -511,3 +515,7 @@
 | `XOPT_SEAM_ONLY` | Orders an intersection seam search only, no minimization is to perform. / Recommendation: / In systems with a large number of degrees of freedom it might be useful to locate the seam first setting this option to TRUE and use that geometry as a starting point for the minimization. | 仅执行交叉缝搜索，不进行最小化。 / 建议： / 对于自由度很多的体系，先将此选项设为 TRUE 定位交叉缝，再以该几何结构作为最小化的起点，可能会很有用。 |
 | `XOPT_STATE_1` | Specify two electronic states the intersection of which will be searched. / [spin, irrep, state] / spin = 0 Addresses states with low spin, see also EOM EE SINGLETS. / spin = 1 Addresses states with high spin, see also EOM EE TRIPLETS. / irrep Species the irreducible representation to which the sta | 指定将搜索其交叉点的两个电子态。 / [spin, irrep, state] / spin = 0 寻址低自旋态，另见 EOM EE SINGLETS。 / spin = 1 寻址高自旋态，另见 EOM EE TRIPLETS。 / irrep 指定该态所属的不可约表示，针对 C2v 点群对称性 / irrep = 1 表示 A1，irrep = 2 表示 A2， / irrep = 3 表示 B1，irrep = 4 表示 B2。 / state 指定不可约 / 表示内的态编号，state = 1 表示最低激发 / 态，state = 2 表示第二激发态，依此类推。 / 0, 0, -1  |
 | `XOPT_STATE_2` | Specify two electronic states the intersection of which will be searched. / [spin, irrep, state] / spin = 0 Addresses states with low spin, see also EOM EE SINGLETS. / spin = 1 Addresses states with high spin, see also EOM EE TRIPLETS. / irrep Species the irreducible representation to which the sta | 指定将搜索其交叉点的两个电子态。 / [spin, irrep, state] / spin = 0 寻址低自旋态，另见 EOM EE SINGLETS。 / spin = 1 寻址高自旋态，另见 EOM EE TRIPLETS。 / irrep 指定该态所属的不可约表示，针对 C2v 点群对称性 / irrep = 1 表示 A1，irrep = 2 表示 A2， / irrep = 3 表示 B1，irrep = 4 表示 B2。 / state 指定不可约 / 表示内的态编号，state = 1 表示最低激发 / 态，state = 2 表示第二激发态，依此类推。 / 0, 0, -1  |
+
+---
+
+> 维护者：@stone-Glitch ｜ 最后整理：2026-10-01

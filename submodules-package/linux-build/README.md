@@ -1,3 +1,7 @@
+> 🏠 [项目首页](../../README.md) › [文档中心](../../docs/README.md)
+
+---
+
 # IQmol 中文版（Linux x86_64）
 
 IQmol v3.2.3 分子编辑与可视化软件的中文本地化版本。
@@ -35,7 +39,7 @@ cd IQmol-linux-x86_64
 
 ## 三、目录结构
 
-```
+```text
 IQmol-linux-x86_64/
 ├── run.sh                  启动脚本（设置运行环境 + 注入资源路径）
 ├── bin/
@@ -49,8 +53,12 @@ IQmol-linux-x86_64/
 │   ├── openbabel/          OpenBabel 数据文件（元素/键参数等）
 │   └── qchem_option.db     Q-Chem 选项数据库
 └── translations/
-    └── zh_CN.qm            中文翻译（1519 条）
+    └── zh_CN.qm            中文翻译（1519 条，见下方口径说明）
 ```
+
+> **条数口径说明**：本包内 `zh_CN.qm` 为该分发包**构建当时**的翻译快照（1519 条）。
+> 仓库 `main` 分支源码中的 `translations/zh_CN.ts` 已扩充至 **2112 条 / 153 context**
+> （口径见仓库根 [`README.md`](../../README.md)）；如需最新翻译，请从源码重新构建。
 
 ---
 
@@ -69,7 +77,7 @@ IQmol-linux-x86_64/
 
 界面其他元素：模型视图面板、全局、历史记录、欢迎使用 IQmol、状态栏提示等。
 
-翻译总数 **1519 条**，无未翻译条目。
+翻译总数 **1519 条**（本包快照口径），无未翻译条目；仓库最新源码为 2112 条。
 
 ---
 
@@ -152,3 +160,7 @@ rm -rf ~/.config/iqmol.org      # 可选：清除个人偏好设置
 IQmol 遵循 GNU General Public License v3。
 本包为 GPL 衍生作品，同样遵循 GPLv3。
 详见包内源码仓库中的 LICENSE 文件。
+
+---
+
+> 维护者：@stone-Glitch ｜ 最后整理：2026-10-01

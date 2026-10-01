@@ -51,14 +51,14 @@ build process.
 
 The source relies on submodules, so to checkout the code use the recursive flag:
 
-```
+```bash
 git clone --recursive https://github.com/nutjunkie/IQmol3.git
 ```
 
 To compile, make sure that you QT installation can be found by cmake.  This
 means that the CMAKE\_PREFIX\_PATH environment variable should include the
 directory containing the Qt5Config.cmake file
-```
+```bash
 export CMAKE_PREFIX_PATH=/directory/containing_Qt5Config.cmake
 ./configure
 cd build
@@ -219,3 +219,6 @@ cd build/bin && ./IQmol.exe
 - **Qt 静态 / 捆绑许可**：Windows 包为「双击即用」采用捆绑 / 静态链接 Qt，请按 Qt LGPL-3.0 或 GPL 条款评估合规，详见 [`THIRD_PARTY_LICENSES.md`](THIRD_PARTY_LICENSES.md)。
 - **未提供官方 Release 资产签名**：当前 Windows 包以 git LFS/Commit 形式分发，未做 GPG 签名；校验请使用发布说明中的 SHA256。
 
+---
+
+> 维护者：@stone-Glitch ｜ 最后整理：2026-10-01

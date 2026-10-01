@@ -1,3 +1,7 @@
+> 🏠 [项目首页](../../README.md) › [文档中心](../../docs/README.md)
+
+---
+
 # 汉化工具脚本集（`scripts/i18n/`）
 
 本目录存放 IQmol 中文本地化过程中使用的**辅助工具脚本**。它们不是构建必需的
@@ -101,3 +105,7 @@ python3 replay_tr.py --apply
 
 > 译法争议时，先更新 `known_translations.json` 并同步 `doc/汉化对照表/` 中的对照表，
 > 再重跑脚本，确保术语全局一致。
+
+---
+
+> 维护者：@stone-Glitch ｜ 最后整理：2026-10-01

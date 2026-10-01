@@ -1,3 +1,7 @@
+> 🏠 [项目首页](../../../README.md) › [文档中心](../../README.md)
+
+---
+
 # IQmol 汉化项目 —— 第一批改造对照表（MainWindow.C）
 
 > 项目：IQmol 汉化项目
@@ -162,3 +166,7 @@
 2. **`lupdate` 提取**：78 条源字符串，与源码 `tr()` 完全一致。
 3. **`lrelease` 编译**：78 finished / 0 unfinished。
 4. **`QTranslator` 加载验证**：独立验证程序用 `QTranslator::load()` 加载 `zh_CN.qm`，10 条抽样翻译全部正确（File→文件、Save Changes?→保存更改？等）。
+
+---
+
+> 维护者：@stone-Glitch ｜ 最后整理：2026-10-01

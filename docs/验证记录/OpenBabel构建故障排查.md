@@ -1,3 +1,7 @@
+> 🏠 [项目首页](../../README.md) › [文档中心](../README.md)
+
+---
+
 # OpenBabel 构建故障排查（合并版）
 > 合并自 4 篇：`2026-09-13-OpenBabel插件加载失败诊断与修复.md`、`2026-09-13-OpenBabel-Windows静态链接undefined-reference诊断.md`、`2026-09-18-OpenBabel静态构建风险全量核对.md`、`2026-09-18-OpenBabel静态链接additional_sources与maeparser宏诊断.md`。
 > 平台：Windows / MSYS2 MINGW64 / MinGW GCC 16.2.0；影响版本 IQmol 3.2.3 静态构建（`BUILD_SHARED_LIBS OFF`）；相关提交：`e4f5857`、`5111a63`、`45a09a0`、`dc6a133`、`ded257a`、`c3ff679`。
@@ -26,7 +30,7 @@
 
 ### 现象
 
-```
+```text
 Failed to load force field: UFF
 Unable to compute energy
 BABEL_DATADIR environment variable may not be set correctly.
@@ -155,7 +159,7 @@ endif()
 
 ### 现象与根因
 
-```
+```text
 mingw32-make[2]: *** No rule to make target
     'modules/openbabel/src/libopenbabel.a', needed by 'bin/IQmol.exe'.  Stop.
 ```
@@ -166,7 +170,7 @@ mingw32-make[2]: *** No rule to make target
 
 用**目标名** `openbabel` 书写，由 CMake 自动建立依赖边并解析为相对构建目录的库路径，同时补 `add_dependencies()` 双保险。实测 `link.txt`：
 
-```
+```text
 -Wl,--whole-archive sub/libsub.a -Wl,--no-whole-archive
 ```
 
@@ -182,7 +186,7 @@ mingw32-make[2]: *** No rule to make target
 
 ### 现象（`--whole-archive` 已生效，`linkLibs.rsp` 中 openbabel 被整段保留）
 
-```
+```cpp
 libopenbabel.a(asciiformat.cpp.obj): undefined reference to `OpenBabel::ASCIIPainter::ASCIIPainter(int, int, double)'
 libopenbabel.a(asciiformat.cpp.obj): undefined reference to `OpenBabel::ASCIIPainter::DrawLine(...)'
 libopenbabel.a(painterformat.cpp.obj): undefined reference to `OpenBabel::CommandPainter::CommandPainter(std::ostream&)'
@@ -215,7 +219,7 @@ else(BUILD_SHARED)
 
 CMake 真实展开验证（静态构建，`BUILD_SHARED=OFF`），泄漏点只有 3 个：
 
-```
+```text
 asciiformat   -> ../depict/asciipainter.cpp
 painterformat -> ../depict/commandpainter.cpp
 wlnformat     -> wln-nextmove.cpp
@@ -239,7 +243,7 @@ wlnformat     -> wln-nextmove.cpp
 
 修复后 CMake 展开验证：
 
-```
+```text
 formats/painterformat.cpp;../depict/commandpainter.cpp
 formats/asciiformat.cpp;../depict/asciipainter.cpp
 formats/wlnformat.cpp;wln-nextmove.cpp
@@ -257,7 +261,7 @@ formats/wlnformat.cpp;wln-nextmove.cpp
 
 ### 现象与排查
 
-```
+```text
 libopenbabel.a(maeformat.cpp.obj): undefined reference to `__imp__ZN11schrodinger3mae6ReaderC1ESt10shared_ptrISiEy'
 ```
 
@@ -429,3 +433,7 @@ if (fn_open != "" && (ifs))   // ← 恒为假
 5. **静态链接时外部库的导出宏必须显式告知「静态使用」，且宏名要以源码 `grep` 为准。** maeparser 的正确宏名是 `STATIC_MAEPARSER`（`MaeParserConfig.hpp:3`，头文件 27 处 `EXPORT_MAEPARSER`），而 `MAEPARSER_STATIC_DEFINE` 零命中、从未生效；同时上游 `target_compile_definitions(... PRIVATE ...)` **不会传播给消费者**，必须在顶层定义。coordgen 的 `STATIC_COORDGEN` 属同类隐患，当前因 `WITH_COORDGEN=OFF` 且不被引而不触发。
 
 6. **改构建配置后必须清缓存重配，并对上游文件修复做兜底。** 新增编译宏 / `--whole-archive` 后若配置指纹不变则不会重跑 configure，旧 `link.txt` 会沿用 —— 需删除 `build/CMakeCache.txt`（或整个 build 目录），并把新开关纳入构建脚本指纹（`BUILD_SHARED_SYNC` / `WHOLE_ARCHIVE` / `OB_SRC_ADDITIONAL` / `OB_ROOT_PATCHED`）。对上游文件的**整份替换**型修复还需在脚本中做「解压离线包后自动重新修复」的兜底。
+
+---
+
+> 维护者：@stone-Glitch ｜ 最后整理：2026-10-01

@@ -1,3 +1,7 @@
+> 🏠 [项目首页](README.md)
+
+---
+
 # 变更日志
 
 本项目所有值得记录的变更都会写入本文件，格式参考 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)，版本号遵循[语义化版本](https://semver.org/lang/zh-CN/)。
@@ -37,3 +41,7 @@
 
 - 汉化仅覆盖界面 / 帮助 / Q-Chem 关键词文案；上游计算功能、SSH 实现、文件解析未做改动
 - 已知问题（源自上游）见 [README](README.md#已知问题源自上游)
+
+---
+
+> 维护者：@stone-Glitch ｜ 最后整理：2026-10-01

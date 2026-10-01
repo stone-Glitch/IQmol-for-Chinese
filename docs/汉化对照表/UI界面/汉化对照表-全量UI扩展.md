@@ -1,3 +1,7 @@
+> 🏠 [项目首页](../../../README.md) › [文档中心](../../README.md)
+
+---
+
 # IQmol 汉化对照表（全量 UI 面板扩展）
 
 > 总计 **1473** 条源串，按界面类（context）分组列出。覆盖 Configurator / Qui / Viewer / Process / Main / Util / Amber / Gromacs / Grid 等全部 UI 面板。
@@ -1931,3 +1935,7 @@
 | Electronic Transition | 电子跃迁 | 术语统一 | IQmol 汉化组 |
 | Units | 单位 | 术语统一 | IQmol 汉化组 |
 | Close | 关闭 | 术语统一 | IQmol 汉化组 |
+
+---
+
+> 维护者：@stone-Glitch ｜ 最后整理：2026-10-01
