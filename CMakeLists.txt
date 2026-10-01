@@ -540,10 +540,32 @@ if (WIN32 AND NOT BUILD_SHARED_LIBS)
             $<LINK_LIBRARY:WHOLE_ARCHIVE,openbabel>
          )
       else()
-         # 低版本 CMake 降级：裸旗标顺序不保证, 但至少不中断配置
-         target_link_libraries (${targetName}
-            -Wl,--whole-archive openbabel -Wl,--no-whole-archive
-         )
+         # 低版本 CMake (< 3.24) 降级：裸旗标顺序不保证, 但至少不中断配置。
+         #
+         # 安全前提：-Wl,--whole-archive / --no-whole-archive 是 GNU ld 专有旗标。
+         # 若当前链接器非 GNU ld(例如 MSVC link.exe / lld-link), 裸旗标会被当作
+         # 未知参数而报错或产生非预期行为。此处显式检测:
+         #   - MINGW / MSYS 环境恒为 GNU ld, 直接放行;
+         #   - 其它环境检查 CMAKE_LINKER 是否指向 ld(.exe);
+         #   - 都不满足则 fail-fast, 提示升级 CMake 以使用官方 WHOLE_ARCHIVE 封装。
+         set(_iqmol_gnu_ld FALSE)
+         if (MINGW OR MSYS)
+            set(_iqmol_gnu_ld TRUE)
+         elseif (CMAKE_LINKER MATCHES "(^|[/\\\\])ld(\\.exe)?$")
+            set(_iqmol_gnu_ld TRUE)
+         endif()
+         if (_iqmol_gnu_ld)
+            target_link_libraries (${targetName}
+               -Wl,--whole-archive openbabel -Wl,--no-whole-archive
+            )
+            message(STATUS
+               "[IQmol] CMake < 3.24 降级为裸 -Wl,--whole-archive (链接器: ${CMAKE_LINKER})")
+         else()
+            message(FATAL_ERROR
+               "[IQmol] 当前链接器 '${CMAKE_LINKER}' 不是 GNU ld, 无法使用裸 --whole-archive "
+               "降级方案; 且 CMake ${CMAKE_VERSION} < 3.24 无法使用官方 WHOLE_ARCHIVE 封装。"
+               "请升级 CMake 到 >= 3.24, 或改用 MinGW-w64 (GNU ld) 工具链。")
+         endif()
       endif()
       # 双保险：显式声明依赖, 确保 openbabel 在链接前被构建
       # (openbabel 经 EXCLUDE_FROM_ALL 引入, 不属于默认 all 目标)

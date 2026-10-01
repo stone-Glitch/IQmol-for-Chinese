@@ -3,6 +3,7 @@
 # 用法:
 #   bash build_windows.sh            # 增量构建（默认，推荐）
 #   bash build_windows.sh --clean    # 删掉 build/ 从零重来（慢，仅在换配置时用）
+#   bash build_windows.sh --recreate-generator  # 若 build/ 由其它 generator 创建，自动清理重建
 #   JOBS=8 bash build_windows.sh     # 手动指定并行度（默认自动取核数，上限 8）
 #   CMAKE_BIN="D:/cmake-3.31/bin/cmake.exe" bash build_windows.sh   # 用已有 3.31
 #
@@ -333,8 +334,10 @@ echo "==> libssh2 源码完整"
 # ===== 4. configure（增量：build/ 已配置过就跳过）=====
 BUILD_DIR="$SRC_DIR/build"
 CLEAN="${CLEAN:-0}"
+RECREATE_GENERATOR="${RECREATE_GENERATOR:-0}"
 case "${1:-}" in
   --clean|--reconfigure|-c) CLEAN=1 ;;
+  --recreate-generator) RECREATE_GENERATOR=1 ;;
 esac
 
 if [ "$CLEAN" = "1" ] && [ -d "$BUILD_DIR" ]; then
@@ -360,6 +363,34 @@ elif [ "$SRC_DIR/CMakeLists.txt" -nt "$BUILD_DIR/CMakeCache.txt" ]; then
 fi
 
 #--------------------------------------------------------------------
+# 生成器一致性检查（防止 build/ 由其它 generator 创建导致的隐性不一致）
+#
+# 背景：本脚本固定用 -G "MinGW Makefiles"。若用户在同一个 build/ 目录里
+# 曾用 Ninja / MSYS Makefiles / Visual Studio 等生成器 configure 过，
+# CMakeCache.txt 里记录的 CMAKE_GENERATOR 会与本脚本将要使用的不同，
+# 导致 cmake 直接报 "generator ... does not match the generator used
+# previously" 或生成互相冲突的产物。此处提前检测并给出明确处置建议。
+EXPECTED_GEN="MinGW Makefiles"
+if [ -f "$BUILD_DIR/CMakeCache.txt" ]; then
+  CACHED_GEN="$(sed -n 's/^CMAKE_GENERATOR:INTERNAL=//p' "$BUILD_DIR/CMakeCache.txt" 2>/dev/null | head -1)"
+  if [ -n "$CACHED_GEN" ] && [ "$CACHED_GEN" != "$EXPECTED_GEN" ]; then
+    if [ "${RECREATE_GENERATOR:-0}" = "1" ]; then
+      echo "==> [generator] 缓存生成器 '$CACHED_GEN' 与期望的 '$EXPECTED_GEN' 不同，"
+      echo "    已指定 --recreate-generator，正在清理 build/ 后重建..."
+      rm -rf "$BUILD_DIR" && mkdir -p "$BUILD_DIR" && cd "$BUILD_DIR" || exit 1
+      NEED_CONFIG=1
+    else
+      echo "!! [generator] 构建目录 build/ 由 '$CACHED_GEN' 生成，与本脚本使用的"
+      echo "   '$EXPECTED_GEN' 不一致，继续将导致 CMake 报错。"
+      echo "   处置方式（任选其一）："
+      echo "     a) 删除 build/ 后重跑本脚本：rm -rf \"$BUILD_DIR\""
+      echo "     b) 使用 --recreate-generator 让脚本自动清理重建"
+      exit 1
+    fi
+  fi
+fi
+
+#--------------------------------------------------------------------
 # 配置指纹自检（针对"改了 CMakeLists 但配置未真正更新"这类坑）
 #
 # 背景：曾多次出现"补丁已下载到 CMakeLists.txt，但 build/ 里的缓存仍是旧
@@ -379,7 +410,7 @@ fi
 #--------------------------------------------------------------------
 _cfg_fingerprint() {
   local _cm="$SRC_DIR/CMakeLists.txt"
-  local _bs=0 _wa=0 _ms=0 _sm=0 _as=0
+  local _bs=0 _wa=0 _ms=0 _sc=0 _sm=0 _as=0
   # BUILD_SHARED 是否被同步为 OFF（静态）
   if grep -q 'set(BUILD_SHARED OFF CACHE' "$_cm" 2>/dev/null; then _bs=1; fi
   # 是否包含 WHOLE_ARCHIVE 处理（裸 --whole-archive 已改为官方封装
@@ -390,13 +421,15 @@ _cfg_fingerprint() {
   #     早期误用 MAEPARSER_STATIC_DEFINE, 两者都检测以兼容旧配置。
   if grep -q 'STATIC_MAEPARSER' "$_cm" 2>/dev/null; then _ms=1; fi
   # 是否定义 STATIC_COORDGEN（coordgen 同类缺陷的预防性修复）
-  if grep -q 'STATIC_COORDGEN' "$_cm" 2>/dev/null; then _ms=1; fi
+  # 注: 必须用独立变量 _sc, 不能复用 _ms(MAEPARSER)。复用会导致
+  #     单独增删 STATIC_COORDGEN 时指纹不变 → 漏报重配。
+  if grep -q 'STATIC_COORDGEN' "$_cm" 2>/dev/null; then _sc=1; fi
   # 是否已包含 additional_sources 修复（静态分支漏加 asciipainter 等）
   local _src_cml="$MODULES_DIR/openbabel/src/CMakeLists.txt"
   if grep -q 'format}_additional_sources' "$_src_cml" 2>/dev/null; then _as=1; fi
   # openbabel 源码根 CMakeLists 是否已打补丁（防 submodules 包覆盖回未修版）
   if grep -q 'NOT TARGET uninstall' "$MODULES_DIR/openbabel/CMakeLists.txt" 2>/dev/null; then _sm=1; fi
-  echo "BUILD_SHARED_SYNC=$_bs WHOLE_ARCHIVE=$_wa MAEPARSER_STATIC=$_ms OB_SRC_ADDITIONAL=$_as OB_ROOT_PATCHED=$_sm"
+  echo "BUILD_SHARED_SYNC=$_bs WHOLE_ARCHIVE=$_wa MAEPARSER_STATIC=$_ms COORDGEN_STATIC=$_sc OB_SRC_ADDITIONAL=$_as OB_ROOT_PATCHED=$_sm"
 }
 
 STAMP_FILE="$BUILD_DIR/.iqmol_config_stamp"
@@ -493,7 +526,15 @@ fi
 # ===== 5. 编译 =====
 # 优先 mingw32-make，某些环境只装了 GNU make（不带前缀）
 MAKE_BIN="mingw32-make"
-command -v "$MAKE_BIN" >/dev/null 2>&1 || MAKE_BIN="make"
+if ! command -v "$MAKE_BIN" >/dev/null 2>&1; then
+  MAKE_BIN="make"
+  # 与 "MinGW Makefiles" 生成器配套的应是 mingw32-make。若回退到通用 make，
+  # 可能因 make 版本/实现差异导致构建异常或极慢，这里显式告警并给出安装提示。
+  echo "!! [make] 未找到 mingw32-make，已回退到 'make'。"
+  echo "   本项目使用 -G \"MinGW Makefiles\"，建议安装配套的 mingw32-make："
+  echo "     MSYS2: pacman -S mingw-w64-x86_64-make   （或 mingw-w64-ucrt-x86_64-make）"
+  echo "   若 'make' 是 MSYS 的 make 而非 MinGW 版，可能构建失败。"
+fi
 
 echo "==> 开始编译（并行 -j$JOBS，首次约 20~40 分钟）..."
 # 构建树自愈: 旧构建树若未包含 libssh2 子构建(早于子模块包解压时配置),
