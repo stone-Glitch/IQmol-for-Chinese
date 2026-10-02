@@ -39,6 +39,19 @@ qrc_*.cpp
 # ---- Linux 分发包产物（package_linux.sh 输出，体积大勿提交）----
 /dist/
 
+# ---- 预编译发行包（Win/Linux/macOS 安装包，体积大，一律走 GitHub Release）----
+# 教训：IQmol-win64-3.2.3-zh_CN.zip（53MB）曾被误提交，使仓库 .git 膨胀到 277MB。
+# 发行包请上传 GitHub Release，不要进仓库。
+IQmol-*.zip
+IQmol-*.tar.gz
+IQmol-*.tar.xz
+IQmol-*.7z
+IQmol-*.dmg
+IQmol-*.deb
+IQmol-*.rpm
+IQmol-*.msi
+IQmol-*.exe
+
 # ---- 子模块离线包（体积大，勿误提交）----
 IQmol-submodules.zip
 IQmol-submodules.tar.gz
