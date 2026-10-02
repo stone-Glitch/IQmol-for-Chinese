@@ -136,7 +136,7 @@ zh_CN.qm 中没有该条目
 
 ### 4.1 补丁（已产出）
 
-见 `补丁-历史记录未翻译字符串.patch`，对上述 8 处逐一加 `tr()`：
+见 `patches/历史残留/补丁-历史记录未翻译字符串.patch`，对上述 8 处逐一加 `tr()`：
 
 ```cpp
 - Command::EditPrimitives* cmd(new Command::EditPrimitives("Reperceive bonds", this));
