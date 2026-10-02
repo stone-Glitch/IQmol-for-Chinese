@@ -1,0 +1,85 @@
+--- a/src/Layer/MoleculeLayer.C
++++ b/src/Layer/MoleculeLayer.C
+@@ -2436,7 +2436,7 @@
+    }
+ 
+    if (postCmd) {
+-      Command::EditPrimitives* cmd(new Command::EditPrimitives("Reperceive bonds", this));
++      Command::EditPrimitives* cmd(new Command::EditPrimitives(tr("Reperceive bonds"), this));
+       cmd->remove(removed).add(added);
+       postCommand(cmd);
+    }else {
+--- a/src/Layer/MoleculeLayer.C
++++ b/src/Layer/MoleculeLayer.C
+@@ -1545,7 +1545,7 @@
+    if (!deleteTargets.isEmpty()) {
+       QLOG_DEBUG() << "Deleting" << deleteTargets.size() << "selected objects";
+       PrimitiveList::iterator iter;
+-      Command::EditPrimitives* cmd(new Command::EditPrimitives("Remove atoms/bonds", this));
++      Command::EditPrimitives* cmd(new Command::EditPrimitives(tr("Remove atoms/bonds"), this));
+       cmd->remove(deleteTargets);
+       postCommand(cmd);
+    }
+--- a/src/Layer/ComponentLayer.C
++++ b/src/Layer/ComponentLayer.C
+@@ -111,7 +111,7 @@
+    bool animate(true);
+    Command::MoveObjects* cmd =
+-       new Command::MoveObjects(this, "Translate to center", animate);
++       new Command::MoveObjects(this, tr("Translate to center"), animate);
+    
+    // The ordering here is important!!
+--- a/src/Viewer/BuildEfpFragmentHandler.C
++++ b/src/Viewer/BuildEfpFragmentHandler.C
+@@ -83,7 +83,7 @@
+    QList<Layer::Primitive*> primitives; 
+    primitives << efp;
+-   Command::EditPrimitives* cmd(new Command::EditPrimitives("Add EFP fragment", m_molecule));
++   Command::EditPrimitives* cmd(new Command::EditPrimitives(tr("Add EFP fragment"), m_molecule));
+    cmd->add(primitives);
+    m_viewer->postCommand(cmd);
+--- a/src/Viewer/BuildMoleculeFragmentHandler.C
++++ b/src/Viewer/BuildMoleculeFragmentHandler.C
+@@ -62,7 +62,7 @@
+    QList<Layer::Primitive*> primitives;
+    primitives << molecule->ungroup();
+-   Command::EditPrimitives* cmd(new Command::EditPrimitives("Add molecule", m_molecule));
++   Command::EditPrimitives* cmd(new Command::EditPrimitives(tr("Add molecule"), m_molecule));
+    cmd->add(primitives);
+    m_viewer->postCommand(cmd);
+--- a/src/Viewer/UndoCommands.h
++++ b/src/Viewer/UndoCommands.h
+@@ -98,10 +98,10 @@
+       public:
+-         MoveObjects(Layer::Component*, QString const& text = "Move items", 
++         MoveObjects(Layer::Component*, QString const& text = tr("Move items"), 
+             bool const animiate = false, bool invalidateSymmetry = true);
+-         MoveObjects(GLObjectList const&, QString const& text = "Move items", 
++         MoveObjects(GLObjectList const&, QString const& text = tr("Move items"), 
+             bool const animiate = false, bool invalidateSymmetry = true);
+          ~MoveObjects();
+@@ -148,7 +148,7 @@
+    class AddCharges: public EditPrimitives 
+    {
+       public:
+          AddCharges(Layer::Molecule* molecule, Layer::PrimitiveList const& chargeList)
+-            : EditPrimitives("Add Charges", molecule) {
++            : EditPrimitives(tr("Add Charges"), molecule) {
+             add(chargeList);
+          }
+@@ -158,7 +158,7 @@
+    class MinimizeStructure: public MoveObjects 
+    {
+       public:
+          MinimizeStructure(Layer::Molecule* molecule) 
+-            : MoveObjects(molecule, "Minimize energy", true, true) { }
++            : MoveObjects(molecule, tr("Minimize energy"), true, true) { }
+    };
+@@ -166,7 +166,7 @@
+    class SymmetrizeStructure : public MoveObjects 
+    {
+       public:
+          SymmetrizeStructure(Layer::Molecule* molecule)
+-            : MoveObjects(molecule, "Symmetrize structure", true, false) { }
++            : MoveObjects(molecule, tr("Symmetrize structure"), true, false) { }
+    };

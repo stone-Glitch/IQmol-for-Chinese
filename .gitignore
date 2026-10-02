@@ -64,3 +64,10 @@ part_0?
 # Python 缓存
 __pycache__/
 *.pyc
+
+# ---- 推广视频 / 发布相关本地产物（体积大，勿入库；走 GitHub Release 或本地保留）----
+# IQmol-video-assets/ 与 promo_scripts/ 是当前工作区（仓库外）的录制素材与旧脚本目录，
+# 若日后移入仓库，同样不应被跟踪。本仓库一律不收纳视频与发行二进制。
+IQmol-video-assets/
+promo_scripts/
+*.mp4
