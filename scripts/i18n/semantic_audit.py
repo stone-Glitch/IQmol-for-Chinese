@@ -40,7 +40,7 @@ A_s 计算
     python3 scripts/i18n/semantic_audit.py sample --size 240
 
     # 消费已填写的审校记录，算 A_s
-    python3 scripts/i18n/semantic_audit.py score review/审校记录.csv
+    python3 scripts/i18n/semantic_audit.py score docs/审校与排查/P6-审校工单.csv
 """
 import argparse
 import csv
@@ -510,11 +510,11 @@ def main():
 
     p2 = sub.add_parser('sample', help='分层抽样生成审校工单')
     p2.add_argument('--size', type=int, default=240)
-    p2.add_argument('--out', default='review')
+    p2.add_argument('--out', default='docs/审校与排查')
 
     p3 = sub.add_parser('score', help='消费审校记录算 A_s')
     p3.add_argument('review_csv')
-    p3.add_argument('--save', default='review/P6-审校结果.json',
+    p3.add_argument('--save', default='docs/审校与排查/P6-审校结果.json',
                     help='A_s 结果写入 JSON（tqa.py 会自动读取）')
     p3.add_argument('--reviewer', default='', help='审校者署名')
 

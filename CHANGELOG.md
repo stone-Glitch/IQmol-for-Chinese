@@ -28,10 +28,10 @@
 ### 新增
 
 - **界面全量汉化**：`translations/zh_CN.ts` 共 **2112 条**翻译、153 个 context，`0 unfinished`；构建时由 CMake 自动调用 `lrelease` 生成 `zh_CN.qm`
-- **Windows 预编译分发包**：`IQmol-win64-3.2.3-zh_CN.zip`（含 `IQmol.exe`、`README_zh_CN.txt`、Qt 运行库与 900+ 依赖 DLL）
+- **Windows 预编译分发包**：`IQmol-win64-3.2.3-zh_CN.zip`（含 `IQmol.exe`、`README_zh_CN.txt`、Qt 运行库与 900+ 依赖 DLL）—— 经 **GitHub Release** 分发，不入仓库
 - **子模块离线包**：`submodules-package/` 提供完整第三方库源码打包（49,335 个文件），供国内网络跳过联网克隆
 - **中文界面截图集**：`dialog_screenshots/`（顶层核心对话框 + `all/` 全量 81 个 `.ui` + `cards/` 多卡片界面）
-- **翻译审校数据**：`review/`（P6 审校工单与结果）与 `docs/汉化工程/`（术语词典、质量评估方案等）
+- **翻译审校数据**：`docs/审校与排查/`（P6 审校工单 CSV 与结果 JSON）与 `docs/汉化工程/`（术语词典、质量评估方案等）
 - **构建与打包文档**：`docs/构建与打包/`（三平台编译、Linux 分发包、发布与上传、零补丁打包）
 - **第三方许可证清单**：`THIRD_PARTY_LICENSES.md`
 - **软件物料清单**：`sbom.json`（CycloneDX 格式）

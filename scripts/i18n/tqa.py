@@ -19,7 +19,7 @@ tqa.py —— IQmol 汉化版翻译质量量化评估（TQA）
 P6（语义质量）由 `semantic_audit.py` 承担：
     · 结构性语义缺陷（术语不一致、硬译参数名、占位符不匹配）→ 自动筛查
     · 「这句话翻得对不对」→ 人工四级评分，产出 A_s
-    若仓库存在 review/P6-审校结果.json，本工具自动读取并计入 P6 权重；
+    若仓库存在 docs/审校与排查/P6-审校结果.json，本工具自动读取并计入 P6 权重；
     否则 P6 保持「未测量」并从有效权重中剔除（不臆造分数）。
 
 关键设计：FragmentTable 等【工具注入】条目（无 <location>）不计入漂移，
@@ -40,7 +40,7 @@ TS = os.path.join(REPO, 'translations/zh_CN.ts')
 QM = os.path.join(REPO, 'translations/zh_CN.qm')
 SRC = os.path.join(REPO, 'src')
 TERMS = os.path.join(REPO, 'scripts/i18n/known_translations.json')
-P6_JSON = os.path.join(REPO, 'review/P6-审校结果.json')
+P6_JSON = os.path.join(REPO, 'docs/审校与排查/P6-审校结果.json')
 
 # ---------------------------------------------------------------- 权重
 WEIGHTS = {'P1': 20, 'P2': 20, 'P3': 15, 'P4': 15, 'P5': 15, 'P6': 15}
