@@ -6,7 +6,8 @@
   "based_on_upstream": "af7ff60",
   "apply_order": 1,
   "applies_after": [],
-  "applies_before": ["功能补丁-非机械改动.patch"],
+  "applies_before": ["功能补丁-非机械改动.patch", "功能补丁-构建层.patch"],
+  "covers_files": 6,
   "verified": true,
   "verification": "在上游 af7ff60 干净树上 git apply 干净应用 ✅（见 patches/README.md 实测验证）",
   "notes": "本补丁的 diff 上下文基于纯上游；须先于 tr() 重放(②)与非机械改动补丁(③)应用。"

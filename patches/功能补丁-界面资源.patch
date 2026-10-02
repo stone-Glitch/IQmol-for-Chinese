@@ -1,0 +1,525 @@
+diff --git a/src/Configurator/DipoleConfigurator.ui b/src/Configurator/DipoleConfigurator.ui
+index fd1bea9..bf964b7 100644
+--- a/src/Configurator/DipoleConfigurator.ui
++++ b/src/Configurator/DipoleConfigurator.ui
+@@ -31,7 +31,7 @@
+    border-style: solid;
+    border-radius: 5;
+    padding: 0px;
+-   font-size: 24px;
++   font-size: 24pt;
+    min-width: 34px;
+    max-width: 34px;
+    min-height: 34px;
+@@ -63,7 +63,7 @@ QToolTip {
+    padding: 2px;
+    border-radius: 3px;
+    opacity: 500;
+-   font-size: 12px;
++   font-size: 12pt;
+ }</string>
+   </property>
+   <layout class="QVBoxLayout" name="verticalLayout">
+diff --git a/src/Configurator/FileConfigurator.ui b/src/Configurator/FileConfigurator.ui
+index de3faa8..8b8fa3d 100644
+--- a/src/Configurator/FileConfigurator.ui
++++ b/src/Configurator/FileConfigurator.ui
+@@ -31,7 +31,7 @@
+    border-style: solid;
+    border-radius: 5;
+    padding: 0px;
+-   font-size: 24px;
++   font-size: 24pt;
+    min-width: 28px;
+    max-width: 28px;
+    min-height: 28px;
+@@ -65,7 +65,7 @@ QToolTip {
+    padding: 2px;
+    border-radius: 3px;
+    opacity: 500;
+-   font-size: 12px;
++   font-size: 12pt;
+ }</string>
+   </property>
+   <layout class="QVBoxLayout" name="verticalLayout">
+diff --git a/src/Configurator/FrequenciesConfigurator.ui b/src/Configurator/FrequenciesConfigurator.ui
+index 5da008d..98abc84 100644
+--- a/src/Configurator/FrequenciesConfigurator.ui
++++ b/src/Configurator/FrequenciesConfigurator.ui
+@@ -31,7 +31,7 @@
+    border-style: solid;
+    border-radius: 5;
+    padding: 0px;
+-   font-size: 24px;
++   font-size: 24pt;
+    min-width: 34px;
+    max-width: 34px;
+    min-height: 34px;
+@@ -63,7 +63,7 @@ QToolTip {
+    padding: 2px;
+    border-radius: 3px;
+    opacity: 500;
+-   font-size: 12px;
++   font-size: 12pt;
+ }</string>
+   </property>
+   <layout class="QHBoxLayout" name="horizontalLayout_4" stretch="1,2">
+diff --git a/src/Configurator/GeometryListConfigurator.ui b/src/Configurator/GeometryListConfigurator.ui
+index c883d61..f9e39af 100644
+--- a/src/Configurator/GeometryListConfigurator.ui
++++ b/src/Configurator/GeometryListConfigurator.ui
+@@ -31,7 +31,7 @@
+    border-style: solid;
+    border-radius: 5;
+    padding: 0px;
+-   font-size: 24px;
++   font-size: 24pt;
+    min-width: 34px;
+    max-width: 34px;
+    min-height: 34px;
+@@ -65,7 +65,7 @@ QToolTip {
+    padding: 2px;
+    border-radius: 3px;
+    opacity: 500;
+-   font-size: 12px;
++   font-size: 12pt;
+ }</string>
+   </property>
+   <layout class="QHBoxLayout" name="horizontalLayout_3">
+diff --git a/src/Configurator/NmrConfigurator.ui b/src/Configurator/NmrConfigurator.ui
+index e395659..b1d0171 100644
+--- a/src/Configurator/NmrConfigurator.ui
++++ b/src/Configurator/NmrConfigurator.ui
+@@ -34,7 +34,7 @@
+    border-style: solid;
+    border-radius: 5;
+    padding: 0px;
+-   font-size: 24px;
++   font-size: 24pt;
+    min-width: 34px;
+    max-width: 34px;
+    min-height: 34px;
+@@ -66,7 +66,7 @@ QToolTip {
+    padding: 2px;
+    border-radius: 3px;
+    opacity: 500;
+-   font-size: 12px;
++   font-size: 12pt;
+ }</string>
+   </property>
+   <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="1,2">
+diff --git a/src/Configurator/SurfaceAnimatorDialog.ui b/src/Configurator/SurfaceAnimatorDialog.ui
+index fc9c413..951b555 100644
+--- a/src/Configurator/SurfaceAnimatorDialog.ui
++++ b/src/Configurator/SurfaceAnimatorDialog.ui
+@@ -54,7 +54,7 @@ QToolButton:pressed {
+    border-style: solid;
+    border-radius: 5;
+    padding: 0px;
+-   font-size: 24px;
++   font-size: 24pt;
+    min-width: 34px;
+    max-width: 34px;
+    min-height: 34px;
+@@ -91,7 +91,7 @@ QToolTip {
+    padding: 2px;
+    border-radius: 3px;
+    opacity: 500;
+-   font-size: 12px;
++   font-size: 12pt;
+ }</string>
+      </property>
+      <property name="title">
+@@ -465,7 +465,7 @@ QToolTip {
+    border-style: solid;
+    border-radius: 5;
+    padding: 0px;
+-   font-size: 24px;
++   font-size: 24pt;
+    min-width: 34px;
+    max-width: 34px;
+    min-height: 34px;
+@@ -499,7 +499,7 @@ QToolTip {
+    padding: 2px;
+    border-radius: 3px;
+    opacity: 500;
+-   font-size: 10px;
++   font-size: 10pt;
+ }</string>
+      </property>
+      <property name="title">
+diff --git a/src/Configurator/VibronicConfigurator.ui b/src/Configurator/VibronicConfigurator.ui
+index c6d4a71..87e2749 100644
+--- a/src/Configurator/VibronicConfigurator.ui
++++ b/src/Configurator/VibronicConfigurator.ui
+@@ -31,7 +31,7 @@
+    border-style: solid;
+    border-radius: 5;
+    padding: 0px;
+-   font-size: 24px;
++   font-size: 24pt;
+    min-width: 34px;
+    max-width: 34px;
+    min-height: 34px;
+@@ -63,7 +63,7 @@ QToolTip {
+    padding: 2px;
+    border-radius: 3px;
+    opacity: 500;
+-   font-size: 12px;
++   font-size: 12pt;
+ }</string>
+   </property>
+   <layout class="QHBoxLayout" name="horizontalLayout_5" stretch="0,1">
+diff --git a/src/Grid/GridInfoDialog.ui b/src/Grid/GridInfoDialog.ui
+index f6f8a44..75ff34a 100644
+--- a/src/Grid/GridInfoDialog.ui
++++ b/src/Grid/GridInfoDialog.ui
+@@ -31,7 +31,7 @@
+    border-style: solid;
+    border-radius: 5;
+    padding: 0px;
+-   font-size: 24px;
++   font-size: 24pt;
+    min-width: 34px;
+    max-width: 34px;
+    min-height: 34px;
+@@ -65,7 +65,7 @@ QToolTip {
+    padding: 2px;
+    border-radius: 3px;
+    opacity: 500;
+-   font-size: 12px;
++   font-size: 12pt;
+ }</string>
+   </property>
+   <layout class="QVBoxLayout" name="verticalLayout">
+diff --git a/src/Main/HelpBrowser.ui b/src/Main/HelpBrowser.ui
+index 0af7b26..17db4c3 100644
+--- a/src/Main/HelpBrowser.ui
++++ b/src/Main/HelpBrowser.ui
+@@ -25,7 +25,7 @@
+    border-style: solid;
+    border-radius: 5;
+    padding: 0px;
+-   font-size: 24px;
++   font-size: 24pt;
+    min-width: 34px;
+    max-width: 34px;
+    min-height: 34px;
+@@ -55,7 +55,7 @@ QToolTip {
+    padding: 2px;
+    border-radius: 3px;
+    opacity: 500;
+-   font-size: 12px;
++   font-size: 12pt;
+ }
+ 
+ QTextBrowser#content { 
+diff --git a/src/Main/PeriodicTable.ui b/src/Main/PeriodicTable.ui
+index 5419789..fa59de0 100644
+--- a/src/Main/PeriodicTable.ui
++++ b/src/Main/PeriodicTable.ui
+@@ -44,7 +44,7 @@ QPushButton:pressed {
+ 
+ QToolButton {
+    color: black;
+-   font-size: 12px;
++   font-size: 12pt;
+    border-width: 2px;
+    border-color: #777;
+    border-style: solid;
+diff --git a/src/Main/PeriodicTableMac.ui b/src/Main/PeriodicTableMac.ui
+index 19e64c7..45e0ac5 100644
+--- a/src/Main/PeriodicTableMac.ui
++++ b/src/Main/PeriodicTableMac.ui
+@@ -37,7 +37,7 @@ border-color: #777;
+ border-style: solid;
+ border-radius: 5;
+ padding: 2px;
+-font-size: 10px;
++font-size: 10pt;
+ min-width: 18px;
+ max-width: 18px;
+ min-height: 18px;
+@@ -49,7 +49,7 @@ QToolTip {
+    padding: 2px;
+    border-radius: 3px;
+    opacity: 200;
+-   font-size: 12px;
++   font-size: 12pt;
+ }
+ 
+ 
+diff --git a/src/Main/PreferencesBrowser.ui b/src/Main/PreferencesBrowser.ui
+index 70cfc14..add2f36 100644
+--- a/src/Main/PreferencesBrowser.ui
++++ b/src/Main/PreferencesBrowser.ui
+@@ -25,7 +25,7 @@
+    border-style: solid;
+    border-radius: 5;
+    padding: 0px;
+-   font-size: 24px;
++   font-size: 24pt;
+    min-width: 34px;
+    max-width: 34px;
+    min-height: 34px;
+@@ -55,7 +55,7 @@ QToolButton:checked {
+     padding: 2px;
+     border-radius: 3px;
+     opacity: 500;
+-    font-size: 12px;
++    font-size: 12pt;
+     color: #000;
+     background-color: #EEE;
+ }</string>
+@@ -307,6 +307,32 @@ QToolButton:checked {
+        </property>
+       </widget>
+      </item>
++     <item row="8" column="0">
++      <widget class="QLabel" name="label_language">
++       <property name="text">
++        <string>界面语言:</string>
++       </property>
++      </widget>
++     </item>
++     <item row="8" column="1">
++      <widget class="QComboBox" name="languageComboBox">
++       <item>
++        <property name="text">
++         <string>中文</string>
++        </property>
++       </item>
++       <item>
++        <property name="text">
++         <string>English</string>
++        </property>
++       </item>
++       <item>
++        <property name="text">
++         <string>跟随系统</string>
++        </property>
++       </item>
++      </widget>
++     </item>
+     </layout>
+    </item>
+    <item>
+diff --git a/src/Main/ToolBar.ui b/src/Main/ToolBar.ui
+index 843b097..126e535 100644
+--- a/src/Main/ToolBar.ui
++++ b/src/Main/ToolBar.ui
+@@ -31,7 +31,7 @@
+    border-style: solid;
+    border-radius: 5;
+    padding: 0px;
+-   font-size: 24px;
++   font-size: 24pt;
+    min-width: 34px;
+    max-width: 34px;
+    min-height: 34px;
+@@ -69,7 +69,7 @@ QToolButton:checked {
+     padding: 2px;
+     border-radius: 3px;
+     opacity: 500;
+-    font-size: 12px;
++    font-size: 12pt;
+     color: #000;
+     background-color: #EEE;
+ }</string>
+@@ -246,7 +246,7 @@ p, li { white-space: pre-wrap; }
+ &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;Build Element&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+      <property name="styleSheet">
+-      <string notr="true">font-size: 18px;
++      <string notr="true">font-size: 18pt;
+ 
+ 
+ QToolTip {
+@@ -254,7 +254,7 @@ QToolTip {
+    padding: 2px;
+    border-radius: 3px;
+    opacity: 200;
+-   font-size: 12px;
++   font-size: 12pt;
+ }</string>
+      </property>
+      <property name="text">
+diff --git a/src/Math/CMakeLists.txt b/src/Math/CMakeLists.txt
+index 92407db..8de276d 100644
+--- a/src/Math/CMakeLists.txt
++++ b/src/Math/CMakeLists.txt
+@@ -14,7 +14,7 @@ set( SOURCES
+ add_library(${LIB} STATIC ${SOURCES})
+ target_include_directories(${LIB} PUBLIC "${${LIB}_SOURCE_DIR}")
+ target_link_libraries(${LIB} PRIVATE
+-   QGLViewer
++   ${QGLVIEWER_LIBRARY}
+    Qt5::Xml
+    Qt5::OpenGL
+ )
+diff --git a/src/Process/JobMonitor.ui b/src/Process/JobMonitor.ui
+index 466dc34..619c476 100644
+--- a/src/Process/JobMonitor.ui
++++ b/src/Process/JobMonitor.ui
+@@ -19,7 +19,7 @@
+     padding: 2px;
+     border-radius: 3px;
+     opacity: 500;
+-    font-size: 12px;
++    font-size: 12pt;
+     color: #000;
+     background-color: #EEE;
+ }</string>
+diff --git a/src/Process/QueueOptionsDialog.ui b/src/Process/QueueOptionsDialog.ui
+index fb8db32..7d34ee1 100644
+--- a/src/Process/QueueOptionsDialog.ui
++++ b/src/Process/QueueOptionsDialog.ui
+@@ -19,7 +19,7 @@
+     padding: 2px;
+     border-radius: 3px;
+     opacity: 500;
+-    font-size: 12px;
++    font-size: 12pt;
+     color: #000;
+     background-color: #EEE;
+ }</string>
+diff --git a/src/Process/ServerConfigurationDialog.ui b/src/Process/ServerConfigurationDialog.ui
+index 09e6888..d6bca31 100644
+--- a/src/Process/ServerConfigurationDialog.ui
++++ b/src/Process/ServerConfigurationDialog.ui
+@@ -34,7 +34,7 @@
+    border-style: solid;
+    border-radius: 5;
+    padding: 0px;
+-   font-size: 24px;
++   font-size: 24pt;
+    min-width: 24px;
+    max-width: 24px;
+    min-height: 24px;
+@@ -71,7 +71,7 @@ QToolButton:checked {
+     padding: 2px;
+     border-radius: 3px;
+     opacity: 500;
+-    font-size: 12px;
++    font-size: 12pt;
+     color: #000;
+     background-color: #EEE;
+ }</string>
+diff --git a/src/Process/ServerConfigurationListDialog.ui b/src/Process/ServerConfigurationListDialog.ui
+index cce7b98..d4658b9 100644
+--- a/src/Process/ServerConfigurationListDialog.ui
++++ b/src/Process/ServerConfigurationListDialog.ui
+@@ -25,7 +25,7 @@
+    border-style: solid;
+    border-radius: 5;
+    padding: 0px;
+-   font-size: 24px;
++   font-size: 24pt;
+    min-width: 34px;
+    max-width: 34px;
+    min-height: 34px;
+@@ -62,7 +62,7 @@ QToolButton:checked {
+     padding: 2px;
+     border-radius: 3px;
+     opacity: 500;
+-    font-size: 12px;
++    font-size: 12pt;
+     color: #000;
+     background-color: #EEE;
+ }</string>
+diff --git a/src/Process/save/JobMonitor.ui b/src/Process/save/JobMonitor.ui
+index 466dc34..619c476 100644
+--- a/src/Process/save/JobMonitor.ui
++++ b/src/Process/save/JobMonitor.ui
+@@ -19,7 +19,7 @@
+     padding: 2px;
+     border-radius: 3px;
+     opacity: 500;
+-    font-size: 12px;
++    font-size: 12pt;
+     color: #000;
+     background-color: #EEE;
+ }</string>
+diff --git a/src/Qui/InputDialog.ui b/src/Qui/InputDialog.ui
+index 8c8692f..85ea409 100644
+--- a/src/Qui/InputDialog.ui
++++ b/src/Qui/InputDialog.ui
+@@ -19,7 +19,7 @@
+     padding: 2px;
+     border-radius: 3px;
+     opacity: 500;
+-    font-size: 12px;
++    font-size: 12pt;
+     color: #000;
+     background-color: #EEE;
+ }</string>
+@@ -295,7 +295,7 @@
+    border-style: solid;
+    border-radius: 5;
+    padding: 0px;
+-   font-size: 24px;
++   font-size: 24pt;
+    min-width: 24px;
+    max-width: 24px;
+    min-height: 24px;
+@@ -345,7 +345,7 @@ QToolButton:checked {
+    border-style: solid;
+    border-radius: 5;
+    padding: 0px;
+-   font-size: 24px;
++   font-size: 24pt;
+    min-width: 24px;
+    max-width: 24px;
+    min-height: 24px;
+diff --git a/src/Viewer/ShaderDialog.ui b/src/Viewer/ShaderDialog.ui
+index 9503892..424a697 100644
+--- a/src/Viewer/ShaderDialog.ui
++++ b/src/Viewer/ShaderDialog.ui
+@@ -484,21 +484,33 @@ QToolButton:pressed {
+              <property name="text">
+               <string>None</string>
+              </property>
++             <property name="userData">
++              <string>None</string>
++             </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Default</string>
+              </property>
++             <property name="userData">
++              <string>Default</string>
++             </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Black</string>
+              </property>
++             <property name="userData">
++              <string>Black</string>
++             </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>White</string>
+              </property>
++             <property name="userData">
++              <string>White</string>
++             </property>
+             </item>
+            </widget>
+           </item>
+diff --git a/src/main.C b/src/main.C
+index fb4c268..84136dc 100644
+--- a/src/main.C
++++ b/src/main.C
+@@ -182,6 +182,9 @@ int main(int argc, char *argv[])
+     signal(11, signalHandler);   // Invalid memory reference
+     signal(13, signalHandler);   // Broken pipe
+ 
++    // 启用高 DPI 自适应缩放：修复高分屏下界面发虚/控件错位（Q06）
++    QApplication::setAttribute(Qt::AA_EnableHighDpiScaling, true);
++
+     IQmol::IQmolApplication iqmol(argc, argv);
+     Q_INIT_RESOURCE(IQmol);
+ 

@@ -1,0 +1,850 @@
+diff --git a/tmp/_ub/CMakeLists.txt b/workspace/IQmol-for-Chinese/CMakeLists.txt
+index c6f3659..11c0ffa 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,7 +1,7 @@
+ cmake_minimum_required(VERSION 3.14.4)
+ 
+ set(targetName IQmol)
+-project(${targetName} VERSION 3.1.1 LANGUAGES CXX C Fortran)
++project(${targetName} VERSION 3.2.3 LANGUAGES CXX C Fortran)
+ 
+ include(FortranCInterface)
+ #FortranCInterface_VERIFY(CXX)
+@@ -16,6 +16,21 @@ endif()
+ set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -Wno-deprecated")
+ set(BUILD_SHARED_LIBS OFF)
+ 
++#-------------------------------------------------------------------
++# QGLViewer / yaml-cpp 静态链接宏 (Windows 必需):
++# 二者均为静态库 (modules/CMakeLists.txt 用 add_library(QGLViewer STATIC),
++# yaml-cpp 继承 BUILD_SHARED_LIBS=OFF), 但它们的头文件靠编译宏判断"静态还是 DLL":
++#   libQGLViewer/QGLViewer/config.h: 未定义 QGLVIEWER_STATIC 时 -> __declspec(dllimport)
++#   yaml-cpp/include/yaml-cpp/dll.h : 未定义 YAML_CPP_STATIC_DEFINE 时 -> dllimport
++# 而 BUILD_SHARED_LIBS=OFF 只影响库本体如何编译, 不会传递到消费者头文件。
++# 结果: 所有引用这些头的 .o 生成 __imp_ 导入符号, 但静态库里只有普通符号,
++# 链接 IQmol.exe 时报大量 undefined reference to `__imp__ZN9QGLViewer.../__imp__ZN4YAML...
++# 故在此显式定义"静态库"宏, 使两类头文件均按静态语义展开(宏为空/无 dllimport)。
++#-------------------------------------------------------------------
++if (WIN32)
++   add_compile_definitions(QGLVIEWER_STATIC YAML_CPP_STATIC_DEFINE)
++endif()
++
+ if (UNIX AND NOT APPLE)
+    set(LINUX TRUE)
+ endif()
+@@ -31,11 +46,38 @@ include_directories(${CMAKE_CURRENT_BINARY_DIR}/src)
+ 
+ 
+ find_package(Qt5 COMPONENTS Core Gui Xml PrintSupport Widgets OpenGL Sql REQUIRED)
++find_package(Qt5LinguistTools REQUIRED)
+ find_package(Threads REQUIRED)
+ find_package(OpenGL  REQUIRED)
+ find_package(OpenMP QUIET)
+ find_package(OpenSSL REQUIRED)
+ 
++# OpenGL / GLU 链接目标兜底:
++# 现代 CMake 的 FindOpenGL 提供 imported target OpenGL::GL / OpenGL::GLU
++# (旧式 OPENGL_LIBRARIES 变量在 3.14+ 不再设置)。历史上这里写死 ${OPENGL_LIBRARIES},
++# 展开为空 -> opengl32/glu32 从未进入链接命令, 导致
++#   OctreeLayer.C 的 glStencilFunc/glClearStencil/glStencilMask/glStencilOp
++#     报 undefined reference to `__imp_gl...'
++#   ClippingPlaneLayer.C / AtomLayer.C 的 gluNewQuadric/gluSphere/gluCylinder/
++#     gluDisk/gluUnProject/gluDeleteQuadric/gluQuadricOrientation
++#     报 undefined reference to `glu...'
++# 统一收敛: 优先用 imported target, 不可用时回退到平台库名, 保证一定非空。
++if (TARGET OpenGL::GL)
++   set(OPENGL_TARGET OpenGL::GL)
++elseif (WIN32)
++   set(OPENGL_TARGET opengl32)
++else()
++   set(OPENGL_TARGET ${OPENGL_LIBRARIES})
++endif()
++
++if (TARGET OpenGL::GLU)
++   set(GLU_TARGET OpenGL::GLU)
++elseif (WIN32)
++   set(GLU_TARGET glu32)
++else()
++   set(GLU_TARGET ${OPENGL_glu_LIBRARY})
++endif()
++
+ find_package(ZLIB REQUIRED)
+    include_directories(${ZLIB_INCLUDE_DIRS})
+ 
+@@ -64,25 +106,187 @@ if (LINUX)
+ else()
+    include_directories(modules/openbabel/include)
+    include_directories(${CMAKE_CURRENT_BINARY_DIR}/modules/openbabel/include)
++   # babelconfig.h 是 OpenBabel 在 configure 期由 src/config.h.cmake 生成的头文件，
++   # 嵌入构建时偶发未生成，会导致 elements.h 等包含 <openbabel/babelconfig.h> 失败。
++   # 这里先用已知 3.1.1 取值显式生成一份兜底；若 OpenBabel 自身 configure_file 随后运行，
++   # 会用其正确版本覆盖本文件。
++   set(_OB_DATADIR "${CMAKE_CURRENT_SOURCE_DIR}/modules/openbabel/data")
++   set(BABEL_DATADIR "${_OB_DATADIR}")
++   set(BABEL_MAJ_VER 3)
++   set(BABEL_MIN_VER 1)
++   set(BABEL_PATCH_VER 1)
++   set(BABEL_VERSION "3.1.1")
++   set(MODULE_EXTENSION ".obf")
++   set(OB_MODULE_PATH "${_OB_DATADIR}")
++   set(OB_SHARED_PTR_HEADER "memory")
++   set(OB_SHARED_PTR_IMPLEMENTATION "std::shared_ptr")
++   set(HAVE_SHARED_POINTER 1)
++   set(HAVE_STD_SHARED_PTR 1)
++   set(HAVE_GCC_VISIBILITY 1)
++   set(HAVE_CONIO_H 1)
++   set(HAVE_SYS_TIME_H 1)
++   set(HAVE_TIME_H 1)
++   set(HAVE_SSTREAM 1)
++   set(HAVE_CLOCK_T 1)
++   set(HAVE_RINT 1)
++   set(HAVE_SNPRINTF 1)
++   set(HAVE_STRCASECMP 1)
++   set(HAVE_STRNCASECMP 1)
++   file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/modules/openbabel/include/openbabel)
++   configure_file(
++      ${CMAKE_CURRENT_SOURCE_DIR}/modules/openbabel/src/config.h.cmake
++      ${CMAKE_CURRENT_BINARY_DIR}/modules/openbabel/include/openbabel/babelconfig.h)
++
++   #----------------------------------------------------------------
++   # 关键: 让 OpenBabel 子模块的 BUILD_SHARED 跟随顶层 BUILD_SHARED_LIBS。
++   #
++   # OpenBabel 用的是自己的私有开关 BUILD_SHARED (modules/openbabel/
++   # CMakeLists.txt:105, 默认 ON), 与 CMake 标准的 BUILD_SHARED_LIBS
++   # 互不相干。若不显式同步, 在顶层 BUILD_SHARED_LIBS=OFF (静态构建)
++   # 的情况下 OpenBabel 仍按 BUILD_SHARED=ON 配置, 导致:
++   #   - 定义 -DUSING_DYNAMIC_LIBS, 插件不再内联进主库,
++   #     而是编成独立 MODULE (.obf/.so) 期望运行时从磁盘加载;
++   #   - 运行期 OBPlugin::LoadAllPlugins() (src/plugin.cpp:46) 进入
++   #     #if defined(USING_DYNAMIC_LIBS) 分支, 在 BABEL_LIBDIR 下找
++   #     插件文件, 找不到即报:
++   #       "Unable to find OpenBabel plugins.
++   #        Try setting the BABEL_LIBDIR environment variable."
++   #   - 进而 FindForceField("UFF") 返回 NULL -> 能量计算报
++   #     "Failed to load force field: UFF"。
++   #
++   # 必须在 add_subdirectory(modules/openbabel) 之前设置; 用 FORCE 保证
++   # 覆盖已被缓存/已定义的 option 值。
++   #----------------------------------------------------------------
++   if (NOT BUILD_SHARED_LIBS)
++      set(BUILD_SHARED OFF CACHE BOOL "OpenBabel: build shared library + dynamic plugins" FORCE)
++   else()
++      set(BUILD_SHARED ON CACHE BOOL "OpenBabel: build shared library + dynamic plugins" FORCE)
++   endif()
++
++   # 静态构建 OpenBabel 时, 其捆绑的 maeparser (schrodinger::mae 命名空间) 默认
++   # 按"DLL 导入"处理, 会在 MinGW 链接期产生 undefined reference:
++   #   __imp__ZN11schrodinger3mae6Reader... (MAE 格式)
++   # 原因: maeparser 的 MaeParserConfig.hpp 用 STATIC_MAEPARSER 控制导出宏:
++   #     #ifndef STATIC_MAEPARSER
++   #       #define EXPORT_MAEPARSER __declspec(dllimport)   // 消费者侧
++   #     #else
++   #       #define EXPORT_MAEPARSER                          // 静态: 空
++   #     #endif
++   # 而 maeparser/CMakeLists.txt 只做了
++   #   target_compile_definitions(maeparser PRIVATE "STATIC_MAEPARSER")
++   # —— PRIVATE 不会传播给消费者(openbabel 的 maeformat.cpp), 故消费者
++   # 仍按 DLL 导入展开。必须在消费者侧补上 STATIC_MAEPARSER。
++   # 注意: 宏名是 STATIC_MAEPARSER, 不是 MAEPARSER_STATIC_DEFINE
++   # (后者是 GenerateExportHeader 的命名习惯, 对 maeparser v1.2.3 无效)。
++   # 必须在 add_subdirectory 之前设置, 让 openbabel/maeparser 子目录继承该宏。
++   #
++   # coordgen 有完全相同的缺陷(其 CoordgenConfig.hpp 用 STATIC_COORDGEN 控制
++   # 导出宏, 而 coordgenlibs/CMakeLists.txt 同样用 PRIVATE 定义不传播)。
++   # 当前 WITH_COORDGEN 在静态构建下默认为 OFF、且 openbabel 源码不引用
++   # coordgen 符号, 故不触发; 此处一并预防, 以便将来打开该选项时不会踩坑。
++   if (NOT BUILD_SHARED_LIBS)
++      add_compile_definitions(STATIC_MAEPARSER STATIC_COORDGEN)
++   endif()
++
+    add_subdirectory(modules/openbabel  EXCLUDE_FROM_ALL)
++
++   #----------------------------------------------------------------
++   # 补齐 OpenBabel 静态构建漏编的"格式附加源" (per-format _additional_sources)
++   #
++   # OpenBabel 的 src/formats/formats.cmake 可为每个格式定义可选的
++   # ${format}_additional_sources, 里面放着该格式真正需要的实现, 例如:
++   #   asciiformat  -> ../depict/asciipainter.cpp   (OpenBabel::ASCIIPainter)
++   #   painterformat-> ../depict/commandpainter.cpp (OpenBabel::CommandPainter)
++   #   wlnformat    -> wln-nextmove.cpp             (NMReadWLN)
++   # 然而 OpenBabel 的 src/CMakeLists.txt 在静态构建分支 (BUILD_SHARED=OFF) 只做了
++   #   foreach(format ${formats})  set(openbabel_srcs ... formats/${format}.cpp)
++   # 完全忽略了 ${format}_additional_sources, 导致这些 .cpp 根本没被编进
++   # libopenbabel.a。最终链 IQmol.exe 时报 undefined reference:
++   #   ASCIIPainter / CommandPainter / NMReadWLN
++   # (共享构建走 add_subdirectory(formats) 会正确带上 additional_sources, 故仅
++   #  静态构建踩坑。)
++   #
++   # 修复: 在 IQmol 侧把漏掉的源显式补进 openbabel 目标, 随其一起编入静态库。
++   # 只补"始终启用"的格式所需源; png2format 的 cairopainter.cpp 仅在 CAIRO_FOUND
++   # 时才需要(本构建默认不带 Cairo, 故此处不加); inchiformat 的附加源由 openbabel
++   # 自己在 WITH_STATIC_INCHI 分支处理, 亦不在此列。
++   #
++   # 文件存在性用 EXISTS 探一下, 避免将来 openbabel 升版改了路径导致 configure 失败。
++   #
++   # 注意: 仅对内嵌的"本地" openbabel 目标补源。Linux 等平台走
++   # find_package(OpenBabel3) 时 openbabel 是 IMPORTED 目标(指向系统 .so),
++   # CMake 禁止给 IMPORTED 目标追加源(target_sources 会直接报错), 且系统库本身
++   # 已编好, 无需也不可能补源。故这里先排除 IMPORTED 场景。
++   #
++   # 去重: 这些附加源也可能已由 openbabel 自身(或其 CMakeLists 被外部补丁改过,
++   # 例如 scripts/build_windows.sh 步骤 2d 给 openbabel/src/CMakeLists.txt 打补丁)
++   # 编入目标。若目标 SOURCES 里已含同名文件, 此处跳过, 避免同一 .cpp 被加两次
++   # 触发重复定义/链接错误。
++   #----------------------------------------------------------------
++   set(_ob_is_imported FALSE)
++   if (TARGET openbabel)
++      get_target_property(_ob_is_imported openbabel IMPORTED)
++   endif()
++   if (TARGET openbabel AND NOT _ob_is_imported)
++      # 收集 openbabel 目标当前已含的源文件基名, 用于去重
++      set(_ob_existing_names "")
++      get_target_property(_ob_existing_srcs openbabel SOURCES)
++      if (_ob_existing_srcs)
++         foreach(_s ${_ob_existing_srcs})
++            get_filename_component(_s_name "${_s}" NAME)
++            list(APPEND _ob_existing_names "${_s_name}")
++         endforeach()
++      endif()
++      set(_ob_missing_srcs "")
++      foreach(_ob_src
++            modules/openbabel/src/depict/asciipainter.cpp
++            modules/openbabel/src/depict/commandpainter.cpp
++            modules/openbabel/src/formats/wln-nextmove.cpp)
++         if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/${_ob_src}")
++            get_filename_component(_ob_base "${_ob_src}" NAME)
++            list(FIND _ob_existing_names "${_ob_base}" _ob_idx)
++            if (_ob_idx EQUAL -1)
++               list(APPEND _ob_missing_srcs "${_ob_src}")
++            else()
++               message(STATUS "[IQmol] 附加源 ${_ob_base} 已由 openbabel 自身编入, 跳过重复添加")
++            endif()
++         endif()
++      endforeach()
++      if (_ob_missing_srcs)
++         target_sources(openbabel PRIVATE ${_ob_missing_srcs})
++         message(STATUS "[IQmol] 已为静态 openbabel 补齐漏编的附加源: ${_ob_missing_srcs}")
++      else()
++         message(STATUS "[IQmol] 无需补齐 openbabel 附加源(均已就位或由 openbabel 自身编入)")
++      endif()
++      unset(_ob_missing_srcs)
++      unset(_ob_existing_srcs)
++      unset(_ob_existing_names)
++   endif()
++   unset(_ob_is_imported)
+ endif()
+ 
+ 
++#-------------------------------------------------------------------
++# 子模块链接约定: 所有平台一律通过 CMake target 名链接, 由 CMake
++# 管理构建顺序与产物路径; Linux 端使用系统库时才直接用库名。
++# 不要写死产物文件路径——各子模块产物命名规则不一(有的重命名,
++# 有的受 BUILD_SHARED_LIBS 影响), 写死路径在 Windows/MinGW 下必报
++# "No rule to make target"。
++#-------------------------------------------------------------------
++
++# libssh2 (静态库 target: libssh2_static)
+ if (LINUX)
+    set(LIBSSH2_LIBRARY ssh2)
+-elseif (APPLE)
+-   include_directories(modules/libssh2/include)
+-   add_subdirectory(modules/libssh2  EXCLUDE_FROM_ALL)
+-   set(LIBSSH2_LIBRARY ssh2)
+ else (WIN32)
+    include_directories(modules/libssh2/include)
+    add_subdirectory(modules/libssh2  EXCLUDE_FROM_ALL)
+-   set(LIBSSH2_LIBRARY ${CMAKE_BINARY_DIR}/modules/libssh2/src/libssh2.a)
++   set(LIBSSH2_LIBRARY libssh2_static)
+ endif()
+ 
+ 
++# OpenMesh (上游三平台 target 名不同, 保持原样——Windows 侧已实测可用)
+ if (LINUX)
+-   find_package(OpenMesh REQUIRED) 
++   find_package(OpenMesh REQUIRED)
+    set(OPENMESH_LIBRARIES OpenMeshCore OpenMeshTools)
+ elseif (APPLE)
+    include_directories(modules/openmesh/src)
+@@ -95,22 +299,47 @@ else (WIN32)
+ endif()
+ 
+ 
++# libarchive (静态库 target: archive_static; bcrypt 为 Windows 下的 SHA 依赖。
++# 上游 WIN32 分支原引用不存在的 modules/zstd 导致 configure 必崩, 已移除;
++# zstd 为 libarchive 可选依赖, 缺失时自动跳过, IQmol 无需 .zst 支持;
++# MinGW 下 libarchive 自带 CHECK_ICONV 探测不可靠, 生成的 config.h 把 ICONV_CONST
++# 定义成空; 而 OpenBabel 自带 iconv.h 声明 iconv 形参 inbuf 为 const char**,
++# 导致 archive_string.c:2092 iconv(cd, &itp,...) 实参 char** 与 const char** 冲突。
++# 命令行 -DICONV_CONST=const 会被 config.h 后定义反覆盖(实测 redefined 仍报错),
++# 故在 configure 阶段对子模块源做幂等修补(见 WIN32 分支), 调用处实参转型为
++# (const char **)&itp, 与 OpenBabel iconv.h 的 const char** 声明对齐)
+ if (LINUX)
+    find_package(LibArchive REQUIRED)
+    set(ARCHIVE_LIBRARY ${LibArchive_LIBRARIES})
+ elseif (APPLE)
+    find_package(ZSTD REQUIRED)
+-   include_directories(modules/libarchive/libarchive)
+-   add_subdirectory(modules/libarchive EXCLUDE_FROM_ALL)
+-   set(ARCHIVE_LIBRARY archive)
+    if (EXISTS /opt/homebrew/lib/)
+       link_directories(/opt/homebrew/lib/)
+    endif()
+-elseif (WIN32)
+-   include_directories(modules/zstd/lib)
++   include_directories(modules/libarchive/libarchive)
++   add_subdirectory(modules/libarchive EXCLUDE_FROM_ALL)
++   set(ARCHIVE_LIBRARY archive_static)
++else (WIN32)
+    include_directories(modules/libarchive)
+-   add_subdirectory(modules/zstd/build/cmake EXCLUDE_FROM_ALL)
+-   set(ARCHIVE_LIBRARY ${CMAKE_BINARY_DIR}/modules/libarchive/libarchive/libarchive.a bcrypt)
++   # 修复 MinGW 下 libarchive 调用 libiconv 的签名冲突: 对子模块源做幂等修补。
++   # OpenBabel 自带 iconv.h 声明 inbuf 为 const char**, 而 libarchive 的 config.h
++   # 把 ICONV_CONST 定义成空, 使 archive_string.c:2092 的 &itp 为 char** 不匹配。
++   # 此处把调用处实参转型为 (const char **)&itp (已修补则跳过, 避免重复),
++   # 它在任意 ICONV_CONST 取值下都合法, 比强行覆盖宏更鲁棒。
++   set(_LA_STRING "${CMAKE_SOURCE_DIR}/modules/libarchive/libarchive/archive_string.c")
++   if (EXISTS "${_LA_STRING}")
++      file(READ "${_LA_STRING}" _LA_SRC)
++      string(FIND "${_LA_SRC}" "iconv(cd, (const char **)&itp," _LA_DONE)
++      if (_LA_DONE EQUAL -1)
++         string(REPLACE "iconv(cd, &itp, &remaining, &outp, &avail)"
++                         "iconv(cd, (const char **)&itp, &remaining, &outp, &avail)"
++                         _LA_SRC "${_LA_SRC}")
++         file(WRITE "${_LA_STRING}" "${_LA_SRC}")
++         message(STATUS "[IQmol] 已修补 libarchive archive_string.c: iconv 实参 &itp -> (const char**)&itp")
++      endif()
++   endif()
++   add_subdirectory(modules/libarchive EXCLUDE_FROM_ALL)
++   set(ARCHIVE_LIBRARY archive_static bcrypt)
+ endif()
+ 
+ 
+@@ -133,7 +362,9 @@ set(CMAKE_AUTOMOC ON)
+ add_subdirectory(src)
+ 
+ enable_testing()
+-add_subdirectory(tests)
++if (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/tests)
++   add_subdirectory(tests)
++endif()
+ 
+ if (${Qt5Core_VERSION_STRING} VERSION_GREATER_EQUAL 5.15 )
+    qt_add_resources(IQmol_RESOURCES_RCC resources/IQmol.qrc)
+@@ -185,6 +416,35 @@ if (WIN32)
+ endif (WIN32)
+ 
+ 
++# ---- 严格本地化开关（IQMOL_STRICT_L10N）----
++# 默认 OFF：仅打印未完成/空翻译统计，不中断构建。
++# 设为 ON：若存在未完成或空翻译，构建失败，禁止带未译发布。
++option(IQMOL_STRICT_L10N "Fail build if zh_CN.ts has unfinished/empty translations" OFF)
++
++# ---- 中文本地化：构建时用 lrelease 生成 .qm 并放到可执行文件同级的 translations/ 目录 ----
++find_program(LRELEASE_EXECUTABLE NAMES lrelease lrelease-qt5)
++set(IQMOL_TS_FILE ${CMAKE_CURRENT_SOURCE_DIR}/translations/zh_CN.ts)
++set(IQMOL_QM_DIR  $<TARGET_FILE_DIR:${targetName}>/translations)
++set(IQMOL_QM_FILE ${IQMOL_QM_DIR}/zh_CN.qm)
++
++if(LRELEASE_EXECUTABLE)
++   add_custom_command(TARGET ${targetName} POST_BUILD
++      COMMAND ${CMAKE_COMMAND} -E make_directory ${IQMOL_QM_DIR}
++      COMMAND ${LRELEASE_EXECUTABLE} ${IQMOL_TS_FILE} -qm ${IQMOL_QM_FILE}
++      COMMAND ${CMAKE_COMMAND}
++              -DTS_FILE=${IQMOL_TS_FILE}
++              -DIQMOL_STRICT_L10N=${IQMOL_STRICT_L10N}
++              -P ${CMAKE_CURRENT_SOURCE_DIR}/scripts/i18n/check_l10n_strict.cmake
++      COMMENT "Generating ${IQMOL_QM_FILE} from ${IQMOL_TS_FILE} + 严格 l10n 检查"
++   )
++else()
++   message(WARNING
++      "未找到 lrelease/lrelease-qt5，跳过 .qm 生成步骤。"
++      "缺少 zh_CN.qm 时界面将回退为英文；"
++      "可安装 Qt5 Linguist 工具（如 qtbase5-dev-tools / qttools5-dev-tools）后重新配置。")
++endif()
++
++
+ target_link_libraries (${targetName}
+    Main
+    Process
+@@ -202,7 +462,6 @@ target_link_libraries (${targetName}
+    Fort
+    Amber 
+    yaml-cpp
+-   openbabel
+    Qt5::Core
+    Qt5::Gui
+    Qt5::Xml
+@@ -213,12 +472,175 @@ target_link_libraries (${targetName}
+    ${LIBSSH2_LIBRARY}
+    ${QGLVIEWER_LIBRARY}
+    ${OPENMESH_LIBRARIES}
+-   ${OPENGL_LIBRARIES}
++   # OpenGL + GLU: 使用上方统一收敛的 OPENGL_TARGET / GLU_TARGET。
++   # 旧代码只写 ${OPENGL_LIBRARIES}, 在 CMake 3.14+ 为空 -> opengl32/glu32 均未链接,
++   # 导致 glStencil*(OctreeLayer.C) 与 gluNewQuadric/gluSphere/gluCylinder/gluDisk/
++   # gluUnProject 等(ClippingPlaneLayer.C/AtomLayer.C/camera.cpp) 报未定义符号。
++   ${OPENGL_TARGET}
++   ${GLU_TARGET}
++   # OpenSSL: Network 的 SshConnection.C 直接调用 MD5() 等 OpenSSL 函数,
++   # 但 Network 以 PRIVATE 方式链接 OpenSSL::SSL —— 静态库的 PRIVATE 依赖
++   # 不会传播到最终可执行文件, 故顶层必须显式补链, 否则链接期报
++   # undefined reference to `MD5' / `__imp_MD5'。
++   OpenSSL::SSL
++   OpenSSL::Crypto
+    ${ZLIB_LIBRARIES}
+    ${FORTRAN_LIBRARIES}
+    ${ARCHIVE_LIBRARY}
+ )
+ 
++#-------------------------------------------------------------------
++# 静态链接 OpenBabel 插件整体保留 (Windows/MinGW 必需):
++#
++#   OpenBabel 的插件(力场/格式/描述符/指纹等)不是通过显式函数调用注册的,
++#   而是靠源文件里的全局对象在 main() 之前自注册, 例如:
++#       forcefields/forcefielduff.cpp:579
++#       OBForceFieldUFF theForceFieldUFF("UFF", true);
++#   构造函数把实例塞进 OBForceField::Map()。
++#
++#   BUILD_SHARED_LIBS OFF 时这些 .cpp 被编成静态库 openbabel.a 的成员。
++#   GNU ld 只按"符号引用"提取静态库成员: 若某个 .o 里的符号没有任何地方
++#   引用(纯全局构造副作用), 该 .o 会被整个丢弃, 自注册随之失效。
++#   症状: 运行时 FindForceField("UFF") 返回 NULL, IQmol 弹出
++#         "Failed to load force field: UFF", 但编译链接期毫无报错。
++#
++#   Linux 上通常因动态链接或系统包展开而恰好可用, Windows 静态构建必踩。
++#
++#   关键: 不能用裸 -Wl,--whole-archive openbabel -Wl,--no-whole-archive ——
++#   CMake 在生成 link.txt 时会把"链接器旗标"与"库名"拆开重新排序, 结果
++#   --whole-archive / --no-whole-archive 被错误地套在 IQmol 自己的 objects.a
++#   上, 而 openbabel 被塞进 linkLibs.rsp 做普通链接, 自注册成员照样被丢弃。
++#   修复: 用 CMake 官方封装 $<LINK_LIBRARY:WHOLE_ARCHIVE,openbabel>, 由 CMake
++#   保证 --whole-archive 紧贴 openbabel 路径, 不惧排序。要求 cmake >= 3.24
++#   (本项目 build_windows.sh 自带 3.31.6, 满足)。
++#-------------------------------------------------------------------
++#-------------------------------------------------------------------
++# $<LINK_LIBRARY:WHOLE_ARCHIVE,...> 需要 CMake >= 3.24。
++# 本项目 cmake_minimum_required 为 3.14.4, 低于该版本时该生成器表达式
++# 会直接报错(不是被忽略), 故这里先探测一次, 低版本自动降级为裸旗标,
++# 避免老环境上"配置期就挂掉"。
++if (CMAKE_VERSION VERSION_GREATER_EQUAL 3.24)
++   set(IQMOL_HAVE_LINK_LIBRARY TRUE)
++else()
++   set(IQMOL_HAVE_LINK_LIBRARY FALSE)
++   message(STATUS
++      "[IQmol] CMake ${CMAKE_VERSION} < 3.24, WHOLE_ARCHIVE 将降级为裸旗标; "
++      "静态构建下力场插件自注册可能失效, 建议升级 CMake")
++endif()
++
++
++if (WIN32 AND NOT BUILD_SHARED_LIBS)
++   if (TARGET openbabel)
++      # 用 CMake 官方封装 $<LINK_LIBRARY:WHOLE_ARCHIVE,openbabel> 而非裸
++      # -Wl,--whole-archive: 裸旗标会被 CMake 在生成 link.txt 时与库名拆开重排,
++      # 错误地套到 IQmol 自己的 objects.a 上。官方封装保证 --whole-archive 紧贴
++      # openbabel 路径, 并保留目标依赖跟踪(无需手写 $<TARGET_FILE:...> 路径)。
++      if (IQMOL_HAVE_LINK_LIBRARY)
++         target_link_libraries (${targetName}
++            $<LINK_LIBRARY:WHOLE_ARCHIVE,openbabel>
++         )
++      else()
++         # 低版本 CMake (< 3.24) 降级：裸旗标顺序不保证, 但至少不中断配置。
++         #
++         # 安全前提：-Wl,--whole-archive / --no-whole-archive 是 GNU ld 专有旗标。
++         # 若当前链接器非 GNU ld(例如 MSVC link.exe / lld-link), 裸旗标会被当作
++         # 未知参数而报错或产生非预期行为。此处显式检测:
++         #   - MINGW / MSYS 环境恒为 GNU ld, 直接放行;
++         #   - 其它环境检查 CMAKE_LINKER 是否指向 ld(.exe);
++         #   - 都不满足则 fail-fast, 提示升级 CMake 以使用官方 WHOLE_ARCHIVE 封装。
++         set(_iqmol_gnu_ld FALSE)
++         if (MINGW OR MSYS)
++            set(_iqmol_gnu_ld TRUE)
++         elseif (CMAKE_LINKER MATCHES "(^|[/\\\\])ld(\\.exe)?$")
++            set(_iqmol_gnu_ld TRUE)
++         endif()
++         if (_iqmol_gnu_ld)
++            target_link_libraries (${targetName}
++               -Wl,--whole-archive openbabel -Wl,--no-whole-archive
++            )
++            message(STATUS
++               "[IQmol] CMake < 3.24 降级为裸 -Wl,--whole-archive (链接器: ${CMAKE_LINKER})")
++         else()
++            message(FATAL_ERROR
++               "[IQmol] 当前链接器 '${CMAKE_LINKER}' 不是 GNU ld, 无法使用裸 --whole-archive "
++               "降级方案; 且 CMake ${CMAKE_VERSION} < 3.24 无法使用官方 WHOLE_ARCHIVE 封装。"
++               "请升级 CMake 到 >= 3.24, 或改用 MinGW-w64 (GNU ld) 工具链。")
++         endif()
++      endif()
++      # 双保险：显式声明依赖, 确保 openbabel 在链接前被构建
++      # (openbabel 经 EXCLUDE_FROM_ALL 引入, 不属于默认 all 目标)
++      add_dependencies(${targetName} openbabel)
++      message(STATUS "[IQmol] 已对 openbabel 启用 --whole-archive (保证静态插件自注册不被丢弃)")
++   else()
++      target_link_libraries (${targetName} openbabel)
++      message(WARNING "[IQmol] 未找到 openbabel 目标, 直接按名称链接")
++   endif()
++else()
++   # 非 Windows 分支。
++   #
++   # 这里要区分两种 openbabel：
++   #   (a) 嵌入式静态构建 —— openbabel 是本地源码编译出的 STATIC 库目标。
++   #       其插件(力场/格式/描述符)靠全局对象自注册, 静态库成员会因"无符号
++   #       引用"被链接器丢弃, 必须整体保留。
++   #   (b) 系统包构建 —— Linux 下 find_package(OpenBabel3) 返回的是 IMPORTED
++   #       目标, 指向 libopenbabel.so。它本身是共享库, 根本不存在"成员被丢弃"
++   #       的问题, 却在实体上又经依赖链被链接了一次。此时再叠加 WHOLE_ARCHIVE
++   #       会让 CMake 报错：
++   #         Impossible to link target 'IQmol' because the link item 'openbabel'
++   #         ... has already occurred with the feature 'WHOLE_ARCHIVE'
++   #       因为同一链接项不能同时以"无特性"和"WHOLE_ARCHIVE 特性"出现。
++   # 故仅对 (a) 启用 WHOLE_ARCHIVE; (b) 按普通链接处理。
++   set(_iqmol_ob_is_imported FALSE)
++   if (TARGET openbabel)
++      get_target_property(_iqmol_ob_is_imported openbabel IMPORTED)
++   endif()
++
++   if (NOT BUILD_SHARED_LIBS AND TARGET openbabel AND NOT _iqmol_ob_is_imported)
++      if (IQMOL_HAVE_LINK_LIBRARY)
++         target_link_libraries (${targetName}
++            $<LINK_LIBRARY:WHOLE_ARCHIVE,openbabel>
++         )
++      else()
++         target_link_libraries (${targetName}
++            -Wl,--whole-archive openbabel -Wl,--no-whole-archive
++         )
++      endif()
++      add_dependencies(${targetName} openbabel)
++      message(STATUS "[IQmol] 已对嵌入式静态 openbabel 启用 --whole-archive")
++   else()
++      if (NOT TARGET openbabel)
++         # 没有任何 openbabel 目标：按名称链接, 交给链接器解析(系统库场景)
++         target_link_libraries (${targetName} openbabel)
++         message(STATUS "[IQmol] openbabel 按库名链接 (系统包)")
++      elseif (_iqmol_ob_is_imported)
++         # IMPORTED(系统共享库): 不重复链接, 沿用依赖链中的那一份。
++         message(STATUS "[IQmol] openbabel 为系统共享库, 已由依赖链链接, 跳过 WHOLE_ARCHIVE")
++      else()
++         target_link_libraries (${targetName} openbabel)
++      endif()
++   endif()
++   unset(_iqmol_ob_is_imported)
++endif()
++
++# maeparser 是 OpenBabel 捆绑的独立静态库(MAE 格式: schrodinger::mae 命名空间),
++# 其实现符号同样可能被链接器按引用丢弃, 且需与上面的 STATIC_MAEPARSER 宏
++# 配合(消除 __imp_ DLL 导入前缀)。若它是独立 CMake 目标则一并整体保留;
++# 否则由 openbabel 的 PRIVATE 依赖传递链入(此时已被 openbabel 的 WHOLE_ARCHIVE
++# 覆盖, 无需重复)。
++if (TARGET maeparser)
++   if (IQMOL_HAVE_LINK_LIBRARY)
++      target_link_libraries (${targetName}
++         $<LINK_LIBRARY:WHOLE_ARCHIVE,maeparser>
++      )
++   else()
++      target_link_libraries (${targetName}
++         -Wl,--whole-archive maeparser -Wl,--no-whole-archive
++      )
++   endif()
++   add_dependencies(${targetName} maeparser)
++   message(STATUS "[IQmol] 已对 maeparser 启用 --whole-archive")
++endif()
++
+ if (WIN32)
+    target_link_libraries (${targetName} ws2_32)
+ endif ()
+diff --git a/tmp/_ub/README.md b/workspace/IQmol-for-Chinese/README.md
+index 6ca9f98..d55e89f 100644
+--- a/README.md
++++ b/README.md
+@@ -1,6 +1,41 @@
+ # IQmol3
+ IQmol version 3
+ 
++> 📌 **本仓库 = IQmol3 官方版 + 简体中文全面本地化**
++> 上游原版：[nutjunkie/IQmol3](https://github.com/nutjunkie/IQmol3)
++>
++> **文档导航**
++>
++> | 你想做什么 | 看这里 |
++> |---|---|
++> | 编译（Windows / Linux / macOS）、离线包、部署、排错 | [docs/构建与打包/构建与部署指南.md](docs/构建与打包/构建与部署指南.md) |
++> | 了解目录结构、代码模块、汉化文件在哪 | [docs/仓库结构.md](docs/仓库结构.md) |
++> | 找其它文档（汉化 / 审校 / 验证记录） | [docs/README.md](docs/README.md) |
++> | Linux 解压即用分发包 | [docs/构建与打包/Linux分发包.md](docs/构建与打包/Linux分发包.md) |
++> | 子模块下载不动（国内网络） | 本文「子模块离线包」章节 |
++> | 学会用这个软件 | [中文用户手册](doc/IQmolUserGuide.pdf)（34 页） |
++> | 维护/更新翻译 | 本文「简体中文本地化」章节 + `scripts/update_translations.sh` |
++> | 上游发新版了，怎么升级合并（★ 一键迁移） | [docs/汉化工程/上游升级迁移指南.md](docs/汉化工程/上游升级迁移指南.md) |
++> | 想彻底降低升级冲突（长期治理方案） | [docs/汉化工程/改动面最小化方案（第三层）.md](docs/汉化工程/改动面最小化方案（第三层）.md) |
++> | 翻译包裹怎么在上游升级后一键重建 | [docs/汉化工程/第三层-重放机制说明.md](docs/汉化工程/第三层-重放机制说明.md) |
++> | 想参与贡献 / 报告翻译问题 | [CONTRIBUTING.md](CONTRIBUTING.md) |
++> | 报告安全漏洞（请勿公开） | [SECURITY.md](SECURITY.md) |
++> | 了解版本变更 | [CHANGELOG.md](CHANGELOG.md) |
++> | 汉化质量怎么量化评估（TQA 六维指标） | [docs/汉化工程/翻译质量量化评估方案.md](docs/汉化工程/翻译质量量化评估方案.md) |
++>
++> **上游升级迁移**：本仓库已实现**两条可验证的迁移路线**，实测在干净上游树上
++> 源码 **69/69 文件 100% 复现**：
++>
++> ```bash
++> # 路线 B（推荐，一条命令）：在干净上游检出上重放全部汉化
++> bash scripts/migrate_to_upstream.sh --check --target /path/to/upstream   # 预检
++> bash scripts/migrate_to_upstream.sh --apply --target /path/to/upstream   # 执行
++>
++> # 路线 A：在本仓库内用 git merge 吸收上游更新
++> bash scripts/sync_upstream.sh --status   # 看差距
++> bash scripts/sync_upstream.sh --merge    # 合并
++> ```
++
+ This is IQmol, a molecular builder and visualization package written by Andrew
+ Gilbert.  IQmol is able to build molecules, set up and submit input for Q-Chem
+ calculations, and analyse the output.  Analyses include display of molecular
+@@ -16,17 +51,174 @@ build process.
+ 
+ The source relies on submodules, so to checkout the code use the recursive flag:
+ 
+-```
++```bash
+ git clone --recursive https://github.com/nutjunkie/IQmol3.git
+ ```
+ 
+ To compile, make sure that you QT installation can be found by cmake.  This
+ means that the CMAKE\_PREFIX\_PATH environment variable should include the
+ directory containing the Qt5Config.cmake file
+-```
++```bash
+ export CMAKE_PREFIX_PATH=/directory/containing_Qt5Config.cmake
+ ./configure
+ cd build
+ make
+ ```
+ 
++## 简体中文本地化（Simplified Chinese Localization）
++
++本仓库在原版 IQmol3 基础上完成了面向简体中文用户的全面本地化：
++
++- **界面翻译**：`translations/zh_CN.ts`（2112 条翻译，153 个 context，全部完成，0 未译），
++  构建时由 CMake 自动调用 lrelease 生成 `zh_CN.qm` 并随可执行文件输出到
++  `translations/` 目录。系统需安装 Qt5 Linguist 工具（lupdate/lrelease，
++  如 `qtbase5-dev-tools`、`qttools5-dev-tools`），缺失时构建仍可继续，但界面回退英文。
++- **源码国际化**：对约 20 个源文件补充了 `tr()` 包裹与可翻译上下文，使菜单、
++  对话框、图层名称等运行期字符串可被翻译体系识别。
++- **中文用户手册**：`doc/IQmolUserGuide.tex` 已翻译为中文（34 页，含反应路径、
++  制作电影、配置三个补全章节），使用 `xelatex` 编译：
++  ```
++  ./scripts/build_docs.sh          # 编译 doc/IQmolUserGuide.pdf
++  ./scripts/build_docs.sh --clean  # 编译后清理 LaTeX 中间文件
++  ```
++  手册配图位于 `doc/figures/`，其中对话框截图为中文界面实拍。
++- **Linux 分发包**：`scripts/package_linux.sh` 一键收集可执行文件、Qt 运行库与插件、
++  OpenBabel 数据与运行期插件、着色器/片段库及精选示例分子（`samples/` 单文件
++  ≤ 1 MB，含说明），产出 `dist/IQmol-linux-x86_64.tar.gz`，解压后 `./run.sh` 即用。
++  翻译文件同时放置于包根 `translations/` 与 `bin/translations/`（双保险，修复
++  旧包"仅从包根启动才加载翻译"的缺陷，详见脚本头注释 reA22A）。
++- **翻译维护**：源码变更后运行以下命令更新翻译并生成 qm（脚本会自动修复
++  lupdate 因 GLObject.h 解析错误而误标的 vanished 条目）：
++  ```
++  ./scripts/update_translations.sh          # lupdate + 防退化 + lrelease
++  ./scripts/update_translations.sh --sync   # 并同步 qm 到 build 目录
++  ```
++  > `lupdate` 已加 `-extensions C,ui`：IQmol 源码多为大写 `.C`，默认 `lupdate` 只认
++  > 小写 `.c`，不加该参数会导致 292 个 `.C` 源文件的 `tr()` 零提取。
++- **界面语言切换**：偏好设置中可切换「中文 / English / 跟随系统」（默认中文）。
++  切回英文便于与上游比对、排查误译；切换为静态生效（重启后应用）。
++- **界面截图**：`dialog_screenshots/` 保存了中文界面下各对话框的运行时截图，
++  可用于文档配图与翻译效果验证。
++
++## 子模块离线包（国内网络适用）
++
++`modules/` 下的 9 个第三方库是 Git 子模块，上游仓库体积较大，国内网络克隆时常断连、
++卡在 6% 或直接 `Failed to connect to github.com:443`。为此本仓库在
++**`submodules-package/` 目录**提供了打包好的完整子模块源码（共 49,335 个文件），
++版本与 `.gitmodules` 记录的 commit 完全一致，单文件 73 MB，无需合并：
++
++下载这两个文件放到同一目录：
++
++| 文件 | 大小 |
++|---|---|
++| [`IQmol-submodules.tar.gz`](https://github.com/stone-Glitch/IQmol-for-Chinese/raw/refs/heads/main/submodules-package/IQmol-submodules.tar.gz) | 73 MB |
++| [`extract_submodules.bat`](https://github.com/stone-Glitch/IQmol-for-Chinese/raw/refs/heads/main/submodules-package/extract_submodules.bat) | 3.5 KB |
++
++在 **cmd** 里带仓库路径运行（不是 PowerShell）：
++
++```bat
++cd /d D:\Downloads
++extract_submodules.bat "D:\IQmol"
++```
++
++脚本会自动校验大小（`75,759,260` 字节）和 MD5（`9c0ed6e3527cf0dd1c8d5628cc31538f`），
++然后解压到仓库根目录。也可以手动：
++
++```bash
++tar -xzf IQmol-submodules.tar.gz    # 在仓库根目录执行；MSYS2 终端最稳
++```
++
++> 选 tar.gz 而不是 zip：tar.gz 把文件打包成一个流再整体压缩，对 4.9 万个小文件
++> 效率高得多——同样内容 tar.gz 只要 73 MB，zip 要 108 MB。
++
++### OpenBabel 额外依赖（必看）
++
++子模块解压后，OpenBabel 在编译期还会联网拉取 3 个依赖（maeparser / coordgenlibs / rapidjson），
++国内网络拉不到会直接 `FATAL_ERROR`。本仓库另提供一个预置包（已按 `external/` 布局摆好），
++解压到 **`modules/openbabel/`** 即可离线构建：
++
++| 文件 | 大小 |
++|---|---|
++| `IQmol-openbabel-deps.tar.gz` | 1.2 MB |
++
++```bat
++cd /d D:\IQmol\modules\openbabel
++tar -xzf D:\Downloads\IQmol-openbabel-deps.tar.gz
++```
++
++### OpenBabel 构建补丁（旧版兼容，通常无需）
++
++> **基础包已完整**：当前 `IQmol-submodules.tar.gz` 已含 OpenBabel 全部源码
++> （含 `libinchi/`、`test/`、`src/formats/`），下面两个补丁包属于**旧版冗余包，通常无需下载**。
++> 仅当你使用旧版基础包、或从 `submodules-package/` 目录单独下载的老包时才需要补打。
++
++历史上 OpenBabel 在 CMake 3.x 下曾因两类问题 configure 失败：
++
++1. **文件缺失**：`src/formats/libinchi/`、`test/` 目录，以及 `src/formats/xml/`、
++   `src/formats/json/` 下的部分源文件（报 `not an existing directory` 或
++   `No SOURCES given to target: pubchem / xmlformat / ...`）；
++2. **目标重名**：OpenBabel 的 `ADD_CUSTOM_TARGET(uninstall)` 与 yaml-cpp 同名目标冲突（CMP0002）。
++
++若确需补打，两个包**都解压到 `modules/openbabel/`**：
++
++| 文件 | 大小 | 说明 |
++|---|---|---|
++| `IQmol-openbabel-fix.tar.gz` | 32 MB | 补全 `libinchi/`、`test/` + 给 uninstall 加重名保护 |
++| `IQmol-openbabel-formats-fix.tar.gz` | 1.3 MB | 补全 `src/formats/` 全部格式源文件（xml / json 等 128 个 `.cpp`） |
++
++```bash
++# 注意：这两个包顶层是 modules/openbabel/，必须在【源码根】解压！
++cd /d/IQmol/IQmol-src
++tar -xzf /d/IQmol/IQmol-openbabel-fix.tar.gz
++tar -xzf /d/IQmol/IQmol-openbabel-formats-fix.tar.gz
++```
++
++> ⚠️ **务必用 MINGW64 终端的 `tar` 解压，不要用 360 压缩 / 7-Zip 图形工具**——
++> 后者解 `.tar.gz` 会**静默丢文件**（本项目已连续两轮因此缺文件），且常只解出中间层 `.tar`。
++> 若不想补全 `test/` 单测目录，可加 `-DENABLE_TESTS=OFF`，但 `test/` 目录仍需存在。
++
++> ⚠️ **顺序陷阱（仅旧版包适用）**：重新解压旧版完整子模块包会把 `openbabel/CMakeLists.txt`
++> 覆盖回**未修版**，uninstall 保护随之丢失、174 行冲突会复现。顺序必须是：
++> **先完整包 → 再打上面两个补丁包**。当前基础包已内置修复，无需此步。
++
++基础包（子模块 / OpenBabel deps）解压到位后，推荐用
++`scripts/build_windows.sh` 一键构建——默认**增量**：首次 configure + 编译，之后只要 `build/`
++目录还在，重跑脚本会跳过 configure 直接续编，不会从头再来。脚本会自动下载 CMake 3.31、补全
++缺失的 `modules/CMakeLists.txt`、检查 OpenBabel 依赖。具体命令见 `docs/构建与打包/构建与部署指南.md`。
++
++编译成功后，**运行前还要执行一次部署**（复制 Qt 插件、运行库与资源）：
++
++```bash
++cd /d/IQmol/IQmol-src
++bash ./scripts/deploy_windows.sh
++cd build/bin && ./IQmol.exe
++```
++
++> 只编译不部署的话，程序会因缺少 Qt 平台插件或 OpenBabel 数据而无法启动或功能异常。
++
++### 注意事项
++
++- 下载慢时，把链接中的 `https://github.com/` 换成 `https://ghfast.top/https://github.com/` 走国内镜像
++  （实测约 1.4 MB/s，支持断点续传）。
++- **解压到仓库根目录**，不是 `modules` 里面——压缩包顶层就是 `modules/`。
++- **仓库放短路径**（如 `D:\IQmol`），Windows 260 字符路径上限会导致深层目录解压失败。
++- 解压后**不要**再运行 `git submodule update --init --recursive`，否则会重新联网克隆覆盖。
++- **CMake 必须用 3.x（3.31）**，不要用 4.x（详见 `docs/构建与打包/构建与部署指南.md`）。
++
++完整步骤见仓库 `submodules-package/使用说明.md`。
++
++## 已知问题（源自上游）
++
++> 本节所列问题**源自 IQmol 上游本身**，并非本汉化引入；汉化仅覆盖界面 / 帮助 / Q-Chem 关键词文案。
++> 遇到疑似 bug 时，请先对照本节判断是否上游固有。
++
++- **部分运行期字符串仍为英文**：上游源码中未被 `tr()` 包裹的字符串（尤其较新上游版本新增的 UI 文本）无法被翻译体系识别，会保持英文显示。本版已覆盖 `translations/zh_CN.ts` 中 **2112 条**翻译；若发现未译项，多属上游未暴露该字符串，可在本仓库提 Issue 由维护者补充 `tr()` 包裹。
++- **OpenBabel 力场插件自注册**：静态构建下若 OpenBabel 的力场 / 格式插件未被整体保留，运行期会报 `Failed to load force field: UFF`。本仓库 `CMakeLists.txt` 已用 `$<LINK_LIBRARY:WHOLE_ARCHIVE,openbabel>` 修复；手工构建或旧包若未启用该修复则可能遇到。
++- **帮助文档内嵌截图为英文**：`doc/IQmolUserGuide.*` 中的部分配图为上游英文截图，汉化尚未重渲染（计划见待办：帮助文档截图汉化，下个版本处理）。
++- **MinGW-w64 为唯一验证工具链**：Windows 构建仅验证 MinGW-w64（Qt5 + MinGW），MSVC 路径未验证、未支持。
++- **Qt 静态 / 捆绑许可**：Windows 包为「双击即用」采用捆绑 / 静态链接 Qt，请按 Qt LGPL-3.0 或 GPL 条款评估合规，详见 [`THIRD_PARTY_LICENSES.md`](THIRD_PARTY_LICENSES.md)。
++- **未提供官方 Release 资产签名**：当前 Windows 包以 git LFS/Commit 形式分发，未做 GPG 签名；校验请使用发布说明中的 SHA256。
++
++---
++
++> 维护者：@stone-Glitch ｜ 最后整理：2026-10-01
+diff --git a/tmp/_ub/.gitignore b/workspace/IQmol-for-Chinese/.gitignore
+index 599af29..983ec87 100644
+--- a/.gitignore
++++ b/.gitignore
+@@ -1,3 +1,52 @@
+ build
++build_*/
+ .*.swp
+ .DS_Store
++Thumbs.db
++.idea/
++.vscode/
++*.user
++
++# LaTeX 中间文件（仅限 doc 目录，避免误伤 samples/*.out 等样本数据）
++/doc/*.aux
++/doc/*.bbl
++/doc/*.blg
++/doc/*.log
++/doc/*.out
++/doc/*.toc
++/doc/*.synctex.gz
++
++# ---- 编译产物（顶层 CMake 构建目录已由上面的 build 覆盖）----
++*.o
++*.obj
++*.a
++*.lib
++*.ilk
++*.exp
++# 注意：不要忽略 *.pdb —— 本仓库的 .pdb 是蛋白质结构数据文件
++# (samples/3nir.pdb 等分子样本)，不是 Visual Studio 调试符号
++moc_*.cpp
++ui_*.h
++qrc_*.cpp
++/CMakeCache.txt
++/CMakeFiles/
++
++# ---- Windows 可执行文件与部署产物 ----
++*.exe
++*.dll
++*.pyd
++
++# ---- Linux 分发包产物（package_linux.sh 输出，体积大勿提交）----
++/dist/
++
++# ---- 子模块离线包（体积大，勿误提交）----
++IQmol-submodules.zip
++IQmol-submodules.tar.gz
++part_0?
++
++# ---- build_windows.sh 自动下载的 portable CMake（生成于源码树下 .tools/，勿提交）----
++.tools/
++
++# Python 缓存
++__pycache__/
++*.pyc
+diff --git a/tmp/_ub/.github/workflows/ubuntu-2404.yml b/workspace/IQmol-for-Chinese/.github/workflows/ubuntu-2404.yml
+index 436cf15..7d5fedd 100644
+--- a/.github/workflows/ubuntu-2404.yml
++++ b/.github/workflows/ubuntu-2404.yml
+@@ -31,6 +31,10 @@ jobs:
+           sudo apt-get install libopenbabel-dev -y
+           sudo apt-get install libboost-iostreams-dev libboost-serialization-dev -y
+           sudo apt-get install qtbase5-dev -y
++          # 汉化 CI 依赖: Qt5LinguistTools 的 CMake config 由 qttools5-dev 提供, 不在 qtbase5-dev 内
++          sudo apt-get install qttools5-dev qttools5-dev-tools -y
++          # 本地成功环境也包含以下两项, 一并补齐避免后续缺失
++          sudo apt-get install libqt5opengl5-dev libqt5sql5-sqlite -y
+           sudo ln -s /usr/include/openbabel3/openbabel /usr/include/
+ 
+       - name: Link Dependencies on x86_64

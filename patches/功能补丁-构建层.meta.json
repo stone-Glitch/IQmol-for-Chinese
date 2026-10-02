@@ -1,0 +1,38 @@
+{
+  "name": "功能补丁-构建层",
+  "file": "patches/功能补丁-构建层.patch",
+  "purpose": "把构建体系相对上游的全部改动带入干净上游树：① CMakeLists.txt 的中文本地化集成段（IQMOL_STRICT_L10N 开关、lrelease 构建期生成 translations/zh_CN.qm、严格 l10n 校验）；② CMakeLists.txt 中十余项 Windows/MinGW 构建修复（QGLViewer/YAML 静态宏、OpenGL/GLU 链接目标兜底、babelconfig.h 兜底生成、OpenBabel BUILD_SHARED 跟随顶层、WHOLE_ARCHIVE 静态链接与低版本 CMake 降级、缺失源码补全等）；③ 项目 README.md 汉化版；④ .gitignore 构建产物忽略规则；⑤ CI 工作流的中文化检查步骤。是「上游升级迁移」流程的第 ④ 步。",
+  "category": "build-infrastructure",
+  "based_on_upstream": "af7ff60",
+  "apply_order": 4,
+  "applies_after": ["功能补丁-语言支持.patch", "tr() 包裹重放(replay_tr.py --apply)", "功能补丁-非机械改动.patch"],
+  "applies_before": [],
+  "covers_files": 4,
+  "covers_file_list": [
+    "CMakeLists.txt",
+    "README.md",
+    ".gitignore",
+    ".github/workflows/ubuntu-2404.yml"
+  ],
+  "verified": true,
+  "verification": "在上游 af7ff60 干净树上 git apply --check 干净通过；实际应用后 4/4 个文件与本仓库成果版逐字节 diff 完全一致 ✅",
+  "delta_stat": {
+    "CMakeLists.txt": "+439 / -17",
+    "README.md": "+194 / -2",
+    ".gitignore": "+49",
+    ".github/workflows/ubuntu-2404.yml": "+4"
+  },
+  "upstream_baseline": {
+    "CMakeLists.txt_lines": 224,
+    "local_lines": 646,
+    "note": "本仓库的 CMakeLists.txt 是相对上游的『整体重写』，不是小增量。上游 224 行，本仓库 646 行。"
+  },
+  "why_not_in_source_patches": "①②③ 三个步骤的文件清单全部来自 src/ 下的源码改动。CMakeLists.txt 属构建配置、README/.gitignore/CI 属工程配置，都不在源码补丁的表达范围内 —— 这正是本补丁存在的原因。",
+  "conflict_policy": {
+    "risk": "high",
+    "reason": "上游 224 行 / 本仓库 646 行，上下文必然漂移。上游一旦改动 CMakeLists.txt 的任何相邻行，本补丁该文件的 hunk 就可能无法应用。",
+    "handling": "保留上游的全部改动（新增源文件、依赖调整等），并在其上重新贴上本仓库的两段内容：① IQMOL_STRICT_L10N + lrelease 生成 .qm 的汉化集成段；② 各项 Windows 构建修复。详见 docs/汉化工程/上游升级迁移指南.md「构建层冲突」。",
+    "fail_mode": "git apply 整体失败（显式），不会静默部分应用 —— 因为本补丁对同一文件是单块 hunk 序列，失败即退出。"
+  },
+  "notes": "普通「下载→构建→打包」路径不需要本补丁（改动已合入 main）。与本补丁配套：scripts/build_windows.sh、scripts/i18n/ 工具链、translations/ 等属『上游不存在的新增资产』，由迁移脚本第 ⑤ 步直接 cp 带入，不打补丁。"
+}

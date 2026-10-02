@@ -1,21 +1,36 @@
 {
   "name": "功能补丁-非机械改动",
   "file": "patches/功能补丁-非机械改动.patch",
-  "purpose": "收集无法由 replay_tr.py 规则表机械重放的 35 个源文件改动（字面量文本改写、我方新增代码行、构造初始化列表重构、常量→可翻译字面量、非 QObject 类 translate() 等），是「上游升级迁移」流程的第 ③ 步。",
+  "purpose": "收集无法由 replay_tr.py 规则表机械重放的源码改动（字面量文本改写、我方新增代码行、构造初始化列表重构、常量→可翻译字面量、非 QObject 类 translate() 等），共 37 个源文件，是「上游升级迁移」流程的第 ③ 步。",
   "category": "non-mechanical",
   "based_on_upstream": "af7ff60",
   "apply_order": 3,
-  "applies_after": ["功能补丁-语言支持.patch", "tr() 包裹重放(replay_tr.py --apply)"],
-  "applies_before": [],
-  "covers_files": 35,
+  "applies_after": [
+    "功能补丁-语言支持.patch",
+    "tr() 包裹重放(replay_tr.py --apply)"
+  ],
+  "applies_before": [
+    "功能补丁-界面资源.patch",
+    "功能补丁-构建层.patch"
+  ],
+  "covers_files": 36,
   "verified": true,
-  "verification": "在上游 af7ff60 干净树上 ①→②→③ 后，69/69 个源码文件与成果版 100% 复现 ✅",
+  "verification": "在上游 af7ff60 干净树上 ①→②→③ 后，全套六步迁移实测 95/95 个文件与成果版 100% 复现 ✅（2026-10-02）",
   "covered_files_sample": [
     "src/Configurator/OrbitalsConfigurator.C",
     "src/Layer/MoleculeLayer.C",
     "src/Main/HelpBrowser.C",
+    "src/Main/IQmolApplication.C",
     "src/Parser/OpenBabelParser.C",
+    "src/Qui/InputDialog.C",
     "src/Viewer/ShaderDialog.C"
+  ],
+  "changelog": [
+    {
+      "date": "2026-10-02",
+      "change": "由 35 个文件扩充至 36 个：补入 src/Main/IQmolApplication.C 与 src/Qui/InputDialog.C 的漏网改动。",
+      "reason": "端到端验证时 selfcheck 报这 2 个文件不一致。根因：InputDialog.C 的窗口标题是拼接字符串 `\"QChem Input File Editor - \" + file.fileName()`，成果版改写为 `tr(\"QChem Input File Editor\") + \" - \" + ...`，规则表按原文精确匹配必然落空，而该文件又不在此前 35 文件清单内；IQmolApplication.C 则是有 5 处后续追加的改动（Linux 多路径搜索、OpenBabel 便携布局探测）未被原补丁记录。"
+    }
   ],
   "notes": "顺序不可颠倒：diff 上下文基于「上游 + ① + ②」的结果。普通「下载→构建→打包」路径不需要本补丁（改动已合入 main）。"
 }
