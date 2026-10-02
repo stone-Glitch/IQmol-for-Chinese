@@ -9,7 +9,8 @@
 ## 技术方案
 
 - **放弃 xdotool 自动化**：在沙箱 Xvfb 环境下，`xdotool` 发送的合成键鼠事件**完全无法被 Qt 接收**（已严格验证：连 `Ctrl+N` 普通快捷键都不响应），导致基于菜单导航的对话框触发截图彻底不可行。
-- **改用 QUiLoader 静态渲染**：用系统 Qt5 的 `QUiLoader` 动态加载 IQmol 各 `.ui` 文件，加载 `zh_CN.qm` 中文翻译，在 `offscreen` 平台下 `grab()` 截图。该方案**无需 Xvfb、无需 xdotool、无需窗口焦点**。
+- **改用 QUiLoader 静态渲染**：用系统 Qt5 的 `QUiLoader` 动态加载 IQmol 各 `.ui` 文件，在 `offscreen` 平台下 `grab()` 截图。该方案**无需 Xvfb、无需 xdotool、无需窗口焦点**。
+- ⚠️ **重要更正（2026-10-02 实测）**：Qt5 的 `QUiLoader` **没有 `setTranslator`**（Qt4 遗 API），加载 `.ui` 时**不应用任何翻译**——即使装上 `QTranslator(zh_CN.qm)` 也不生效。因此 `all/`、`cards/` 共 150+ 张截图中，**所有应用级文本（对话框内标签、按钮、标签页名）显示的是 `.ui` 英文原文，不是真实运行时的中文**；「重置/取消/关闭」等标准按钮的中文是截图驱动的**后处理**写上去的（见第 4 条）。真实运行时界面（uic 生成代码 + QTranslator）是全中文的——运行时采样实测英文残留率 `E_r=0%`，真机录屏见 `build-video/out/`。**本截图集只能用于「对话框结构清单 / 布局核对」，不能用于展示中文效果，也不能直接进推广视频。**
 - **补漏与修正**：
   1. 发现 `.ui` 顶层不只有 `QDialog`，还存在 `QMainWindow`、`QFrame`、`QWidget` 等类型。重新渲染后覆盖全部 **82** 个 `.ui` 文件，0 失败。
   2. 系统 `QFileDialog`（打开文件 / 打开目录）使用自定义 Qt 渲染 + 系统 `qt_zh_CN.qm` 翻译文件生成中文截图。
