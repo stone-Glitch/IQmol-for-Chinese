@@ -1,0 +1,164 @@
+--- a/src/Configurator/ConstraintConfigurator.C
++++ b/src/Configurator/ConstraintConfigurator.C
+@@ L55 [Text] @@
+-   m_constraintConfigurator.label->setText("Set position of atom " + atoms);
++   m_constraintConfigurator.label->setText(tr("Set position of atom ") + atoms);
+@@ L56 [Text] @@
+-   m_constraint.setText("Position " + atoms);
++   m_constraint.setText(tr("Position ") + atoms);
+@@ L141 [Text] @@
+-   m_constraintConfigurator.label->setText("Distance between atoms " + atoms);
++   m_constraintConfigurator.label->setText(tr("Distance between atoms ") + atoms);
+@@ L142 [Text] @@
+-   m_constraint.setText("Distance " + atoms);
++   m_constraint.setText(tr("Distance ") + atoms);
+@@ L163 [Text] @@
+-   m_constraintConfigurator.label->setText("Angle between atoms " + atoms);
++   m_constraintConfigurator.label->setText(tr("Angle between atoms ") + atoms);
+@@ L164 [Text] @@
+-   m_constraint.setText("Angle " + atoms);
++   m_constraint.setText(tr("Angle ") + atoms);
+@@ L186 [Text] @@
+-   m_constraintConfigurator.label->setText("Torsion between atoms " + atoms);
++   m_constraintConfigurator.label->setText(tr("Torsion between atoms ") + atoms);
+@@ L187 [Text] @@
+-   m_constraint.setText("Torsion " + atoms);
++   m_constraint.setText(tr("Torsion ") + atoms);
+
+--- a/src/Configurator/MullikenDecompositionsDialog.C
++++ b/src/Configurator/MullikenDecompositionsDialog.C
+@@ L35 [WindowTitle] @@
+-   setWindowTitle("Mulliken decomposition for " + m_density.label());
++   setWindowTitle(tr("Mulliken decomposition for ") + m_density.label());
+
+--- a/src/Configurator/SurfaceAnimatorDialog.C
++++ b/src/Configurator/SurfaceAnimatorDialog.C
+@@ L394 [Text] @@
+-   surface->setText("Cube Data " + QString::number(m_referenceFrames));
++   surface->setText(tr("Cube Data ") + QString::number(m_referenceFrames));
+
+--- a/src/Grid/GridInfoDialog.C
++++ b/src/Grid/GridInfoDialog.C
+@@ L125 [Menu] @@
+-   menu.addAction("Export Cube File", this, SLOT(exportCubeFilePositive()));
++   menu.addAction(tr("Export Cube File"), this, SLOT(exportCubeFilePositive()));
+@@ L126 [Menu] @@
+-   menu.addAction("Export Cube File (Switch Phase)", this, SLOT(exportCubeFileNegative()));
++   menu.addAction(tr("Export Cube File (Switch Phase)"), this, SLOT(exportCubeFileNegative()));
+
+--- a/src/Layer/ComponentLayer.C
++++ b/src/Layer/ComponentLayer.C
+@@ L114 [UndoCommand] @@
+-       new Command::MoveObjects(this, "Translate to center", animate);
++       new Command::MoveObjects(this, tr("Translate to center"), animate);
+
+--- a/src/Layer/CubeDataLayer.C
++++ b/src/Layer/CubeDataLayer.C
+@@ L46 [Text] @@
+-   setText("Cube Data (" + m_cube.label() + ")");
++   setText(tr("Cube Data (") + m_cube.label() + ")");
+
+--- a/src/Layer/GeminalOrbitalsLayer.C
++++ b/src/Layer/GeminalOrbitalsLayer.C
+@@ L804 [Text] @@
+-   setText("Geminal Alpha " + QString::number(index+1));
++   setText(tr("Geminal Alpha ") + QString::number(index+1));
+@@ L806 [Text] @@
+-    setText("Geminal Beta " + QString::number(index+1-geminalOrbitals.nAlpha()));
++    setText(tr("Geminal Beta ") + QString::number(index+1-geminalOrbitals.nAlpha()));
+
+--- a/src/Layer/MoleculeLayer.C
++++ b/src/Layer/MoleculeLayer.C
+@@ L1548 [UndoCommand] @@
+-      Command::EditPrimitives* cmd(new Command::EditPrimitives("Remove atoms/bonds", this));
++      Command::EditPrimitives* cmd(new Command::EditPrimitives(tr("Remove atoms/bonds"), this));
+@@ L2439 [UndoCommand] @@
+-      Command::EditPrimitives* cmd(new Command::EditPrimitives("Reperceive bonds", this));
++      Command::EditPrimitives* cmd(new Command::EditPrimitives(tr("Reperceive bonds"), this));
+@@ L2786 [Menu] @@
+-   QAction* action(menu->addAction("Gasteiger"));
++   QAction* action(menu->addAction(tr("Gasteiger")));
+@@ L2799 [Menu] @@
+-      action = menu->addAction("Mulliken");
++      action = menu->addAction(tr("Mulliken"));
+@@ L2810 [Menu] @@
+-      action = menu->addAction("Multipole Derived");
++      action = menu->addAction(tr("Multipole Derived"));
+@@ L2821 [Menu] @@
+-      action = menu->addAction("CHELPG");
++      action = menu->addAction(tr("CHELPG"));
+@@ L2832 [Menu] @@
+-      action = menu->addAction("Hirshfeld");
++      action = menu->addAction(tr("Hirshfeld"));
+@@ L2843 [Menu] @@
+-      action = menu->addAction("Lowdin");
++      action = menu->addAction(tr("Lowdin"));
+@@ L2855 [Menu] @@
+-      action = menu->addAction("Natural");
++      action = menu->addAction(tr("Natural"));
+@@ L2866 [Menu] @@
+-      action = menu->addAction("Merz-Kollman ESP");
++      action = menu->addAction(tr("Merz-Kollman ESP"));
+@@ L2877 [Menu] @@
+-      action = menu->addAction("Merz-Kollman RESP");
++      action = menu->addAction(tr("Merz-Kollman RESP"));
+
+--- a/src/Layer/SurfaceLayer.C
++++ b/src/Layer/SurfaceLayer.C
+@@ L64 [WindowTitle] @@
+-   m_configurator.setWindowTitle("Configure Surface: " + m_surface.description());
++   m_configurator.setWindowTitle(tr("Configure Surface: ") + m_surface.description());
+
+--- a/src/Plot/CustomPlot.C
++++ b/src/Plot/CustomPlot.C
+@@ L37 [Menu] @@
+-   menu->addAction("Save Image As", this, SLOT(saveAs()));
++   menu->addAction(tr("Save Image As"), this, SLOT(saveAs()));
+
+--- a/src/Process/JobMonitor.C
++++ b/src/Process/JobMonitor.C
+@@ L743 [Menu] @@
+-         kill = menu->addAction("Delete Job From Queue", this, SLOT(killJob()));
++         kill = menu->addAction(tr("Delete Job From Queue"), this, SLOT(killJob()));
+@@ L746 [Menu] @@
+-         kill = menu->addAction("Cancel Copy", this, SLOT(cancelCopy()));
++         kill = menu->addAction(tr("Cancel Copy"), this, SLOT(cancelCopy()));
+@@ L749 [Menu] @@
+-         kill = menu->addAction("Kill Job", this, SLOT(killJob()));
++         kill = menu->addAction(tr("Kill Job"), this, SLOT(killJob()));
+
+--- a/src/Qui/InputDialog.C
++++ b/src/Qui/InputDialog.C
+@@ L85 [WindowTitle] @@
+-   setWindowTitle("QChem Input File Editor - " + file.fileName());
++   setWindowTitle(tr("QChem Input File Editor - ") + file.fileName());
+
+--- a/src/Viewer/BuildEfpFragmentHandler.C
++++ b/src/Viewer/BuildEfpFragmentHandler.C
+@@ L86 [UndoCommand] @@
+-   Command::EditPrimitives* cmd(new Command::EditPrimitives("Add EFP fragment", m_molecule));
++   Command::EditPrimitives* cmd(new Command::EditPrimitives(tr("Add EFP fragment"), m_molecule));
+
+--- a/src/Viewer/BuildMoleculeFragmentHandler.C
++++ b/src/Viewer/BuildMoleculeFragmentHandler.C
+@@ L65 [UndoCommand] @@
+-   Command::EditPrimitives* cmd(new Command::EditPrimitives("Add molecule", m_molecule));
++   Command::EditPrimitives* cmd(new Command::EditPrimitives(tr("Add molecule"), m_molecule));
+
+--- a/src/Viewer/UndoCommands.C
++++ b/src/Viewer/UndoCommands.C
+@@ L391 [Text] @@
+-      setText("Load file " + m_component->fileName());
++      setText(tr("Load file ") + m_component->fileName());
+
+--- a/src/Viewer/UndoCommands.h
++++ b/src/Viewer/UndoCommands.h
+@@ L151 [UndoCommand] @@
+-            : EditPrimitives("Add Charges", molecule) {
++            : EditPrimitives(tr("Add Charges"), molecule) {
+@@ L161 [UndoCommand] @@
+-            : MoveObjects(molecule, "Minimize energy", true, true) { }
++            : MoveObjects(molecule, tr("Minimize energy"), true, true) { }
+@@ L169 [UndoCommand] @@
+-            : MoveObjects(molecule, "Symmetrize structure", true, false) { }
++            : MoveObjects(molecule, tr("Symmetrize structure"), true, false) { }

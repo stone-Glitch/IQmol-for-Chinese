@@ -1,0 +1,2 @@
+d064a6bb98d48bb189e15ff7c95cd61ae2b6bb093fff6945d33ea665e0ba0580  IQmol-win64-3.2.3-zh_CN.zip
+bee6dfec94ec566eb41a3780c3575e2093ff0c11193d2a5deca2c4b7065e2ded  IQmol-linux-x86_64.tar.gz
