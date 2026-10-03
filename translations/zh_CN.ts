@@ -3762,7 +3762,53 @@ QToolTip {
 QTextBrowser#content { 
    padding: 20px;
 }</source>
-        <translation type="unfinished"></translation>
+        <translation>QToolButton {
+   color: #333;
+   background-color: QLinearGradient( x1: 0, y1: 0, x2: 0, y2: 1, 
+          stop: 0 #fff,
+          stop: 0.5 #eee, 
+          stop: 1 #999);
+   border-width: 2px;
+   border-color: #333;
+   border-style: solid;
+   border-radius: 5;
+   padding: 0px;
+   font-size: 24pt;
+   min-width: 34px;
+   max-width: 34px;
+   min-height: 34px;
+   max-height: 34px;
+}
+
+QToolButton:disabled {
+  background-color: QLinearGradient( x1: 0, y1: 0, x2: 0, y2: 1, 
+          stop: 0 #fff,
+          stop: 0.5 #eee, 
+          stop: 1 #bbb);
+   border-color: #aaa;
+   color: #aaa;
+}
+
+QToolButton:pressed {
+   border-color: #b00;
+}
+
+
+QToolButton:checked {
+   border-color: #b00;
+}
+
+QToolTip {
+   border: 2px solid darkkhaki;
+   padding: 2px;
+   border-radius: 3px;
+   opacity: 500;
+   font-size: 12pt;
+}
+
+QTextBrowser#content { 
+   padding: 20px;
+}</translation>
     </message>
     <message>
         <location filename="../src/Main/HelpBrowser.ui" line="71"/>
@@ -7400,7 +7446,40 @@ QToolButton:pressed {
 QToolButton:checked {
    border-color: #b00;
 }</source>
-        <translation type="unfinished"></translation>
+        <translation>QToolButton {
+   color: #333;
+   background-color: QLinearGradient( x1: 0, y1: 0, x2: 0, y2: 1, 
+          stop: 0 #fff,
+          stop: 0.5 #eee, 
+          stop: 1 #999);
+   border-width: 2px;
+   border-color: #333;
+   border-style: solid;
+   border-radius: 5;
+   padding: 0px;
+   font-size: 24pt;
+   min-width: 24px;
+   max-width: 24px;
+   min-height: 24px;
+   max-height: 24px;
+}
+
+QToolButton:disabled {
+  background-color: QLinearGradient( x1: 0, y1: 0, x2: 0, y2: 1, 
+          stop: 0 #fff,
+          stop: 0.5 #eee, 
+          stop: 1 #bbb);
+   border-color: #aaa;
+   color: #aaa;
+}
+
+QToolButton:pressed {
+   border-color: #222;
+}
+
+QToolButton:checked {
+   border-color: #b00;
+}</translation>
     </message>
     <message>
         <location filename="../src/Qui/InputDialog.ui" line="337"/>
@@ -7439,7 +7518,41 @@ QToolButton:pressed {
 QToolButton:checked {
    border-color: #b00;
 }</source>
-        <translation type="unfinished"></translation>
+        <translation>QToolButton {
+   color: #333;
+   background-color: QLinearGradient( x1: 0, y1: 0, x2: 0, y2: 1, 
+          stop: 0 #fff,
+          stop: 0.5 #eee, 
+          stop: 1 #999);
+   border-width: 2px;
+   border-color: #333;
+   border-style: solid;
+   border-radius: 5;
+   padding: 0px;
+   font-size: 24pt;
+   min-width: 24px;
+   max-width: 24px;
+   min-height: 24px;
+   max-height: 24px;
+}
+
+QToolButton:disabled {
+  background-color: QLinearGradient( x1: 0, y1: 0, x2: 0, y2: 1, 
+          stop: 0 #fff,
+          stop: 0.5 #eee, 
+          stop: 1 #bbb);
+   border-color: #aaa;
+   color: #aaa;
+}
+
+QToolButton:pressed {
+   border-color: #222;
+}
+
+
+QToolButton:checked {
+   border-color: #b00;
+}</translation>
     </message>
     <message>
         <location filename="../src/Qui/InputDialog.ui" line="1025"/>
@@ -11058,7 +11171,56 @@ QToolTip {
    opacity: 500;
    font-size: 12pt;
 }</source>
-        <translation type="unfinished"></translation>
+        <translation>QToolButton {
+   color: #333;
+   background-color: QLinearGradient( x1: 0, y1: 0, x2: 0, y2: 1, 
+          stop: 0 #fff,
+          stop: 0.5 #eee, 
+          stop: 1 #999);
+   border-width: 2px;
+   border-color: #333;
+   border-style: solid;
+   border-radius: 5;
+   padding: 0px;
+   font-size: 24pt;
+   min-width: 34px;
+   max-width: 34px;
+   min-height: 34px;
+   max-height: 34px;
+}
+
+QToolButton:disabled {
+  background-color: QLinearGradient( x1: 0, y1: 0, x2: 0, y2: 1, 
+          stop: 0 #fff,
+          stop: 0.5 #eee, 
+          stop: 1 #bbb);
+   border-color: #aaa;
+   color: #aaa;
+}
+
+QToolButton:pressed {
+   background-color: QLinearGradient( x1: 0, y1: 0, x2: 0, y2: 1, 
+          stop: 0 #999,
+          stop: 0.5 #eee, 
+          stop: 1 #fff);
+}
+
+
+QToolButton:checked {
+   border-color: #b00;
+   background-color: QLinearGradient( x1: 0, y1: 0, x2: 0, y2: 1, 
+          stop: 0 #999,
+          stop: 0.5 #eee, 
+          stop: 1 #fff);
+}
+
+QToolTip {
+   border: 2px solid darkkhaki;
+   padding: 2px;
+   border-radius: 3px;
+   opacity: 500;
+   font-size: 12pt;
+}</translation>
     </message>
     <message>
         <location filename="../src/Configurator/SurfaceAnimatorDialog.ui" line="98"/>
@@ -11217,7 +11379,53 @@ QToolTip {
    opacity: 500;
    font-size: 10pt;
 }</source>
-        <translation type="unfinished"></translation>
+        <translation>QToolButton {
+   color: #333;
+   background-color: QLinearGradient( x1: 0, y1: 0, x2: 0, y2: 1, 
+          stop: 0 #fff,
+          stop: 0.5 #eee, 
+          stop: 1 #999);
+   border-width: 2px;
+   border-color: #333;
+   border-style: solid;
+   border-radius: 5;
+   padding: 0px;
+   font-size: 24pt;
+   min-width: 34px;
+   max-width: 34px;
+   min-height: 34px;
+   max-height: 34px;
+}
+
+QToolButton:disabled {
+  background-color: QLinearGradient( x1: 0, y1: 0, x2: 0, y2: 1, 
+          stop: 0 #fff,
+          stop: 0.5 #eee, 
+          stop: 1 #bbb);
+   border-color: #aaa;
+   color: #aaa;
+}
+
+
+QToolButton:pressed {
+   background-color: QLinearGradient( x1: 0, y1: 0, x2: 0, y2: 1, 
+          stop: 0 #999,
+          stop: 0.5 #eee, 
+          stop: 1 #fff);
+}
+
+
+QToolButton:checked {
+   border-color: #b00;
+}
+
+QToolTip {
+   border: 2px solid darkkhaki;
+   padding: 2px;
+   border-radius: 3px;
+   opacity: 500;
+   font-size: 10pt;
+}</translation>
     </message>
     <message>
         <source>QToolButton {
