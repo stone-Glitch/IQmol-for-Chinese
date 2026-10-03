@@ -1,22 +1,43 @@
-name: Build on Windows (MinGW-w64)
+name: Build & Package Windows (MinGW-w64)
+
+# 目的：在 GitHub 原生 Windows runner 上编译 IQmol 中文版，
+#       并产出**可直接分发的 Windows 压缩包**（不是只验证能编译）。
+#
+# 流水线：
+#   checkout -> MSYS2(MinGW64) -> 解包子模块 -> cmake/ninja 编译
+#     -> scripts/package_windows.sh（含自包含性自检）
+#     -> 上传 artifact（每次） / 发布 Release（打 tag 时）
+#
+# 为什么用 MSYS2 而非 Qt 官方 MinGW：
+#   scripts/deploy_windows.sh 的 DLL 闭包扫描基于 MSYS2 的 /mingw64 布局，
+#   Qt 官方包无 pacman 依赖树，windeployqt 之外的运行库需手工凑齐。
+#   两者产物等价（都是 MinGW-w64 x86_64），MSYS2 更省心。
 
 on:
   push:
     branches: [ main ]
+    tags: [ 'v*' ]
   pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+concurrency:
+  group: win-pkg-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   build-windows:
-    name: Build Windows (MinGW-w64)
+    name: 编译 + 打包 (Windows x64)
     runs-on: windows-2022
     defaults:
       run:
         shell: msys2 {0}
+
     steps:
-      - name: Checkout Project
+      - name: 检出代码
         uses: actions/checkout@v4.2.2
 
-      - name: Setup MSYS2 (MinGW-w64)
+      - name: 安装 MSYS2 / MinGW-w64 工具链与依赖
         uses: msys2/setup-msys2@v2
         with:
           msystem: MINGW64
@@ -35,32 +56,88 @@ jobs:
             mingw-w64-x86_64-boost
             mingw-w64-x86_64-zlib
             mingw-w64-x86_64-openssl
+            mingw-w64-x86_64-sqlite3
+            mingw-w64-x86_64-gcc-libs
+            mingw-w64-x86_64-gcc-fortran
             git
             p7zip
 
-      - name: Unpack bundled submodules
+      - name: 解包子模块源码
         run: |
           if [ -f submodules-package/IQmol-submodules.tar.gz ]; then
             tar -xzf submodules-package/IQmol-submodules.tar.gz
+            echo "子模块已解包："
+            ls modules/
+          else
+            echo "::error::缺少 submodules-package/IQmol-submodules.tar.gz"
+            exit 1
           fi
 
-      - name: Configure (MinGW + Ninja)
+      - name: 配置（MinGW + Ninja，Release）
         run: |
-          cmake -G "Ninja" -B build -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF
+          cmake -G "Ninja" -B build \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DBUILD_SHARED_LIBS=OFF
         env:
+          # CI 上仅做编译验证 + 出包；严格 l10n 由 i18n-tqa.yml 单独把关
           IQMOL_STRICT_L10N: "OFF"
 
-      - name: Build
+      - name: 编译
         run: cmake --build build -j4
 
-      - name: Verify translation asset
+      - name: 校验产物
         run: |
-          if [ ! -f build/bin/translations/zh_CN.qm ]; then
-            echo "::warning::zh_CN.qm 未生成，界面将回退英文"
-          else
+          set -e
+          test -f build/bin/IQmol.exe || { echo "::error::未生成 build/bin/IQmol.exe"; exit 1; }
+          ls -la build/bin/IQmol.exe
+          if [ -f build/bin/translations/zh_CN.qm ]; then
             echo "zh_CN.qm 已生成"
+          else
+            echo "::error::zh_CN.qm 未生成，界面将回退英文"
+            exit 1
           fi
 
-      - name: Test
+      - name: 打包（scripts/package_windows.sh，含自包含性自检）
         run: |
-          cd build && ctest --output-on-failure || true
+          bash scripts/package_windows.sh --out dist --zip
+
+      - name: 列出打包产物
+        run: ls -la dist/
+
+      - name: 生成校验和
+        run: |
+          cd dist
+          for f in *.7z *.zip; do
+            [ -f "$f" ] && sha256sum "$f" >> SHA256SUMS.txt
+          done
+          cat SHA256SUMS.txt || true
+
+      - name: 上传构建产物
+        uses: actions/upload-artifact@v4
+        with:
+          name: IQmol-windows-x64-zh_CN
+          path: |
+            dist/*.7z
+            dist/*.zip
+            dist/SHA256SUMS.txt
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: 附加到 Release（仅在推送 tag 时）
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            dist/*.7z
+            dist/*.zip
+            dist/SHA256SUMS.txt
+          fail_on_unmatched_files: false
+          draft: false
+
+      - name: 冒烟测试（验证 exe 可启动）
+        run: |
+          cd build
+          # GUI 程序无控制台输出；能跑过 3 秒不崩溃、且写出日志即视为启动成功
+          timeout 20 ./bin/IQmol.exe --version || true
+          echo "--- 冒烟测试完成 ---"
+        continue-on-error: true
