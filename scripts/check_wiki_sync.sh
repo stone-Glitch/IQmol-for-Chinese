@@ -25,6 +25,7 @@ MAP=(
   "docs/构建与打包|Build"
   "docs/汉化工程/无显卡环境运行与录屏.md|Build"
   "scripts/publish_release.sh|Build"
+  ".github/workflows|Build"
   "docs/推广视频|Video"
   "scripts/video|Video"
   "scripts/video/narration.py|Video"
