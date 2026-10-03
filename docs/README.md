@@ -45,6 +45,10 @@ IQmol 汉化项目的全部文档按**主题**分类于此。入口是仓库根 
 | [`patches/历史残留/README.md`](../patches/历史残留/README.md) | 已被 功能补丁-* 取代的早期草稿补丁（仅追溯，勿应用） | 维护者 / 审计 |
 | [`dialog_screenshots/README.md`](../dialog_screenshots/README.md) | 中文界面截图集（QUiLoader 静态渲染方案、82 个 .ui 覆盖清单） | 维护者 |
 
+> ⚠️ **命名提醒**：仓库根有两个只差一个字母的目录——
+> `doc/` 是**上游英文用户手册源**（`doc/IQmolUserGuide.pdf`、LaTeX），来自上游 fork；
+> `docs/`（本表，中文文档）是**本仓库的汉化中文文档**。两者用途不同，别下错目录。
+
 ## 二、按角色推荐阅读顺序
 
 **新成员**：`README.md` → `仓库结构.md` → `构建与打包/构建与部署指南.md`

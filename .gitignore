@@ -71,6 +71,16 @@ __pycache__/
 IQmol-video-assets/
 promo_scripts/
 *.mp4
-# build-video/ 是视频录制与合成产物目录（out/ 成片、edit/ 剪辑中间、IQmol 录屏用可执行），
+# build-video/ 是视频录制与合成工程目录（out/ 成片、edit/ 剪辑中间、IQmol 录屏用可执行）。
+# 注意：它**被 scripts/video/*.sh、*.py 及 docs/推广视频/* 约 50+ 处以相对路径强耦合引用**，
+# 脚本均假设「当前目录 = 仓库根」，因此该目录必须留在仓库根、不可随意移动或改名。
 # 体积大且不入库；build-*/ 已能忽略它，此处显式声明以防目录改名（如 build_video）漏网。
 build-video/
+
+# ==================== 须保持 git 跟踪（勿忽略） ====================
+# submodules-package/ 是 **CI 离线构建依赖**（见 .github/workflows/windows-msvc.yml
+# 第 111–138 行：解压 IQmol-submodules.tar.gz 做内嵌离线构建）。
+# 它必须保持 git 跟踪，请勿加入忽略规则。
+# 注意：上面「子模块离线包」一节里的 IQmol-submodules.zip / IQmol-submodules.tar.gz /
+# part_0? 规则只忽略**根目录散落**的同名压缩包，不会覆盖本目录内的文件；
+# 若日后清理，请只删根目录散落的临时包，勿误删本目录。
