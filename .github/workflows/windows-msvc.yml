@@ -38,10 +38,16 @@ jobs:
         uses: actions/checkout@v4.2.2
 
       - name: 安装 MSYS2 / MinGW-w64 工具链与依赖
+        # 注意：这里刻意不开 update: true。
+        # msys2/setup-msys2 的 update 会执行 `pacman -Syuu`，而完整升级
+        # 需要「升级 -> 重启 shell -> 再升级」两阶段，单跑一次在 CI 上
+        # 几乎必然失败（本仓库旧版工作流正是卡在这一步）。
+        # GitHub 的 windows-2022 镜像里 MSYS2 已是近期快照，无需全量更新。
+        # 用 --needed 避免重复下载，--noconfirm 避免交互。
         uses: msys2/setup-msys2@v2
         with:
           msystem: MINGW64
-          update: true
+          update: false
           install: >-
             mingw-w64-x86_64-toolchain
             mingw-w64-x86_64-cmake
@@ -61,6 +67,15 @@ jobs:
             mingw-w64-x86_64-gcc-fortran
             git
             p7zip
+
+      - name: 环境自检（便于失败时定位）
+        run: |
+          echo "== msystem =="; echo "$MSYSTEM"
+          echo "== gcc =="; gcc --version | head -1
+          echo "== cmake =="; cmake --version | head -1
+          echo "== windeployqt =="; command -v windeployqt || echo "(未在 PATH)"
+          echo "== 7z =="; 7z 2>/dev/null | head -2 || echo "(7z 未就绪)"
+          echo "== 磁盘 =="; df -h . | tail -1
 
       - name: 解包子模块源码
         run: |
