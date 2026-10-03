@@ -43,30 +43,39 @@ jobs:
         # 需要「升级 -> 重启 shell -> 再升级」两阶段，单跑一次在 CI 上
         # 几乎必然失败（本仓库旧版工作流正是卡在这一步）。
         # GitHub 的 windows-2022 镜像里 MSYS2 已是近期快照，无需全量更新。
-        # 用 --needed 避免重复下载，--noconfirm 避免交互。
+        #
+        # 包名坑（已按 packages.msys2.org 索引逐一核对）：
+        #   ✗ mingw-w64-x86_64-toolchain  —— 无此包，用 mingw-w64-x86_64-gcc
+        #   ✗ mingw-w64-x86_64-qt5        —— 无此包，用 qt5-base 及所需子模块
+        #   ✗ mingw-w64-x86_64-openbabel  —— MSYS2 仓库中不存在
+        #   ✗ mingw-w64-x86_64-openmesh   —— MSYS2 仓库中不存在
+        #   ✗ p7zip / mingw-w64-x86_64-p7zip —— 无此包，用 mingw-w64-x86_64-7zip
+        # 之所以不装 openbabel/openmesh 系统包也没关系：CMakeLists.txt 的
+        # 非 LINUX 分支本就 add_subdirectory(modules/openbabel|openmesh)，
+        # 从 submodules-package 解出的源码内嵌构建（见 CMakeLists 第 104、288 行）。
         uses: msys2/setup-msys2@v2
         with:
           msystem: MINGW64
           update: false
           install: >-
-            mingw-w64-x86_64-toolchain
+            mingw-w64-x86_64-gcc
+            mingw-w64-x86_64-gcc-libs
+            mingw-w64-x86_64-gcc-fortran
             mingw-w64-x86_64-cmake
             mingw-w64-x86_64-ninja
-            mingw-w64-x86_64-qt5
+            mingw-w64-x86_64-qt5-base
             mingw-w64-x86_64-qt5-tools
-            mingw-w64-x86_64-openbabel
+            mingw-w64-x86_64-qt5-svg
+            mingw-w64-x86_64-qt5-declarative
             mingw-w64-x86_64-yaml-cpp
-            mingw-w64-x86_64-openmesh
             mingw-w64-x86_64-libssh2
             mingw-w64-x86_64-libarchive
             mingw-w64-x86_64-boost
             mingw-w64-x86_64-zlib
             mingw-w64-x86_64-openssl
             mingw-w64-x86_64-sqlite3
-            mingw-w64-x86_64-gcc-libs
-            mingw-w64-x86_64-gcc-fortran
+            mingw-w64-x86_64-7zip
             git
-            p7zip
 
       - name: 环境自检（便于失败时定位）
         run: |
