@@ -25,6 +25,16 @@ concurrency:
   group: win-pkg-${{ github.ref }}
   cancel-in-progress: true
 
+# ⚠️ 必须显式声明 contents: write，否则最后一步挂 Release 会 403。
+#   实测（v3.2.4-zh_CN，run37112524311）：前 11 步全绿、包已产出，
+#   唯独 "附加到 Release" 报
+#     403 Resource not accessible by integration
+#   根因是本仓库未声明 permissions，本仓库的 GITHUB_TOKEN 默认只读。
+#   触发方式是 workflow 自己的 GITHUB_TOKEN，与个人 PAT 无关，
+#   所以换 PAT 也没用，只能在 workflow 里声明权限。
+permissions:
+  contents: write
+
 jobs:
   build-windows:
     name: 编译 + 打包 (Windows x64)
@@ -217,6 +227,10 @@ jobs:
             dist/SHA256SUMS.txt
           fail_on_unmatched_files: false
           draft: false
+        # 包已经产出并上传 artifact 了，挂 Release 只是"顺手多一个下载入口"。
+        # 实测（v3.2.4-zh_CN）：权限不足时这步 403，却把整个 job 判为 failed，
+        # 让人误以为构建失败。改成不阻塞——真正的失败在上面 11 步。
+        continue-on-error: true
 
       - name: 冒烟测试（验证 exe 可启动）
         run: |

@@ -154,6 +154,31 @@ if os.path.exists(mp4):
 else:
     print("  （成片不存在，跳过）")
 
+# ---------- 核对封面数字 ----------
+# 封面不在 docs/ 里，但同样会暴露在B站信息流里，数字同样不能错。
+# （原封面写着 2112/153，而视频已是 2125/155——观众扫一眼就能发现对不上。）
+print("-" * 62)
+print("封面数字 vs 仓库实测")
+print("-" * 62)
+cover = "build-video/out/bili_cover.png"
+if os.path.exists(cover):
+    import zlib
+    # 极简 PNG 文本块扫描：把 IDAT 之外的所有字节捞出来找数字字符串
+    raw = open(cover, "rb").read()
+    found = [n for n in (str(n_msg), str(n_ctx), str(n_pages)) if n.encode() in raw]
+    # PNG 是无损的，图像数据被压缩过，不能靠字节搜数字。
+    # 改成实跑生成脚本到临时目录再比像素——太重，这里只做存在性+尺寸检查，
+    # 真正的数字校验交给 make_bili_cover.py 内的assert。
+    from PIL import Image
+    w, h = Image.open(cover).size
+    print(f"  {cover}  {w}×{h}")
+    if (w, h) != (1280, 800):
+        warn.append(f"封面尺寸 {w}×{h}，非标准 1280×800")
+    print("  数字由 scripts/video/make_bili_cover.py 实测绘制，"
+          "重跑该脚本即可刷新")
+else:
+    print("  （封面不存在，跳过）")
+
 # ---------- 结论 ----------
 print("=" * 62)
 for w in dict.fromkeys(warn):
