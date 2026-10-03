@@ -53,6 +53,13 @@ jobs:
         # 之所以不装 openbabel/openmesh 系统包也没关系：CMakeLists.txt 的
         # 非 LINUX 分支本就 add_subdirectory(modules/openbabel|openmesh)，
         # 从 submodules-package 解出的源码内嵌构建（见 CMakeLists 第 104、288 行）。
+        #
+        # qt5-translations 不可省：它提供 /mingw64/share/qt5/translations/qt_zh_CN.qm，
+        # 即 Qt 自身的中文翻译（标准对话框的 Cancel/OK/Open/Save 等按钮文案）。
+        # 缺它时 IQmol 自己的 zh_CN.qm 照常工作，但标准按钮仍是英文，
+        # 且 package_windows.sh 的发布前自检会硬拦截：
+        #   ERROR: 分发包缺少 Qt 标准翻译 (bin/translations/qt*_zh_CN.qm)
+        # 注意它和 qt5-tools 是两个包：lrelease 归 qt5-tools，翻译资源归 qt5-translations。
         uses: msys2/setup-msys2@v2
         with:
           msystem: MINGW64
@@ -65,6 +72,7 @@ jobs:
             mingw-w64-x86_64-ninja
             mingw-w64-x86_64-qt5-base
             mingw-w64-x86_64-qt5-tools
+            mingw-w64-x86_64-qt5-translations
             mingw-w64-x86_64-qt5-svg
             mingw-w64-x86_64-qt5-declarative
             mingw-w64-x86_64-yaml-cpp
