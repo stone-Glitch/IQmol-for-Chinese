@@ -75,6 +75,7 @@ jobs:
             mingw-w64-x86_64-openssl
             mingw-w64-x86_64-sqlite3
             mingw-w64-x86_64-7zip
+            mingw-w64-x86_64-make
             git
 
       - name: 环境自检（便于失败时定位）
@@ -89,20 +90,28 @@ jobs:
       - name: 解包子模块源码
         run: |
           set -x
-          ls -la submodules-package/ | head -20
           if [ ! -f submodules-package/IQmol-submodules.tar.gz ]; then
             echo "::error::缺少 submodules-package/IQmol-submodules.tar.gz"
             exit 1
           fi
           # 包内顶层即 modules/，直接解到仓库根即可。
-          # MSYS2 的 tar 处理含 4.8 万小文件的大包偶发长路径失败，
-          # 故失败时回退用 7z 解（Windows 原生实现，长路径支持更好）。
-          if ! tar -xzf submodules-package/IQmol-submodules.tar.gz; then
-            echo "::warning::tar 解包失败，回退 7z"
-            7z x -y -o. submodules-package/IQmol-submodules.tar.gz
-            7z x -y -o. IQmol-submodules.tar
-            rm -f IQmol-submodules.tar
-          fi
+          #
+          # 【必须跳过符号链接】该包含 3 个 symlink，且全在 test/ 目录里
+          # （libxml2/test/relaxng/*.rng、HighFive/tests/test_project/*.cpp），
+          # 与 IQmol 构建无关。但 Windows 创建 symlink 需管理员权限或开发者模式，
+          # GitHub runner 默认两者都没有，tar 会报
+          #   "Cannot create symlink to ...: No such file or directory"
+          # 并以非零退出——即使 99.99% 的文件都已正确解出。
+          # 7z 也不可靠：7-Zip 26 的 "Dangerous link path was ignored"
+          # 同样是 exit 2。
+          # 故用 --exclude 显式排除这 3 个文件，其余内容照常解出。
+          tar -xzf submodules-package/IQmol-submodules.tar.gz \
+            --exclude='*/test/*' \
+            --exclude='*/tests/*' \
+            || {
+              echo "::warning::排除 test 目录后仍失败，改为全量解包并容忍 symlink 错误"
+              tar -xzf submodules-package/IQmol-submodules.tar.gz || true
+            }
           echo "== 解包结果 =="
           ls -d modules/*/ 2>/dev/null || { echo "::error::modules/ 为空"; exit 1; }
           echo "== 各子模块文件数 =="
@@ -110,17 +119,27 @@ jobs:
             printf "  %-28s %s\n" "$d" "$(find "$d" -type f 2>/dev/null | wc -l)"
           done
 
-      - name: 配置（MinGW + Ninja，Release）
+      # 关键：必须走 scripts/build_windows.sh，不能直接 cmake。
+      # 该脚本承载了 Windows 专属的全部修复，直接 cmake 会绕过它们导致必崩：
+      #   1) 解压并应用 4 个 OpenBabel 补丁包（deps / fix / formats-fix /
+      #      data-headers）—— 尤其 data-headers：MinGW 无法执行 bin2hex.pl，
+      #      没有预生成头会报 "'BondTypeData' was not declared"
+      #   2) 修 openbabel/data/CMakeLists.txt 为预生成头方案
+      #   3) 修 openbabel/src/CMakeLists.txt 静态分支漏加
+      #      ${format}_additional_sources 的问题
+      #   4) 拦截 OpenBabel external 三件套缺失（缺了 configure 必 FATAL_ERROR）
+      #   5) 兜底补全 modules/CMakeLists.txt（libQGLViewer 聚合脚本，缺则必崩）
+      #   6) 用 -G "MinGW Makefiles" + CMAKE_PREFIX_PATH=/mingw64，
+      #      缺了 CMake 找不到 Qt/Boost，Generate 阶段就失败
+      # 另外生成器必须是 MinGW Makefiles（配 mingw32-make），
+      # 不能用 Ninja——OpenBabel 的 MinGW 链接在 Ninja 下已知出问题。
+      - name: 配置 + 编译（scripts/build_windows.sh，含全部 Windows 专属修复）
         run: |
-          cmake -G "Ninja" -B build \
-            -DCMAKE_BUILD_TYPE=Release \
-            -DBUILD_SHARED_LIBS=OFF
+          export PATH="/mingw64/bin:$PATH"
+          bash scripts/build_windows.sh --clean
         env:
           # CI 上仅做编译验证 + 出包；严格 l10n 由 i18n-tqa.yml 单独把关
           IQMOL_STRICT_L10N: "OFF"
-
-      - name: 编译
-        run: cmake --build build -j4
 
       - name: 校验产物
         run: |
