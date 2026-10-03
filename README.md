@@ -49,6 +49,21 @@ IQmol version 3
 
 👉 **[查看完整汉化展示主页 →](docs/汉化展示主页.md)** ｜ [下载 Releases](https://github.com/stone-Glitch/IQmol-for-Chinese/releases)
 
+---
+
+### 📂 仓库布局速览
+
+顶层目录分四类，避免混淆：
+
+| 类别 | 目录 | 用途 |
+|---|---|---|
+| **软件源码（上游）** | `src/` `modules/`(子模块) `resources/` `share/` `samples/` `cmake/` `installer/` | IQmol 本体与第三方库，来自上游 fork，请勿改名（破坏 `sync_upstream`） |
+| **汉化资产** | `translations/`(zh_CN.ts) `dialog_screenshots/`(对话框截图素材) `patches/`(仅供上游迁移) | 中文翻译与迁移补丁 |
+| **文档** | `doc/`(上游英文手册 LaTeX/PDF 源) · `docs/`(**本仓库汉化中文文档**) | ⚠️ 两者只差一个字母：`doc` 是上游英文手册源，`docs` 是我们写的中文文档，别下错 |
+| **构建/工程** | `scripts/` `submodules-package/`(CI 离线依赖，须跟踪) `build-video/`(视频工程，已 gitignore) `.github/` | 编译脚本、CI 离线包、推广视频工程 |
+
+> 更细的目录说明见 [docs/仓库结构.md](docs/仓库结构.md)；文档总入口见 [docs/README.md](docs/README.md)。
+
 This is IQmol, a molecular builder and visualization package written by Andrew
 Gilbert.  IQmol is able to build molecules, set up and submit input for Q-Chem
 calculations, and analyse the output.  Analyses include display of molecular
