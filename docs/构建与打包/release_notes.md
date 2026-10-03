@@ -5,7 +5,7 @@
 
 ## ✨ 本版亮点
 
-- **界面全量汉化**：`translations/zh_CN.ts` 共 **2112 条**翻译、**153 个 context**、`0 unfinished`；构建时由 CMake 自动调用 `lrelease` 生成 `zh_CN.qm`。
+- **界面全量汉化**：`translations/zh_CN.ts` 共 **2125 条**翻译、**155 个 context**、`0 unfinished`；构建时由 CMake 自动调用 `lrelease` 生成 `zh_CN.qm`。
 - **Windows 预编译包**：解压即用，含 `IQmol.exe`、Qt 运行库与 900+ 依赖 DLL，无需自行编译。
 - **Linux 预编译包**：`x86_64` 解压即用，自带 Qt5 / OpenBabel / OpenMesh / QGLViewer 等全部依赖，不污染系统。
 - **中文用户手册**：仓库 `doc/IQmolUserGuide.pdf`（34 页，全中文）。
