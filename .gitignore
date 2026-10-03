@@ -71,3 +71,6 @@ __pycache__/
 IQmol-video-assets/
 promo_scripts/
 *.mp4
+# build-video/ 是视频录制与合成产物目录（out/ 成片、edit/ 剪辑中间、IQmol 录屏用可执行），
+# 体积大且不入库；build-*/ 已能忽略它，此处显式声明以防目录改名（如 build_video）漏网。
+build-video/
