@@ -28,6 +28,7 @@
 #include "UndoCommands.h"
 #include "QsLog.h"
 #include <QFileInfo>
+#include <QCoreApplication>
 
 #include <QDebug>
 
@@ -83,7 +84,8 @@ qDebug() << "EfpData to go to molecule  Data::Bank?";
 
    QList<Layer::Primitive*> primitives; 
    primitives << efp;
-   Command::EditPrimitives* cmd(new Command::EditPrimitives("Add EFP fragment", m_molecule));
+   Command::EditPrimitives* cmd(new Command::EditPrimitives(
+      QCoreApplication::translate("Handler::BuildEfpFragment", "Add EFP fragment"), m_molecule));
    cmd->add(primitives);
    m_viewer->postCommand(cmd);
 

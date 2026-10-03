@@ -2,7 +2,7 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="zh_CN">
 <context>
-        <name>AboutDialog</name>
+    <name>AboutDialog</name>
     <message>
         <location filename="../src/Main/AboutDialog.ui" line="20"/>
         <source>About IQmol</source>
@@ -64,7 +64,7 @@
     </message>
 </context>
 <context>
-        <name>AdcTab</name>
+    <name>AdcTab</name>
     <message>
         <location filename="../src/Qui/AdcTab.ui" line="14"/>
         <source>Form</source>
@@ -127,7 +127,7 @@
     </message>
 </context>
 <context>
-        <name>AimdTab</name>
+    <name>AimdTab</name>
     <message>
         <location filename="../src/Qui/AimdTab.ui" line="14"/>
         <source>Form</source>
@@ -181,7 +181,7 @@
     </message>
 </context>
 <context>
-        <name>AttenuationParameterTab</name>
+    <name>AttenuationParameterTab</name>
     <message>
         <location filename="../src/Qui/AttenuationParameterTab.ui" line="14"/>
         <source>Form</source>
@@ -194,7 +194,7 @@
     </message>
 </context>
 <context>
-        <name>AuxiliaryBasisTab</name>
+    <name>AuxiliaryBasisTab</name>
     <message>
         <location filename="../src/Qui/AuxiliaryBasisTab.ui" line="14"/>
         <source>Form</source>
@@ -207,7 +207,7 @@
     </message>
 </context>
 <context>
-        <name>AwsConfigurationDialog</name>
+    <name>AwsConfigurationDialog</name>
     <message>
         <location filename="../src/Process/AwsConfigurationDialog.ui" line="14"/>
         <source>Q-Cloud Configuration</source>
@@ -245,7 +245,7 @@
     </message>
 </context>
 <context>
-        <name>AxesConfigurator</name>
+    <name>AxesConfigurator</name>
     <message>
         <location filename="../src/Configurator/AxesConfigurator.ui" line="14"/>
         <source>Configure Mesh</source>
@@ -278,7 +278,7 @@
     </message>
 </context>
 <context>
-        <name>AxesMeshConfigurator</name>
+    <name>AxesMeshConfigurator</name>
     <message>
         <location filename="../src/Configurator/AxesMeshConfigurator.ui" line="14"/>
         <source>Configure Mesh</source>
@@ -336,7 +336,7 @@
     </message>
 </context>
 <context>
-        <name>BackgroundConfigurator</name>
+    <name>BackgroundConfigurator</name>
     <message>
         <location filename="../src/Configurator/BackgroundConfigurator.ui" line="20"/>
         <source>Configure Background</source>
@@ -408,7 +408,7 @@ QToolButton:pressed {
     </message>
 </context>
 <context>
-        <name>BoundingBoxDialog</name>
+    <name>BoundingBoxDialog</name>
     <message>
         <location filename="../src/Grid/BoundingBoxDialog.ui" line="14"/>
         <source>Edit Bounding Box</source>
@@ -441,7 +441,7 @@ QToolButton:pressed {
     </message>
 </context>
 <context>
-        <name>CameraDialog</name>
+    <name>CameraDialog</name>
     <message>
         <location filename="../src/Viewer/CameraDialog.ui" line="14"/>
         <source>Configure Camera</source>
@@ -555,7 +555,7 @@ QToolButton:pressed {
     </message>
 </context>
 <context>
-        <name>CisTab</name>
+    <name>CisTab</name>
     <message>
         <location filename="../src/Qui/CisTab.ui" line="14"/>
         <source>Form</source>
@@ -638,7 +638,7 @@ QToolButton:pressed {
     </message>
 </context>
 <context>
-        <name>ClippingPlaneConfigurator</name>
+    <name>ClippingPlaneConfigurator</name>
     <message>
         <location filename="../src/Configurator/ClippingPlaneConfigurator.ui" line="14"/>
         <source>Configure Clipping Plane</source>
@@ -686,7 +686,7 @@ QToolButton:pressed {
     </message>
 </context>
 <context>
-        <name>ColorDialog</name>
+    <name>ColorDialog</name>
     <message>
         <location filename="../src/Util/ColorDialog.ui" line="20"/>
         <source>Color Editor</source>
@@ -823,7 +823,7 @@ QToolButton:pressed {
     </message>
 </context>
 <context>
-        <name>ColorGradientDialog</name>
+    <name>ColorGradientDialog</name>
     <message>
         <location filename="../src/Util/ColorGradientDialog.ui" line="20"/>
         <source>Color Gradient Editor</source>
@@ -925,7 +925,7 @@ QToolButton:pressed {
     </message>
 </context>
 <context>
-        <name>ConfigDialog</name>
+    <name>ConfigDialog</name>
     <message>
         <location filename="../src/Amber/ConfigDialog.ui" line="14"/>
         <source>Amber Config</source>
@@ -954,7 +954,7 @@ QToolButton:pressed {
     </message>
 </context>
 <context>
-        <name>CubeDataConfigurator</name>
+    <name>CubeDataConfigurator</name>
     <message>
         <location filename="../src/Configurator/CubeDataConfigurator.ui" line="20"/>
         <source>Add Surface</source>
@@ -1048,7 +1048,7 @@ Uncheck if only one surface is desired.</source>
     </message>
 </context>
 <context>
-        <name>Dialog</name>
+    <name>Dialog</name>
     <message>
         <location filename="../src/Qui/GeometryConstraintDialog.ui" line="35"/>
         <source>Edit Constraints</source>
@@ -1360,7 +1360,7 @@ Uncheck if only one surface is desired.</source>
     </message>
 </context>
 <context>
-        <name>DipoleConfigurator</name>
+    <name>DipoleConfigurator</name>
     <message>
         <location filename="../src/Configurator/DipoleConfigurator.ui" line="20"/>
         <source>Dipole Options</source>
@@ -1398,7 +1398,7 @@ Uncheck if only one surface is desired.</source>
     </message>
 </context>
 <context>
-        <name>EfpFragmentListConfigurator</name>
+    <name>EfpFragmentListConfigurator</name>
     <message>
         <source>Configure EFP Fragments</source>
         <comment>与“片段表”统一。</comment>
@@ -1461,7 +1461,7 @@ Uncheck if only one surface is desired.</source>
     </message>
 </context>
 <context>
-        <name>EomTab</name>
+    <name>EomTab</name>
     <message>
         <location filename="../src/Qui/EomTab.ui" line="14"/>
         <source>Form</source>
@@ -1524,7 +1524,7 @@ Uncheck if only one surface is desired.</source>
     </message>
 </context>
 <context>
-        <name>ExcitedStatesConfigurator</name>
+    <name>ExcitedStatesConfigurator</name>
     <message>
         <location filename="../src/Configurator/ExcitedStatesConfigurator.ui" line="20"/>
         <source>Excited States</source>
@@ -1621,7 +1621,7 @@ QToolButton:pressed {
     </message>
 </context>
 <context>
-        <name>FileConfigurator</name>
+    <name>FileConfigurator</name>
     <message>
         <location filename="../src/Configurator/FileConfigurator.ui" line="20"/>
         <source>View File</source>
@@ -1654,7 +1654,7 @@ QToolButton:pressed {
     </message>
 </context>
 <context>
-        <name>FragmentTable</name>
+    <name>FragmentTable</name>
     <message>
         <location filename="../src/Main/FragmentTable.ui" line="14"/>
         <source>Frame</source>
@@ -2939,7 +2939,7 @@ QToolButton:pressed {
     </message>
 </context>
 <context>
-        <name>FreezingStringTab</name>
+    <name>FreezingStringTab</name>
     <message>
         <location filename="../src/Qui/FreezingStringTab.ui" line="14"/>
         <source>Form</source>
@@ -2967,7 +2967,7 @@ QToolButton:pressed {
     </message>
 </context>
 <context>
-        <name>FrequenciesConfigurator</name>
+    <name>FrequenciesConfigurator</name>
     <message>
         <location filename="../src/Configurator/FrequenciesConfigurator.ui" line="20"/>
         <source>Vibrational Frequencies</source>
@@ -3101,7 +3101,7 @@ QToolButton:pressed {
     </message>
 </context>
 <context>
-        <name>FrequenciesTab</name>
+    <name>FrequenciesTab</name>
     <message>
         <location filename="../src/Qui/FrequenciesTab.ui" line="14"/>
         <source>Form</source>
@@ -3134,7 +3134,7 @@ QToolButton:pressed {
     </message>
 </context>
 <context>
-        <name>GeminalOrbitalsConfigurator</name>
+    <name>GeminalOrbitalsConfigurator</name>
     <message>
         <location filename="../src/Configurator/GeminalOrbitalsConfigurator.ui" line="20"/>
         <source>Add Surface</source>
@@ -3287,7 +3287,7 @@ QToolButton:pressed {
     </message>
 </context>
 <context>
-        <name>GenerateConformersDialog</name>
+    <name>GenerateConformersDialog</name>
     <message>
         <location filename="../src/Configurator/GenerateConformersDialog.ui" line="14"/>
         <source>Generate Conformers</source>
@@ -3335,7 +3335,7 @@ QToolButton:pressed {
     </message>
 </context>
 <context>
-        <name>GeometryListConfigurator</name>
+    <name>GeometryListConfigurator</name>
     <message>
         <location filename="../src/Configurator/GeometryListConfigurator.ui" line="20"/>
         <source>Geometries</source>
@@ -3424,7 +3424,7 @@ QToolButton:pressed {
     </message>
 </context>
 <context>
-        <name>GeometryTab</name>
+    <name>GeometryTab</name>
     <message>
         <location filename="../src/Qui/GeometryTab.ui" line="14"/>
         <source>Form</source>
@@ -3442,7 +3442,7 @@ QToolButton:pressed {
     </message>
 </context>
 <context>
-        <name>GridInfoDialog</name>
+    <name>GridInfoDialog</name>
     <message>
         <location filename="../src/Grid/GridInfoDialog.ui" line="20"/>
         <source>Grid Information</source>
@@ -3475,7 +3475,7 @@ QToolButton:pressed {
     </message>
 </context>
 <context>
-        <name>GromacsConfigDialog</name>
+    <name>GromacsConfigDialog</name>
     <message>
         <location filename="../src/Gromacs/GromacsConfigDialog.ui" line="14"/>
         <source>Gromacs Server</source>
@@ -3508,7 +3508,7 @@ QToolButton:pressed {
     </message>
 </context>
 <context>
-        <name>GromacsDialog</name>
+    <name>GromacsDialog</name>
     <message>
         <location filename="../src/Gromacs/GromacsDialog.ui" line="14"/>
         <source>Gromacs Control</source>
@@ -3582,7 +3582,7 @@ QToolButton:pressed {
     </message>
 </context>
 <context>
-        <name>GromacsServerDialog</name>
+    <name>GromacsServerDialog</name>
     <message>
         <location filename="../src/Gromacs/GromacsServerDialog.ui" line="14"/>
         <source>Gromacs Server</source>
@@ -3595,14 +3595,29 @@ QToolButton:pressed {
     </message>
 </context>
 <context>
-        <name>HelpBrowser</name>
+    <name>Handler::BuildEfpFragment</name>
+    <message>
+        <location filename="../src/Viewer/BuildEfpFragmentHandler.C" line="88"/>
+        <source>Add EFP fragment</source>
+        <translation>添加 EFP 片段</translation>
+    </message>
+</context>
+<context>
+    <name>Handler::BuildMoleculeFragment</name>
+    <message>
+        <location filename="../src/Viewer/BuildMoleculeFragmentHandler.C" line="67"/>
+        <source>Add molecule</source>
+        <translation>添加分子</translation>
+    </message>
+</context>
+<context>
+    <name>HelpBrowser</name>
     <message>
         <location filename="../src/Main/HelpBrowser.ui" line="14"/>
         <source>Help Browser</source>
         <translation>帮助浏览器</translation>
     </message>
     <message>
-        <location filename="../src/Main/HelpBrowser.ui" line="17"/>
         <source>QToolButton {
    color: #333;
    background-color: QLinearGradient( x1: 0, y1: 0, x2: 0, y2: 1, 
@@ -3699,6 +3714,57 @@ QTextBrowser#content {
 }</translation>
     </message>
     <message>
+        <location filename="../src/Main/HelpBrowser.ui" line="17"/>
+        <source>QToolButton {
+   color: #333;
+   background-color: QLinearGradient( x1: 0, y1: 0, x2: 0, y2: 1, 
+          stop: 0 #fff,
+          stop: 0.5 #eee, 
+          stop: 1 #999);
+   border-width: 2px;
+   border-color: #333;
+   border-style: solid;
+   border-radius: 5;
+   padding: 0px;
+   font-size: 24pt;
+   min-width: 34px;
+   max-width: 34px;
+   min-height: 34px;
+   max-height: 34px;
+}
+
+QToolButton:disabled {
+  background-color: QLinearGradient( x1: 0, y1: 0, x2: 0, y2: 1, 
+          stop: 0 #fff,
+          stop: 0.5 #eee, 
+          stop: 1 #bbb);
+   border-color: #aaa;
+   color: #aaa;
+}
+
+QToolButton:pressed {
+   border-color: #b00;
+}
+
+
+QToolButton:checked {
+   border-color: #b00;
+}
+
+QToolTip {
+   border: 2px solid darkkhaki;
+   padding: 2px;
+   border-radius: 3px;
+   opacity: 500;
+   font-size: 12pt;
+}
+
+QTextBrowser#content { 
+   padding: 20px;
+}</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../src/Main/HelpBrowser.ui" line="71"/>
         <source>Back</source>
         <translation>后退</translation>
@@ -3743,7 +3809,7 @@ QTextBrowser#content {
     </message>
 </context>
 <context>
-        <name>IQmol::CameraDialog</name>
+    <name>IQmol::CameraDialog</name>
     <message>
         <location filename="../src/Viewer/CameraDialog.C" line="49"/>
         <source>Time (s)</source>
@@ -3756,7 +3822,7 @@ QTextBrowser#content {
     </message>
 </context>
 <context>
-        <name>IQmol::Color::Dialog</name>
+    <name>IQmol::Color::Dialog</name>
     <message>
         <location filename="../src/Util/ColorDialog.C" line="162"/>
         <source>Custom</source>
@@ -3789,7 +3855,7 @@ QTextBrowser#content {
     </message>
 </context>
 <context>
-        <name>IQmol::Color::StopButton</name>
+    <name>IQmol::Color::StopButton</name>
     <message>
         <source>Select color</source>
         <comment>预置：需配合源码补 tr() 后由 lupdate 匹配</comment>
@@ -3802,7 +3868,7 @@ QTextBrowser#content {
     </message>
 </context>
 <context>
-        <name>IQmol::Command::AddComponent</name>
+    <name>IQmol::Command::AddComponent</name>
     <message>
         <source>Load file %1</source>
         <comment>预置：需配合源码补 tr() 后由 lupdate 匹配</comment>
@@ -3810,7 +3876,7 @@ QTextBrowser#content {
     </message>
 </context>
 <context>
-        <name>IQmol::Configurator::ExcitedStates</name>
+    <name>IQmol::Configurator::ExcitedStates</name>
     <message>
         <source>Rel. Strength</source>
         <comment>预置：需配合源码补 tr() 后由 lupdate 匹配</comment>
@@ -3834,7 +3900,7 @@ QTextBrowser#content {
     </message>
 </context>
 <context>
-        <name>IQmol::Configurator::Frequencies</name>
+    <name>IQmol::Configurator::Frequencies</name>
     <message>
         <location filename="../src/Configurator/FrequenciesConfigurator.C" line="47"/>
         <source>Freq. (cm⁻¹)</source>
@@ -3889,7 +3955,7 @@ QTextBrowser#content {
     </message>
 </context>
 <context>
-        <name>IQmol::Configurator::GeminalOrbitals</name>
+    <name>IQmol::Configurator::GeminalOrbitals</name>
     <message>
         <location filename="../src/Configurator/GeminalOrbitalsConfigurator.C" line="45"/>
         <source>Geminal</source>
@@ -3902,7 +3968,7 @@ QTextBrowser#content {
     </message>
 </context>
 <context>
-        <name>IQmol::Configurator::GeometryList</name>
+    <name>IQmol::Configurator::GeometryList</name>
     <message>
         <source>Geometry</source>
         <comment>预置：需配合源码补 tr() 后由 lupdate 匹配</comment>
@@ -3931,7 +3997,7 @@ QTextBrowser#content {
     </message>
 </context>
 <context>
-        <name>IQmol::Configurator::Isotopes</name>
+    <name>IQmol::Configurator::Isotopes</name>
     <message>
         <location filename="../src/Configurator/IsotopesConfigurator.C" line="45"/>
         <source>Element</source>
@@ -3949,7 +4015,7 @@ QTextBrowser#content {
     </message>
 </context>
 <context>
-        <name>IQmol::Configurator::MolecularSurfaces</name>
+    <name>IQmol::Configurator::MolecularSurfaces</name>
     <message>
         <location filename="../src/Configurator/MolecularSurfacesConfigurator.C" line="59"/>
         <source>Scale</source>
@@ -3978,7 +4044,7 @@ QTextBrowser#content {
     </message>
 </context>
 <context>
-        <name>IQmol::Configurator::Nmr</name>
+    <name>IQmol::Configurator::Nmr</name>
     <message>
         <location filename="../src/Configurator/NmrConfigurator.C" line="51"/>
         <source>Resolution</source>
@@ -4031,7 +4097,7 @@ QTextBrowser#content {
     </message>
 </context>
 <context>
-        <name>IQmol::Configurator::Orbitals</name>
+    <name>IQmol::Configurator::Orbitals</name>
     <message>
         <location filename="../src/Configurator/OrbitalsConfigurator.C" line="793"/>
         <source>Orbital(s):</source>
@@ -4130,7 +4196,7 @@ QTextBrowser#content {
     </message>
 </context>
 <context>
-        <name>IQmol::Configurator::ScalarConstraint</name>
+    <name>IQmol::Configurator::ScalarConstraint</name>
     <message>
         <location filename="../src/Configurator/ConstraintConfigurator.C" line="127"/>
         <source>Configure Distance</source>
@@ -4168,7 +4234,7 @@ QTextBrowser#content {
     </message>
 </context>
 <context>
-        <name>IQmol::Configurator::VectorConstraint</name>
+    <name>IQmol::Configurator::VectorConstraint</name>
     <message>
         <location filename="../src/Configurator/ConstraintConfigurator.C" line="41"/>
         <source>Set Position</source>
@@ -4186,7 +4252,7 @@ QTextBrowser#content {
     </message>
 </context>
 <context>
-        <name>IQmol::Configurator::Vibronic</name>
+    <name>IQmol::Configurator::Vibronic</name>
     <message>
         <location filename="../src/Configurator/VibronicConfigurator.C" line="221"/>
         <source>Electronic Transition</source>
@@ -4199,7 +4265,7 @@ QTextBrowser#content {
     </message>
 </context>
 <context>
-        <name>IQmol::CustomPlot</name>
+    <name>IQmol::CustomPlot</name>
     <message>
         <location filename="../src/Plot/CustomPlot.C" line="37"/>
         <source>Save Image As</source>
@@ -4232,7 +4298,7 @@ QTextBrowser#content {
     </message>
 </context>
 <context>
-        <name>IQmol::Data::SurfaceType</name>
+    <name>IQmol::Data::SurfaceType</name>
     <message>
         <location filename="../src/Data/SurfaceType.C" line="153"/>
         <source>Alpha</source>
@@ -4370,7 +4436,7 @@ QTextBrowser#content {
     </message>
 </context>
 <context>
-        <name>IQmol::FragmentTable</name>
+    <name>IQmol::FragmentTable</name>
     <message>
         <location filename="../src/Main/FragmentTable.C" line="49"/>
         <source>Fragment Table</source>
@@ -4378,7 +4444,7 @@ QTextBrowser#content {
     </message>
 </context>
 <context>
-        <name>IQmol::GridInfoDialog</name>
+    <name>IQmol::GridInfoDialog</name>
     <message>
         <source>Export Cube File</source>
         <comment>预置：需配合源码补 tr() 后由 lupdate 匹配</comment>
@@ -4406,7 +4472,7 @@ QTextBrowser#content {
     </message>
 </context>
 <context>
-        <name>IQmol::Layer::Atom</name>
+    <name>IQmol::Layer::Atom</name>
     <message>
         <location filename="../src/Layer/AtomLayer.C" line="99"/>
         <source>Atom</source>
@@ -4414,7 +4480,7 @@ QTextBrowser#content {
     </message>
 </context>
 <context>
-        <name>IQmol::Layer::Axes</name>
+    <name>IQmol::Layer::Axes</name>
     <message>
         <location filename="../src/Layer/AxesLayer.C" line="37"/>
         <source>Configure</source>
@@ -4422,7 +4488,7 @@ QTextBrowser#content {
     </message>
 </context>
 <context>
-        <name>IQmol::Layer::AxesMesh</name>
+    <name>IQmol::Layer::AxesMesh</name>
     <message>
         <location filename="../src/Layer/AxesMeshLayer.C" line="38"/>
         <source>Configure</source>
@@ -4430,7 +4496,7 @@ QTextBrowser#content {
     </message>
 </context>
 <context>
-        <name>IQmol::Layer::Background</name>
+    <name>IQmol::Layer::Background</name>
     <message>
         <location filename="../src/Layer/BackgroundLayer.C" line="36"/>
         <source>Background</source>
@@ -4443,15 +4509,20 @@ QTextBrowser#content {
     </message>
 </context>
 <context>
-        <name>IQmol::Layer::Component</name>
+    <name>IQmol::Layer::Component</name>
     <message>
         <location filename="../src/Layer/ComponentLayer.C" line="36"/>
         <source>Surfaces</source>
         <translation>表面</translation>
     </message>
+    <message>
+        <location filename="../src/Layer/ComponentLayer.C" line="114"/>
+        <source>Translate to center</source>
+        <translation>平移到中心</translation>
+    </message>
 </context>
 <context>
-        <name>IQmol::Layer::Constraint</name>
+    <name>IQmol::Layer::Constraint</name>
     <message>
         <location filename="../src/Layer/ConstraintLayer.C" line="125"/>
         <source>Invalid</source>
@@ -4469,7 +4540,7 @@ QTextBrowser#content {
     </message>
 </context>
 <context>
-        <name>IQmol::Layer::CubeData</name>
+    <name>IQmol::Layer::CubeData</name>
     <message>
         <location filename="../src/Layer/CubeDataLayer.C" line="61"/>
         <source>Surface Animator</source>
@@ -4482,7 +4553,7 @@ QTextBrowser#content {
     </message>
 </context>
 <context>
-        <name>IQmol::Layer::Dipole</name>
+    <name>IQmol::Layer::Dipole</name>
     <message>
         <location filename="../src/Layer/DipoleLayer.C" line="43"/>
         <source>Dipole</source>
@@ -4490,7 +4561,7 @@ QTextBrowser#content {
     </message>
 </context>
 <context>
-        <name>IQmol::Layer::EfpFragmentList</name>
+    <name>IQmol::Layer::EfpFragmentList</name>
     <message>
         <location filename="../src/Layer/EfpFragmentListLayer.C" line="38"/>
         <source>EFP Fragments</source>
@@ -4498,7 +4569,7 @@ QTextBrowser#content {
     </message>
 </context>
 <context>
-        <name>IQmol::Layer::ExcitedStates</name>
+    <name>IQmol::Layer::ExcitedStates</name>
     <message>
         <location filename="../src/Layer/ExcitedStatesLayer.C" line="37"/>
         <source>Excited States</source>
@@ -4506,7 +4577,7 @@ QTextBrowser#content {
     </message>
 </context>
 <context>
-        <name>IQmol::Layer::Frequencies</name>
+    <name>IQmol::Layer::Frequencies</name>
     <message>
         <location filename="../src/Layer/FrequenciesLayer.C" line="42"/>
         <source>Frequencies</source>
@@ -4514,7 +4585,7 @@ QTextBrowser#content {
     </message>
 </context>
 <context>
-        <name>IQmol::Layer::GeminalOrbitalProperty</name>
+    <name>IQmol::Layer::GeminalOrbitalProperty</name>
     <message>
         <source>Geminal Alpha %1</source>
         <comment>预置：需配合源码补 tr() 后由 lupdate 匹配</comment>
@@ -4537,7 +4608,7 @@ QTextBrowser#content {
     </message>
 </context>
 <context>
-        <name>IQmol::Layer::GeminalOrbitals</name>
+    <name>IQmol::Layer::GeminalOrbitals</name>
     <message>
         <location filename="../src/Layer/GeminalOrbitalsLayer.C" line="68"/>
         <source>Show Grid Info</source>
@@ -4555,7 +4626,7 @@ QTextBrowser#content {
     </message>
 </context>
 <context>
-        <name>IQmol::Layer::GeometryList</name>
+    <name>IQmol::Layer::GeometryList</name>
     <message>
         <location filename="../src/Layer/GeometryListLayer.C" line="58"/>
         <location filename="../src/Layer/GeometryListLayer.C" line="118"/>
@@ -4569,7 +4640,7 @@ QTextBrowser#content {
     </message>
 </context>
 <context>
-        <name>IQmol::Layer::Group</name>
+    <name>IQmol::Layer::Group</name>
     <message>
         <location filename="../src/Layer/GroupLayer.C" line="57"/>
         <source>Add Hydrogens</source>
@@ -4582,7 +4653,7 @@ QTextBrowser#content {
     </message>
 </context>
 <context>
-        <name>IQmol::Layer::Info</name>
+    <name>IQmol::Layer::Info</name>
     <message>
         <location filename="../src/Layer/InfoLayer.C" line="42"/>
         <source>Info</source>
@@ -4590,7 +4661,7 @@ QTextBrowser#content {
     </message>
 </context>
 <context>
-        <name>IQmol::Layer::MacroMolecule</name>
+    <name>IQmol::Layer::MacroMolecule</name>
     <message>
         <location filename="../src/Layer/MacroMoleculeLayer.C" line="44"/>
         <source>Residues</source>
@@ -4598,7 +4669,7 @@ QTextBrowser#content {
     </message>
 </context>
 <context>
-        <name>IQmol::Layer::MolecularSurfaces</name>
+    <name>IQmol::Layer::MolecularSurfaces</name>
     <message>
         <location filename="../src/Layer/MolecularSurfacesLayer.C" line="46"/>
         <source>Surfaces</source>
@@ -4606,7 +4677,7 @@ QTextBrowser#content {
     </message>
 </context>
 <context>
-        <name>IQmol::Layer::Molecule</name>
+    <name>IQmol::Layer::Molecule</name>
     <message>
         <location filename="../src/Layer/MoleculeLayer.C" line="394"/>
         <source>XYZ</source>
@@ -4699,6 +4770,26 @@ QTextBrowser#content {
         <translation>另存为</translation>
     </message>
     <message>
+        <location filename="../src/Layer/MoleculeLayer.C" line="1559"/>
+        <source>Remove atoms/bonds</source>
+        <translation>移除原子/键</translation>
+    </message>
+    <message>
+        <location filename="../src/Layer/MoleculeLayer.C" line="2193"/>
+        <source>Minimize energy</source>
+        <translation>最小化能量</translation>
+    </message>
+    <message>
+        <location filename="../src/Layer/MoleculeLayer.C" line="2279"/>
+        <source>Symmetrize structure</source>
+        <translation>结构对称化</translation>
+    </message>
+    <message>
+        <location filename="../src/Layer/MoleculeLayer.C" line="2450"/>
+        <source>Reperceive bonds</source>
+        <translation>重新识别键</translation>
+    </message>
+    <message>
         <location filename="../src/Layer/MoleculeLayer.C" line="2797"/>
         <source>Gasteiger</source>
         <translation>Gasteiger</translation>
@@ -4786,7 +4877,7 @@ QTextBrowser#content {
     </message>
 </context>
 <context>
-        <name>IQmol::Layer::Nmr</name>
+    <name>IQmol::Layer::Nmr</name>
     <message>
         <location filename="../src/Layer/NmrLayer.C" line="36"/>
         <source>NMR</source>
@@ -4794,7 +4885,7 @@ QTextBrowser#content {
     </message>
 </context>
 <context>
-        <name>IQmol::Layer::Octree</name>
+    <name>IQmol::Layer::Octree</name>
     <message>
         <location filename="../src/Layer/OctreeLayer.C" line="53"/>
         <source>Octree Box</source>
@@ -4802,7 +4893,7 @@ QTextBrowser#content {
     </message>
 </context>
 <context>
-        <name>IQmol::Layer::Orbitals</name>
+    <name>IQmol::Layer::Orbitals</name>
     <message>
         <location filename="../src/Layer/OrbitalsLayer.C" line="77"/>
         <source>Show Grid Info</source>
@@ -4815,7 +4906,7 @@ QTextBrowser#content {
     </message>
 </context>
 <context>
-        <name>IQmol::Layer::Solvent</name>
+    <name>IQmol::Layer::Solvent</name>
     <message>
         <location filename="../src/Layer/SolventLayer.C" line="46"/>
         <source>Solvent</source>
@@ -4823,7 +4914,7 @@ QTextBrowser#content {
     </message>
 </context>
 <context>
-        <name>IQmol::Layer::Surface</name>
+    <name>IQmol::Layer::Surface</name>
     <message>
         <location filename="../src/Layer/SurfaceLayer.C" line="66"/>
         <source>Show Vertex Normals</source>
@@ -4846,7 +4937,7 @@ QTextBrowser#content {
     </message>
 </context>
 <context>
-        <name>IQmol::Layer::Symmetry</name>
+    <name>IQmol::Layer::Symmetry</name>
     <message>
         <location filename="../src/Layer/SymmetryLayer.C" line="34"/>
         <source>Symmetry</source>
@@ -4854,7 +4945,7 @@ QTextBrowser#content {
     </message>
 </context>
 <context>
-        <name>IQmol::Layer::System</name>
+    <name>IQmol::Layer::System</name>
     <message>
         <location filename="../src/Layer/SystemLayer.C" line="57"/>
         <source>Ribbons</source>
@@ -4888,7 +4979,7 @@ QTextBrowser#content {
     </message>
 </context>
 <context>
-        <name>IQmol::Layer::Vibronic</name>
+    <name>IQmol::Layer::Vibronic</name>
     <message>
         <location filename="../src/Layer/VibronicLayer.C" line="40"/>
         <source>Vibronic</source>
@@ -4896,7 +4987,7 @@ QTextBrowser#content {
     </message>
 </context>
 <context>
-        <name>IQmol::LogMessageDialog</name>
+    <name>IQmol::LogMessageDialog</name>
     <message>
         <location filename="../src/Util/LogMessageDialog.C" line="68"/>
         <source>Logging disabled</source>
@@ -4904,7 +4995,7 @@ QTextBrowser#content {
     </message>
 </context>
 <context>
-        <name>IQmol::MainWindow</name>
+    <name>IQmol::MainWindow</name>
     <message>
         <location filename="../src/Main/MainWindow.C" line="75"/>
         <source>IQmol</source>
@@ -5305,7 +5396,7 @@ QTextBrowser#content {
     </message>
 </context>
 <context>
-        <name>IQmol::MullikenDecompositionsDialog</name>
+    <name>IQmol::MullikenDecompositionsDialog</name>
     <message>
         <source>Mulliken decomposition for %1</source>
         <comment>预置：需配合源码补 tr() 后由 lupdate 匹配</comment>
@@ -5318,7 +5409,7 @@ QTextBrowser#content {
     </message>
 </context>
 <context>
-        <name>IQmol::Parser::OpenBabel</name>
+    <name>IQmol::Parser::OpenBabel</name>
     <message>
         <location filename="../src/Parser/OpenBabelParser.C" line="359"/>
         <source>Energy</source>
@@ -5326,7 +5417,7 @@ QTextBrowser#content {
     </message>
 </context>
 <context>
-        <name>IQmol::PeriodicTable</name>
+    <name>IQmol::PeriodicTable</name>
     <message>
         <location filename="../src/Main/PeriodicTable.C" line="36"/>
         <source>Periodic Table</source>
@@ -5334,7 +5425,7 @@ QTextBrowser#content {
     </message>
 </context>
 <context>
-        <name>IQmol::Preferences::Browser</name>
+    <name>IQmol::Preferences::Browser</name>
     <message>
         <location filename="../src/Main/PreferencesBrowser.C" line="184"/>
         <source>Select Path</source>
@@ -5348,7 +5439,7 @@ QTextBrowser#content {
     </message>
 </context>
 <context>
-        <name>IQmol::Process::JobMonitor</name>
+    <name>IQmol::Process::JobMonitor</name>
     <message>
         <location filename="../src/Process/JobMonitor.C" line="119"/>
         <location filename="../src/Process/save/JobMonitor.C" line="128"/>
@@ -5440,7 +5531,7 @@ QTextBrowser#content {
     </message>
 </context>
 <context>
-        <name>IQmol::Process::QueueOptionsDialog</name>
+    <name>IQmol::Process::QueueOptionsDialog</name>
     <message>
         <location filename="../src/Process/QueueOptionsDialog.C" line="60"/>
         <location filename="../src/Process/QueueOptionsDialog.C" line="64"/>
@@ -5459,7 +5550,7 @@ QTextBrowser#content {
     </message>
 </context>
 <context>
-        <name>IQmol::Process::ServerConfigurationDialog</name>
+    <name>IQmol::Process::ServerConfigurationDialog</name>
     <message>
         <location filename="../src/Process/ServerConfigurationDialog.C" line="465"/>
         <source>Open Server Configuration</source>
@@ -5478,7 +5569,7 @@ QTextBrowser#content {
     </message>
 </context>
 <context>
-        <name>IQmol::Qui::LJParametersSection</name>
+    <name>IQmol::Qui::LJParametersSection</name>
     <message>
         <location filename="../src/Qui/LJParametersSection.C" line="78"/>
         <source>LJ Parameter Error</source>
@@ -5486,7 +5577,7 @@ QTextBrowser#content {
     </message>
 </context>
 <context>
-        <name>IQmol::Qui::MoleculeSection</name>
+    <name>IQmol::Qui::MoleculeSection</name>
     <message>
         <location filename="../src/Qui/MoleculeSection.C" line="57"/>
         <source>Problem reading $molecule section: 
@@ -5501,7 +5592,7 @@ QTextBrowser#content {
     </message>
 </context>
 <context>
-        <name>IQmol::Qui::RemSection</name>
+    <name>IQmol::Qui::RemSection</name>
     <message>
         <location filename="../src/Qui/RemSection.C" line="121"/>
         <source>An error occured when parsing the following options:
@@ -5516,7 +5607,7 @@ QTextBrowser#content {
     </message>
 </context>
 <context>
-        <name>IQmol::ShaderDialog</name>
+    <name>IQmol::ShaderDialog</name>
     <message>
         <location filename="../src/Viewer/ShaderDialog.C" line="421"/>
         <source>Black</source>
@@ -5539,7 +5630,7 @@ QTextBrowser#content {
     </message>
 </context>
 <context>
-        <name>IQmol::SurfaceAnimatorDialog</name>
+    <name>IQmol::SurfaceAnimatorDialog</name>
     <message>
         <location filename="../src/Configurator/SurfaceAnimatorDialog.C" line="355"/>
         <source>Difference Surface</source>
@@ -5568,7 +5659,7 @@ QTextBrowser#content {
     </message>
 </context>
 <context>
-        <name>IQmol::ViewerModel</name>
+    <name>IQmol::ViewerModel</name>
     <message>
         <location filename="../src/Viewer/ViewerModel.C" line="70"/>
         <source>Model View</source>
@@ -5581,7 +5672,7 @@ QTextBrowser#content {
     </message>
 </context>
 <context>
-        <name>IQmol::ViewerModelView</name>
+    <name>IQmol::ViewerModelView</name>
     <message>
         <source>Merge Molecules</source>
         <comment>预置：需配合源码补 tr() 后由 lupdate 匹配</comment>
@@ -5619,7 +5710,7 @@ QTextBrowser#content {
     </message>
 </context>
 <context>
-        <name>InfoConfigurator</name>
+    <name>InfoConfigurator</name>
     <message>
         <location filename="../src/Configurator/InfoConfigurator.ui" line="14"/>
         <source>Dialog</source>
@@ -5738,100 +5829,100 @@ p, li { white-space: pre-wrap; }
     </message>
 </context>
 <context>
-        <name>InputDialog</name>
+    <name>InputDialog</name>
     <message>
-        <location filename="../src/Qui/InputDialog.C" line="85"/>
-        <location filename="../src/Qui/InputDialog.C" line="489"/>
+        <location filename="../src/Qui/InputDialog.C" line="86"/>
+        <location filename="../src/Qui/InputDialog.C" line="491"/>
         <source>QChem Input File Editor</source>
         <translation>Q-Chem 输入文件编辑器</translation>
     </message>
     <message>
-        <location filename="../src/Qui/InputDialog.C" line="370"/>
+        <location filename="../src/Qui/InputDialog.C" line="371"/>
         <source>File</source>
         <translation>文件</translation>
     </message>
     <message>
-        <location filename="../src/Qui/InputDialog.C" line="386"/>
+        <location filename="../src/Qui/InputDialog.C" line="387"/>
         <source>Edit</source>
         <translation>编辑</translation>
     </message>
     <message>
-        <location filename="../src/Qui/InputDialog.C" line="409"/>
+        <location filename="../src/Qui/InputDialog.C" line="410"/>
         <source>Job</source>
         <translation>任务</translation>
     </message>
     <message>
-        <location filename="../src/Qui/InputDialog.C" line="412"/>
+        <location filename="../src/Qui/InputDialog.C" line="413"/>
         <source>New Job Section</source>
         <translation>新建任务段</translation>
     </message>
     <message>
-        <location filename="../src/Qui/InputDialog.C" line="418"/>
+        <location filename="../src/Qui/InputDialog.C" line="419"/>
         <source>Reset Input</source>
         <translation>重置输入</translation>
     </message>
     <message>
-        <location filename="../src/Qui/InputDialog.C" line="433"/>
+        <location filename="../src/Qui/InputDialog.C" line="434"/>
         <source>Font</source>
         <translation>字体</translation>
     </message>
     <message>
-        <location filename="../src/Qui/InputDialog.C" line="436"/>
+        <location filename="../src/Qui/InputDialog.C" line="437"/>
         <source>Bigger</source>
         <translation>放大</translation>
     </message>
     <message>
-        <location filename="../src/Qui/InputDialog.C" line="442"/>
+        <location filename="../src/Qui/InputDialog.C" line="443"/>
         <source>Smaller</source>
         <translation>缩小</translation>
     </message>
     <message>
-        <location filename="../src/Qui/InputDialog.C" line="450"/>
+        <location filename="../src/Qui/InputDialog.C" line="451"/>
         <source>Set Font</source>
         <translation>设置字体</translation>
     </message>
     <message>
-        <location filename="../src/Qui/InputDialog.C" line="470"/>
+        <location filename="../src/Qui/InputDialog.C" line="471"/>
         <source>Save Input File</source>
         <translation>保存输入文件</translation>
     </message>
     <message>
-        <location filename="../src/Qui/InputDialog.C" line="802"/>
+        <location filename="../src/Qui/InputDialog.C" line="804"/>
         <source>Open File</source>
         <translation>打开文件</translation>
     </message>
     <message>
-        <location filename="../src/Qui/InputDialog.C" line="864"/>
+        <location filename="../src/Qui/InputDialog.C" line="866"/>
         <source>Are you sure you want to delete all generated input?</source>
         <translation>确定要删除所有已生成的输入吗？</translation>
     </message>
     <message>
-        <location filename="../src/Qui/InputDialog.C" line="379"/>
+        <location filename="../src/Qui/InputDialog.C" line="380"/>
         <source>Close</source>
         <translation>关闭</translation>
     </message>
     <message>
-        <location filename="../src/Qui/InputDialog.C" line="389"/>
+        <location filename="../src/Qui/InputDialog.C" line="390"/>
         <source>Copy</source>
         <translation>复制</translation>
     </message>
     <message>
-        <location filename="../src/Qui/InputDialog.C" line="402"/>
+        <location filename="../src/Qui/InputDialog.C" line="403"/>
         <source>Cut</source>
         <translation>剪切</translation>
     </message>
     <message>
-        <location filename="../src/Qui/InputDialog.C" line="865"/>
+        <location filename="../src/Qui/InputDialog.C" line="867"/>
         <source>Delete input?</source>
         <translation>删除输入？</translation>
     </message>
     <message>
-        <location filename="../src/Qui/InputDialog.C" line="396"/>
+        <location filename="../src/Qui/InputDialog.C" line="397"/>
         <source>Paste</source>
         <translation>粘贴</translation>
     </message>
     <message>
-        <location filename="../src/Qui/InputDialog.C" line="373"/>
+        <location filename="../src/Qui/InputDialog.C" line="374"/>
         <source>Save As</source>
         <translation>另存为</translation>
     </message>
@@ -5843,7 +5934,7 @@ p, li { white-space: pre-wrap; }
         <translation>单重态</translation>
     </message>
     <message>
-        <location filename="../src/Qui/InputDialog.C" line="426"/>
+        <location filename="../src/Qui/InputDialog.C" line="427"/>
         <source>Submit</source>
         <translation>提交</translation>
     </message>
@@ -5862,7 +5953,7 @@ p, li { white-space: pre-wrap; }
     </message>
 </context>
 <context>
-        <name>InsertMoleculeDialog</name>
+    <name>InsertMoleculeDialog</name>
     <message>
         <location filename="../src/Main/InsertMoleculeDialog.ui" line="14"/>
         <source>Insert Molecule</source>
@@ -5890,7 +5981,7 @@ p, li { white-space: pre-wrap; }
     </message>
 </context>
 <context>
-        <name>IsotopesConfigurator</name>
+    <name>IsotopesConfigurator</name>
     <message>
         <location filename="../src/Configurator/IsotopesConfigurator.ui" line="14"/>
         <source>Dialog</source>
@@ -5933,7 +6024,7 @@ p, li { white-space: pre-wrap; }
     </message>
 </context>
 <context>
-        <name>JobInfo</name>
+    <name>JobInfo</name>
     <message>
         <location filename="../src/Process/JobInfo.C" line="39"/>
         <source>Not Running</source>
@@ -5981,7 +6072,7 @@ p, li { white-space: pre-wrap; }
     </message>
 </context>
 <context>
-        <name>JobMonitor</name>
+    <name>JobMonitor</name>
     <message>
         <location filename="../src/Process/JobMonitor.ui" line="14"/>
         <location filename="../src/Process/save/JobMonitor.ui" line="14"/>
@@ -6038,7 +6129,7 @@ p, li { white-space: pre-wrap; }
     </message>
 </context>
 <context>
-        <name>Libopt3Tab</name>
+    <name>Libopt3Tab</name>
     <message>
         <location filename="../src/Qui/Libopt3Tab.ui" line="14"/>
         <source>Form</source>
@@ -6111,7 +6202,7 @@ p, li { white-space: pre-wrap; }
     </message>
 </context>
 <context>
-        <name>LogMessageDialog</name>
+    <name>LogMessageDialog</name>
     <message>
         <location filename="../src/Util/LogMessageDialog.ui" line="14"/>
         <source>IQmol Log Messages</source>
@@ -6159,7 +6250,7 @@ p, li { white-space: pre-wrap; }
     </message>
 </context>
 <context>
-        <name>MainWindow</name>
+    <name>MainWindow</name>
     <message>
         <location filename="../src/Qui/InputDialog.ui" line="14"/>
         <source>MainWindow</source>
@@ -6224,7 +6315,6 @@ p, li { white-space: pre-wrap; }
         <translation>向输入文件添加段</translation>
     </message>
     <message>
-        <location filename="../src/Qui/InputDialog.ui" line="287"/>
         <source>QToolButton {
    color: #333;
    background-color: QLinearGradient( x1: 0, y1: 0, x2: 0, y2: 1, 
@@ -6300,7 +6390,6 @@ QToolButton:checked {
         <translation>从输入文件移除当前段</translation>
     </message>
     <message>
-        <location filename="../src/Qui/InputDialog.ui" line="337"/>
         <source>QToolButton {
    color: #333;
    background-color: QLinearGradient( x1: 0, y1: 0, x2: 0, y2: 1, 
@@ -7276,6 +7365,83 @@ QToolButton:checked {
         <translation>多重度</translation>
     </message>
     <message>
+        <location filename="../src/Qui/InputDialog.ui" line="287"/>
+        <source>QToolButton {
+   color: #333;
+   background-color: QLinearGradient( x1: 0, y1: 0, x2: 0, y2: 1, 
+          stop: 0 #fff,
+          stop: 0.5 #eee, 
+          stop: 1 #999);
+   border-width: 2px;
+   border-color: #333;
+   border-style: solid;
+   border-radius: 5;
+   padding: 0px;
+   font-size: 24pt;
+   min-width: 24px;
+   max-width: 24px;
+   min-height: 24px;
+   max-height: 24px;
+}
+
+QToolButton:disabled {
+  background-color: QLinearGradient( x1: 0, y1: 0, x2: 0, y2: 1, 
+          stop: 0 #fff,
+          stop: 0.5 #eee, 
+          stop: 1 #bbb);
+   border-color: #aaa;
+   color: #aaa;
+}
+
+QToolButton:pressed {
+   border-color: #222;
+}
+
+QToolButton:checked {
+   border-color: #b00;
+}</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Qui/InputDialog.ui" line="337"/>
+        <source>QToolButton {
+   color: #333;
+   background-color: QLinearGradient( x1: 0, y1: 0, x2: 0, y2: 1, 
+          stop: 0 #fff,
+          stop: 0.5 #eee, 
+          stop: 1 #999);
+   border-width: 2px;
+   border-color: #333;
+   border-style: solid;
+   border-radius: 5;
+   padding: 0px;
+   font-size: 24pt;
+   min-width: 24px;
+   max-width: 24px;
+   min-height: 24px;
+   max-height: 24px;
+}
+
+QToolButton:disabled {
+  background-color: QLinearGradient( x1: 0, y1: 0, x2: 0, y2: 1, 
+          stop: 0 #fff,
+          stop: 0.5 #eee, 
+          stop: 1 #bbb);
+   border-color: #aaa;
+   color: #aaa;
+}
+
+QToolButton:pressed {
+   border-color: #222;
+}
+
+
+QToolButton:checked {
+   border-color: #b00;
+}</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../src/Qui/InputDialog.ui" line="1025"/>
         <source>Pure/Cartesian</source>
         <translation>纯球谐/笛卡尔</translation>
@@ -7786,7 +7952,7 @@ Eventually this should go.</source>
     </message>
 </context>
 <context>
-        <name>MolecularGridEvaluator</name>
+    <name>MolecularGridEvaluator</name>
     <message>
         <location filename="../src/Grid/MolecularGridEvaluator.C" line="190"/>
         <source>Computing basis functions on grid %1</source>
@@ -7819,7 +7985,7 @@ Eventually this should go.</source>
     </message>
 </context>
 <context>
-        <name>MolecularSurfacesConfigurator</name>
+    <name>MolecularSurfacesConfigurator</name>
     <message>
         <location filename="../src/Configurator/MolecularSurfacesConfigurator.ui" line="20"/>
         <source>Add Surface</source>
@@ -7926,7 +8092,7 @@ QToolButton:pressed {
     </message>
 </context>
 <context>
-        <name>MoleculeConfigurator</name>
+    <name>MoleculeConfigurator</name>
     <message>
         <location filename="../src/Configurator/MoleculeConfigurator.ui" line="14"/>
         <source>Configure Molecule</source>
@@ -8004,7 +8170,7 @@ QToolButton:pressed {
     </message>
 </context>
 <context>
-        <name>MullikenDecompositionsDialog</name>
+    <name>MullikenDecompositionsDialog</name>
     <message>
         <location filename="../src/Configurator/MullikenDecompositionsDialog.ui" line="14"/>
         <source>Dialog</source>
@@ -8017,7 +8183,7 @@ QToolButton:pressed {
     </message>
 </context>
 <context>
-        <name>NmrConfigurator</name>
+    <name>NmrConfigurator</name>
     <message>
         <location filename="../src/Configurator/NmrConfigurator.ui" line="20"/>
         <source>NMR Spectrum</source>
@@ -8111,7 +8277,7 @@ QToolButton:pressed {
     </message>
 </context>
 <context>
-        <name>OctreeConfigurator</name>
+    <name>OctreeConfigurator</name>
     <message>
         <location filename="../src/Configurator/OctreeConfigurator.ui" line="14"/>
         <source>Selection</source>
@@ -8154,7 +8320,7 @@ QToolButton:pressed {
     </message>
 </context>
 <context>
-        <name>OptimizeTab</name>
+    <name>OptimizeTab</name>
     <message>
         <location filename="../src/Qui/OptimizeTab.ui" line="14"/>
         <source>Form</source>
@@ -8253,7 +8419,7 @@ QToolButton:pressed {
     </message>
 </context>
 <context>
-        <name>OptionDatabaseForm</name>
+    <name>OptionDatabaseForm</name>
     <message>
         <location filename="../src/Qui/OptionDatabaseForm.ui" line="24"/>
         <source>Form</source>
@@ -8366,7 +8532,7 @@ QToolButton:pressed {
     </message>
 </context>
 <context>
-        <name>OptionListEditor</name>
+    <name>OptionListEditor</name>
     <message>
         <location filename="../src/Qui/OptionListEditor.ui" line="13"/>
         <source>Dialog</source>
@@ -8409,7 +8575,7 @@ QToolButton:pressed {
     </message>
 </context>
 <context>
-        <name>OptionNumberEditor</name>
+    <name>OptionNumberEditor</name>
     <message>
         <location filename="../src/Qui/OptionNumberEditor.ui" line="24"/>
         <source>Dialog</source>
@@ -8452,7 +8618,7 @@ QToolButton:pressed {
     </message>
 </context>
 <context>
-        <name>OrbitalsConfigurator</name>
+    <name>OrbitalsConfigurator</name>
     <message>
         <location filename="../src/Configurator/OrbitalsConfigurator.ui" line="20"/>
         <source>Add Surface</source>
@@ -8619,7 +8785,7 @@ QToolButton:pressed {
     </message>
 </context>
 <context>
-        <name>ParametrizeMoleculeDialog</name>
+    <name>ParametrizeMoleculeDialog</name>
     <message>
         <location filename="../src/Amber/ParametrizeMoleculeDialog.ui" line="14"/>
         <source>Parametrize Molecule</source>
@@ -8672,7 +8838,7 @@ QToolButton:pressed {
     </message>
 </context>
 <context>
-        <name>PeriodicTable</name>
+    <name>PeriodicTable</name>
     <message>
         <location filename="../src/Main/PeriodicTable.ui" line="26"/>
         <location filename="../src/Main/PeriodicTableMac.ui" line="26"/>
@@ -9305,7 +9471,7 @@ QToolButton:pressed {
     </message>
 </context>
 <context>
-        <name>PreferencesBrowser</name>
+    <name>PreferencesBrowser</name>
     <message>
         <location filename="../src/Main/PreferencesBrowser.ui" line="14"/>
         <source>IQmol Preferences</source>
@@ -9431,7 +9597,7 @@ QToolButton:pressed {
     </message>
 </context>
 <context>
-        <name>PrimaryBasisTab</name>
+    <name>PrimaryBasisTab</name>
     <message>
         <location filename="../src/Qui/PrimaryBasisTab.ui" line="14"/>
         <source>Form</source>
@@ -9439,7 +9605,7 @@ QToolButton:pressed {
     </message>
 </context>
 <context>
-        <name>ProgressDialog</name>
+    <name>ProgressDialog</name>
     <message>
         <location filename="../src/Util/ProgressDialog.ui" line="14"/>
         <source>Dialog</source>
@@ -9457,7 +9623,7 @@ QToolButton:pressed {
     </message>
 </context>
 <context>
-        <name>PropertiesTab</name>
+    <name>PropertiesTab</name>
     <message>
         <location filename="../src/Qui/PropertiesTab.ui" line="14"/>
         <source>Form</source>
@@ -9475,7 +9641,7 @@ QToolButton:pressed {
     </message>
 </context>
 <context>
-        <name>ProteinConfigurator</name>
+    <name>ProteinConfigurator</name>
     <message>
         <location filename="../src/Configurator/ProteinChainConfigurator.ui" line="14"/>
         <source>Configure Protein</source>
@@ -9508,7 +9674,7 @@ QToolButton:pressed {
     </message>
 </context>
 <context>
-        <name>QueueOptionsDialog</name>
+    <name>QueueOptionsDialog</name>
     <message>
         <location filename="../src/Process/QueueOptionsDialog.ui" line="14"/>
         <source>Queue Options</source>
@@ -9585,7 +9751,7 @@ Note this is ignored on PBS servers.</source>
     </message>
 </context>
 <context>
-        <name>QueueResourcesDialog</name>
+    <name>QueueResourcesDialog</name>
     <message>
         <location filename="../src/Process/QueueResourcesDialog.ui" line="20"/>
         <source>Resource Limits</source>
@@ -9664,7 +9830,7 @@ in the run file template</source>
     </message>
 </context>
 <context>
-        <name>Qui::GeometryConstraint</name>
+    <name>Qui::GeometryConstraint</name>
     <message>
         <source>Are you sure you want to delete the selected constraint?</source>
         <comment>预置：需配合源码补 tr() 后由 lupdate 匹配</comment>
@@ -9727,7 +9893,7 @@ in the run file template</source>
     </message>
 </context>
 <context>
-        <name>Qui::GeometryConstraint::Dialog</name>
+    <name>Qui::GeometryConstraint::Dialog</name>
     <message>
         <location filename="../src/Qui/GeometryConstraint.C" line="104"/>
         <source>Delete</source>
@@ -9807,7 +9973,7 @@ in the run file template</source>
     </message>
 </context>
 <context>
-        <name>Qui::InputDialog</name>
+    <name>Qui::InputDialog</name>
     <message>
         <source>Are you sure you want to delete all generated input?</source>
         <comment>预置：需配合源码补 tr() 后由 lupdate 匹配</comment>
@@ -9820,7 +9986,7 @@ in the run file template</source>
     </message>
 </context>
 <context>
-        <name>Qui::LJParametersSection</name>
+    <name>Qui::LJParametersSection</name>
     <message>
         <source>LJ Parameter Error</source>
         <comment>预置：需配合源码补 tr() 后由 lupdate 匹配</comment>
@@ -9833,7 +9999,7 @@ in the run file template</source>
     </message>
 </context>
 <context>
-        <name>Qui::MoleculeSection</name>
+    <name>Qui::MoleculeSection</name>
     <message>
         <source>Problem reading $molecule section: 
 </source>
@@ -9848,7 +10014,7 @@ in the run file template</source>
     </message>
 </context>
 <context>
-        <name>Qui::OptionDatabaseForm</name>
+    <name>Qui::OptionDatabaseForm</name>
     <message>
         <location filename="../src/Qui/OptionDatabaseForm.C" line="44"/>
         <source>Option Database Editor</source>
@@ -9856,7 +10022,7 @@ in the run file template</source>
     </message>
 </context>
 <context>
-        <name>Qui::OptionListEditor</name>
+    <name>Qui::OptionListEditor</name>
     <message>
         <location filename="../src/Qui/OptionEditors.C" line="33"/>
         <source>Edit Option List</source>
@@ -9874,7 +10040,7 @@ in the run file template</source>
     </message>
 </context>
 <context>
-        <name>Qui::RemSection</name>
+    <name>Qui::RemSection</name>
     <message>
         <source>An error occured when parsing the following options:
 </source>
@@ -9889,7 +10055,7 @@ in the run file template</source>
     </message>
 </context>
 <context>
-        <name>ReactionPathTab</name>
+    <name>ReactionPathTab</name>
     <message>
         <location filename="../src/Qui/ReactionPathTab.ui" line="14"/>
         <source>Form</source>
@@ -9907,7 +10073,7 @@ in the run file template</source>
     </message>
 </context>
 <context>
-        <name>ScalarConstraintConfigurator</name>
+    <name>ScalarConstraintConfigurator</name>
     <message>
         <location filename="../src/Configurator/ScalarConstraintConfigurator.ui" line="14"/>
         <source>Set Value</source>
@@ -9960,7 +10126,7 @@ in the run file template</source>
     </message>
 </context>
 <context>
-        <name>ServerConfigurationDialog</name>
+    <name>ServerConfigurationDialog</name>
     <message>
         <location filename="../src/Process/ServerConfigurationDialog.ui" line="23"/>
         <source>Edit Server</source>
@@ -10164,7 +10330,7 @@ Use Web for HTTP/HTTPS servers</source>
     </message>
 </context>
 <context>
-        <name>ServerConfigurationListDialog</name>
+    <name>ServerConfigurationListDialog</name>
     <message>
         <location filename="../src/Process/ServerConfigurationListDialog.ui" line="14"/>
         <source>Server List</source>
@@ -10231,7 +10397,7 @@ Use Web for HTTP/HTTPS servers</source>
     </message>
 </context>
 <context>
-        <name>ShaderDialog</name>
+    <name>ShaderDialog</name>
     <message>
         <location filename="../src/Viewer/ShaderDialog.ui" line="14"/>
         <source>Appearance</source>
@@ -10529,7 +10695,7 @@ Use Web for HTTP/HTTPS servers</source>
     </message>
 </context>
 <context>
-        <name>SnapshotImageDialog</name>
+    <name>SnapshotImageDialog</name>
     <message>
         <location filename="../src/Viewer/SnapshotImageDialog.ui" line="14"/>
         <source>Image Settings</source>
@@ -10557,7 +10723,7 @@ Use Web for HTTP/HTTPS servers</source>
     </message>
 </context>
 <context>
-        <name>SnapshotVideoDialog</name>
+    <name>SnapshotVideoDialog</name>
     <message>
         <location filename="../src/Viewer/SnapshotVideoDialog.ui" line="14"/>
         <source>Video Settings</source>
@@ -10645,7 +10811,7 @@ Use Web for HTTP/HTTPS servers</source>
     </message>
 </context>
 <context>
-        <name>SshFileDialog</name>
+    <name>SshFileDialog</name>
     <message>
         <location filename="../src/Process/SshFileDialog.ui" line="20"/>
         <source>SSH File Locations</source>
@@ -10688,7 +10854,7 @@ Typically this is in $HOME/.ssh/known_hosts</source>
     </message>
 </context>
 <context>
-        <name>SurfaceAnimatorDialog</name>
+    <name>SurfaceAnimatorDialog</name>
     <message>
         <location filename="../src/Configurator/SurfaceAnimatorDialog.ui" line="20"/>
         <source>Create Animation</source>
@@ -10734,7 +10900,6 @@ QToolButton:pressed {
 </translation>
     </message>
     <message>
-        <location filename="../src/Configurator/SurfaceAnimatorDialog.ui" line="46"/>
         <source>QToolButton {
    color: #333;
    background-color: QLinearGradient( x1: 0, y1: 0, x2: 0, y2: 1, 
@@ -10840,6 +11005,60 @@ QToolTip {
         <source>Cube File Frames</source>
         <comment>Cube 为文件格式专名，保留英文。</comment>
         <translation>Cube 文件帧</translation>
+    </message>
+    <message>
+        <location filename="../src/Configurator/SurfaceAnimatorDialog.ui" line="46"/>
+        <source>QToolButton {
+   color: #333;
+   background-color: QLinearGradient( x1: 0, y1: 0, x2: 0, y2: 1, 
+          stop: 0 #fff,
+          stop: 0.5 #eee, 
+          stop: 1 #999);
+   border-width: 2px;
+   border-color: #333;
+   border-style: solid;
+   border-radius: 5;
+   padding: 0px;
+   font-size: 24pt;
+   min-width: 34px;
+   max-width: 34px;
+   min-height: 34px;
+   max-height: 34px;
+}
+
+QToolButton:disabled {
+  background-color: QLinearGradient( x1: 0, y1: 0, x2: 0, y2: 1, 
+          stop: 0 #fff,
+          stop: 0.5 #eee, 
+          stop: 1 #bbb);
+   border-color: #aaa;
+   color: #aaa;
+}
+
+QToolButton:pressed {
+   background-color: QLinearGradient( x1: 0, y1: 0, x2: 0, y2: 1, 
+          stop: 0 #999,
+          stop: 0.5 #eee, 
+          stop: 1 #fff);
+}
+
+
+QToolButton:checked {
+   border-color: #b00;
+   background-color: QLinearGradient( x1: 0, y1: 0, x2: 0, y2: 1, 
+          stop: 0 #999,
+          stop: 0.5 #eee, 
+          stop: 1 #fff);
+}
+
+QToolTip {
+   border: 2px solid darkkhaki;
+   padding: 2px;
+   border-radius: 3px;
+   opacity: 500;
+   font-size: 12pt;
+}</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/Configurator/SurfaceAnimatorDialog.ui" line="98"/>
@@ -10951,6 +11170,56 @@ QToolTip {
     </message>
     <message>
         <location filename="../src/Configurator/SurfaceAnimatorDialog.ui" line="457"/>
+        <source>QToolButton {
+   color: #333;
+   background-color: QLinearGradient( x1: 0, y1: 0, x2: 0, y2: 1, 
+          stop: 0 #fff,
+          stop: 0.5 #eee, 
+          stop: 1 #999);
+   border-width: 2px;
+   border-color: #333;
+   border-style: solid;
+   border-radius: 5;
+   padding: 0px;
+   font-size: 24pt;
+   min-width: 34px;
+   max-width: 34px;
+   min-height: 34px;
+   max-height: 34px;
+}
+
+QToolButton:disabled {
+  background-color: QLinearGradient( x1: 0, y1: 0, x2: 0, y2: 1, 
+          stop: 0 #fff,
+          stop: 0.5 #eee, 
+          stop: 1 #bbb);
+   border-color: #aaa;
+   color: #aaa;
+}
+
+
+QToolButton:pressed {
+   background-color: QLinearGradient( x1: 0, y1: 0, x2: 0, y2: 1, 
+          stop: 0 #999,
+          stop: 0.5 #eee, 
+          stop: 1 #fff);
+}
+
+
+QToolButton:checked {
+   border-color: #b00;
+}
+
+QToolTip {
+   border: 2px solid darkkhaki;
+   padding: 2px;
+   border-radius: 3px;
+   opacity: 500;
+   font-size: 10pt;
+}</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>QToolButton {
    color: #333;
    background-color: QLinearGradient( x1: 0, y1: 0, x2: 0, y2: 1, 
@@ -11122,7 +11391,7 @@ QToolTip {
     </message>
 </context>
 <context>
-        <name>SurfaceConfigurator</name>
+    <name>SurfaceConfigurator</name>
     <message>
         <location filename="../src/Configurator/SurfaceConfigurator.ui" line="14"/>
         <source>Configure Surface</source>
@@ -11215,7 +11484,7 @@ QToolTip {
     </message>
 </context>
 <context>
-        <name>SymmetryConfigurator</name>
+    <name>SymmetryConfigurator</name>
     <message>
         <location filename="../src/Configurator/SymmetryConfigurator.ui" line="14"/>
         <source>Form</source>
@@ -11233,7 +11502,7 @@ QToolTip {
     </message>
 </context>
 <context>
-        <name>SymmetryToleranceDialog</name>
+    <name>SymmetryToleranceDialog</name>
     <message>
         <location filename="../src/Viewer/SymmetryToleranceDialog.ui" line="14"/>
         <source>Symmetry Tolerance</source>
@@ -11269,7 +11538,7 @@ p, li { white-space: pre-wrap; }
     </message>
 </context>
 <context>
-        <name>SystemBuilderDialog</name>
+    <name>SystemBuilderDialog</name>
     <message>
         <location filename="../src/Amber/SystemBuilderDialog.ui" line="14"/>
         <source>Amber System Builder</source>
@@ -11492,7 +11761,7 @@ Are you sure you want to continue?</source>
     </message>
 </context>
 <context>
-        <name>ToolBar</name>
+    <name>ToolBar</name>
     <message>
         <location filename="../src/Main/ToolBar.ui" line="20"/>
         <source>Form</source>
@@ -11615,7 +11884,7 @@ p, li { white-space: pre-wrap; }
     </message>
 </context>
 <context>
-        <name>TransitionStateTab</name>
+    <name>TransitionStateTab</name>
     <message>
         <location filename="../src/Qui/TransitionStateTab.ui" line="14"/>
         <source>Form</source>
@@ -11628,9 +11897,9 @@ p, li { white-space: pre-wrap; }
     </message>
 </context>
 <context>
-        <name>UndoCommands</name>
+    <name>UndoCommands</name>
     <message>
-        <location filename="../src/Viewer/UndoCommands.C" line="263"/>
+        <location filename="../src/Viewer/UndoCommands.C" line="269"/>
         <source>Add constraint</source>
         <translation>添加约束</translation>
     </message>
@@ -11640,53 +11909,59 @@ p, li { white-space: pre-wrap; }
         <translation>添加扫描坐标</translation>
     </message>
     <message>
-        <location filename="../src/Viewer/UndoCommands.C" line="266"/>
+        <location filename="../src/Viewer/UndoCommands.C" line="154"/>
+        <location filename="../src/Viewer/UndoCommands.C" line="165"/>
+        <source>Move items</source>
+        <translation>移动对象</translation>
+    </message>
+    <message>
+        <location filename="../src/Viewer/UndoCommands.C" line="272"/>
         <source>Add scan coordinated</source>
         <translation>添加扫描坐标</translation>
     </message>
     <message>
-        <location filename="../src/Viewer/UndoCommands.C" line="295"/>
+        <location filename="../src/Viewer/UndoCommands.C" line="301"/>
         <source>Change atom type</source>
         <translation>更改原子类型</translation>
     </message>
     <message>
-        <location filename="../src/Viewer/UndoCommands.C" line="341"/>
+        <location filename="../src/Viewer/UndoCommands.C" line="347"/>
         <source>Change bond order</source>
         <translation>更改键级</translation>
     </message>
     <message>
-        <location filename="../src/Viewer/UndoCommands.C" line="386"/>
+        <location filename="../src/Viewer/UndoCommands.C" line="392"/>
         <source>New molecule</source>
         <translation>新建分子</translation>
     </message>
     <message>
-        <location filename="../src/Viewer/UndoCommands.C" line="388"/>
+        <location filename="../src/Viewer/UndoCommands.C" line="394"/>
         <source>New system</source>
         <translation>新建系统</translation>
     </message>
     <message>
-        <location filename="../src/Viewer/UndoCommands.C" line="438"/>
+        <location filename="../src/Viewer/UndoCommands.C" line="444"/>
         <source>Remove molecule</source>
         <translation>移除分子</translation>
     </message>
     <message>
-        <location filename="../src/Viewer/UndoCommands.C" line="440"/>
+        <location filename="../src/Viewer/UndoCommands.C" line="446"/>
         <source>Remove system</source>
         <translation>移除系统</translation>
     </message>
     <message>
-        <location filename="../src/Viewer/UndoCommands.C" line="443"/>
+        <location filename="../src/Viewer/UndoCommands.C" line="449"/>
         <source>Remove </source>
         <translation>移除</translation>
     </message>
     <message>
-        <location filename="../src/Viewer/UndoCommands.C" line="392"/>
+        <location filename="../src/Viewer/UndoCommands.C" line="398"/>
         <source>Load file %1</source>
         <translation>加载文件 %1</translation>
     </message>
 </context>
 <context>
-        <name>VectorConstraintConfigurator</name>
+    <name>VectorConstraintConfigurator</name>
     <message>
         <location filename="../src/Configurator/VectorConstraintConfigurator.ui" line="14"/>
         <source>Set Position</source>
@@ -11735,7 +12010,7 @@ p, li { white-space: pre-wrap; }
     </message>
 </context>
 <context>
-        <name>VibronicConfigurator</name>
+    <name>VibronicConfigurator</name>
     <message>
         <location filename="../src/Configurator/VibronicConfigurator.ui" line="20"/>
         <source>Vibronic Analysis</source>
