@@ -34,7 +34,7 @@
 - [ ] 若涉及界面改动，已附**中文界面截图**
 - [ ] 若涉及翻译，已确认 `zh_CN.ts` 条目数与 `0 unfinished` 校验通过：
   ```
-  grep -c '<message' translations/zh_CN.ts          # 应为 2112
+  grep -c '<message' translations/zh_CN.ts          # 应为 2125
   grep -c 'type="unfinished"' translations/zh_CN.ts # 应为 0
   ```
 
