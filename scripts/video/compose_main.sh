@@ -102,8 +102,48 @@ badge "$SEG/s4b.mp4" "$SEG/s4b_l.mp4" "② 计算 · Q-Chem 设置"
 badge "$SEG/s4c.mp4" "$SEG/s4c_l.mp4" "③ 可视化 · 轨道与性质"
 
 # 数据条卡
+# ⚠️ 数字必须从 translations/zh_CN.ts 实时统计，不要硬编码。
+#    画面底部写着「数据可在 translations/zh_CN.ts 逐条核验」，
+#    硬编码的数字一旦随翻译更新而失准，就成了自打脸的破绽
+#    （历史上就发生过：画面 2112 / 文档 2035 / 实际早已不是 2112）。
 python3 - <<'PY'
+import os, re, subprocess
+import xml.etree.ElementTree as ET
 from PIL import Image, ImageDraw, ImageFont
+
+# ---- 从 ts 实测三项数字 ----
+TS = "translations/zh_CN.ts"
+root = ET.parse(TS).getroot()
+contexts = root.findall("context")
+n_msg = sum(len(c.findall("message")) for c in contexts)
+n_ctx = len(contexts)
+n_unfinished = 0
+for c in contexts:
+    for m in c.findall("message"):
+        t = m.find("translation")
+        if t is None or t.get("type") == "unfinished" or not (t.text or "").strip():
+            n_unfinished += 1
+# 手册页数：实读仓库内的中文手册 PDF。
+# ⚠️ 文件名是英文 IQmolUserGuide.pdf（在 doc/ 下），不叫「手册」——
+#    早先按 *手册* / docs/ 去找会误判为"手册不存在"，务必用真实路径。
+n_pages = None
+for cand in ("doc/IQmolUserGuide.pdf",
+             "docs/IQmolUserGuide.pdf",
+             "docs/IQmol用户手册.pdf"):
+    if os.path.exists(cand):
+        try:
+            out = subprocess.run(["pdfinfo", cand], capture_output=True, text=True).stdout
+            m = re.search(r"Pages:\s+(\d+)", out)
+            if m:
+                n_pages = int(m.group(1))
+        except Exception:
+            pass
+        break
+print(f"  数据卡实测: {n_msg} 条翻译 / {n_ctx} 个界面模块 / "
+      f"{str(n_pages) + ' 页中文手册' if n_pages else '手册未找到'}"
+      f"（unfinished {n_unfinished}）")
+assert n_unfinished == 0, f"存在 {n_unfinished} 条未完成翻译，数据卡不应发布"
+
 W, H = 1920, 1080
 # ⚠️ 这里必须用含拉丁字形的字体，否则 2112 / 153 / 34 与 GPL-3.0 会变方框
 F = "/usr/share/fonts/opentype/noto/NotoSansCJK-Regular.ttc"
@@ -122,13 +162,17 @@ def center(y, t, f, c):
     d.text(((W - w) / 2, y), t, font=f, fill=c)
 
 center(110, "建模 · 计算 · 可视化", f_h, (120, 200, 255))
-for i, (n, l) in enumerate([("2112", "条翻译"), ("153", "个界面模块"), ("34", "页中文手册")]):
+for i, (n, l) in enumerate([(str(n_msg), "条翻译"),
+                            (str(n_ctx), "个界面模块"),
+                            (str(n_pages) if n_pages else "—",
+                             "页中文手册" if n_pages else "手册未找到")]):
     x = 380 + i * 580
     d.text((x, 370), n, font=f_n, fill=(255, 255, 255))
     w = d.textbbox((0, 0), n, font=f_n)[2]
     d.text((x + w / 2, 492), l, font=f_l, fill=(150, 172, 196))
 center(700, "开源免费 · GPL-3.0", f_h, (200, 220, 240))
-center(890, "数据可在 translations/zh_CN.ts 逐条核验", f_s, (110, 132, 158))
+center(890, f"数据可在 translations/zh_CN.ts 逐条核验（{n_msg} 条 / 0 未完成）",
+       f_s, (110, 132, 158))
 img.save("build-video/edit/datacard.png")
 PY
 ffmpeg -y -loop 1 -i "$EDIT/datacard.png" -t 4 -r $VFPS \
