@@ -104,14 +104,34 @@ jobs:
           # 并以非零退出——即使 99.99% 的文件都已正确解出。
           # 7z 也不可靠：7-Zip 26 的 "Dangerous link path was ignored"
           # 同样是 exit 2。
-          # 故用 --exclude 显式排除这 3 个文件，其余内容照常解出。
+          #
+          # 注意：必须逐个精确排除，不能用 --exclude='*/test/*'。
+          # 包内有 17 个 test/CMakeLists.txt 是构建必需的
+          # （hdf5 10 个、libarchive 5 个、openbabel / libssh2 / yaml-cpp 各 1 个），
+          # 粗放排除会导致 configure 报
+          #   "modules/libarchive/*/test does not contain a CMakeLists.txt file"
+          # 而直接失败（run 37103996117 实测）。
           tar -xzf submodules-package/IQmol-submodules.tar.gz \
-            --exclude='*/test/*' \
-            --exclude='*/tests/*' \
+            --exclude='modules/libxml2/test/relaxng/ambig_name-class.rng' \
+            --exclude='modules/libxml2/test/relaxng/ambig_name-class2.rng' \
+            --exclude='modules/HighFive/tests/test_project/read_write_vector_dataset.cpp' \
             || {
-              echo "::warning::排除 test 目录后仍失败，改为全量解包并容忍 symlink 错误"
+              echo "::warning::排除 symlink 后仍失败，改为全量解包并容忍 symlink 错误"
               tar -xzf submodules-package/IQmol-submodules.tar.gz || true
             }
+          echo "== 校验关键 test/CMakeLists.txt 未被误删 =="
+          MISSING_TEST=0
+          for f in modules/libarchive/tar/test/CMakeLists.txt \
+                   modules/libarchive/libarchive/test/CMakeLists.txt \
+                   modules/libarchive/cat/test/CMakeLists.txt \
+                   modules/libarchive/cpio/test/CMakeLists.txt \
+                   modules/libarchive/unzip/test/CMakeLists.txt \
+                   modules/libssh2/tests/CMakeLists.txt \
+                   modules/yaml-cpp/test/CMakeLists.txt; do
+            [ -f "$f" ] || { echo "::error::缺失 $f"; MISSING_TEST=1; }
+          done
+          [ "$MISSING_TEST" = "0" ] || exit 1
+          echo "  全部就位"
           echo "== 解包结果 =="
           ls -d modules/*/ 2>/dev/null || { echo "::error::modules/ 为空"; exit 1; }
           echo "== 各子模块文件数 =="
