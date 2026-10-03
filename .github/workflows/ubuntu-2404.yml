@@ -15,11 +15,16 @@ jobs:
         uses: actions/checkout@v4.2.2
 
       - name: Setup Fortran
+        # fortran-lang/setup-fortran 只发布 x86_64 二进制，在 ubuntu-24.04-arm
+        # 上会直接失败；ARM runner 镜像已自带 gfortran，无需该 action。
+        if: ${{ matrix.os == 'ubuntu-24.04' }}
         uses: fortran-lang/setup-fortran@v1
 
       - name: Install Dependencies
         run: |
           sudo apt-get update
+          # ARM runner 跳过 setup-fortran，这里显式补 gfortran 保底
+          sudo apt-get install gfortran -y
           sudo apt-get install libarchive-dev -y
           sudo apt-get install librust-bzip2-dev -y
           sudo apt-get install liblzma-dev -y
