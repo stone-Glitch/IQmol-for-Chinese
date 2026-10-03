@@ -47,7 +47,7 @@
 
 2. **修改后自检**：
    ```bash
-   grep -c '<message' translations/zh_CN.ts          # 条目总数（当前 2112）
+   grep -c '<message' translations/zh_CN.ts          # 条目总数（当前 2125）
    grep -c 'type="unfinished"' translations/zh_CN.ts # 应为 0
    ```
    若改了 `.ts`，构建时会由 CMake 自动调用 `lrelease` 生成 `.qm`。
@@ -63,7 +63,7 @@
 
 ## 文档口径约定
 
-- 译文条数的**权威口径**是 `translations/zh_CN.ts` 的 `<message` 计数（当前 **2112 条 / 153 context / 0 unfinished**），**不是文档里出现的数字**。
+- 译文条数的**权威口径**是 `translations/zh_CN.ts` 的 `<message` 计数（当前 **2125 条 / 155 context / 0 unfinished**），**不是文档里出现的数字**。
 - 同一事实只在**一处**维护，其它文档用相对链接引用，避免口径漂移。
 - 文档语言为简体中文；代码注释与命令保持原文。
 
