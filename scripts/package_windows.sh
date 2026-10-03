@@ -171,9 +171,32 @@ echo "==> 已写入 README: $STAGE/README_zh_CN.txt"
 PKG_NAME="IQmol-win64-${VER}-zh_CN"
 cd "$OUT_DIR"
 
+# ⚠️ 先对齐 staging 目录里所有文件的 mtime，再打包。
+#
+# 为什么：7z / Compress-Archive 会把每个文件的 mtime 写进压缩包，
+# 于是**同一份构建产物、两次打包的哈希必然不同**。
+# 实测证据（v3.2.4-zh_CN vs v3.2.4.1-zh_CN）：
+#   zip 两次都是 53,556,768 字节，但哈希一个 a7553f62… 一个 9f999716…
+#   ——尺寸完全一致，说明内容一致，差异纯粹来自时间戳。
+# 这会让发布出去的 SHA256SUMS.txt 失去"可复现核验"的意义：
+# 用户下载后算出的哈希永远对不上我们写的那一份。
+#
+# 固定成源码提交时间（SOURCE_DATE_EPOCH 是业界通用的可复现构建约定，
+# 若 CI 已设置就沿用它，否则退回一个固定值）。
+: "${SOURCE_DATE_EPOCH:=1700000000}"
+export SOURCE_DATE_EPOCH
+if command -v find >/dev/null 2>&1; then
+  # MSYS2 的 find 支持 -exec touch -d @<epoch>
+  find "$STAGE" -exec touch -d "@${SOURCE_DATE_EPOCH}" {} + 2>/dev/null \
+    || echo "    （touch 对齐 mtime 失败，压缩包哈希仍会随构建时间变化）"
+  echo "==> 已把 staging 内所有文件 mtime 对齐到 SOURCE_DATE_EPOCH=${SOURCE_DATE_EPOCH}"
+fi
+
 if command -v 7z >/dev/null 2>&1; then
   echo "==> 7z 打包: $PKG_NAME.7z"
-  7z a -t7z -mx=9 -m0=LZMA2 "$PKG_NAME.7z" IQmol >/dev/null \
+  # -mta 强制按 mtime 排序、不写入额外时间属性，配合上面的 mtime 对齐，
+  # 同一份 staging 重复打包可得到相同哈希。
+  7z a -t7z -mx=9 -m0=LZMA2 -mta=1 "$PKG_NAME.7z" IQmol >/dev/null \
     && echo "    完成: $OUT_DIR/$PKG_NAME.7z  ($(du -h "$PKG_NAME.7z" | cut -f1))"
 else
   echo "    未找到 7z，回退为 PowerShell 生成 .zip"
