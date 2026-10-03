@@ -13,19 +13,29 @@
     "功能补丁-界面资源.patch",
     "功能补丁-构建层.patch"
   ],
-  "covers_files": 36,
+  "covers_files": 38,
   "verified": true,
-  "verification": "在上游 af7ff60 干净树上 ①→②→③ 后，全套六步迁移实测 95/95 个文件与成果版 100% 复现 ✅（2026-10-02）",
+  "verification": "在上游 af7ff60 干净树上 ①→②→③ 后，全套六步迁移实测 95/95 个文件与成果版 100% 复现 ✅（2026-10-02）；2026-10-03 追加的 9 处撤销/操作命令名改动已用「HEAD 版临时树 + git apply --recount」逐字节复验，6 个受影响文件全部一致 ✅",
   "covered_files_sample": [
     "src/Configurator/OrbitalsConfigurator.C",
+    "src/Layer/ComponentLayer.C",
     "src/Layer/MoleculeLayer.C",
     "src/Main/HelpBrowser.C",
     "src/Main/IQmolApplication.C",
     "src/Parser/OpenBabelParser.C",
     "src/Qui/InputDialog.C",
-    "src/Viewer/ShaderDialog.C"
+    "src/Viewer/BuildEfpFragmentHandler.C",
+    "src/Viewer/BuildMoleculeFragmentHandler.C",
+    "src/Viewer/ShaderDialog.C",
+    "src/Viewer/UndoCommands.C",
+    "src/Viewer/UndoCommands.h"
   ],
   "changelog": [
+    {
+      "date": "2026-10-03",
+      "change": "新增 3 个文件（共 38）：src/Layer/ComponentLayer.C、src/Viewer/BuildEfpFragmentHandler.C、src/Viewer/BuildMoleculeFragmentHandler.C、src/Viewer/UndoCommands.h；并扩充已在清单内的 src/Layer/MoleculeLayer.C 与 src/Viewer/UndoCommands.C。合计修复 9 处未翻译的撤销/操作命令名。",
+      "reason": "F1 缺陷（用户反馈：撤销栈/操作提示显示英文）核实出的漏网项。这 9 处字符串既不在 tr() 规则表（wrap_tr.rules 0 命中），也不在原有功能补丁集，属「补丁集的缝隙」——正是发布版仍漏翻的根因。按类上下文分两种写法：Molecule 与 Component 有 Q_OBJECT，用裸 tr()；BuildEfpFragment/BuildMoleculeFragment 的基类 Handler::Base 非 QObject、UndoCommands.h 的类派生自 QUndoCommand（非 QObject），须用 QCoreApplication::translate()。**关键坑**：lupdate 只扫 .C/.ui 不扫 .h，凡写在 UndoCommands.h 里的字面量永远抽不进士林表——故将操作名文本改为由调用点（MoleculeLayer.C）传入，MoveObjects 的默认文本兜底下沉到 UndoCommands.C 构造实现。"
+    },
     {
       "date": "2026-10-02",
       "change": "由 35 个文件扩充至 36 个：补入 src/Main/IQmolApplication.C 与 src/Qui/InputDialog.C 的漏网改动。",

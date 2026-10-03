@@ -1556,7 +1556,7 @@ void Molecule::deleteSelection()
    if (!deleteTargets.isEmpty()) {
       QLOG_DEBUG() << "Deleting" << deleteTargets.size() << "selected objects";
       PrimitiveList::iterator iter;
-      Command::EditPrimitives* cmd(new Command::EditPrimitives("Remove atoms/bonds", this));
+      Command::EditPrimitives* cmd(new Command::EditPrimitives(tr("Remove atoms/bonds"), this));
       cmd->remove(deleteTargets);
       postCommand(cmd);
    }
@@ -2190,7 +2190,7 @@ void Molecule::minimizeEnergy(QString const& forceFieldName)
 
    forceField->SetConformers(*obMol);
 
-   Command::MinimizeStructure* cmd(new Command::MinimizeStructure(this));
+   Command::MinimizeStructure* cmd(new Command::MinimizeStructure(this, tr("Minimize energy")));
 
    double convergence(1e-6f);
    int maxSteps(1000);
@@ -2276,7 +2276,7 @@ void Molecule::symmetrize(double tolerance, bool updateCoordinates)
    time.start();
 
    AtomList atomList(findLayers<Atom>(Children | Visible));
-   Command::SymmetrizeStructure* cmd = new Command::SymmetrizeStructure(this);
+   Command::SymmetrizeStructure* cmd = new Command::SymmetrizeStructure(this, tr("Symmetrize structure"));
    QString pointGroup;
    int nAtoms(atomList.size());
 
@@ -2447,7 +2447,7 @@ void Molecule::reperceiveBonds(bool postCmd)
    }
 
    if (postCmd) {
-      Command::EditPrimitives* cmd(new Command::EditPrimitives("Reperceive bonds", this));
+      Command::EditPrimitives* cmd(new Command::EditPrimitives(tr("Reperceive bonds"), this));
       cmd->remove(removed).add(added);
       postCommand(cmd);
    }else {

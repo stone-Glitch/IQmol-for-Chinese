@@ -23,6 +23,7 @@
 #include "BuildMoleculeFragmentHandler.h"
 #include "Viewer.h"
 #include "UndoCommands.h"
+#include <QCoreApplication>
 
 
 using namespace qglviewer;
@@ -62,7 +63,8 @@ void BuildMoleculeFragment::addMolecule(QMouseEvent* e)
 
    QList<Layer::Primitive*> primitives;
    primitives << molecule->ungroup();
-   Command::EditPrimitives* cmd(new Command::EditPrimitives("Add molecule", m_molecule));
+   Command::EditPrimitives* cmd(new Command::EditPrimitives(
+      QCoreApplication::translate("Handler::BuildMoleculeFragment", "Add molecule"), m_molecule));
    cmd->add(primitives);
    m_viewer->postCommand(cmd);
 

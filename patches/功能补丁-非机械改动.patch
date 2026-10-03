@@ -1428,3 +1428,183 @@ index 322010c..79d1ac1 100644
     }else {
        QString msg("Could not write to file '");
        msg += tmp.fileName() + "'\nInput file not saved\n";
+diff --git a/src/Viewer/UndoCommands.h b/src/Viewer/UndoCommands.h
+--- a/src/Viewer/UndoCommands.h
++++ b/src/Viewer/UndoCommands.h
+@@ -98,12 +98,14 @@ namespace Command {
+    class MoveObjects : public QUndoCommand 
+    {
+       public:
+-         MoveObjects(Layer::Component*, QString const& text = "Move items", 
++         // text 为撤销栈中显示的操作名。默认空串由 UndoCommands.C 兜底为
++         // 「Move items」的可翻译文本（lupdate 不扫描 .h，字面量必须放在 .C 中）。
++         MoveObjects(Layer::Component*, QString const& text = QString(), 
+             bool const animiate = false, bool invalidateSymmetry = true);
+-         MoveObjects(GLObjectList const&, QString const& text = "Move items", 
++         MoveObjects(GLObjectList const&, QString const& text = QString(), 
+             bool const animiate = false, bool invalidateSymmetry = true);
+          ~MoveObjects();
+            
+@@ -143,12 +145,18 @@ namespace Command {
+ 
+ 
+    // Specialized cases of the above
++   //
++   // 注意：操作名文本（Add Charges / Minimize energy / Symmetrize structure）
++   // 不在本头文件里直接写 QCoreApplication::translate —— lupdate 不扫描 .h，
++   // 写在头文件里的字面量抽不进士林表、译文永不生效。改由调用点传入可翻译文本
++   // （见 src/Layer/MoleculeLayer.C 的 tr("Minimize energy") 等）。
+ 
+    class AddCharges: public EditPrimitives 
+    {
+       public:
+-         AddCharges(Layer::Molecule* molecule, Layer::PrimitiveList const& chargeList)
+-            : EditPrimitives("Add Charges", molecule) {
++         AddCharges(Layer::Molecule* molecule, Layer::PrimitiveList const& chargeList,
++                    QString const& text)
++            : EditPrimitives(text, molecule) {
+             add(chargeList);
+          }
+    };
+@@ -157,16 +165,16 @@ namespace Command {
+    class MinimizeStructure: public MoveObjects 
+    {
+       public:
+-         MinimizeStructure(Layer::Molecule* molecule) 
+-            : MoveObjects(molecule, "Minimize energy", true, true) { }
++         MinimizeStructure(Layer::Molecule* molecule, QString const& text) 
++            : MoveObjects(molecule, text, true, true) { }
+    };
+  
+ 
+    class SymmetrizeStructure : public MoveObjects 
+    {
+       public:
+-         SymmetrizeStructure(Layer::Molecule* molecule)
+-            : MoveObjects(molecule, "Symmetrize structure", true, false) { }
++         SymmetrizeStructure(Layer::Molecule* molecule, QString const& text)
++            : MoveObjects(molecule, text, true, false) { }
+    };
+ 
+ 
+diff --git a/src/Viewer/UndoCommands.C b/src/Viewer/UndoCommands.C
+--- a/src/Viewer/UndoCommands.C
++++ b/src/Viewer/UndoCommands.C
+@@ -147,8 +147,12 @@ void EditPrimitives::undo()
+ 
+ 
+ // --------------- MoveObjects ---------------
++// text 为空时兜底为「Move items」的可翻译文本。字面量必须放在 .C 而非 .h：
++// lupdate 不扫描头文件，写在 .h 里的字面量抽不进士林表、译文永不生效。
+ MoveObjects::MoveObjects(Layer::Component* component, QString const& text, bool const animate,
+-   bool const invalidateSymmetry) : QUndoCommand(text), m_component(component), 
++   bool const invalidateSymmetry) : QUndoCommand(text.isEmpty()
++      ? QCoreApplication::translate("UndoCommands", "Move items") : text),
++   m_component(component), 
+    m_finalStateSaved(false), m_animate(animate), m_invalidateSymmetry(invalidateSymmetry)
+ { 
+    m_objectList = m_component->findLayers<Layer::GLObject>(Layer::Children);
+@@ -157,7 +161,9 @@ MoveObjects::MoveObjects(Layer::Component* component, QString const& text, bool
+ 
+ 
+ MoveObjects::MoveObjects(GLObjectList const& objectList, QString const& text, 
+-   bool const animate, bool const invalidateSymmetry) : QUndoCommand(text), m_component(0),
++   bool const animate, bool const invalidateSymmetry) : QUndoCommand(text.isEmpty()
++      ? QCoreApplication::translate("UndoCommands", "Move items") : text),
++   m_component(0),
+    m_objectList(objectList), m_finalStateSaved(false), m_animate(animate), 
+    m_invalidateSymmetry(invalidateSymmetry)
+ { 
+diff --git a/src/Viewer/BuildEfpFragmentHandler.C b/src/Viewer/BuildEfpFragmentHandler.C
+--- a/src/Viewer/BuildEfpFragmentHandler.C
++++ b/src/Viewer/BuildEfpFragmentHandler.C
+@@ -28,6 +28,7 @@
+ #include "UndoCommands.h"
+ #include "QsLog.h"
+ #include <QFileInfo>
++#include <QCoreApplication>
+ 
+ #include <QDebug>
+ 
+@@ -83,7 +84,8 @@ qDebug() << "EfpData to go to molecule  Data::Bank?";
+ 
+    QList<Layer::Primitive*> primitives; 
+    primitives << efp;
+-   Command::EditPrimitives* cmd(new Command::EditPrimitives("Add EFP fragment", m_molecule));
++   Command::EditPrimitives* cmd(new Command::EditPrimitives(
++      QCoreApplication::translate("Handler::BuildEfpFragment", "Add EFP fragment"), m_molecule));
+    cmd->add(primitives);
+    m_viewer->postCommand(cmd);
+ 
+diff --git a/src/Viewer/BuildMoleculeFragmentHandler.C b/src/Viewer/BuildMoleculeFragmentHandler.C
+--- a/src/Viewer/BuildMoleculeFragmentHandler.C
++++ b/src/Viewer/BuildMoleculeFragmentHandler.C
+@@ -23,6 +23,7 @@
+ #include "BuildMoleculeFragmentHandler.h"
+ #include "Viewer.h"
+ #include "UndoCommands.h"
++#include <QCoreApplication>
+ 
+ 
+ using namespace qglviewer;
+@@ -62,7 +63,8 @@ void BuildMoleculeFragment::addMolecule(QMouseEvent* e)
+ 
+    QList<Layer::Primitive*> primitives;
+    primitives << molecule->ungroup();
+-   Command::EditPrimitives* cmd(new Command::EditPrimitives("Add molecule", m_molecule));
++   Command::EditPrimitives* cmd(new Command::EditPrimitives(
++      QCoreApplication::translate("Handler::BuildMoleculeFragment", "Add molecule"), m_molecule));
+    cmd->add(primitives);
+    m_viewer->postCommand(cmd);
+ 
+diff --git a/src/Layer/ComponentLayer.C b/src/Layer/ComponentLayer.C
+--- a/src/Layer/ComponentLayer.C
++++ b/src/Layer/ComponentLayer.C
+@@ -111,7 +111,7 @@ void Component::translateToCenter(GLObjectList const& selection)
+ {
+    bool animate(true);
+    Command::MoveObjects* cmd =
+-       new Command::MoveObjects(this, "Translate to center", animate);
++       new Command::MoveObjects(this, tr("Translate to center"), animate);
+    
+    // The ordering here is important!!
+    Atom* atom;
+diff --git a/src/Layer/MoleculeLayer.C b/src/Layer/MoleculeLayer.C
+--- a/src/Layer/MoleculeLayer.C
++++ b/src/Layer/MoleculeLayer.C
+@@ -1556,7 +1556,7 @@ void Molecule::deleteSelection()
+    if (!deleteTargets.isEmpty()) {
+       QLOG_DEBUG() << "Deleting" << deleteTargets.size() << "selected objects";
+       PrimitiveList::iterator iter;
+-      Command::EditPrimitives* cmd(new Command::EditPrimitives("Remove atoms/bonds", this));
++      Command::EditPrimitives* cmd(new Command::EditPrimitives(tr("Remove atoms/bonds"), this));
+       cmd->remove(deleteTargets);
+       postCommand(cmd);
+    }
+@@ -2190,7 +2190,7 @@ void Molecule::minimizeEnergy(QString const& forceFieldName)
+ 
+    forceField->SetConformers(*obMol);
+ 
+-   Command::MinimizeStructure* cmd(new Command::MinimizeStructure(this));
++   Command::MinimizeStructure* cmd(new Command::MinimizeStructure(this, tr("Minimize energy")));
+ 
+    double convergence(1e-6f);
+    int maxSteps(1000);
+@@ -2276,7 +2276,7 @@ void Molecule::symmetrize(double tolerance, bool updateCoordinates)
+    time.start();
+ 
+    AtomList atomList(findLayers<Atom>(Children | Visible));
+-   Command::SymmetrizeStructure* cmd = new Command::SymmetrizeStructure(this);
++   Command::SymmetrizeStructure* cmd = new Command::SymmetrizeStructure(this, tr("Symmetrize structure"));
+    QString pointGroup;
+    int nAtoms(atomList.size());
+ 
+@@ -2447,7 +2447,7 @@ void Molecule::reperceiveBonds(bool postCmd)
+    }
+ 
+    if (postCmd) {
+-      Command::EditPrimitives* cmd(new Command::EditPrimitives("Reperceive bonds", this));
++      Command::EditPrimitives* cmd(new Command::EditPrimitives(tr("Reperceive bonds"), this));
+       cmd->remove(removed).add(added);
+       postCommand(cmd);
+    }else {

@@ -22,7 +22,7 @@
 |---|---|---|---|
 | [`功能补丁-语言支持.patch`](功能补丁-语言支持.patch) | ① | 6 个文件 | 语言加载 / Language 偏好 / GCC15 cstdint |
 | （规则表，非补丁）`scripts/i18n/wrap_tr.rules` | ② | 487 条 / 58 文件 | tr() 包裹机械重放 |
-| [`功能补丁-非机械改动.patch`](功能补丁-非机械改动.patch) | ③ | 36 个文件 | 无法机械重放的源码逻辑改动 |
+| [`功能补丁-非机械改动.patch`](功能补丁-非机械改动.patch) | ③ | 38 个文件 | 无法机械重放的源码逻辑改动 |
 | [`功能补丁-界面资源.patch`](功能补丁-界面资源.patch) | ③.5 | 22 个文件 | `.ui` 文本汉化 + 高分屏修正（**见下节**） |
 | [`功能补丁-构建层.patch`](功能补丁-构建层.patch) | ④ | 4 个文件 | 构建体系 + 工程配置（**见下节**） |
 
@@ -36,7 +36,7 @@ git apply patches/功能补丁-语言支持.patch
 cp scripts/i18n/replay_tr.py scripts/i18n/wrap_tr.rules <目标树>/scripts/i18n/
 cd <目标树> && python3 scripts/i18n/replay_tr.py --apply
 
-# ③ 非机械改动补丁（36 个文件）
+# ③ 非机械改动补丁（38 个文件）
 git apply patches/功能补丁-非机械改动.patch
 
 # ③.5 界面资源补丁（22 个文件）
@@ -166,12 +166,25 @@ find_program(LRELEASE_EXECUTABLE NAMES lrelease lrelease-qt5)
 
 ## ③ 非机械改动补丁（技术细节）
 
-本补丁收集**无法由 `replay_tr.py` 规则表重放**的 36 个源文件改动，
+本补丁收集**无法由 `replay_tr.py` 规则表重放**的 38 个源文件改动，
 是「上游升级迁移」流程的第 ③ 步。
 
 > **2026-10-02 扩充**：由 35 个文件增至 36 个，补入 `src/Main/IQmolApplication.C`
 > 与 `src/Qui/InputDialog.C`。这两个文件的改动此前既不在规则表、也不在本补丁内，
 > 属端到端验证时查出的漏网项（详见两个补丁的 `.meta.json` `changelog`）。
+>
+> **2026-10-03 扩充**：增至 38 个，补入 `src/Layer/ComponentLayer.C`、
+> `src/Viewer/BuildEfpFragmentHandler.C`、`src/Viewer/BuildMoleculeFragmentHandler.C`、
+> `src/Viewer/UndoCommands.h`，并扩充 `src/Layer/MoleculeLayer.C` 与
+> `src/Viewer/UndoCommands.C`。修复 9 处未翻译的**撤销/操作命令名**（用户反馈 F1：
+> 撤销栈与操作提示显示英文）。这批字符串在 `wrap_tr.rules` 中 **0 命中**、
+> 也不在原有补丁集，属「补丁集的缝隙」。
+>
+> ⚠️ **附带发现的一类新坑**：`lupdate` 只扫描 `.C` / `.ui`，**不扫描 `.h`**。
+> 凡写在头文件里的 `tr()` / `QCoreApplication::translate()` 字面量永远抽不进士林表、
+> 译文永不生效。因此本批修复把操作名文本**改为由调用点传入**（`MoleculeLayer.C` 的
+> `tr("Minimize energy")` 等），`MoveObjects` 的默认文本兜底则**下沉到 `UndoCommands.C`
+> 的构造实现**（空串时 `QCoreApplication::translate("UndoCommands", "Move items")`）。
 
 ## 实测验证
 
@@ -195,7 +208,7 @@ find_program(LRELEASE_EXECUTABLE NAMES lrelease lrelease-qt5)
 | 常量 → 可翻译字面量 | `DefaultMoleculeName` → `"Untitled"` | `MoleculeLayer.C` |
 | 非 QObject 类需 `translate()` | 普通 C++ 类无 `tr()`，须 `QCoreApplication::translate("Ctx", ...)` | `HelpBrowser.C`、`OpenBabelParser.C`、`SurfaceType.C`、`JobInfo.C` |
 
-## 覆盖的 36 个文件
+## 覆盖的 38 个文件
 
 - `src/Configurator/ConstraintConfigurator.C`
 - `src/Configurator/GeminalOrbitalsConfigurator.C`
@@ -206,6 +219,7 @@ find_program(LRELEASE_EXECUTABLE NAMES lrelease lrelease-qt5)
 - `src/Data/SurfaceType.C`
 - `src/Data/SurfaceType.h`
 - `src/Grid/MolecularGridEvaluator.C`
+- `src/Layer/ComponentLayer.C` ⬅ 2026-10-03 新增
 - `src/Layer/CubeDataLayer.C`
 - `src/Layer/DipoleLayer.C`
 - `src/Layer/EfpFragmentListLayer.C`
@@ -230,8 +244,11 @@ find_program(LRELEASE_EXECUTABLE NAMES lrelease lrelease-qt5)
 - `src/Qui/MoleculeSection.C`
 - `src/Qui/RemSection.C`
 - `src/Util/ColorDialog.C`
+- `src/Viewer/BuildEfpFragmentHandler.C` ⬅ 2026-10-03 新增
+- `src/Viewer/BuildMoleculeFragmentHandler.C` ⬅ 2026-10-03 新增
 - `src/Viewer/ShaderDialog.C`
 - `src/Viewer/UndoCommands.C`
+- `src/Viewer/UndoCommands.h` ⬅ 2026-10-03 新增
 - `src/Qui/InputDialog.C`
 
 > 注：`src/Main/IQmolApplication.C` 见上方 `src/Main/` 段。
