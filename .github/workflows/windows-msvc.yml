@@ -88,14 +88,27 @@ jobs:
 
       - name: 解包子模块源码
         run: |
-          if [ -f submodules-package/IQmol-submodules.tar.gz ]; then
-            tar -xzf submodules-package/IQmol-submodules.tar.gz
-            echo "子模块已解包："
-            ls modules/
-          else
+          set -x
+          ls -la submodules-package/ | head -20
+          if [ ! -f submodules-package/IQmol-submodules.tar.gz ]; then
             echo "::error::缺少 submodules-package/IQmol-submodules.tar.gz"
             exit 1
           fi
+          # 包内顶层即 modules/，直接解到仓库根即可。
+          # MSYS2 的 tar 处理含 4.8 万小文件的大包偶发长路径失败，
+          # 故失败时回退用 7z 解（Windows 原生实现，长路径支持更好）。
+          if ! tar -xzf submodules-package/IQmol-submodules.tar.gz; then
+            echo "::warning::tar 解包失败，回退 7z"
+            7z x -y -o. submodules-package/IQmol-submodules.tar.gz
+            7z x -y -o. IQmol-submodules.tar
+            rm -f IQmol-submodules.tar
+          fi
+          echo "== 解包结果 =="
+          ls -d modules/*/ 2>/dev/null || { echo "::error::modules/ 为空"; exit 1; }
+          echo "== 各子模块文件数 =="
+          for d in modules/*/; do
+            printf "  %-28s %s\n" "$d" "$(find "$d" -type f 2>/dev/null | wc -l)"
+          done
 
       - name: 配置（MinGW + Ninja，Release）
         run: |
