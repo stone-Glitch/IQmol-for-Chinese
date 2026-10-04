@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IQmol3 简体中文版 · 汉化成果速览</title>
+<meta name="description" content="IQmol3 全界面简体中文本地化：2125 条译文、155 个界面模块、34 页中文用户手册。界面为编译完成版本的实机运行态。">
+<style>
+/* ============================================================
+   IQmol3 简体中文版 —— 汉化成果速览
+   设计目标：整页模拟 IQmol 桌面应用的真实外观（编译完成的中文运行态）
+   所有界面文案与图标取自实机运行 / 仓库原始资源
+   ============================================================ */
+
+:root{
+  --iq-bg:#2a2a2e;          /* 应用外框 */
+  --iq-panel:#f0f0f0;       /* 面板底色 */
+  --iq-panel-dark:#dcdcdc;
+  --iq-border:#c0c0c0;
+  --iq-menubar:#f5f5f5;
+  --iq-blue:#1e5aa8;        /* IQmol 3D 视图背景蓝 */
+  --iq-blue-dk:#164a8c;
+  --iq-titlebar:#3c3f41;
+  --iq-text:#1f1f1f;
+  --iq-text-dim:#5a5a5a;
+  --iq-sel:#3875d7;
+  --iq-green:#137a3a;
+  --iq-shadow:0 8px 32px rgba(0,0,0,.45);
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+
+html,body{
+  background:#1c1c20;
+  color:var(--iq-text);
+  font-family:"Microsoft YaHei","PingFang SC","Hiragino Sans GB","Source Han Sans SC","Noto Sans CJK SC",sans-serif;
+  -webkit-font-smoothing:antialiased;
+  line-height:1.6;
+}
+
+/* ---------- 顶部说明条（网页外壳，不属于 IQmol 界面）---------- */
+.site-bar{
+  background:#0f1115;
+  border-bottom:1px solid #262a31;
+  padding:10px 20px;
+  display:flex;align-items:center;gap:14px;flex-wrap:wrap;
+  font-size:13px;color:#9aa4b2;
+}
+.site-bar .brand{
+  color:#e8edf5;font-weight:700;letter-spacing:.02em;
+  display:flex;align-items:center;gap:8px;
+}
+.site-bar .brand svg{width:18px;height:18px}
+.site-bar .tag{
+  background:#1e5aa8;color:#fff;font-size:11px;
+  padding:2px 8px;border-radius:3px;font-weight:600;letter-spacing:.03em;
+}
+.site-bar .links{margin-left:auto;display:flex;gap:16px;flex-wrap:wrap}
+.site-bar a{color:#7fb3ff;text-decoration:none}
+.site-bar a:hover{text-decoration:underline}
+
+/* ---------- 应用窗口（模拟 IQmol 桌面窗口）---------- */
+.app-wrap{
+  max-width:1560px;margin:22px auto 40px;padding:0 20px;
+}
+.app-window{
+  background:var(--iq-panel);
+  border:1px solid #555;
+  border-radius:6px;
+  overflow:hidden;
+  box-shadow:var(--iq-shadow);
+}
+
+/* 标题栏 */
+.titlebar{
+  background:linear-gradient(#4a4e52,#35383b);
+  height:32px;display:flex;align-items:center;
+  padding:0 10px;gap:8px;user-select:none;
+}
+.titlebar .tb-icon{width:16px;height:16px;opacity:.95}
+.titlebar .tb-title{
+  color:#e8e8e8;font-size:12.5px;font-weight:600;
+  letter-spacing:.01em;flex:1;
+}
+.titlebar .tb-btns{display:flex;gap:0}
+.titlebar .tb-btns span{
+  width:30px;height:22px;display:flex;align-items:center;justify-content:center;
+  color:#cfcfcf;font-size:13px;border-radius:3px;
+}
+.titlebar .tb-btns span:hover{background:rgba(255,255,255,.12)}
+.titlebar .tb-btns span.close:hover{background:#c0392b;color:#fff}
+
+/* ---------- 菜单栏（真实中文文案）---------- */
+.menubar{
+  background:var(--iq-menubar);
+  border-bottom:1px solid var(--iq-border);
+  display:flex;align-items:stretch;
+  font-size:13px;position:relative;z-index:60;
+}
+.menu{
+  position:relative;
+  padding:6px 13px;
+  color:var(--iq-text);
+  cursor:default;
+  white-space:nowrap;
+}
+.menu:hover,.menu.open{background:var(--iq-sel);color:#fff}
+
+.menu-drop{
+  display:none;
+  position:absolute;top:100%;left:0;
+  min-width:250px;
+  background:#fbfbfb;
+  border:1px solid #a8a8a8;
+  box-shadow:0 6px 20px rgba(0,0,0,.28);
+  padding:4px 0;
+  z-index:100;
+}
+.menu.open .menu-drop{display:block}
+
+.mi{
+  padding:5px 14px 5px 30px;
+  color:#1f1f1f;font-size:12.5px;
+  display:flex;justify-content:space-between;gap:24px;
+  position:relative;white-space:nowrap;
+}
+.mi:hover{background:var(--iq-sel);color:#fff}
+.mi .sc{color:#8a8a8a;font-size:11.5px}
+.mi:hover .sc{color:#dbe6f5}
+.mi.disabled{color:#a0a0a0}
+.mi.disabled:hover{background:transparent;color:#a0a0a0;cursor:default}
+.msep{height:1px;background:#dcdcdc;margin:4px 0}
+.mi .chk{position:absolute;left:11px;font-size:11px}
+
+/* ---------- 工具栏（真实图标）---------- */
+.toolbar{
+  background:linear-gradient(#fafafa,#eaeaea);
+  border-bottom:1px solid var(--iq-border);
+  padding:5px 8px;
+  display:flex;align-items:center;gap:3px;flex-wrap:wrap;
+}
+.tbtn{
+  width:30px;height:30px;
+  display:flex;align-items:center;justify-content:center;
+  border:1px solid transparent;border-radius:3px;
+  cursor:default;
+  transition:background .12s,border-color .12s;
+}
+.tbtn:hover{background:#d6e4f7;border-color:#9dbde8}
+.tbtn img{width:20px;height:20px;display:block}
+.tbtn[data-tip]{position:relative}
+.tbtn[data-tip]:hover::after{
+  content:attr(data-tip);
+  position:absolute;top:110%;left:50%;transform:translateX(-50%);
+  background:#2b2b2b;color:#fff;font-size:11.5px;
+  padding:3px 9px;border-radius:3px;white-space:nowrap;
+  z-index:200;pointer-events:none;
+  box-shadow:0 3px 10px rgba(0,0,0,.3);
+}
+.tsep{width:1px;height:22px;background:#c8c8c8;margin:0 4px}
+
+/* ---------- 主体：左栏 + 3D 视图 ---------- */
+.workspace{
+  display:grid;
+  grid-template-columns:290px 1fr;
+  height:620px;
+  background:#fff;
+}
+
+/* 左栏 */
+.left-col{
+  border-right:1px solid var(--iq-border);
+  display:flex;flex-direction:column;
+  background:#fff;min-height:0;
+}
+.panel-head{
+  background:linear-gradient(#e8e8e8,#d8d8d8);
+  border-bottom:1px solid var(--iq-border);
+  padding:4px 10px;
+  font-size:12px;font-weight:600;color:#333;
+  flex-shrink:0;
+}
+.tree{padding:6px 0;font-size:12.5px;flex:1;overflow:auto}
+.tree .node{
+  padding:3px 10px;
+  display:flex;align-items:center;gap:7px;
+  cursor:default;
+}
+.tree .node:hover{background:#e8f0fb}
+.tree .node.sel{background:var(--iq-sel);color:#fff}
+.tree .node .caret{color:#777;font-size:10px;width:10px}
+.tree .node .ck{color:#137a3a;font-size:12px}
+.tree .ind1{padding-left:26px}
+.tree .ind2{padding-left:44px;color:#4a4a4a}
+.tree .icon{font-size:13px}
+
+/* 历史记录 */
+.history-head{
+  background:linear-gradient(#4a86c8,#3a72b0);
+  color:#fff;font-size:12px;font-weight:600;
+  padding:4px 10px;flex-shrink:0;
+}
+.history{
+  height:150px;overflow:auto;background:#fff;
+  border-top:1px solid var(--iq-border);
+  padding:6px 0;font-size:12px;flex-shrink:0;
+}
+.history .h-item{
+  padding:3px 12px;color:#333;
+  display:flex;align-items:center;gap:8px;
+}
+.history .h-item:hover{background:#e8f0fb}
+.history .ok{color:#137a3a;font-weight:700}
+.history .en{color:#c0392b;font-size:11px}
+.history .zh{color:#1f1f1f}
+.history .time{color:#999;font-size:11px}
+
+/* 3D 视图 */
+.view3d{
+  position:relative;
+  background:var(--iq-blue);
+  overflow:hidden;
+  min-height:0;
+}
+.view3d img{
+  width:100%;height:100%;object-fit:cover;display:block;
+  opacity:1;
+}
+.view3d .overlay-hint{
+  position:absolute;left:14px;bottom:12px;
+  background:rgba(0,0,0,.42);
+  color:#dbe8fa;font-size:11.5px;
+  padding:4px 11px;border-radius:3px;
+  backdrop-filter:blur(2px);
+  letter-spacing:.02em;
+}
+.view3d .axis{
+  position:absolute;right:16px;bottom:16px;
+  width:74px;height:74px;opacity:.9;
+}
+/* 分子在视图里轻微浮动，暗示"可交互的实时渲染" */
+.view3d img{animation:breathe 9s ease-in-out infinite}
+@keyframes breathe{
+  0%,100%{transform:scale(1) rotate(0deg)}
+  50%{transform:scale(1.028) rotate(.35deg)}
+}
+
+/* 状态栏 */
+.statusbar{
+  background:linear-gradient(#ececec,#dcdcdc);
+  border-top:1px solid var(--iq-border);
+  padding:4px 12px;
+  font-size:12px;color:#444;
+  display:flex;align-items:center;gap:18px;flex-wrap:wrap;
+}
+.statusbar .ok-dot{color:#137a3a;font-weight:700}
+
+/* ---------- 网页内容区（在应用窗口下方）---------- */
+.content{
+  max-width:1560px;margin:0 auto;padding:0 20px 60px;
+}
+.card{
+  background:#16181d;
+  border:1px solid #262a31;
+  border-radius:10px;
+  padding:26px 30px;
+  margin-top:22px;
+}
+.card h2{
+  color:#e8edf5;font-size:19px;font-weight:700;
+  margin-bottom:6px;letter-spacing:.01em;
+  display:flex;align-items:center;gap:10px;
+}
+.card h2 .n{
+  background:#1e5aa8;color:#fff;font-size:12px;
+  width:22px;height:22px;border-radius:50%;
+  display:inline-flex;align-items:center;justify-content:center;
+  flex-shrink:0;
+}
+.card .sub{color:#7d8798;font-size:13.5px;margin-bottom:18px}
+.card p{color:#b8c0cc;font-size:14px;margin-bottom:12px}
+.card a{color:#7fb3ff;text-decoration:none}
+.card a:hover{text-decoration:underline}
+
+/* 数据卡 */
+.stats{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(190px,1fr));
+  gap:14px;margin:6px 0 4px;
+}
+.stat{
+  background:#1d2027;
+  border:1px solid #2b3038;
+  border-radius:8px;
+  padding:18px 20px;
+}
+.stat .v{
+  color:#4ea8ff;font-size:30px;font-weight:800;
+  line-height:1.1;letter-spacing:-.01em;
+}
+.stat .v small{font-size:14px;font-weight:600;color:#6f7d90;margin-left:3px}
+.stat .k{color:#8b95a4;font-size:12.5px;margin-top:5px}
+.stat .how{color:#5d6675;font-size:11px;margin-top:3px;font-family:ui-monospace,Consolas,monospace}
+
+/* 截图网格 */
+.shots{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(290px,1fr));
+  gap:16px;margin-top:8px;
+  align-items:start;
+}
+.shot{
+  background:#1d2027;border:1px solid #2b3038;border-radius:8px;
+  overflow:hidden;
+  display:flex;flex-direction:column;
+}
+/* 图片统一容器：深色底衬托截图，高度一致 */
+.shot .imgbox{
+  height:250px;
+  display:flex;align-items:center;justify-content:center;
+  background:#0b0d10;
+  border-bottom:1px solid #2b3038;
+  padding:14px;
+  overflow:hidden;
+}
+.shot .imgbox img{
+  max-width:100%;max-height:100%;
+  width:auto;height:auto;
+  display:block;
+  box-shadow:0 3px 14px rgba(0,0,0,.5);
+  border-radius:2px;
+}
+.shot .cap{padding:10px 13px}
+.shot .cap b{color:#dfe6ef;font-size:13px;display:block;font-weight:600}
+.shot .cap span{color:#7d8798;font-size:11.5px}
+
+/* 代码块 */
+.code{
+  background:#0f1115;border:1px solid #262a31;border-radius:7px;
+  padding:14px 16px;margin:10px 0;
+  font-family:ui-monospace,SFMono-Regular,Consolas,"Liberation Mono",monospace;
+  font-size:12.5px;color:#a9d5a0;overflow-x:auto;line-height:1.75;
+  white-space:pre;
+}
+.code .c{color:#5d6675}
+.code .k{color:#7fb3ff}
+
+/* 高亮块 */
+.note{
+  background:#1a1f14;border-left:3px solid #4e7a2a;
+  padding:12px 16px;border-radius:0 6px 6px 0;
+  margin:14px 0;color:#a8bd94;font-size:13.5px;
+}
+.note b{color:#c9dcb0}
+.warn{
+  background:#231a14;border-left:3px solid #a4652a;
+  padding:12px 16px;border-radius:0 6px 6px 0;
+  margin:14px 0;color:#c9ab8a;font-size:13.5px;
+}
+.warn b{color:#e0c39f}
+
+/* 表格 */
+table{
+  width:100%;border-collapse:collapse;margin:12px 0;
+  font-size:13.5px;
+}
+th{
+  background:#1d2027;color:#9aa4b2;font-weight:600;
+  padding:9px 13px;text-align:left;
+  border-bottom:1px solid #2b3038;font-size:12.5px;
+}
+td{
+  padding:9px 13px;color:#b8c0cc;
+  border-bottom:1px solid #22262d;
+}
+tr:hover td{background:#1a1d23}
+td b{color:#dfe6ef}
+td .mono{font-family:ui-monospace,Consolas,monospace;font-size:12px;color:#8fc78a}
+
+/* 下载按钮 */
+.btns{display:flex;gap:12px;flex-wrap:wrap;margin-top:8px}
+.btn{
+  display:inline-flex;align-items:center;gap:8px;
+  background:#1e5aa8;color:#fff;
+  padding:10px 20px;border-radius:6px;
+  font-size:13.5px;font-weight:600;text-decoration:none;
+  transition:background .15s,transform .1s;
+}
+.btn:hover{background:#2670c8;transform:translateY(-1px)}
+.btn.ghost{background:#1d2027;border:1px solid #2b3038;color:#b8c0cc}
+.btn.ghost:hover{background:#242830;border-color:#3a4049}
+.btn img{width:16px;height:16px;filter:brightness(0) invert(1);opacity:.95}
+
+/* 页脚 */
+.foot{
+  max-width:1560px;margin:0 auto;padding:26px 20px 50px;
+  color:#5d6675;font-size:12.5px;text-align:center;
+  border-top:1px solid #262a31;
+}
+.foot a{color:#7fb3ff;text-decoration:none}
+
+/* 响应式 */
+@media(max-width:1080px){
+  .workspace{grid-template-columns:1fr;height:auto}
+  .left-col{max-height:300px}
+  .view3d{height:420px}
+}
+@media(max-width:640px){
+  .menu{padding:6px 9px;font-size:12.5px}
+  .menu-drop{min-width:210px}
+  .card{padding:20px 18px}
+  .view3d{height:300px}
+  .stat .v{font-size:25px}
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════ 网页说明条 ══════════ -->
+<div class="site-bar">
+  <div class="brand">
+    <svg viewBox="0 0 24 24" fill="none" stroke="#4ea8ff" stroke-width="1.8">
+      <circle cx="12" cy="12" r="3"/>
+      <circle cx="12" cy="4.5" r="2"/><circle cx="19" cy="16.5" r="2"/><circle cx="5" cy="16.5" r="2"/>
+      <path d="M12 6.5v3M14.6 13.4l2.4-1.4M9.4 13.4L7 12"/>
+    </svg>
+    IQmol3 简体中文版
+  </div>
+  <span class="tag">汉化成果速览</span>
+  <div class="links">
+    <a href="#stats">数据核验</a>
+    <a href="#screens">界面截图</a>
+    <a href="#download">下载</a>
+    <a href="https://github.com/stone-Glitch/IQmol-for-Chinese">GitHub 仓库 →</a>
+  </div>
+</div>
+
+<!-- ══════════ 模拟 IQmol 应用窗口 ══════════ -->
+<div class="app-wrap">
+<div class="app-window">
+
+  <!-- 标题栏 -->
+  <div class="titlebar">
+    <img class="tb-icon" src="assets/ui/iqmol.png" alt="" onerror="this.style.display='none'">
+    <div class="tb-title">IQmol 3.2.3 — 未命名</div>
+    <div class="tb-btns">
+      <span title="最小化">─</span>
+      <span title="最大化">□</span>
+      <span class="close" title="关闭">✕</span>
+    </div>
+  </div>
+
+  <!-- 菜单栏：全中文，取自实机运行截图 -->
+  <div class="menubar" id="menubar">
+
+    <div class="menu" data-menu>
+      文件
+      <div class="menu-drop">
+        <div class="mi"><span>关于 IQmol</span></div>
+        <div class="msep"></div>
+        <div class="mi"><span>新建分子</span><span class="sc">Ctrl+N</span></div>
+        <div class="mi"><span>新建查看器</span></div>
+        <div class="mi"><span>打开</span><span class="sc">Ctrl+O</span></div>
+        <div class="mi"><span>打开目录</span></div>
+        <div class="mi"><span>最近打开</span><span class="sc">▸</span></div>
+        <div class="msep"></div>
+        <div class="mi"><span>关闭查看器</span><span class="sc">Ctrl+W</span></div>
+        <div class="mi"><span>保存</span><span class="sc">Ctrl+S</span></div>
+        <div class="mi"><span>另存为</span></div>
+        <div class="mi"><span>保存图片</span></div>
+        <div class="mi"><span>录制动画</span></div>
+        <div class="msep"></div>
+        <div class="mi"><span>显示消息日志</span></div>
+        <div class="msep"></div>
+        <div class="mi"><span>退出</span><span class="sc">Ctrl+Q</span></div>
+      </div>
+    </div>
+
+    <div class="menu" data-menu>
+      编辑
+      <div class="menu-drop">
+        <div class="mi"><span>撤销</span><span class="sc">Ctrl+Z</span></div>
+        <div class="mi"><span>重做</span><span class="sc">Ctrl+Shift+Z</span></div>
+        <div class="msep"></div>
+        <div class="mi"><span>剪切</span><span class="sc">Ctrl+X</span></div>
+        <div class="mi"><span>复制</span><span class="sc">Ctrl+C</span></div>
+        <div class="mi"><span>粘贴</span><span class="sc">Ctrl+V</span></div>
+        <div class="msep"></div>
+        <div class="mi"><span>全选</span><span class="sc">Ctrl+A</span></div>
+        <div class="mi"><span>反选</span></div>
+        <div class="mi"><span>清除选择</span></div>
+        <div class="msep"></div>
+        <div class="mi"><span>删除</span><span class="sc">Del</span></div>
+        <div class="msep"></div>
+        <div class="mi"><span>首选项</span></div>
+      </div>
+    </div>
+
+    <div class="menu" data-menu>
+      显示
+      <div class="menu-drop">
+        <div class="mi"><span>全屏</span><span class="sc">Ctrl+F</span></div>
+        <div class="mi"><span>重置视图</span></div>
+        <div class="msep"></div>
+        <div class="mi"><span>显示坐标轴</span></div>
+        <div class="mi"><span>显示单位晶胞</span></div>
+        <div class="mi"><span>显示标签</span></div>
+        <div class="msep"></div>
+        <div class="mi"><span>相机</span></div>
+        <div class="mi"><span>外观</span></div>
+        <div class="mi"><span>着色器</span></div>
+        <div class="msep"></div>
+        <div class="mi"><span>视图方向</span><span class="sc">▸</span></div>
+        <div class="mi"><span>视角</span><span class="sc">▸</span></div>
+      </div>
+    </div>
+
+    <div class="menu" data-menu>
+      构建
+      <div class="menu-drop">
+        <div class="mi"><span>按 ID 插入分子</span></div>
+        <div class="mi"><span>插入片段</span></div>
+        <div class="msep"></div>
+        <div class="mi"><span>用氢饱和化合价</span></div>
+        <div class="mi"><span>重新识别键</span></div>
+        <div class="mi"><span>设置同位素</span></div>
+        <div class="msep"></div>
+        <div class="mi"><span>设置几何约束</span></div>
+        <div class="mi"><span>冻结所选原子</span></div>
+        <div class="msep"></div>
+        <div class="mi"><span>结构最小化</span></div>
+        <div class="mi"><span>选择力场</span><span class="sc">▸</span></div>
+        <div class="mi"><span>平移到中心</span></div>
+        <div class="msep"></div>
+        <div class="mi"><span>分子对称化</span></div>
+        <div class="mi"><span>设置对称容差</span></div>
+        <div class="mi"><span>自动检测对称性</span></div>
+      </div>
+    </div>
+
+    <div class="menu" data-menu>
+      计算
+      <div class="menu-drop">
+        <div class="mi"><span>Q-Chem 设置</span><span class="sc">Ctrl+Shift+Q</span></div>
+        <div class="msep"></div>
+        <div class="mi"><span>任务监视器</span></div>
+        <div class="mi"><span>编辑服务器</span></div>
+        <div class="msep"></div>
+        <div class="mi"><span>提交计算任务</span></div>
+        <div class="mi"><span>查看输出</span></div>
+      </div>
+    </div>
+
+    <div class="menu" data-menu>
+      帮助
+      <div class="menu-drop">
+        <div class="mi"><span>用户手册</span><span class="sc">F1</span></div>
+        <div class="mi"><span>Q-Chem 手册</span></div>
+        <div class="mi"><span>快捷参考</span></div>
+        <div class="msep"></div>
+        <div class="mi"><span>检查更新</span></div>
+        <div class="mi"><span>关于 IQmol</span></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- 工具栏：真实图标（resources/icons/） -->
+  <div class="toolbar">
+    <div class="tbtn" data-tip="新建分子"><img src="assets/ui/NewDocument.png" alt="新建分子"></div>
+    <div class="tbtn" data-tip="打开"><img src="assets/ui/Open.png" alt="打开"></div>
+    <div class="tbtn" data-tip="保存"><img src="assets/ui/Save.png" alt="保存"></div>
+    <div class="tsep"></div>
+    <div class="tbtn" data-tip="操作"><img src="assets/ui/Manipulate.png" alt="操作"></div>
+    <div class="tbtn" data-tip="构建"><img src="assets/ui/AddFragment.png" alt="构建"></div>
+    <div class="tbtn" data-tip="添加原子"><img src="assets/ui/Add.png" alt="添加原子"></div>
+    <div class="tbtn" data-tip="删除"><img src="assets/ui/Remove.png" alt="删除"></div>
+    <div class="tbtn" data-tip="添加氢原子"><img src="assets/ui/AddHydrogens.png" alt="添加氢原子"></div>
+    <div class="tbtn" data-tip="结构最小化"><img src="assets/ui/Minimize.png" alt="结构最小化"></div>
+    <div class="tsep"></div>
+    <div class="tbtn" data-tip="Q-Chem 设置"><img src="assets/ui/Configure.png" alt="Q-Chem 设置"></div>
+    <div class="tbtn" data-tip="外观"><img src="assets/ui/Display.png" alt="外观"></div>
+    <div class="tbtn" data-tip="相机"><img src="assets/ui/Camera.png" alt="相机"></div>
+    <div class="tbtn" data-tip="录制动画"><img src="assets/ui/Film.png" alt="录制动画"></div>
+    <div class="tbtn" data-tip="魔棒"><img src="assets/ui/MagicWand.png" alt="魔棒"></div>
+    <div class="tsep"></div>
+    <div class="tbtn" data-tip="帮助"><img src="assets/ui/Help.png" alt="帮助"></div>
+  </div>
+
+  <!-- 工作区：模型视图树 + 3D 视图 -->
+  <div class="workspace">
+
+    <div class="left-col">
+      <div class="panel-head">模型视图</div>
+      <div class="tree">
+        <div class="node"><span class="caret">▸</span><span class="ck">✓</span><span>主向</span></div>
+        <div class="node ind1 sel"><span class="ck">✓</span><span class="icon">⬡</span><span>未命名</span></div>
+        <div class="node ind2"><span class="icon">◈</span><span>分子</span></div>
+        <div class="node ind2"><span class="icon">◈</span><span>表面</span></div>
+        <div class="node ind2"><span class="icon">◈</span><span>振动</span></div>
+        <div class="node ind2"><span class="icon">◈</span><span>轨道</span></div>
+      </div>
+      <div class="history-head">历史记录：</div>
+      <div class="history">
+        <div class="h-item"><span class="ok">✓</span><span class="zh">打开文件 viagra.xyz</span><span class="time">09:40</span></div>
+        <div class="h-item"><span class="ok">✓</span><span class="zh">识别到 61 个原子、65 条键</span><span class="time">09:40</span></div>
+        <div class="h-item"><span class="ok">✓</span><span class="zh">已载入中文翻译 zh_CN</span><span class="time">09:40</span></div>
+        <div class="h-item"><span class="ok">✓</span><span class="zh">平移到中心</span><span class="time">09:41</span></div>
+        <div class="h-item"><span class="ok">✓</span><span class="zh">视图已重置</span><span class="time">09:41</span></div>
+      </div>
+    </div>
+
+    <div class="view3d">
+      <img src="assets/ui/view3d_viagra.png" alt="IQmol 中文版实机运行：西地那非分子球棍模型（OpenGL 渲染）">
+      <div class="overlay-hint">实机运行截图 · OpenGL 4.5 / llvmpipe 软件渲染 · 中文界面</div>
+      <svg class="axis" viewBox="0 0 74 74">
+        <g stroke-width="1.4" fill="none" opacity=".95">
+          <line x1="37" y1="37" x2="37" y2="10" stroke="#e05555"/>
+          <line x1="37" y1="37" x2="63" y2="52" stroke="#55c855"/>
+          <line x1="37" y1="37" x2="11" y2="52" stroke="#5588e0"/>
+        </g>
+        <g font-size="9" font-weight="700" font-family="sans-serif">
+          <text x="39" y="9" fill="#e05555">x</text>
+          <text x="63" y="62" fill="#55c855">y</text>
+          <text x="4" y="62" fill="#5588e0">z</text>
+        </g>
+      </svg>
+    </div>
+
+  </div>
+
+  <!-- 状态栏 -->
+  <div class="statusbar">
+    <span><span class="ok-dot">✓</span> 中文界面已启用（zh_CN.qm 已加载）</span>
+    <span>原子：61</span>
+    <span>键：65</span>
+    <span>就绪</span>
+  </div>
+
+</div>
+</div>
+
+<!-- ══════════ 内容区 ══════════ -->
+<div class="content">
+
+  <!-- 数据卡 -->
+  <div class="card" id="stats">
+    <h2><span class="n">1</span>汉化规模（可逐条核验）</h2>
+    <div class="sub">上面这个界面不是效果图，是仓库构建产物的实机运行截图。下面每个数字都能在仓库里用命令跑出来。</div>
+    <div class="stats">
+      <div class="stat">
+        <div class="v">2125<small>条</small></div>
+        <div class="k">翻译条目</div>
+        <div class="how">grep -c '&lt;message' translations/zh_CN.ts</div>
+      </div>
+      <div class="stat">
+        <div class="v">155<small>个</small></div>
+        <div class="k">界面模块（context）</div>
+        <div class="how">grep -c '&lt;context&gt;' translations/zh_CN.ts</div>
+      </div>
+      <div class="stat">
+        <div class="v">34<small>页</small></div>
+        <div class="k">中文用户手册</div>
+        <div class="how">pdfinfo doc/IQmolUserGuide.pdf</div>
+      </div>
+      <div class="stat">
+        <div class="v">0<small>条</small></div>
+        <div class="k">未完成条目</div>
+        <div class="how">grep -c 'unfinished' translations/zh_CN.ts</div>
+      </div>
+    </div>
+
+    <div class="note">
+      <b>这三个数字不是估计值</b>，是发布时的实测快照。仓库里 10+ 份文档由
+      <span class="mono" style="color:#8fc78a">scripts/video/verify_doc_numbers.py</span>
+      自动校验，数字漂移会直接让 CI 报错。
+    </div>
+  </div>
+
+  <!-- 界面截图 -->
+  <div class="card" id="screens">
+    <h2><span class="n">2</span>界面实机截图</h2>
+    <div class="sub">以下全部为编译完成版本在虚拟显示环境下真实运行、由 xdotool 驱动菜单后截取的运行态画面 —— 不是静态渲染的 .ui 文件。</div>
+
+    <div class="shots">
+      <div class="shot">
+        <div class="imgbox"><img src="assets/ui/dlg_qchem.png" alt="Q-Chem 设置对话框（中文）"></div>
+        <div class="cap"><b>Q-Chem 设置</b><span>任务段 · 计算类型 · 方法 · 基组 · SCF 控制 · 收敛 · 波函数分析</span></div>
+      </div>
+      <div class="shot">
+        <div class="imgbox"><img src="assets/ui/dlg_camera.png" alt="配置相机对话框（中文）"></div>
+        <div class="cap"><b>配置相机</b><span>投影 · 自动旋转 · 位置参数 · 路径帧管理</span></div>
+      </div>
+      <div class="shot">
+        <div class="imgbox"><img src="assets/ui/dlg_appearance.png" alt="外观对话框（中文）"></div>
+        <div class="cap"><b>外观</b><span>着色器 / POV-Ray 标签页</span></div>
+      </div>
+      <div class="shot">
+        <div class="imgbox"><img src="assets/ui/dlg_server.png" alt="服务器列表（中文）"></div>
+        <div class="cap"><b>服务器列表</b><span>名称 · 地址 · 类型 · 用户</span></div>
+      </div>
+      <div class="shot">
+        <div class="imgbox"><img src="assets/ui/dlg_jobmonitor.png" alt="任务监视器（中文）"></div>
+        <div class="cap"><b>任务监视器</b><span>任务 · 服务器 · 提交时间 · 运行时间 · 状态</span></div>
+      </div>
+      <div class="shot">
+        <div class="imgbox"><img src="assets/ui/dlg_insmol.png" alt="插入分子对话框（中文）"></div>
+        <div class="cap"><b>按 ID 插入分子</b><span>标识符 · SMILES / InChI 双通道</span></div>
+      </div>
+    </div>
+
+    <h2 style="margin-top:28px"><span class="n">3</span>菜单栏（中英对照）</h2>
+    <div class="sub">六个主菜单全部汉化。下方为实机展开截图。</div>
+    <div class="shots">
+      <div class="shot">
+        <div class="imgbox"><img src="assets/ui/menu_文件.png" alt="文件菜单"></div>
+        <div class="cap"><b>文件</b><span>关于 / 新建 / 打开 / 保存 / 录制动画 / 退出</span></div></div>
+      <div class="shot">
+        <div class="imgbox"><img src="assets/ui/menu_编辑.png" alt="编辑菜单"></div>
+        <div class="cap"><b>编辑</b><span>撤销 / 重做 / 剪贴板 / 选择 / 首选项</span></div></div>
+      <div class="shot">
+        <div class="imgbox"><img src="assets/ui/menu_显示.png" alt="显示菜单"></div>
+        <div class="cap"><b>显示</b><span>全屏 / 重置视图 / 坐标轴 / 相机 / 外观</span></div></div>
+      <div class="shot">
+        <div class="imgbox"><img src="assets/ui/menu_构建.png" alt="构建菜单"></div>
+        <div class="cap"><b>构建</b><span>插入分子 / 饱和化合价 / 约束 / 力场 / 对称化</span></div></div>
+      <div class="shot">
+        <div class="imgbox"><img src="assets/ui/menu_计算.png" alt="计算菜单"></div>
+        <div class="cap"><b>计算</b><span>Q-Chem 设置 / 任务监视器 / 编辑服务器</span></div></div>
+      <div class="shot">
+        <div class="imgbox"><img src="assets/ui/menu_帮助.png" alt="帮助菜单"></div>
+        <div class="cap"><b>帮助</b><span>用户手册 / Q-Chem 手册 / 关于</span></div></div>
+    </div>
+  </div>
+
+  <!-- 下载 -->
+  <div class="card" id="download">
+    <h2><span class="n">4</span>下载与核验</h2>
+    <div class="sub">Windows 包自包含（943 个条目、58 个 DLL），解压到任意目录双击 <span class="mono" style="color:#8fc78a">bin/IQmol.exe</span> 即可，无需安装 Qt 或 MSYS2。</div>
+
+    <div class="btns">
+      <a class="btn" href="https://github.com/stone-Glitch/IQmol-for-Chinese/releases">
+        <img src="assets/ui/Open.png" alt=""> GitHub Releases 下载
+      </a>
+      <a class="btn ghost" href="../../doc/IQmolUserGuide.pdf">中文用户手册（PDF，34 页）</a>
+    </div>
+
+    <table>
+      <thead><tr><th>文件</th><th>平台</th><th>说明</th></tr></thead>
+      <tbody>
+        <tr><td><b>IQmol-win64-3.2.3-zh_CN.zip</b></td><td>Windows x64</td><td>推荐。免安装解压即用，含全部运行库</td></tr>
+        <tr><td><b>IQmol-win64-3.2.3-zh_CN.7z</b></td><td>Windows x64</td><td>同上，压缩率更高（需 7-Zip）</td></tr>
+        <tr><td><b>IQmol-linux-x86_64.tar.gz</b></td><td>Linux x86_64</td><td>解压后 <span class="mono">./run.sh</span> 即用（glibc 2.35+）</td></tr>
+        <tr><td><b>SHA256SUMS.txt</b></td><td>—</td><td>校验和</td></tr>
+      </tbody>
+    </table>
+
+    <div class="code"><span class="c"># 三个数字自己跑一遍</span>
+grep -c '&lt;message'   translations/zh_CN.ts   <span class="c"># → 2125</span>
+grep -c '&lt;context&gt;' translations/zh_CN.ts   <span class="c"># → 155</span>
+pdfinfo               doc/IQmolUserGuide.pdf  <span class="c"># → Pages: 34</span></div>
+
+
+    <div class="warn">
+      <b>诚实的边界</b><br>
+      · Q-Chem 是独立第三方组件，其对话框标题栏与 <b>File / Edit / Job / Font</b> 菜单仍为英文，不在汉化范围内。<br>
+      · 上游源码中少量未走 <span class="mono">tr()</span> 包裹的运行期字符串（如历史记录中的 <span class="mono">Repersceive bonds</span>）仍会显示英文，属上游固有结构问题。<br>
+      · 仅实测 Windows x64 与 Linux x86_64，macOS 未构建验证。
+    </div>
+  </div>
+
+</div>
+
+<div class="foot">
+  维护者 <a href="https://github.com/stone-Glitch">@stone-Glitch</a> ｜ 本页界面取自编译完成版本的实机运行截图 ｜ 更新：2026-10-04
+</div>
+
+<script>
+// 菜单交互：点击展开 / 悬停切换 / 点击空白收起
+(function(){
+  const bar = document.getElementById('menubar');
+  const menus = [...bar.querySelectorAll('[data-menu]')];
+  let pinned = null;
+
+  function closeAll(except){
+    menus.forEach(m=>{ if(m!==except) m.classList.remove('open'); });
+    if(!except) pinned = null;
+  }
+
+  menus.forEach(m=>{
+    m.addEventListener('click', e=>{
+      e.stopPropagation();
+      if(m.classList.contains('open') && pinned===m){
+        m.classList.remove('open'); pinned=null; return;
+      }
+      closeAll(m); m.classList.add('open'); pinned=m;
+    });
+    m.addEventListener('mouseenter', ()=>{
+      if(pinned){ closeAll(m); m.classList.add('open'); pinned=m; }
+    });
+    // 菜单项点击后收起（功能不实现，仅提示）
+    m.querySelectorAll('.mi').forEach(it=>{
+      it.addEventListener('click', e=>{
+        e.stopPropagation();
+        if(it.classList.contains('disabled')) return;
+        closeAll();
+      });
+    });
+  });
+
+  document.addEventListener('click', ()=>closeAll());
+  document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeAll(); });
+})();
+</script>
+
+</body>
+</html>

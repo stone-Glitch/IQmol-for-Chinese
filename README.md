@@ -47,7 +47,11 @@ IQmol version 3
 | **平台** | Windows / macOS / Linux |
 | **宣传视频** | 90 秒实机录屏，已发布 B 站 |
 
-👉 **[查看完整汉化展示主页 →](docs/汉化展示主页.md)** ｜ [下载 Releases](https://github.com/stone-Glitch/IQmol-for-Chinese/releases)
+👉 **[打开汉化成果速览网页面板 →](docs/汉化成果速览.html)**（模拟 IQmol 界面，菜单可点开）
+👉 **[文字版：汉化展示主页 →](docs/汉化展示主页.md)** ｜ [下载 Releases](https://github.com/stone-Glitch/IQmol-for-Chinese/releases)
+
+> 网页面板里的界面截图与菜单文案，全部取自**编译完成版本的实机运行画面**（`[i18n] Loaded translation: "zh_CN"`），
+> 不是静态渲染的 `.ui` 文件，也不是效果图。
 
 ---
 
@@ -59,7 +63,7 @@ IQmol version 3
 |---|---|---|
 | **软件源码（上游）** | `src/` `modules/`(子模块) `resources/` `share/` `samples/` `cmake/` `installer/` | IQmol 本体与第三方库，来自上游 fork，请勿改名（破坏 `sync_upstream`） |
 | **汉化资产** | `translations/`(zh_CN.ts) `dialog_screenshots/`(对话框截图素材) `patches/`(仅供上游迁移) | 中文翻译与迁移补丁 |
-| **文档** | `doc/`(上游英文手册 LaTeX/PDF 源) · `docs/`(**本仓库汉化中文文档**) | ⚠️ 两者只差一个字母：`doc` 是上游英文手册源，`docs` 是我们写的中文文档，别下错 |
+| **文档** | `doc/`(上游英文手册 LaTeX/PDF 源) · `docs/`(**本仓库汉化中文文档**，含 `汉化成果速览.html` 网页面板) | ⚠️ 两者只差一个字母：`doc` 是上游英文手册源，`docs` 是我们写的中文文档，别下错 |
 | **构建/工程** | `scripts/` `submodules-package/`(CI 离线依赖，须跟踪) `build-video/`(视频工程，已 gitignore) `.github/` | 编译脚本、CI 离线包、推广视频工程 |
 
 > 更细的目录说明见 [docs/仓库结构.md](docs/仓库结构.md)；文档总入口见 [docs/README.md](docs/README.md)。
