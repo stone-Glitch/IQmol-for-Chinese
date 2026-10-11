@@ -1,0 +1,5 @@
+14a6e7cedf4000d203cbb3916c08d80c68c9887e380bf059d6dd3a86dcd6c654  IQmol-data-headers.tar.gz
+b5cc49bd9a89c612ab50d61cd2179eacf9e343bc1641f9c085c570d03facaebb  IQmol-openbabel-deps.tar.gz
+d01172201e65e397bdd762a2b900480ea6fd2cdbe99a6e3736451adad8b420be  IQmol-openbabel-fix.tar.gz
+3a0ffacc8829f6547b70d2f7d6bba1614307a3e6c5cdacad7691f69035b9d5cb  IQmol-openbabel-formats-fix.tar.gz
+dd784736c77ff152e52c2a880146a9a1e2c8d5f31cbc7b6aa25a2fe72525e1e7  IQmol-submodules.tar.gz
