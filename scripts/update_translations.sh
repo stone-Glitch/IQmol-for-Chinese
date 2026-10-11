@@ -38,8 +38,13 @@ if n:
 print(f'    恢复 {n} 条被误标的翻译')
 PY
 
-echo "==> lrelease 生成 qm"
-lrelease "$TS" -qm "$TOPDIR/translations/zh_CN.qm" 2>&1 | tail -1
+echo "==> lrelease 生成 qm（严格模式：不含未完成条目）"
+# -nounfinished: 不把 unfinished 条目编进 qm，与 CI i18n-tqa.yml 的 ts_unfinished_max=0 口径一致。
+# 注：刻意**不加 -removeidentical** —— 它会把「译文与原文相同」的条目（如保留西文原名的
+#     Gasteiger/Mulliken、单位符号 ppm 等）从 qm 中剔除，虽能减小体积，但会让
+#     「已翻译条数」统计口径从 2125 → 1766，与仓库文档反复引用的 2125 条冲突，得不偿失。
+#     界面显示不受影响（miss 时 Qt 自动回退原文），故保持 2125 口径。
+lrelease -nounfinished "$TS" -qm "$TOPDIR/translations/zh_CN.qm" 2>&1 | tail -1
 
 if [ "$SYNC" = "1" ]; then
    for d in "$TOPDIR/build/translations" "$TOPDIR/build/bin/translations"; do
