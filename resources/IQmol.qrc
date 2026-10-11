@@ -124,4 +124,11 @@
     <file>IQmol.png</file>
     <file>IQmolDocument.png</file>
   </qresource>
+
+  <!-- User guide PDF (feedback item H3): bundled so the Help menu can open it
+       without depending on the deploy/share layout.  Path is relative to this
+       .qrc file (resources/), i.e. repo-root/doc/IQmolUserGuide.pdf. -->
+  <qresource prefix="/" >
+    <file alias="doc/IQmolUserGuide.pdf">../doc/IQmolUserGuide.pdf</file>
+  </qresource>
 </RCC>
