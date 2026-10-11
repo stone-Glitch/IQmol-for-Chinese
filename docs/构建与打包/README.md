@@ -23,8 +23,8 @@
 |---|---|---|
 | [`Linux分发包.md`](Linux分发包.md) | Linux 分发包的目录布局、插件规划与瘦身策略 | 打包者 |
 | [`发布与上传.md`](发布与上传.md) | 分发包的发布与上传流程（含 Release 附件、依赖包 `submodules-package/` 的存放约定） | 维护者 |
-| [`release_notes.md`](release_notes.md) | v3.2.3-zh_CN 发布说明（新增功能、汉化范围、已知问题） | 发布者 / 使用者 |
-| [`SHA256SUMS.txt`](SHA256SUMS.txt) | 各分发包的 SHA-256 校验和（下载后核对完整性） | 使用者 / 发布者 |
+| [`release_notes.md`](release_notes.md) | v3.2.3-zh_CN 发布说明（新增功能、汉化范围、已知问题）+ **发布状态与校验和实况补记**（tag/Release 对齐） | 发布者 / 使用者 |
+| [`SHA256SUMS.txt`](SHA256SUMS.txt) | v3.2.3 Release 各分发包的 SHA-256 校验和（**最新 Release 为 v3.2.4.1，其校验和以 Release 页附件为准**） | 使用者 / 发布者 |
 
 ---
 

@@ -77,3 +77,31 @@ IQmol 遵循 **GNU General Public License v3**。本包为 GPL 衍生作品，�
 
 - 上游作者 **Andrew Gilbert** 及 [nutjunkie/IQmol3](https://github.com/nutjunkie/IQmol3) 项目
 - 所有第三方库作者（OpenBabel、OpenMesh、libQGLViewer、Qt 等，详见 `THIRD_PARTY_LICENSES.md`）
+
+---
+
+## 📌 发布状态与校验和（2026-10-11 实况补记）
+
+> 本节为**对仓库实际发布状态的核对记录**，用于消除"文档写 3.2.3、实际发到 3.2.4.1"的口径歧义。
+
+**Git 标签（tags）**
+
+| tag | 指向提交 | 说明 |
+|---|---|---|
+| `v3.2.3-zh_CN` | `61a5cd6` | 首发版本 |
+| `v3.2.4-zh_CN` | `fdc87cb` | **含 F1 修复**（历史记录面板 / 撤销栈 9 处操作名硬编码英文）｜**无对应 Release**（仅 tag） |
+| `v3.2.4.1-zh_CN` | `63f018a` | 修 Release 403（补 `contents: write` 权限声明）+ 封面数字脚本化 |
+
+**GitHub Release（经 `api.github.com` 实测）**
+
+| Release | 状态 | 附件 |
+|---|---|---|
+| `v3.2.3-zh_CN` | 已发布 | `IQmol-linux-x86_64.tar.gz`、`IQmol-win64-3.2.3-zh_CN.zip`、`SHA256SUMS.txt` |
+| `v3.2.4.1-zh_CN` | **已发布（当前最新）** | `IQmol-win64-3.2.3-zh_CN.zip`、`IQmol-win64-3.2.3-zh_CN.7z`、`SHA256SUMS.txt` |
+
+> ⚠️ **两处口径须知**（不影响功能，属发布卫生）：
+> 1. **最新 Release 是 `v3.2.4.1-zh_CN`，但附件文件名仍叫 `...3.2.3...zip`**——包内容为最新源码所出，只是未随 tag 改名。
+> 2. 本仓库内 `SHA256SUMS.txt` 记录的是 **v3.2.3 Release** 的两个文件校验和；`v3.2.4.1` Release 的 `SHA256SUMS.txt` 以**该 Release 页附件为准**（`docs/` 内副本未同步）。
+>
+> 后续若要彻底消除歧义：在 `package_windows.sh` / `package_linux.sh` 里把版本号参数化（从 tag 注入），重新发一版命名正确的 Release 即可。
+
