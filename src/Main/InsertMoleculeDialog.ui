@@ -43,7 +43,7 @@
      <item>
       <widget class="QRadioButton" name="inchi">
        <property name="text">
-        <string>InChi</string>
+        <string>InChI</string>
        </property>
       </widget>
      </item>

@@ -3238,22 +3238,22 @@ QToolButton:pressed {
     <message>
         <location filename="../src/Configurator/GeminalOrbitalsConfigurator.ui" line="305"/>
         <source>Type:</source>
-        <translation>类型</translation>
+<translation>类型：</translation>
     </message>
     <message>
         <location filename="../src/Configurator/GeminalOrbitalsConfigurator.ui" line="312"/>
         <source>Isovalue:</source>
-        <translation>等值</translation>
+<translation>等值面值：</translation>
     </message>
     <message>
         <location filename="../src/Configurator/GeminalOrbitalsConfigurator.ui" line="319"/>
         <source>Opacity:</source>
-        <translation>不透明度</translation>
+<translation>不透明度：</translation>
     </message>
     <message>
         <location filename="../src/Configurator/GeminalOrbitalsConfigurator.ui" line="326"/>
         <source>Quality:</source>
-        <translation>质量</translation>
+<translation>质量：</translation>
     </message>
     <message>
         <location filename="../src/Configurator/GeminalOrbitalsConfigurator.ui" line="333"/>
@@ -3950,12 +3950,12 @@ QTextBrowser#content {
     <message>
         <location filename="../src/Configurator/FrequenciesConfigurator.C" line="47"/>
         <source>Freq. (cm⁻¹)</source>
-        <translation>频率(cm⁻¹)</translation>
+<translation>频率（cm⁻¹）</translation>
     </message>
     <message>
         <location filename="../src/Configurator/FrequenciesConfigurator.C" line="48"/>
         <source>Intens. (km/mol)</source>
-        <translation>强度(km/mol)</translation>
+<translation>强度（km/mol）</translation>
     </message>
     <message>
         <location filename="../src/Configurator/FrequenciesConfigurator.C" line="49"/>
@@ -4071,7 +4071,7 @@ QTextBrowser#content {
         <location filename="../src/Configurator/MolecularSurfacesConfigurator.C" line="65"/>
         <location filename="../src/Configurator/MolecularSurfacesConfigurator.C" line="71"/>
         <source>Isovalue</source>
-        <translation>等值</translation>
+<translation>等值面值</translation>
     </message>
     <message>
         <location filename="../src/Configurator/MolecularSurfacesConfigurator.C" line="38"/>
@@ -6017,7 +6017,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <location filename="../src/Main/InsertMoleculeDialog.ui" line="46"/>
-        <source>InChi</source>
+        <source>InChI</source>
         <translation>InChI</translation>
     </message>
     <message>
@@ -7059,7 +7059,7 @@ QToolButton:checked {
     <message>
         <location filename="../src/Qui/InputDialog.ui" line="1859"/>
         <source>Number of Roots</source>
-        <translation>根数量</translation>
+<translation>根数</translation>
     </message>
     <message>
         <location filename="../src/Qui/InputDialog.ui" line="1879"/>
@@ -8234,7 +8234,7 @@ QToolButton:pressed {
     <message>
         <location filename="../src/Configurator/MoleculeConfigurator.ui" line="55"/>
         <source>Tubes</source>
-        <translation>管</translation>
+<translation>管状</translation>
     </message>
     <message>
         <location filename="../src/Configurator/MoleculeConfigurator.ui" line="62"/>
@@ -10549,7 +10549,7 @@ Use Web for HTTP/HTTPS servers</source>
     </message>
     <message>
         <location filename="../src/Viewer/ShaderDialog.ui" line="179"/>
-        <source>Lable6</source>
+        <source>Label6</source>
         <translation>Label6</translation>
     </message>
     <message>
@@ -11585,7 +11585,7 @@ QToolTip {
     <message>
         <location filename="../src/Configurator/SurfaceAnimatorDialog.ui" line="654"/>
         <source>Controls the speed of animation</source>
-        <translation>控制动画速度</translation>
+<translation>调节动画速度</translation>
     </message>
     <message>
         <location filename="../src/Configurator/SurfaceAnimatorDialog.ui" line="693"/>
