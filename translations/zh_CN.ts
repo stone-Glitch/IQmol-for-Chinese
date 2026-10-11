@@ -11935,7 +11935,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../src/Amber/SystemBuilderDialog.C" line="154"/>
         <source>mol2</source>
-        <translation>Mol2</translation>
+        <translation>mol2</translation>
     </message>
     <message>
         <location filename="../src/Amber/SystemBuilderDialog.C" line="168"/>
