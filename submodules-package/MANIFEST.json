@@ -1,0 +1,16 @@
+{
+  "generated_at": "2026-10-11T08:02:32Z",
+  "source": "git ls-tree HEAD modules/ (gitlink commits)",
+  "note": "该清单记录离线包打包时的子模块快照；CI 解包后由 scripts/check_submodules_drift.sh 比对仓库 gitlink sha，不一致即 fail",
+  "submodules": [
+    { "path": "modules/HighFive", "commit": "c987a51efc8de275155079351acc5cdfeb195fe7", "url": "https://github.com/BlueBrain/HighFive.git" },
+    { "path": "modules/hdf5", "commit": "a0edeee49f77a1cb59c7969a451164dd595e0d01", "url": "https://github.com/HDFGroup/hdf5.git" },
+    { "path": "modules/libQGLViewer", "commit": "b397d1aa56479de9db24424832835d557143b040", "url": "https://github.com/GillesDebunne/libQGLViewer.git" },
+    { "path": "modules/libarchive", "commit": "2961b132d053f4a8eb2723fe9476cf50457f3ea7", "url": "https://github.com/libarchive/libarchive.git" },
+    { "path": "modules/libssh2", "commit": "88a960a86b9ffbabd17a4bbcf767e26514c4678e", "url": "https://github.com/libssh2/libssh2.git" },
+    { "path": "modules/libxml2", "commit": "c9925454fd384a17c8c03d358c6778a552e9287b", "url": "https://github.com/GNOME/libxml2.git" },
+    { "path": "modules/openbabel", "commit": "ea4710f04120df713a6806ffb56baae29f16f58f", "url": "https://github.com/openbabel/openbabel.git" },
+    { "path": "modules/openmesh", "commit": "4e2e481f438747d64e62899021da9f469fd9daf8", "url": "https://github.com/Lawrencemm/openmesh.git" },
+    { "path": "modules/yaml-cpp", "commit": "016b2e77691c5578f90e35d772fea80540f2b30e", "url": "https://github.com/jbeder/yaml-cpp.git" }
+  ]
+}

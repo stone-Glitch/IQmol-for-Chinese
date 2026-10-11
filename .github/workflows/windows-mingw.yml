@@ -157,6 +157,12 @@ jobs:
             printf "  %-28s %s\n" "$d" "$(find "$d" -type f 2>/dev/null | wc -l)"
           done
 
+      # P2-8 子模块版本漂移校验：比对离线包 MANIFEST 与仓库 gitlink sha。
+      # 若上游 bump 了子模块 commit 而离线包未重打，这里会 fail，避免 CI 静默
+      # 用旧源码构建出"能过但不对"的包。
+      - name: 子模块版本漂移校验
+        run: scripts/check_submodules_drift.sh
+
       # 关键：必须走 scripts/build_windows.sh，不能直接 cmake。
       # 该脚本承载了 Windows 专属的全部修复，直接 cmake 会绕过它们导致必崩：
       #   1) 解压并应用 4 个 OpenBabel 补丁包（deps / fix / formats-fix /
