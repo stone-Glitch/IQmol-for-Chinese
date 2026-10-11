@@ -59,6 +59,45 @@ fetch_from_github() {
   return 1
 }
 
+# ===== 0b. 下载完整性校验（SHA256）=====
+# 用法: verify_sha256 <文件> <期望SHA256> [名称]
+#   · 期望值为空 → 跳过（不阻断弱网用户），仅提示
+#   · 不匹配      → 返回 1，由调用方决定是否删除并重试
+# 校验值来源：submodules-package/SHA256SUMS.txt（随包提供）或环境变量
+verify_sha256() {
+  local FILE="$1"; local EXPECT="$2"; local NAME="${3:-$(basename "$1")}"
+  [ -f "$FILE" ] || { echo "    校验跳过：文件不存在"; return 1; }
+  if [ -z "$EXPECT" ]; then
+    echo "    ⚠ 无 $NAME 的校验值，跳过完整性校验（建议随包提供 SHA256SUMS.txt）"
+    return 0
+  fi
+  local ACTUAL
+  if command -v sha256sum >/dev/null 2>&1; then
+    ACTUAL=$(sha256sum "$FILE" | awk '{print $1}')
+  elif command -v shasum >/dev/null 2>&1; then
+    ACTUAL=$(shasum -a 256 "$FILE" | awk '{print $1}')
+  else
+    echo "    ⚠ 未找到 sha256sum/shasum，跳过校验"
+    return 0
+  fi
+  if [ "$ACTUAL" = "$EXPECT" ]; then
+    echo "    ✓ $NAME SHA256 校验通过"
+    return 0
+  else
+    echo "    ✗ $NAME SHA256 不匹配！"
+    echo "      期望: $EXPECT"
+    echo "      实际: $ACTUAL"
+    return 1
+  fi
+}
+
+# 从 SHA256SUMS.txt 查某个文件名对应的期望校验值（找不到则输出空）
+lookup_sha256() {
+  local SUMS="$1"; local NAME="$2"
+  [ -f "$SUMS" ] || { echo ""; return; }
+  awk -v n="$NAME" '$2==n || $2=="*"n {print $1}' "$SUMS" | head -1
+}
+
 # ===== 1. 检查/补全 modules/CMakeLists.txt（构建 libQGLViewer 的聚合脚本）=====
 if [ ! -f "$MODULES_DIR/CMakeLists.txt" ]; then
   echo "==> 缺失 modules/CMakeLists.txt，尝试恢复..."
@@ -110,6 +149,11 @@ auto_get_cmake_3_31() {
     echo "       解压后运行: CMAKE_BIN=\"解压目录/bin/cmake.exe\" bash build_windows.sh"
     return 1
   fi
+  # 完整性校验（校验值可选：置环境变量 CMAKE_ZIP_SHA256 或随包提供）
+  verify_sha256 "$ZIP" "${CMAKE_ZIP_SHA256:-}" "cmake-$VER-windows-x86_64.zip" || {
+    echo "ERROR: CMake 压缩包完整性校验失败（可能下载被劫持/损坏），已删除，请重试。"
+    rm -f "$ZIP"; return 1
+  }
   echo "    解压中..."
   ( cd "$SRC_DIR/.tools" && cmake -E tar xf "$ZIP" ) || { echo "ERROR: 解压失败"; return 1; }
   if [ -d "$SRC_DIR/.tools/cmake-$VER-windows-x86_64" ]; then
@@ -138,6 +182,15 @@ fi
 SUB_TGZ="$SRC_DIR/submodules-package/IQmol-submodules.tar.gz"
 if [ ! -f "$MODULES_DIR/openbabel/CMakeLists.txt" ] && [ -f "$SUB_TGZ" ]; then
   echo "==> 检测到 modules/ 未填充，自动解压子模块离线包（约 73M，仅解压一次）..."
+  # 解压前先校验完整性：优先查 submodules-package/SHA256SUMS.txt，其次环境变量
+  SUB_SUMS="$SRC_DIR/submodules-package/SHA256SUMS.txt"
+  SUB_EXPECT="$(lookup_sha256 "$SUB_SUMS" "IQmol-submodules.tar.gz")"
+  [ -z "$SUB_EXPECT" ] && SUB_EXPECT="${SUB_TGZ_SHA256:-}"
+  verify_sha256 "$SUB_TGZ" "$SUB_EXPECT" "IQmol-submodules.tar.gz" || {
+    echo "ERROR: 子模块离线包完整性校验失败，解压可能产出损坏源码，已中止。" >&2
+    echo "       如确认包无误，可跳过校验：SUB_TGZ_SHA256= bash $(basename "$0")" >&2
+    exit 1
+  }
   tar -xzf "$SUB_TGZ" -C "$SRC_DIR" \
     && echo "    已完成 modules/ 填充" \
     || { echo "ERROR: 解压 $SUB_TGZ 失败，请手动执行: tar -xzf $SUB_TGZ -C $SRC_DIR" >&2; exit 1; }
