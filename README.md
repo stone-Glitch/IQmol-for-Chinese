@@ -1,7 +1,7 @@
 # IQmol3
 IQmol version 3
 
-> **English:** Simplified Chinese localization of [IQmol3](https://github.com/nutjunkie/IQmol3) — a free, open-source molecular visualization and quantum-chemistry front end. This fork ships a complete `zh_CN` UI translation (2125 strings, 0 unfinished), a 34-page Chinese user manual, and a verified toolchain to re-apply the localization onto clean upstream trees.
+> **English:** Simplified Chinese localization of [IQmol3](https://github.com/nutjunkie/IQmol3) — a free, open-source molecular visualization and quantum-chemistry front end. This fork ships a complete `zh_CN` UI translation (2126 strings, 0 unfinished), a 34-page Chinese user manual, and a verified toolchain to re-apply the localization onto clean upstream trees.
 
 > 📌 **本仓库 = IQmol3 官方版 + 简体中文全面本地化**
 > 上游原版：[nutjunkie/IQmol3](https://github.com/nutjunkie/IQmol3)
@@ -44,7 +44,7 @@ IQmol version 3
 
 | | |
 |---|---|
-| **译文** | 2125 条（155 个界面模块，0 未译） |
+| **译文** | 2126 条（156 个界面模块，0 未译） |
 | **中文手册** | 34 页（PDF，随包提供） |
 | **平台** | Windows / macOS / Linux |
 | **宣传视频** | 90 秒实机录屏，已发布 B 站 |
@@ -103,7 +103,7 @@ make
 
 本仓库在原版 IQmol3 基础上完成了面向简体中文用户的全面本地化：
 
-- **界面翻译**：`translations/zh_CN.ts`（2125 条翻译，155 个 context，全部完成，0 未译），
+- **界面翻译**：`translations/zh_CN.ts`（2126 条翻译，156 个 context，全部完成，0 未译），
   构建时由 CMake 自动调用 lrelease 生成 `zh_CN.qm` 并随可执行文件输出到
   `translations/` 目录。系统需安装 Qt5 Linguist 工具（lupdate/lrelease，
   如 `qtbase5-dev-tools`、`qttools5-dev-tools`），缺失时构建仍可继续，但界面回退英文。
@@ -246,7 +246,7 @@ cd build/bin && ./IQmol.exe
 > 本节所列问题**源自 IQmol 上游本身**，并非本汉化引入；汉化仅覆盖界面 / 帮助 / Q-Chem 关键词文案。
 > 遇到疑似 bug 时，请先对照本节判断是否上游固有。
 
-- **部分运行期字符串仍为英文**：上游源码中未被 `tr()` 包裹的字符串（尤其较新上游版本新增的 UI 文本）无法被翻译体系识别，会保持英文显示。本版已覆盖 `translations/zh_CN.ts` 中 **2125 条**翻译；若发现未译项，多属上游未暴露该字符串，可在本仓库提 Issue 由维护者补充 `tr()` 包裹。
+- **部分运行期字符串仍为英文**：上游源码中未被 `tr()` 包裹的字符串（尤其较新上游版本新增的 UI 文本）无法被翻译体系识别，会保持英文显示。本版已覆盖 `translations/zh_CN.ts` 中 **2126 条**翻译；若发现未译项，多属上游未暴露该字符串，可在本仓库提 Issue 由维护者补充 `tr()` 包裹。
 - **OpenBabel 力场插件自注册**：静态构建下若 OpenBabel 的力场 / 格式插件未被整体保留，运行期会报 `Failed to load force field: UFF`。本仓库 `CMakeLists.txt` 已用 `$<LINK_LIBRARY:WHOLE_ARCHIVE,openbabel>` 修复；手工构建或旧包若未启用该修复则可能遇到。
 - **帮助文档内嵌截图为英文**：`doc/IQmolUserGuide.*` 中的部分配图为上游英文截图，汉化尚未重渲染（计划见待办：帮助文档截图汉化，下个版本处理）。
 - **MinGW-w64 为唯一验证工具链**：Windows 构建仅验证 MinGW-w64（Qt5 + MinGW），MSVC 路径未验证、未支持。
@@ -265,7 +265,7 @@ cd build/bin && ./IQmol.exe
 - **Homepage**：`https://www.iqmol.org`（或本仓库文档首页
   `https://stone-glitch.github.io/IQmol-for-Chinese/`，若已开启 GitHub Pages）
 - **About 描述**：建议中英双语，例如
-  `IQmol3 简体中文本地化 · Simplified Chinese localization of IQmol3 (2125 translated UI strings, 34-page Chinese manual)`
+  `IQmol3 简体中文本地化 · Simplified Chinese localization of IQmol3 (2126 translated UI strings, 34-page Chinese manual)`
 - **向上游反哺**：向 `nutjunkie/IQmol3` 提交 Issue / PR，贡献本仓库发现的 `tr()` 包裹、
   `-extensions C,ui` 踩坑、GLObject.h 导致 lupdate 误标 vanished 等经验——
   这是对本项目最持久的自然引流。
