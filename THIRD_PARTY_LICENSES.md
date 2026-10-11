@@ -36,8 +36,11 @@ IQmol 中文版基于上游 **IQmol 3.2.3**，本仓库根目录 `LICENSE` 为�
   当前 Windows 包为便于「双击即用」采用静态/捆绑方式，请按 Qt 商业或 GPL 条款评估。
 - **Q-Chem 选项库（`qchem_option.db`）**：为 Q-Chem 输入关键词参考数据库，
   属上游文档性数据；汉化仅翻译其展示文案，不嵌入任何专有可执行代码。
+- **重链接说明（Relinking Notice）**：关于如何以 LGPL 方式合规地重新链接 / 替换 Qt
+  （所用 Qt 版本、源码获取要约、动态链接与提供目标文件两条路径），详见
+  [RELINKING-NOTICE.md](RELINKING-NOTICE.md)。
 - 各依赖的完整许可证文本可在对应上游仓库获取；本清单为汇总，不构成法律意见。
 
 ---
 
-> 维护者：@stone-Glitch ｜ 最后整理：2026-10-01
+> 维护者：@stone-Glitch ｜ 最后整理：2026-10-11
