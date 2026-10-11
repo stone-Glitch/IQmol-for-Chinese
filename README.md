@@ -1,6 +1,8 @@
 # IQmol3
 IQmol version 3
 
+> **English:** Simplified Chinese localization of [IQmol3](https://github.com/nutjunkie/IQmol3) — a free, open-source molecular visualization and quantum-chemistry front end. This fork ships a complete `zh_CN` UI translation (2125 strings, 0 unfinished), a 34-page Chinese user manual, and a verified toolchain to re-apply the localization onto clean upstream trees.
+
 > 📌 **本仓库 = IQmol3 官方版 + 简体中文全面本地化**
 > 上游原版：[nutjunkie/IQmol3](https://github.com/nutjunkie/IQmol3)
 >
@@ -253,4 +255,21 @@ cd build/bin && ./IQmol.exe
 
 ---
 
-> 维护者：@stone-Glitch ｜ 最后整理：2026-10-01
+## 项目元数据建议（GitHub 仓库设置）
+
+以下为提升仓库可发现性的建议项，需在本仓库 **GitHub Settings** 中手动配置
+（无法仅靠提交文件自动生效）：
+
+- **Topics**：`iqmol`、`chemistry`、`molecular-visualization`、`qt5`、
+  `chinese-localization`、`i18n`、`qchem`、`simplified-chinese`
+- **Homepage**：`https://www.iqmol.org`（或本仓库文档首页
+  `https://stone-glitch.github.io/IQmol-for-Chinese/`，若已开启 GitHub Pages）
+- **About 描述**：建议中英双语，例如
+  `IQmol3 简体中文本地化 · Simplified Chinese localization of IQmol3 (2125 translated UI strings, 34-page Chinese manual)`
+- **向上游反哺**：向 `nutjunkie/IQmol3` 提交 Issue / PR，贡献本仓库发现的 `tr()` 包裹、
+  `-extensions C,ui` 踩坑、GLObject.h 导致 lupdate 误标 vanished 等经验——
+  这是对本项目最持久的自然引流。
+
+---
+
+> 维护者：@stone-Glitch ｜ 最后整理：2026-10-11
