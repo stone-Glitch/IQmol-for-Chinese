@@ -1,15 +1,15 @@
 {
   "bomFormat": "CycloneDX",
   "specVersion": "1.5",
-  "serialNumber": "urn:uuid:iqmol-zh-cn-3.2.3-sbom",
+  "serialNumber": "urn:uuid:iqmol-zh-cn-3.2.4.1-sbom",
   "version": 1,
   "metadata": {
-    "timestamp": "2026-10-01T00:00:00Z",
+    "timestamp": "2026-10-03T09:41:34Z",
     "component": {
       "type": "application",
       "name": "IQmol-zh_CN",
-      "version": "3.2.3-zh_CN",
-      "description": "IQmol 3.2.3 简体中文本地化版本（界面/帮助/Q-Chem 关键词库汉化）",
+      "version": "3.2.4.1-zh_CN",
+      "description": "IQmol 3.2.4.1 简体中文本地化版本（界面/帮助/Q-Chem 关键词库汉化）",
       "licenses": [ { "license": { "id": "GPL-3.0-or-later" } } ],
       "externalReferences": [
         { "type": "vcs", "url": "https://github.com/stone-Glitch/IQmol-for-Chinese" }
