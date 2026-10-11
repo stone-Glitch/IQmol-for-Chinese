@@ -96,6 +96,7 @@ namespace Gmx {
       private Q_SLOTS:
          void splitterMoved(int, int);
          void showHelp() { m_helpBrowser.show(); }
+         void openUserGuide();   // feedback H3: open the PDF user manual
          void showAbout() { m_aboutDialog.show(); }
          void showPreferences() { m_preferencesBrowser.show(); }
          void showLogMessages();

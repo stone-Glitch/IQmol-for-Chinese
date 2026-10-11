@@ -12305,4 +12305,13 @@ p, li { white-space: pre-wrap; }
         <translation>关闭</translation>
     </message>
 </context>
+
+<context>
+    <name>MainWindow</name>
+    <message>
+        <location filename="../src/Main/MainWindow.C" line="778"/>
+        <source>User Manual (PDF)</source>
+        <translation>用户手册 (PDF)</translation>
+    </message>
+</context>
 </TS>

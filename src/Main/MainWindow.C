@@ -48,6 +48,12 @@
 #include <QMenuBar>
 #include <QtDebug>
 #include <QActionGroup>
+#include <QDesktopServices>
+#include <QUrl>
+#include <QFile>
+#include <QFileInfo>
+#include <QTemporaryFile>
+#include <QDir>
 #include <fstream>
 
 #include "Util/ColorDialog.h"
@@ -773,6 +779,12 @@ void MainWindow::createMenus()
       name = tr("Show Help");
       action = menu->addAction(name);
       connect(action, SIGNAL(triggered()), this, SLOT(showHelp()));
+
+      // Feedback item H3: provide a single entry point to the PDF user manual,
+      // integrating it with the built-in HTML help browser.
+      name = tr("User Manual (PDF)");
+      action = menu->addAction(name);
+      connect(action, SIGNAL(triggered()), this, SLOT(openUserGuide()));
 }
 
 
@@ -780,6 +792,39 @@ void MainWindow::editNewServers()
 {
    Process::ServerConfigurationListDialog dialog(this);
    dialog.exec();  
+}
+
+
+void MainWindow::openUserGuide()
+{
+   // Feedback item H3: open the bundled PDF user manual from a single Help-menu
+   // entry, integrating it with the built-in HTML help browser.  The PDF is
+   // compiled into the binary as a Qt resource (:/doc/IQmolUserGuide.pdf), so we
+   // extract it to a temporary file first — QDesktopServices cannot open qrc:/
+   // resources directly, and the system PDF viewer needs a real file path.
+   QFile source(":/doc/IQmolUserGuide.pdf");
+   if (!source.open(QIODevice::ReadOnly)) {
+      QMsgBox::warning(this, tr("IQmol"),
+         tr("无法打开用户手册 PDF 资源，请检查安装是否完整。"));
+      return;
+   }
+
+   QTemporaryFile tmp(QDir::temp().filePath("IQmolUserGuide-XXXXXX.pdf"));
+   tmp.setAutoRemove(false);
+   if (!tmp.open()) {
+      QMsgBox::warning(this, tr("IQmol"),
+         tr("无法创建临时文件以打开用户手册。"));
+      source.close();
+      return;
+   }
+   tmp.write(source.readAll());
+   tmp.close();
+   source.close();
+
+   if (!QDesktopServices::openUrl(QUrl::fromLocalFile(tmp.fileName()))) {
+      QMsgBox::warning(this, tr("IQmol"),
+         tr("未能启动 PDF 查看器，请手动打开：") + tmp.fileName());
+   }
 }
 
 

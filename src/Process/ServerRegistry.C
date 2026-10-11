@@ -216,6 +216,26 @@ void ServerRegistry::loadFromPreferences()
          addServer(config);
       }
 
+      // Feedback item S1: ensure a "本地计算" (local compute) server is always
+      // available so users can run calculations on this machine without first
+      // configuring a remote server. IQmol already supports local execution
+      // (Server.C creates a LocalConnection for Network::Local), so this just
+      // makes the option visible in both the server list and the job-submission
+      // dropdown.  It is only added when no local server already exists, so it
+      // is idempotent across restarts and respects any user-defined local
+      // server.
+      bool localFound(false);
+      for (int i = 0; i < s_servers.size(); ++i) {
+          if (s_servers[i]->configuration().isLocal()) { localFound = true; break; }
+      }
+      if (!localFound) {
+         QLOG_DEBUG() << "Appending local compute server";
+         ServerConfiguration localConfig;
+         localConfig.setDefaults(Network::Local);
+         localConfig.setValue(ServerConfiguration::ServerName, "本地计算");
+         addServer(localConfig);
+      }
+
    } catch (Exception& ex) {
       QString msg("Problem loading servers from Preferences file:\n");
       msg += ex.what();
