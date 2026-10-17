@@ -61,7 +61,7 @@ Surface::Surface(Data::Surface& surface) : m_surface(surface), m_configurator(*t
    }
 
    setConfigurator(&m_configurator); 
-   m_configurator.setWindowTitle("Configure Surface: " + m_surface.description());
+   m_configurator.setWindowTitle(tr("Configure Surface: ") + m_surface.description());
 
    connect(newAction(tr("Show Vertex Normals")), SIGNAL(triggered()), 
       this, SLOT(toggleVertexNormals()));
@@ -573,7 +573,7 @@ qDebug() << "Computing property data using Function3D";
 void Surface::decimate()
 {
    if (m_decimator) {
-      QMsgBox::information(0, "IQmol", "Mesh simplification in progress");
+      QMsgBox::information(0, "IQmol", tr("Mesh simplification in progress"));
       return;
    }   
 

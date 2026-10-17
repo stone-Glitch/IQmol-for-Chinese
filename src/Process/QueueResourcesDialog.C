@@ -39,7 +39,7 @@ QueueResourcesDialog::QueueResourcesDialog(QueueResourcesList* queueResourcesLis
    m_dialog.queue->clear();
 
    if (m_queueResourcesList->isEmpty()) {
-      QMsgBox::warning(this, "IQmol", "No queues found on server");
+      QMsgBox::warning(this, "IQmol", tr("No queues found on server"));
       close();
       return;
    }
@@ -68,7 +68,7 @@ void QueueResourcesDialog::verify()
    m_dialog.walltime->setText(time);
 
    if (m_timeValidator.validate(time, n) != QValidator::Acceptable) {
-      QMsgBox::warning(this, "IQmol", "Wall time must be in the format h:mm:ss");
+      QMsgBox::warning(this, "IQmol", tr("Wall time must be in the format h:mm:ss"));
       return;
    }
 
@@ -79,7 +79,7 @@ void QueueResourcesDialog::verify()
    QStringList maxTime(time.split(":", IQmolSkipEmptyParts));
 
    if (requestedTime.size() < 3 || maxTime.size() < 3) {
-      QMsgBox::warning(this, "IQmol", "Validated wall time not in the format h:mm:ss");
+      QMsgBox::warning(this, "IQmol", tr("Validated wall time not in the format h:mm:ss"));
       return;
    }
 
@@ -92,18 +92,18 @@ void QueueResourcesDialog::verify()
    t2 += maxTime[2].toInt(&ok);
 
    if (t1 > t2) {
-      QMsgBox::warning(this, "IQmol", "Wall time exceeds queue maximum of " + time);
+      QMsgBox::warning(this, "IQmol", tr("Wall time exceeds queue maximum of ") + time);
       return;
    }else if (m_dialog.memory->value() > currentQueue->m_maxMemory) {
-      QMsgBox::warning(this, "IQmol", "Memory exceeds queue limit of " 
+      QMsgBox::warning(this, "IQmol", tr("Memory exceeds queue limit of ") 
          + QString::number(currentQueue->m_maxMemory));
       return;
    }else if (m_dialog.scratch->value() > currentQueue->m_maxScratch) {
-      QMsgBox::warning(this, "IQmol", "Scratch exceeds queue limit of " 
+      QMsgBox::warning(this, "IQmol", tr("Scratch exceeds queue limit of ") 
          + QString::number(currentQueue->m_maxScratch));
       return;
    }else if (m_dialog.ncpus->value() > currentQueue->m_maxCpus) {
-      QMsgBox::warning(this, "IQmol", "Number of CPUs exceeds queue limit of " 
+      QMsgBox::warning(this, "IQmol", tr("Number of CPUs exceeds queue limit of ") 
          + QString::number(currentQueue->m_maxCpus));
       return;
    }

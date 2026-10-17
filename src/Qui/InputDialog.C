@@ -490,9 +490,9 @@ bool InputDialog::saveFile(bool prompt)
       // [i18n] 同构造函数：标题翻译，文件名保留原样。
       setWindowTitle(tr("QChem Input File Editor") + " - " + file.fileName());
    }else {
-      QString msg("Could not write to file '");
-      msg += tmp.fileName() + "'\nInput file not saved\n";
-      QMsgBox::warning(0, "File Not Saved", msg);
+      QString msg(tr("Could not write to file '%1'\nInput file not saved\n")
+         .arg(tmp.fileName()));
+      QMsgBox::warning(0, tr("File Not Saved"), msg);
    }
 
    return saved;
@@ -769,10 +769,10 @@ void InputDialog::removeJobFromList(Job* job)
 
 void InputDialog::on_deleteJobButton_clicked(bool) 
 {
-   QString msg("Are you sure you want to delete the section ");
-   msg += m_ui.jobList->currentText() + "?";
+   QString msg(tr("Are you sure you want to delete the section %1?")
+      .arg(m_ui.jobList->currentText()));
 
-   if (QMsgBox::question(this, "Delete Section?", msg,
+   if (QMsgBox::question(this, tr("Delete Section?"), msg,
       QMessageBox::Ok | QMessageBox::Cancel) == QMessageBox::Cancel)  {
       return;
    }

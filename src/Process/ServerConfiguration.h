@@ -35,6 +35,8 @@ namespace Process {
    class ServerConfiguration {
 
       friend class ServerConfigurationDialog;
+      // ServerRegistry 启动时注册「本地计算」服务器需调用 setDefaults()（0de3fb9/S1）
+      friend class ServerRegistry;
 
       public:
          enum FieldT { ServerName = 0, Connection, QueueSystem, HostAddress, Port,

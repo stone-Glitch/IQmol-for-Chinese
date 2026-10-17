@@ -130,7 +130,7 @@ void GeminalOrbitals::initPlot()
 
    i = 0;
 
-   m_customPlot->yAxis->setLabel("Energy/Hartree");
+   m_customPlot->yAxis->setLabel(tr("Energy/Hartree"));
    m_customPlot->yAxis->setNumberPrecision(3);
    // Set the scale
    double yMin(-1.0), yMax(0.5);

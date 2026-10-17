@@ -227,7 +227,7 @@ bool AwsConnection::resetPassword(QString const& userName, QString const& oldPas
         if (pw1 == pw2) {
            return respondToNewPasswordChallenge(userName, pw2, session);
         }else {
-           QMsgBox::warning(0, "IQmol", "Passwords do not match");
+           QMsgBox::warning(0, "IQmol", tr("Passwords do not match"));
         }
     }
 

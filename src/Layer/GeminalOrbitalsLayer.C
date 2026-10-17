@@ -272,7 +272,7 @@ qDebug() << "Grid already exists";
          }
       }
    } catch (...) {
-      QMsgBox::warning(0, "IQmol", "Problem calculating grid data");
+      QMsgBox::warning(0, "IQmol", tr("Problem calculating grid data"));
       clearSurfaceQueue();
    }
 

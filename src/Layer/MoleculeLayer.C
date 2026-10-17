@@ -954,7 +954,7 @@ bool Molecule::editIsotopes()
    AtomList atoms(findLayers<Atom>(Children | Visible | SelectedOnly));
 
    if (atoms.isEmpty()) {
-      QMsgBox::warning(0, "IQmol", "Atom selection required");
+      QMsgBox::warning(0, "IQmol", tr("Atom selection required"));
       return added;
    }
 
@@ -1040,7 +1040,7 @@ bool Molecule::editConstraint(AtomList const& atomsIn)
    }
 
    if (atoms.isEmpty()) {
-      QMsgBox::warning(0, "IQmol", "Atom selection required");
+      QMsgBox::warning(0, "IQmol", tr("Atom selection required"));
       return added;
    }else if (atoms.size() > 4) {
       return freezeAtomPositions();
@@ -1425,7 +1425,7 @@ void Molecule::appendPrimitives(PrimitiveList const& primitives)
           //appendPrimitives(group->ungroup());
 
        } else {
-          QMsgBox::warning(0, "IQmol", "Attempt to add unknown primitive type to molecule");
+          QMsgBox::warning(0, "IQmol", tr("Attempt to add unknown primitive type to molecule"));
        }
    }
 
@@ -1479,7 +1479,7 @@ void Molecule::takePrimitives(PrimitiveList const& primitives)
           m_groupList.takeRow((*primitive)->row());
 
        } else {
-          QMsgBox::warning(0, "IQmol", "Atempt to remove unknown primitive type to molecule");
+          QMsgBox::warning(0, "IQmol", tr("Atempt to remove unknown primitive type to molecule"));
        }
    }
 
@@ -1615,7 +1615,7 @@ void Molecule::groupSelection()
    // Check to see we haven't already grouped any of the objects
    for (iter = selected.begin(); iter != selected.end(); ++iter) {
        if ((*iter)->isInGroup()) {
-          QMsgBox::warning(0, "IQmol", "Unable to nest fragments");
+          QMsgBox::warning(0, "IQmol", tr("Unable to nest fragments"));
           return;
        }
    }

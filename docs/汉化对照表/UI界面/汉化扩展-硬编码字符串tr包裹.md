@@ -20,7 +20,7 @@
 | 翻译总条数（本阶段完成后，历史快照） | 1514 条（1473 + 41） |
 | 全量 qm 验证（本阶段） | 1514 通过, 0 失败 |
 
-> **当前主分支全量译文**：2126 条 / 156 个 context，0 unfinished、0 vanished（见 `translations/zh_CN.ts`）。
+> **当前主分支全量译文**：2110 条 / 158 个 context，0 unfinished、0 vanished（见 `translations/zh_CN.ts`）。
 
 ## 逐项对照（文件 / 行号 / 原文 / 译文 / 修改理由 / 责任人）
 

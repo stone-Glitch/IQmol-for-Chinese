@@ -247,7 +247,7 @@ void Orbitals::processSurfaceQueue()
 {
    // First, check to see if we are still computing data from a previous request.
    if (m_molecularGridEvaluator) {
-      QMsgBox::warning(0, "IQmol", "Still processing previous grid data request");
+      QMsgBox::warning(0, "IQmol", tr("Still processing previous grid data request"));
       return;
    }
 

@@ -1,17 +1,40 @@
 # 源码侧未 tr() 字符串清单（P2-10）
 
 > 生成：2026-10-17，由 `scripts/i18n/check_tr_coverage.py` 扫描 `src/`（排除 `save/` 备份副本 + 白名单）得出。
-> **门禁策略**：防恶化 `baseline=49` + 目标上限 `5`（用户 2026-10-17 决策）。当前 49 种为基线，禁止新增；分批清零到 ≤5 后，把 `.github/workflows/i18n-tqa.yml` 的 `--baseline 49` 改为 `5`，即收紧为硬门禁。
+> **现状：✅ 已清零（2026-10-17）**。49 种（52 处）真漏翻全部包裹 `tr()` / `QCoreApplication::translate()` 并补中文译文，`zh_CN.qm` 已重编，门禁基线由 49 收紧为 **0（硬门禁：新增任何未授权裸字符串即失败）**。
 > **性质**：#43（界面英文残留排查）当时只修了其清单内列的 71 处；本清单是**新增发现**——全仓 `QMsgBox` 错误/警告信息与约束/表面配置器标签从未被 `tr()` 包裹，`lupdate` 扫不到，界面显示英文。
 
-## 一、分布
+## 〇、清理结果（2026-10-17）
+
+| 项 | 结果 |
+|---|---|
+| 源码侧残留 | 49 种 / 52 处 → **0**（白名单命中 8 种不变） |
+| 新增译文 | **61 条**（45 处单行包裹 + 7 块多行重构 + 4 条 MainWindow PDF 手册入口，含 3 条原中文源码串改英文源后补译） |
+| zh_CN.ts | 2126 → **2110 条**（剔除陈旧/错 context 条目 77 条，FragmentTable 298 条手工条目已用 `sync_fragment_names.py` 恢复） |
+| 门禁 | `--baseline 49` → **`--baseline 0 --limit 5`**（`.github/workflows/i18n-tqa.yml`） |
+| 验证 | `tqa.py --gate` 绿（99.98/100，漂移 0）；`check_tr_coverage.py --gate --baseline 0` 绿；qm 运行时抽查 14/14 命中；全量编译通过 |
+
+执行脚本：`scripts/i18n/fix_tr_leaks_batch2.py`（源码包裹）+ `scripts/i18n/fill_batch2_translations.py`（译文回填）。
+
+**非 QObject 类的处理**（经继承链核实，共 4 处上下文用显式 `translate`）：
+
+| 文件 | 所属 | context | 原因 |
+|---|---|---|---|
+| src/Network/Network.C:210 | 自由函数 `TestNetworkConnection()` | `IQmol::Network` | 非类成员，无 `tr()` |
+| src/Parser/QChemOutputParser.C:1155 | `IQmol::Parser::QChemOutput` | `IQmol::Parser::QChemOutput` | `Parser::Base` 非 QObject |
+| src/Qui/OptionDatabase.C:172/210/266 | `Qui::OptionDatabase` | `Qui::OptionDatabase` | 非 QObject |
+| src/Viewer/BuildHandler.C:69 | `Handler::Build` | `Handler::Build` | `Handler::Base` 非 QObject |
+
+**顺带修正**：`src/Main/MainWindow.C` 3 处 `tr()` 源码串原为中文（0de3fb9 引入，会导致英文界面也显示中文），已改为英文源码 + 译文分离。
+
+## 一、分布（历史记录）
 
 | 类别 | 数量 | 说明 |
 |---|---|---|
 | `QMsgBox` 错误/警告/信息（warning / information / critical / question） | 约 40 | `QMsgBox::warning(0,"IQmol","...")` 等，运行时提示，界面可见 |
 | 配置器标签（setText / setLabel / setWindowTitle） | 9 | 约束 / 表面 / 坐标轴标签 |
 
-## 二、清单（49 种，按字母序）
+## 二、清单（49 种，按字母序；2026-10-17 已全部清理）
 
 | # | 原文 source | 出现位置 | consumer |
 |---|-------------|----------|----------|
@@ -65,17 +88,18 @@
 | 48 | `Warning` | src/Qui/GeometryConstraint.C:408 | warning |
 | 49 | `ffmpeg executable not found` | src/Viewer/Snapshot.C:192 | warning |
 
-## 三、清理方式（每处二选一）
+## 三、清理方式（每处二选一；本次 49 种全部走第 1 类"该译"）
 
-1. **该译**：源码补 `tr("...")`（变量拼接的改为 `tr("...%1...").arg(x)`）→ 跑 `update_translations.sh` / `lupdate` 收敛进 `zh_CN.ts` → 补译文 → 重编 `zh_CN.qm`。
+1. **该译**：源码补 `tr("...")`（变量拼接的改为 `tr("...%1...").arg(x)`）→ 跑 `lupdate` 收敛进 `zh_CN.ts` → 补译文 → 重编 `zh_CN.qm`。
    > ⚠ TQA 已有「未完成条目 > 0」门禁：加 `tr()` 后**必须同步补译文**，否则 `tqa.py --gate` 会红。建议一处一提交，便于回退。
+   > ⚠ `lupdate -no-obsolete` 会清掉 `FragmentTable` 等手工维护 context，之后必须跑 `scripts/i18n/sync_fragment_names.py --apply` 恢复。
 2. **确认不译**（技术标识 / 内部用途）：加入 `scripts/i18n/source_tr_whitelist.json`，带 `reason`。
 
-## 四、边界项（建议先裁决再处理）
+## 四、边界项处置（原建议 → 实际）
 
-- ` energy`（QChemOutputParser.C:1155，setLabel）：Q-Chem 输出能量列标签，界面可能可见，建议译「能量」。
-- `Energy / Hartree`、`Energy/Hartree`：坐标轴单位标签，`Hartree` 为单位可保留、`Energy` 可译。
-- `EGAD!`（OptionDatabase 提示）：口语化，建议译。
+- ` energy`（QChemOutputParser.C:1155，setLabel）：**已译**「 能量」（显式 context `IQmol::Parser::QChemOutput`）。
+- `Energy / Hartree`、`Energy/Hartree`：**已译**「能量 / Hartree」「能量/Hartree」（`Hartree` 为单位保留）。
+- `EGAD!`（OptionDatabase 提示）：**已译**「天哪！」。
 
 ## 五、与白名单的关系
 

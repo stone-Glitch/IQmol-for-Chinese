@@ -305,12 +305,12 @@ void JobMonitor::submitJob(JobInfo* jobInfo)
    }catch (Network::AuthenticationError& ex) {
       server->closeConnection();
       postUpdateMessage("");
-      QMsgBox::warning(0, "IQmol", "Invalid username or password");
+      QMsgBox::warning(0, "IQmol", tr("Invalid username or password"));
 
    }catch (Network::NetworkTimeout& ex) {
       server->closeConnection();
       postUpdateMessage("");
-      QMsgBox::warning(0, "IQmol", "Network timeout");
+      QMsgBox::warning(0, "IQmol", tr("Network timeout"));
 
    }catch (Exception& ex) {
       postUpdateMessage("");
@@ -318,7 +318,7 @@ void JobMonitor::submitJob(JobInfo* jobInfo)
 
    }catch (...) {
       postUpdateMessage("");
-      QMsgBox::warning(0, "IQmol", "Error encountered");
+      QMsgBox::warning(0, "IQmol", tr("Error encountered"));
    }
 }
 
@@ -444,7 +444,7 @@ bool JobMonitor::getLocalWorkingDirectory(QString& dirName, bool allowSpace)
          // This situation should only arise when we are submitting a QChem
          // job locally, in which case this is effectively the job name.
          // We can't have a space in the name because QChem will barf.
-         QMsgBox::warning(0, "IQmol", "Directory name cannot contain spaces");
+         QMsgBox::warning(0, "IQmol", tr("Directory name cannot contain spaces"));
       }else {
          if (dir.count() == 0) break;
 
@@ -842,7 +842,7 @@ void JobMonitor::on_processTable_cellDoubleClicked(int, int)
          if (localFilesExist) {
             openResults(job);
          }else {
-            if (QMsgBox::question(0, "IQmol", "Copy results from server?",
+            if (QMsgBox::question(0, "IQmol", tr("Copy results from server?"),
                QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes) {
                copyResults(job);
             }
@@ -931,7 +931,7 @@ void JobMonitor::viewOutput(Job* job)
    QFileInfo output(job->getLocalFilePath("OutputFileName"));
 
    if (!output.exists()) {
-      QMsgBox::warning(this,"IQmol", "Output file no longer exists");
+      QMsgBox::warning(this,"IQmol", tr("Output file no longer exists"));
       job->set("LocalFilesExist", false);
       return;
    }   

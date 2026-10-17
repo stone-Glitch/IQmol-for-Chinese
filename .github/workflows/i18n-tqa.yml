@@ -9,7 +9,7 @@ name: i18n TQA（翻译质量门禁）
 #   · TS 未完成条目 > 0        · 空译文 > 0
 #   · zh_CN.qm 缺失            · 源码—翻译漂移率 > 5%
 #   · 致命术语错误 > 0
-#   · 源码侧未 tr() 可见字符串 > 防恶化基线 49（P2-10，check_tr_coverage.py）
+#   · 源码侧未 tr() 可见字符串 > 0（P2-10，check_tr_coverage.py；49 处已于 2026-10-17 清零）
 #
 # 另跑 extract_tr_rules.py --verify：tr() 包裹规则表覆盖率必须 100%
 # （保证 patches/ 重放链路不会因规则缺失而丢翻译）。
@@ -70,14 +70,13 @@ jobs:
         run: |
           python3 scripts/i18n/tqa.py --gate
 
-      - name: 源码侧 tr() 覆盖率门禁（P2-10 · 防恶化 + 目标 5）
+      - name: 源码侧 tr() 覆盖率门禁（P2-10 · 已清零，硬门禁 0）
         # 扫 src/ 中「界面可见但未 tr() 包裹」的裸字符串，与白名单比对。
-        # 策略：--baseline 49 为防恶化硬门禁（禁止回退/新增未 tr() 可见字符串）；
-        #       --limit 5 为目标上限，当前仅告警；待 49 处真漏翻分批清零后，
-        #       把 --baseline 改 5 即收紧为硬门禁。
-        # 漏翻清单：docs/汉化工程/源码侧未tr字符串清单.md
+        # 2026-10-17：49 处真漏翻已全部包裹 tr()/translate() 并补译文，
+        #   残留归零，基线由 49 收紧为 0 —— 新增任何未授权裸字符串即失败。
+        # 漏翻清单（已清零）：docs/汉化工程/源码侧未tr字符串清单.md
         # 白名单：scripts/i18n/source_tr_whitelist.json
-        run: python3 scripts/i18n/check_tr_coverage.py --gate --baseline 49 --limit 5
+        run: python3 scripts/i18n/check_tr_coverage.py --gate --baseline 0 --limit 5
 
       - name: 翻译部署链路静态自检（reA22A 防回退）
         # 不构建、不需要 Qt：确认"qm 放两处 + 源码多路径搜索 + run.sh cd"三层修复都还在

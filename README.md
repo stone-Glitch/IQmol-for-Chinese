@@ -1,7 +1,7 @@
 # IQmol3
 IQmol version 3
 
-> **English:** Simplified Chinese localization of [IQmol3](https://github.com/nutjunkie/IQmol3) — a free, open-source molecular visualization and quantum-chemistry front end. This fork ships a complete `zh_CN` UI translation (2126 strings, 0 unfinished), a 34-page Chinese user manual, and a verified toolchain to re-apply the localization onto clean upstream trees.
+> **English:** Simplified Chinese localization of [IQmol3](https://github.com/nutjunkie/IQmol3) — a free, open-source molecular visualization and quantum-chemistry front end. This fork ships a complete `zh_CN` UI translation (2110 strings, 0 unfinished), a 34-page Chinese user manual, and a verified toolchain to re-apply the localization onto clean upstream trees.
 
 > 📌 **本仓库 = IQmol3 官方版 + 简体中文全面本地化**
 > 上游原版：[nutjunkie/IQmol3](https://github.com/nutjunkie/IQmol3)
@@ -45,7 +45,7 @@ IQmol version 3
 
 | | |
 |---|---|
-| **译文** | 2126 条（156 个界面模块，0 未译） |
+| **译文** | 2110 条（158 个界面模块，0 未译） |
 | **中文手册** | 34 页（PDF，随包提供） |
 | **平台** | Windows / macOS / Linux |
 | **宣传视频** | 90 秒实机录屏，已发布 B 站 |
@@ -104,7 +104,7 @@ make
 
 本仓库在原版 IQmol3 基础上完成了面向简体中文用户的全面本地化：
 
-- **界面翻译**：`translations/zh_CN.ts`（2126 条翻译，156 个 context，全部完成，0 未译），
+- **界面翻译**：`translations/zh_CN.ts`（2110 条翻译，158 个 context，全部完成，0 未译），
   构建时由 CMake 自动调用 lrelease 生成 `zh_CN.qm` 并随可执行文件输出到
   `translations/` 目录。系统需安装 Qt5 Linguist 工具（lupdate/lrelease，
   如 `qtbase5-dev-tools`、`qttools5-dev-tools`），缺失时构建仍可继续，但界面回退英文。

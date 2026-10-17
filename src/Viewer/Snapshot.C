@@ -182,21 +182,21 @@ void Snapshot::capture()
 void Snapshot::makeMovie()
 {
    if (m_movieProcess) {
-      QMsgBox::warning(0, "IQmol", "Movie making already in progress, please wait");
+      QMsgBox::warning(0, "IQmol", tr("Movie making already in progress, please wait"));
       return;
    }
 
    QDir dir(QApplication::applicationDirPath());
    QFileInfo ffmpeg = Preferences::FFmpegPath();
    if (!ffmpeg.exists()) {
-      QMsgBox::warning(0, "IQmol", "ffmpeg executable not found");
+      QMsgBox::warning(0, "IQmol", tr("ffmpeg executable not found"));
       return;
    }
 
    QFile movie(m_fileBaseName + "." + m_videoExtension);
    if (movie.exists()) {
       if (!movie.remove()) {
-         QMsgBox::warning(0, "IQmol", "Could not remove existing file " + movie.fileName());
+         QMsgBox::warning(0, "IQmol", tr("Could not remove existing file ") + movie.fileName());
          return;
       }
    }
