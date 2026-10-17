@@ -166,10 +166,10 @@ bool OptionDatabase::insert(Option const& opt, bool const promptOnOverwrite)
 
    if ( get(name, tmp) ) {
       if (promptOnOverwrite) {
-         QString msg("Option name ");
-         msg += name;
-         msg += " already exists in database, overwrite?";
-         int ret = QMsgBox::question(0, "Option Exists",msg, 
+         QString msg(QCoreApplication::translate("Qui::OptionDatabase",
+            "Option name %1 already exists in database, overwrite?").arg(name));
+         int ret = QMsgBox::question(0, QCoreApplication::translate("Qui::OptionDatabase",
+            "Option Exists"), msg, 
             QMessageBox::Ok | QMessageBox::Cancel);
          if (ret == QMessageBox::Cancel) {
             return false;
@@ -203,11 +203,11 @@ bool OptionDatabase::insert(Option const& opt, bool const promptOnOverwrite)
 bool OptionDatabase::remove(QString const& optionName, bool const prompt) 
 {
    if (prompt) {
-      QString msg("Permanently delete the ");
-      msg += optionName;
-      msg += " record from the option database?";
+      QString msg(QCoreApplication::translate("Qui::OptionDatabase",
+         "Permanently delete the %1 record from the option database?").arg(optionName));
 
-      int ret = QMsgBox::question(0, "Delete Option?",msg, 
+      int ret = QMsgBox::question(0, QCoreApplication::translate("Qui::OptionDatabase",
+         "Delete Option?"), msg, 
          QMessageBox::Ok | QMessageBox::Cancel);
       if (ret == QMessageBox::Cancel) {
          return false;
@@ -260,10 +260,10 @@ bool OptionDatabase::get(QString const& optionName, Option& option)
          option.setImplementation(query.value(5).toInt());
 
          if (query.next()) {
-            QString msg("More than one record for ");
-            msg += optionName;
-            msg += " found in database.";
-            QMsgBox::information(0, "EGAD!", msg);
+            QString msg(QCoreApplication::translate("Qui::OptionDatabase",
+               "More than one record for %1 found in database.").arg(optionName));
+            QMsgBox::information(0, QCoreApplication::translate("Qui::OptionDatabase",
+               "EGAD!"), msg);
          }
 
       }

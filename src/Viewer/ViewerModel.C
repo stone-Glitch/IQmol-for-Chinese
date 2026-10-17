@@ -230,7 +230,7 @@ void ViewerModel::insertMoleculeById(QString identifier)
    if (ok && errors.isEmpty() && !bank.isEmpty()) {
       if (activeMolecule()) activeMolecule()->appendData(bank);
    }else {
-      QMsgBox::warning(m_parent, "IQmol", "Invalid string");
+      QMsgBox::warning(m_parent, "IQmol", tr("Invalid string"));
    }
 }
 

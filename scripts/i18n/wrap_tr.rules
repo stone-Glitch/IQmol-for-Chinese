@@ -13,13 +13,12 @@
 # 重放由 replay_tr.py 执行，幂等：已包裹的不会被二次包裹。
 #
 # ---------------------------------------------------------------
-# 重放能力边界（实测数据，2026-09-24 复核）
+# 重放能力边界（实测数据，2026-10-17 复核）
 #
-# 覆盖：58 个文件 / 487 条规则，对 diff 中 343 处 tr() 覆盖率 100%。
-# 实测：对上游干净树重放可新增 323 处包裹，其中 45/58 个文件与成果版
-#       tr() 计数完全一致；幂等（对成果树重放新增 0 处）。
+# 覆盖：68 个文件 / 563 条规则，对 diff 中 411 处 tr() 覆盖率 100%。
+# 实测：对成果树重放新增 0 处（幂等，2026-10-17 dry-run 验证）。
 #
-# 以下 13 个文件重放【不完整】，上游升级后需人工核对。分两类根因：
+# 以下文件重放【不完整】，上游升级后需人工核对。分两类根因：
 #
 # 【类 A】上游字面量文本与我们的不同 —— 精确匹配必然落空
 #   典型：src/Grid/MolecularGridEvaluator.C
@@ -32,20 +31,25 @@
 #     src/Configurator/MullikenDecompositionsDialog.C
 #     src/Configurator/SurfaceAnimatorDialog.C
 #     src/Layer/GeminalOrbitalsLayer.C
-#     src/Qui/GeometryConstraint.C
+#     src/Qui/GeometryConstraint.C        （跨行字符串拼接）
+#     src/Qui/InputDialog.C               （第二批：消息体 %1 重构）
+#     src/Qui/OptionDatabase.C            （第二批：消息 %1 重构）
+#   同类（相邻字面量合并）：
+#     src/Viewer/BuildHandler.C           （第二批：两句合并为一句）
 #   同类（常量 → 可翻译字面量替换）：
-#     src/Layer/MoleculeLayer.C   （DefaultMoleculeName → "Untitled"）
+#     src/Layer/MoleculeLayer.C           （DefaultMoleculeName → "Untitled"）
 #
-# 【类 B】我们新增的代码行，上游根本不存在对应字面量 —— 无处可包
+# 【类 B】我们新增/改写的代码行，上游不存在对应字面量 —— 无处可包
 #   典型：src/Viewer/ShaderDialog.C（数据/显示分离重构）
 #         src/Configurator/OrbitalsConfigurator.C
 #         src/Data/SurfaceType.C（translate: 形态，计数口径与 tr() 不同）
 #         src/Configurator/GeminalOrbitalsConfigurator.C / MolecularSurfacesConfigurator.C
 #         src/Layer/*Layer.C 若干（6 行级差异，多为 include/常量调整）
 #         src/Util/ColorDialog.C, src/Viewer/UndoCommands.C, src/Process/JobInfo.C
+#         src/Main/MainWindow.C            （第二批：中文源码串 → 英文 tr()）
 #   这类改动属于【逻辑重构】而非机械包裹，须按 commit 迁移或人工重做。
 #
-# 结论：规则表可覆盖绝大多数 tr() 包裹；上述 13 个文件的【逻辑改动】部分
+# 结论：规则表可覆盖绝大多数 tr() 包裹；上述文件的【逻辑改动】部分
 #       无法由规则表恢复，需配合 patches/ 与 commit 逐一 cherry-pick。
 # ---------------------------------------------------------------
 #
@@ -57,6 +61,8 @@
 #     src/Layer/OctreeLayer.C             （#include <cstdint>，GCC15 兼容）
 # ---------------------------------------------------------------
 #
+src/Configurator/ConstraintConfigurator.C	Angle 	bare	1
+src/Configurator/ConstraintConfigurator.C	Angle 	call:m_constraint.setText	1
 src/Configurator/ConstraintConfigurator.C	Angle between atoms %1	bare	1
 src/Configurator/ConstraintConfigurator.C	Angle between atoms %1	call:m_constraintConfigurator.label->setText	1
 src/Configurator/ConstraintConfigurator.C	Configure Angle	bare	1
@@ -65,13 +71,23 @@ src/Configurator/ConstraintConfigurator.C	Configure Distance	bare	1
 src/Configurator/ConstraintConfigurator.C	Configure Distance	call:setWindowTitle	1
 src/Configurator/ConstraintConfigurator.C	Configure Torsion	bare	1
 src/Configurator/ConstraintConfigurator.C	Configure Torsion	call:setWindowTitle	1
+src/Configurator/ConstraintConfigurator.C	Distance 	bare	1
+src/Configurator/ConstraintConfigurator.C	Distance 	call:m_constraint.setText	1
 src/Configurator/ConstraintConfigurator.C	Distance between atoms %1	bare	1
 src/Configurator/ConstraintConfigurator.C	Distance between atoms %1	call:m_constraintConfigurator.label->setText	1
+src/Configurator/ConstraintConfigurator.C	Position 	bare	1
+src/Configurator/ConstraintConfigurator.C	Position 	call:m_constraint.setText	1
 src/Configurator/ConstraintConfigurator.C	Set Position	bare	1
 src/Configurator/ConstraintConfigurator.C	Set Position	call:setWindowTitle	1
 src/Configurator/ConstraintConfigurator.C	Set position of atom %1	bare	1
 src/Configurator/ConstraintConfigurator.C	Set position of atom %1	call:m_constraintConfigurator.label->setText	1
+src/Configurator/ConstraintConfigurator.C	Torsion 	bare	1
+src/Configurator/ConstraintConfigurator.C	Torsion 	call:m_constraint.setText	1
+src/Configurator/ConstraintConfigurator.C	Torsion between atoms 	bare	1
+src/Configurator/ConstraintConfigurator.C	Torsion between atoms 	call:m_constraintConfigurator.label->setText	1
 src/Configurator/ExcitedStatesConfigurator.C	Alpha	bare	1
+src/Configurator/ExcitedStatesConfigurator.C	Energy / Hartree	bare	1
+src/Configurator/ExcitedStatesConfigurator.C	Energy / Hartree	call:m_moPlot->yAxis->setLabel	1
 src/Configurator/ExcitedStatesConfigurator.C	Rel. Strength	bare	2
 src/Configurator/ExcitedStatesConfigurator.C	Rel. Strength	call:m_spectrum->yAxis->setLabel	2
 src/Configurator/ExcitedStatesConfigurator.C	Strength	bare	1
@@ -92,6 +108,8 @@ src/Configurator/FrequenciesConfigurator.C	Raman (Å4/amu)	bare	1
 src/Configurator/FrequenciesConfigurator.C	Raman (Å4/amu)	call:setText	1
 src/Configurator/FrequenciesConfigurator.C	Rel. Intensity	bare	2
 src/Configurator/FrequenciesConfigurator.C	Rel. Intensity	call:m_spectrum->yAxis->setLabel	2
+src/Configurator/GeminalOrbitalsConfigurator.C	Energy/Hartree	bare	1
+src/Configurator/GeminalOrbitalsConfigurator.C	Energy/Hartree	call:m_customPlot->yAxis->setLabel	1
 src/Configurator/GeminalOrbitalsConfigurator.C	Geminal	bare	1
 src/Configurator/GeminalOrbitalsConfigurator.C	Geminal	call:m_configurator.surfaceType->addItem	1
 src/Configurator/GeminalOrbitalsConfigurator.C	Geminal Correlation	bare	1
@@ -144,6 +162,8 @@ src/Configurator/OrbitalsConfigurator.C	Complex Alpha Orbital	bare	1
 src/Configurator/OrbitalsConfigurator.C	Complex Beta Orbital	bare	1
 src/Configurator/OrbitalsConfigurator.C	Dyson (Left)	bare	1
 src/Configurator/OrbitalsConfigurator.C	Dyson (Right)	bare	1
+src/Configurator/OrbitalsConfigurator.C	Energy/Hartree	bare	1
+src/Configurator/OrbitalsConfigurator.C	Energy/Hartree	call:m_customPlot->yAxis->setLabel	1
 src/Configurator/OrbitalsConfigurator.C	Function(s):	bare	1
 src/Configurator/OrbitalsConfigurator.C	Function(s):	call:m_configurator.orbitalLabel->setText	1
 src/Configurator/OrbitalsConfigurator.C	Occupancy	bare	1
@@ -216,6 +236,7 @@ src/Layer/BackgroundLayer.C	Background	call:setText	1
 src/Layer/BackgroundLayer.C	Edit Color	bare	1
 src/Layer/BackgroundLayer.C	Edit Color	call:newAction	1
 src/Layer/ComponentLayer.C	Surfaces	bare	1
+src/Layer/ComponentLayer.C	Translate to center	bare	1
 src/Layer/ConstraintLayer.C	Configure	bare	1
 src/Layer/ConstraintLayer.C	Configure	call:newAction	1
 src/Layer/ConstraintLayer.C	Delete	bare	1
@@ -238,6 +259,7 @@ src/Layer/GeminalOrbitalsLayer.C	Edit Bounding Box	bare	1
 src/Layer/GeminalOrbitalsLayer.C	Edit Bounding Box	call:newAction	1
 src/Layer/GeminalOrbitalsLayer.C	Geminal Orbitals	bare	1
 src/Layer/GeminalOrbitalsLayer.C	Geminal Orbitals	call:setText	1
+src/Layer/GeminalOrbitalsLayer.C	Problem calculating grid data	bare	1
 src/Layer/GeminalOrbitalsLayer.C	Show Grid Info	bare	1
 src/Layer/GeminalOrbitalsLayer.C	Show Grid Info	call:newAction	1
 src/Layer/GeometryListLayer.C	Copy Geometry	bare	1
@@ -247,6 +269,8 @@ src/Layer/GeometryListLayer.C	Remove	call:geometry->newAction	2
 src/Layer/GeometryListLayer.C	Remove	call:layer->newAction	2
 src/Layer/GroupLayer.C	Add Hydrogens	bare	1
 src/Layer/GroupLayer.C	Add Hydrogens	call:newAction	1
+src/Layer/GroupLayer.C	Alignment failed in Group::align	bare	1
+src/Layer/GroupLayer.C	Coordinate mismatch in Group alignment	bare	1
 src/Layer/GroupLayer.C	Reperceive Bonds	bare	1
 src/Layer/GroupLayer.C	Reperceive Bonds	call:newAction	1
 src/Layer/InfoLayer.C	Info	bare	1
@@ -256,10 +280,13 @@ src/Layer/MolecularSurfacesLayer.C	Surfaces	bare	1
 src/Layer/MolecularSurfacesLayer.C	Surfaces	call:Base	1
 src/Layer/MoleculeLayer.C	Add Hydrogens	bare	1
 src/Layer/MoleculeLayer.C	Add Hydrogens	call:newAction	1
+src/Layer/MoleculeLayer.C	Atempt to remove unknown primitive type to molecule	bare	1
+src/Layer/MoleculeLayer.C	Atom selection required	bare	2
 src/Layer/MoleculeLayer.C	Atomic Charges	bare	1
 src/Layer/MoleculeLayer.C	Atomic Charges	call:newAction	1
 src/Layer/MoleculeLayer.C	Atoms	bare	1
 src/Layer/MoleculeLayer.C	Atoms	call:m_atomList.setText	1
+src/Layer/MoleculeLayer.C	Attempt to add unknown primitive type to molecule	bare	1
 src/Layer/MoleculeLayer.C	Bonds	bare	1
 src/Layer/MoleculeLayer.C	Bonds	call:m_bondList.setText	1
 src/Layer/MoleculeLayer.C	CHELPG	bare	1
@@ -289,6 +316,7 @@ src/Layer/MoleculeLayer.C	Merz-Kollman ESP	bare	1
 src/Layer/MoleculeLayer.C	Merz-Kollman ESP	call:menu->addAction	1
 src/Layer/MoleculeLayer.C	Merz-Kollman RESP	bare	1
 src/Layer/MoleculeLayer.C	Merz-Kollman RESP	call:menu->addAction	1
+src/Layer/MoleculeLayer.C	Minimize energy	bare	1
 src/Layer/MoleculeLayer.C	Mulliken	bare	1
 src/Layer/MoleculeLayer.C	Mulliken	call:menu->addAction	1
 src/Layer/MoleculeLayer.C	Multipole Derived	bare	1
@@ -297,14 +325,20 @@ src/Layer/MoleculeLayer.C	Natural	bare	1
 src/Layer/MoleculeLayer.C	Natural	call:menu->addAction	1
 src/Layer/MoleculeLayer.C	Remove	bare	1
 src/Layer/MoleculeLayer.C	Remove	call:newAction	1
+src/Layer/MoleculeLayer.C	Remove atoms/bonds	bare	1
+src/Layer/MoleculeLayer.C	Remove atoms/bonds	call:Command::EditPrimitives	1
 src/Layer/MoleculeLayer.C	Reperceive Bonds	bare	1
 src/Layer/MoleculeLayer.C	Reperceive Bonds	call:newAction	1
+src/Layer/MoleculeLayer.C	Reperceive bonds	bare	1
+src/Layer/MoleculeLayer.C	Reperceive bonds	call:Command::EditPrimitives	1
 src/Layer/MoleculeLayer.C	Save As	bare	1
 src/Layer/MoleculeLayer.C	Save As	call:newAction	1
 src/Layer/MoleculeLayer.C	Scan Coordinates	bare	1
 src/Layer/MoleculeLayer.C	Scan Coordinates	call:m_scanList.setText	1
 src/Layer/MoleculeLayer.C	Select All	bare	1
 src/Layer/MoleculeLayer.C	Select All	call:newAction	1
+src/Layer/MoleculeLayer.C	Symmetrize structure	bare	1
+src/Layer/MoleculeLayer.C	Unable to nest fragments	bare	1
 src/Layer/MoleculeLayer.C	Untitled	bare	2
 src/Layer/MoleculeLayer.C	Untitled	call:Component	2
 src/Layer/NmrLayer.C	NMR	bare	1
@@ -315,10 +349,14 @@ src/Layer/OrbitalsLayer.C	Edit Bounding Box	bare	1
 src/Layer/OrbitalsLayer.C	Edit Bounding Box	call:newAction	1
 src/Layer/OrbitalsLayer.C	Show Grid Info	bare	1
 src/Layer/OrbitalsLayer.C	Show Grid Info	call:newAction	1
+src/Layer/OrbitalsLayer.C	Still processing previous grid data request	bare	1
 src/Layer/SolventLayer.C	Solvent	bare	1
 src/Layer/SolventLayer.C	Solvent	call:setText	1
+src/Layer/SurfaceLayer.C	Configure Surface: 	bare	1
+src/Layer/SurfaceLayer.C	Configure Surface: 	call:m_configurator.setWindowTitle	1
 src/Layer/SurfaceLayer.C	Decimate	bare	1
 src/Layer/SurfaceLayer.C	Decimate	call:newAction	1
+src/Layer/SurfaceLayer.C	Mesh simplification in progress	bare	1
 src/Layer/SurfaceLayer.C	Print Mesh Info	bare	1
 src/Layer/SurfaceLayer.C	Print Mesh Info	call:newAction	1
 src/Layer/SurfaceLayer.C	Show Face Normals	bare	1
@@ -331,6 +369,7 @@ src/Layer/SystemLayer.C	Box System	bare	1
 src/Layer/SystemLayer.C	Box System	call:newAction	1
 src/Layer/SystemLayer.C	Export PDB	bare	1
 src/Layer/SystemLayer.C	Export PDB	call:newAction	1
+src/Layer/SystemLayer.C	Failed to open PDB file for writing	bare	1
 src/Layer/SystemLayer.C	Info	bare	1
 src/Layer/SystemLayer.C	Molecule	bare	2
 src/Layer/SystemLayer.C	Molecule	call:molecule->setText	2
@@ -361,6 +400,8 @@ src/Main/MainWindow.C	Clear List	bare	1
 src/Main/MainWindow.C	Clear List	call:m_recentFilesMenu->addAction	1
 src/Main/MainWindow.C	Close Viewer	bare	1
 src/Main/MainWindow.C	Copy	bare	1
+src/Main/MainWindow.C	Could not create a temporary file to open the user manual.	bare	1
+src/Main/MainWindow.C	Could not launch the PDF viewer. Please open it manually: 	bare	1
 src/Main/MainWindow.C	Cut	bare	1
 src/Main/MainWindow.C	Discard	bare	1
 src/Main/MainWindow.C	Discard	call:messageBox.addButton	1
@@ -385,8 +426,8 @@ src/Main/MainWindow.C	Help	bare	1
 src/Main/MainWindow.C	Help	call:addMenu	1
 src/Main/MainWindow.C	History:	bare	1
 src/Main/MainWindow.C	History:	call:m_undoStackView.setEmptyLabel	1
-src/Main/MainWindow.C	IQmol	bare	1
-src/Main/MainWindow.C	IQmol	call:setWindowTitle	1
+src/Main/MainWindow.C	IQmol	bare	4
+src/Main/MainWindow.C	IQmol	call:setWindowTitle	4
 src/Main/MainWindow.C	Index	bare	1
 src/Main/MainWindow.C	Insert Molecule by ID	bare	1
 src/Main/MainWindow.C	Invert Selection	bare	1
@@ -433,12 +474,17 @@ src/Main/MainWindow.C	Symmetrize Molecule	bare	1
 src/Main/MainWindow.C	Translate To Center	bare	1
 src/Main/MainWindow.C	Undo	bare	1
 src/Main/MainWindow.C	Use <esc> to exit full screen mode	bare	1
+src/Main/MainWindow.C	User Manual (PDF)	bare	1
 src/Main/MainWindow.C	Welcome to IQmol	bare	1
 src/Main/MainWindow.C	Welcome to IQmol	call:m_statusWidget.showMessage	1
 src/Main/MainWindow.C	Wonky molecule detected	bare	1
 src/Main/MainWindow.C	Wonky molecule detected	call:mbox.setText	1
+src/Network/AwsConnection.C	Passwords do not match	bare	1
+src/Network/Network.C	Invalid username or password	translate:IQmol::Network	1
+src/Parser/QChemOutputParser.C	 energy	translate:IQmol::Parser::QChemOutput	1
 src/Plot/CustomPlot.C	Save Image As	bare	1
 src/Plot/CustomPlot.C	Save Image As	call:menu->addAction	1
+src/Process/AwsConfigurationDialog.C	Cognito Pool ID should start with the AWS region	bare	1
 src/Process/JobInfo.C	Copying	translate:JobInfo	1
 src/Process/JobInfo.C	Error	translate:JobInfo	1
 src/Process/JobInfo.C	Finished	translate:JobInfo	1
@@ -450,16 +496,33 @@ src/Process/JobInfo.C	Suspended	translate:JobInfo	1
 src/Process/JobInfo.C	Unknown	translate:JobInfo	1
 src/Process/JobMonitor.C	Cancel Copy	bare	1
 src/Process/JobMonitor.C	Cancel Copy	call:menu->addAction	1
+src/Process/JobMonitor.C	Copy results from server?	bare	1
 src/Process/JobMonitor.C	Delete Job From Queue	bare	1
 src/Process/JobMonitor.C	Delete Job From Queue	call:menu->addAction	1
+src/Process/JobMonitor.C	Directory name cannot contain spaces	bare	1
+src/Process/JobMonitor.C	Error encountered	bare	1
+src/Process/JobMonitor.C	Invalid username or password	bare	1
 src/Process/JobMonitor.C	Kill Job	bare	1
 src/Process/JobMonitor.C	Kill Job	call:menu->addAction	1
+src/Process/JobMonitor.C	Network timeout	bare	1
+src/Process/JobMonitor.C	Output file no longer exists	bare	1
 src/Process/QueueOptionsDialog.C	Download	bare	2
 src/Process/QueueOptionsDialog.C	Download	call:m_dialog.queueInfoLabel->setText	2
 src/Process/QueueOptionsDialog.C	Executable	bare	1
 src/Process/QueueOptionsDialog.C	Executable	call:m_dialog.queueInfoLabel->setText	1
 src/Process/QueueOptionsDialog.C	Job Info	bare	1
 src/Process/QueueOptionsDialog.C	Job Info	call:m_dialog.jobFileListLabel->setText	1
+src/Process/QueueResourcesDialog.C	Memory exceeds queue limit of 	bare	1
+src/Process/QueueResourcesDialog.C	No queues found on server	bare	1
+src/Process/QueueResourcesDialog.C	Number of CPUs exceeds queue limit of 	bare	1
+src/Process/QueueResourcesDialog.C	Scratch exceeds queue limit of 	bare	1
+src/Process/QueueResourcesDialog.C	Validated wall time not in the format h:mm:ss	bare	1
+src/Process/QueueResourcesDialog.C	Wall time exceeds queue maximum of 	bare	1
+src/Process/QueueResourcesDialog.C	Wall time must be in the format h:mm:ss	bare	1
+src/Process/ServerConfigurationDialog.C	Failed to export server configuration	bare	1
+src/Process/ServerConfigurationDialog.C	Host address not set	bare	1
+src/Process/ServerConfigurationDialog.C	Server name not set	bare	1
+src/Process/ServerConfigurationDialog.C	User name must be set	bare	1
 src/Qui/GeometryConstraint.C	A constraint involving the following atoms has already been defined:\n	bare	1
 src/Qui/GeometryConstraint.C	A constraint involving the following atoms has already been defined:\n	call:msg	1
 src/Qui/GeometryConstraint.C	Are you sure you want to delete the selected constraint?	bare	1
@@ -479,15 +542,24 @@ src/Qui/GeometryConstraint.C	Perpendicular	translate:Qui::GeometryConstraint	1
 src/Qui/GeometryConstraint.C	Stretch	translate:Qui::GeometryConstraint	1
 src/Qui/GeometryConstraint.C	The following constraint is invalid:\n	bare	1
 src/Qui/GeometryConstraint.C	The following constraint is invalid:\n	call:msg	1
+src/Qui/GeometryConstraint.C	Warning	bare	1
 src/Qui/InputDialog.C	Are you sure you want to delete all generated input?	bare	1
 src/Qui/InputDialog.C	Are you sure you want to delete all generated input?	call:msg	1
+src/Qui/InputDialog.C	Are you sure you want to delete the section %1?	bare	1
+src/Qui/InputDialog.C	Are you sure you want to delete the section %1?	call:msg	1
 src/Qui/InputDialog.C	Bigger	bare	1
 src/Qui/InputDialog.C	Close	bare	1
 src/Qui/InputDialog.C	Copy	bare	1
+src/Qui/InputDialog.C	Could not write to file '%1'\nInput file not saved\n	bare	1
+src/Qui/InputDialog.C	Could not write to file '%1'\nInput file not saved\n	call:msg	1
 src/Qui/InputDialog.C	Cut	bare	1
+src/Qui/InputDialog.C	Delete Section?	bare	1
 src/Qui/InputDialog.C	Delete input?	bare	1
+src/Qui/InputDialog.C	File Not Saved	bare	1
 src/Qui/InputDialog.C	New Job Section	bare	1
 src/Qui/InputDialog.C	Paste	bare	1
+src/Qui/InputDialog.C	QChem Input File Editor	bare	2
+src/Qui/InputDialog.C	QChem Input File Editor	call:setWindowTitle	2
 src/Qui/InputDialog.C	Reset Input	bare	1
 src/Qui/InputDialog.C	Save As	bare	1
 src/Qui/InputDialog.C	Set Font	bare	1
@@ -514,6 +586,8 @@ src/Util/ColorDialog.C	Spectrum	bare	1
 src/Util/ColorDialog.C	Spectrum	call:combo->addItem	1
 src/Util/LogMessageDialog.C	Logging disabled	bare	1
 src/Util/LogMessageDialog.C	Logging disabled	call:m_logMessageDialog.logTextBrowser->setText	1
+src/Viewer/BuildEfpFragmentHandler.C	Add EFP fragment	translate:Handler::BuildEfpFragment	1
+src/Viewer/BuildMoleculeFragmentHandler.C	Add molecule	translate:Handler::BuildMoleculeFragment	1
 src/Viewer/CameraDialog.C	Camera Position	bare	1
 src/Viewer/CameraDialog.C	Camera Position	call:setText	1
 src/Viewer/CameraDialog.C	Time (s)	bare	1
@@ -523,18 +597,24 @@ src/Viewer/ShaderDialog.C	Black	bare	1
 src/Viewer/ShaderDialog.C	Default	bare	1
 src/Viewer/ShaderDialog.C	None	bare	1
 src/Viewer/ShaderDialog.C	White	bare	1
+src/Viewer/Snapshot.C	Could not remove existing file 	bare	1
+src/Viewer/Snapshot.C	Movie making already in progress, please wait	bare	1
+src/Viewer/Snapshot.C	ffmpeg executable not found	bare	1
 src/Viewer/UndoCommands.C	Add constraint	translate:UndoCommands	1
 src/Viewer/UndoCommands.C	Add scan coordinated	translate:UndoCommands	1
 src/Viewer/UndoCommands.C	Change atom type	translate:UndoCommands	1
 src/Viewer/UndoCommands.C	Change bond order	translate:UndoCommands	1
 src/Viewer/UndoCommands.C	Load file %1	translate:UndoCommands	1
+src/Viewer/UndoCommands.C	Move items	translate:UndoCommands	2
 src/Viewer/UndoCommands.C	New molecule	translate:UndoCommands	1
 src/Viewer/UndoCommands.C	New system	translate:UndoCommands	1
 src/Viewer/UndoCommands.C	Remove 	translate:UndoCommands	1
 src/Viewer/UndoCommands.C	Remove molecule	translate:UndoCommands	1
 src/Viewer/UndoCommands.C	Remove system	translate:UndoCommands	1
+src/Viewer/UndoCommands.h	Minimize energy	bare	1
 src/Viewer/ViewerModel.C	Global	bare	1
 src/Viewer/ViewerModel.C	Global	call:m_global	1
+src/Viewer/ViewerModel.C	Invalid string	bare	1
 src/Viewer/ViewerModel.C	Model View	bare	1
 src/Viewer/ViewerModelView.C	Hide Molecules	bare	1
 src/Viewer/ViewerModelView.C	Hide Molecules	call:QAction	1

@@ -101,11 +101,6 @@
         <translation>内层轨道</translation>
     </message>
     <message>
-        <source>Core Orbitals</source>
-        <comment>内层(芯层)轨道。</comment>
-        <translation>内层轨道</translation>
-    </message>
-    <message>
         <location filename="../src/Qui/AdcTab.ui" line="83"/>
         <source>Two-Photon Absorption</source>
         <translation>双光子吸收</translation>
@@ -627,11 +622,6 @@ QToolButton:pressed {
         <translation>分析弛豫密度</translation>
     </message>
     <message>
-        <source>Analyze Relaxed Density</source>
-        <comment>relaxed density 标准译法：弛豫密度。</comment>
-        <translation>分析弛豫密度</translation>
-    </message>
-    <message>
         <location filename="../src/Qui/CisTab.ui" line="132"/>
         <source>NTO Pairs</source>
         <translation>NTO 对</translation>
@@ -750,16 +740,6 @@ QToolButton:pressed {
         <translation>色标</translation>
     </message>
     <message>
-        <source>Chroma</source>
-        <comment>Chroma=彩度(饱和度)；Hue=色相；Lightness=明度。色彩三属性需区分。</comment>
-        <translation>彩度</translation>
-    </message>
-    <message>
-        <source>Hue</source>
-        <comment>Hue=色相(色彩三属性之一)；Chroma=彩度/饱和度，二者不同。</comment>
-        <translation>色相</translation>
-    </message>
-    <message>
         <location filename="../src/Util/ColorDialog.ui" line="305"/>
         <source>...</source>
         <translation>...</translation>
@@ -783,11 +763,6 @@ QToolButton:pressed {
         <location filename="../src/Util/ColorDialog.ui" line="383"/>
         <source>Custom</source>
         <translation>自定义</translation>
-    </message>
-    <message>
-        <source>Stops</source>
-        <comment>颜色渐变的色标(stop point)；不是“停止”。</comment>
-        <translation>色标</translation>
     </message>
     <message>
         <location filename="../src/Util/ColorDialog.ui" line="436"/>
@@ -889,11 +864,6 @@ QToolButton:pressed {
     <message>
         <location filename="../src/Util/ColorGradientDialog.ui" line="183"/>
         <source>Stops</source>
-        <translation>色标</translation>
-    </message>
-    <message>
-        <source>Stops</source>
-        <comment>颜色渐变的色标(stop point)；不是“停止”。</comment>
         <translation>色标</translation>
     </message>
     <message>
@@ -1179,11 +1149,6 @@ Uncheck if only one surface is desired.</source>
         <translation>固定</translation>
     </message>
     <message>
-        <source>Fix</source>
-        <comment>几何约束中固定原子坐标；不是修复缺陷。</comment>
-        <translation>固定</translation>
-    </message>
-    <message>
         <location filename="../src/Qui/GeometryConstraintDialog.ui" line="458"/>
         <source>X</source>
         <translation>X</translation>
@@ -1399,11 +1364,6 @@ Uncheck if only one surface is desired.</source>
 </context>
 <context>
     <name>EfpFragmentListConfigurator</name>
-    <message>
-        <source>Configure EFP Fragments</source>
-        <comment>与“片段表”统一。</comment>
-        <translation>配置 EFP 片段</translation>
-    </message>
     <message>
         <location filename="../src/Configurator/EfpFragmentListConfigurator.ui" line="14"/>
         <source>Configure EFP Fragments</source>
@@ -1661,11 +1621,6 @@ QToolButton:pressed {
         <translation>帧</translation>
     </message>
     <message>
-        <source>Functional Group</source>
-        <comment>分子结构中的官能团；不是 DFT 交换相关泛函。</comment>
-        <translation>官能团</translation>
-    </message>
-    <message>
         <location filename="../src/Main/FragmentTable.ui" line="28"/>
         <source>Functional Group</source>
         <translation>官能团</translation>
@@ -1733,7 +1688,7 @@ QToolButton:pressed {
     <message>
         <location filename="../src/Main/FragmentTable.ui" line="160"/>
         <source>Bases</source>
-        <translation>碱</translation>
+        <translation>碱基</translation>
     </message>
     <message>
         <location filename="../src/Main/FragmentTable.ui" line="182"/>
@@ -1745,1198 +1700,1198 @@ QToolButton:pressed {
         <source>Select</source>
         <translation>选择</translation>
     </message>
-    <message>
-        <source>1 2-Oxazole</source>
-        <translation>1,2-噁唑</translation>
-    </message>
-    <message>
-        <source>1 2-Thiazole</source>
-        <translation>1,2-噻唑</translation>
-    </message>
-    <message>
-        <source>1 3-Oxazole</source>
-        <translation>1,3-噁唑</translation>
-    </message>
-    <message>
-        <source>1 3-Thiazole</source>
-        <translation>1,3-噻唑</translation>
-    </message>
-    <message>
-        <source>12-Crown-4</source>
-        <translation>12-冠-4</translation>
-    </message>
-    <message>
-        <source>15-Crown-5</source>
-        <translation>15-冠-5</translation>
-    </message>
-    <message>
-        <source>18-Crown-6</source>
-        <translation>18-冠-6</translation>
-    </message>
-    <message>
-        <source>1H-Indene</source>
-        <translation>1H-茚</translation>
-    </message>
-    <message>
-        <source>1H-Indole</source>
-        <translation>1H-吲哚</translation>
-    </message>
-    <message>
-        <source>1H-Pyrazole</source>
-        <translation>1H-吡唑</translation>
-    </message>
-    <message>
-        <source>1H-Pyrrole</source>
-        <translation>1H-吡咯</translation>
-    </message>
-    <message>
-        <source>2 2 2-Trichloroacetic acid</source>
-        <translation>2,2,2-三氯乙酸</translation>
-    </message>
-    <message>
-        <source>2 2 2-Trifluoroacetic acid</source>
-        <translation>2,2,2-三氟乙酸</translation>
-    </message>
-    <message>
-        <source>2 2-Dichloroacetic acid</source>
-        <translation>2,2-二氯乙酸</translation>
-    </message>
-    <message>
-        <source>2-Methylpropane</source>
-        <translation>2-甲基丙烷</translation>
-    </message>
-    <message>
-        <source>3-Trigonal-planar</source>
-        <translation>3-平面三角形</translation>
-    </message>
-    <message>
-        <source>3-Trigonal-pyramidal</source>
-        <translation>3-三角锥形</translation>
-    </message>
-    <message>
-        <source>4-Planar</source>
-        <translation>4-平面形</translation>
-    </message>
-    <message>
-        <source>4-Tetrahedral</source>
-        <translation>4-四面体形</translation>
-    </message>
-    <message>
-        <source>5-Square-pyramidal</source>
-        <translation>5-四方锥形</translation>
-    </message>
-    <message>
-        <source>5-Trigonal-bipyramidal</source>
-        <translation>5-三角双锥形</translation>
-    </message>
-    <message>
-        <source>6-Octahedral</source>
-        <translation>6-八面体形</translation>
-    </message>
-    <message>
-        <source>ACETONE (L)</source>
-        <translation>丙酮 (L)</translation>
-    </message>
-    <message>
-        <source>ACETONITRILE (L)</source>
-        <translation>乙腈 (L)</translation>
-    </message>
-    <message>
-        <source>ADENINE (L)</source>
-        <translation>腺嘌呤 (L)</translation>
-    </message>
-    <message>
-        <source>AMMONIA (L)</source>
-        <translation>氨 (L)</translation>
-    </message>
-    <message>
-        <source>Acenaphthene</source>
-        <translation>苊</translation>
-    </message>
-    <message>
-        <source>Acetaldehyde</source>
-        <translation>乙醛</translation>
-    </message>
-    <message>
-        <source>Acetamide</source>
-        <translation>乙酰胺</translation>
-    </message>
-    <message>
-        <source>Acetic acid</source>
-        <translation>乙酸</translation>
-    </message>
-    <message>
-        <source>Acetylene</source>
-        <translation>乙炔</translation>
-    </message>
-    <message>
-        <source>Adamantane</source>
-        <translation>金刚烷</translation>
-    </message>
-    <message>
-        <source>Adenine</source>
-        <translation>腺嘌呤</translation>
-    </message>
-    <message>
-        <source>Alcohol</source>
-        <translation>醇</translation>
-    </message>
-    <message>
-        <source>Alcohols</source>
-        <translation>醇类</translation>
-    </message>
-    <message>
-        <source>Aldehyde</source>
-        <translation>醛</translation>
-    </message>
-    <message>
-        <source>Aldehydes</source>
-        <translation>醛类</translation>
-    </message>
-    <message>
-        <source>Alkanes</source>
-        <translation>烷烃</translation>
-    </message>
-    <message>
-        <source>Alkenes</source>
-        <translation>烯烃</translation>
-    </message>
-    <message>
-        <source>Alkynes</source>
-        <translation>炔烃</translation>
-    </message>
-    <message>
-        <source>Amide-C</source>
-        <translation>酰胺（C 位）</translation>
-    </message>
-    <message>
-        <source>Amide-N</source>
-        <translation>酰胺（N 位）</translation>
-    </message>
-    <message>
-        <source>Amides</source>
-        <translation>酰胺类</translation>
-    </message>
-    <message>
-        <source>Amine</source>
-        <translation>胺</translation>
-    </message>
-    <message>
-        <source>Amines</source>
-        <translation>胺类</translation>
-    </message>
-    <message>
-        <source>Amino Acids</source>
-        <translation>氨基酸</translation>
-    </message>
-    <message>
-        <source>Aniline</source>
-        <translation>苯胺</translation>
-    </message>
-    <message>
-        <source>Anisole</source>
-        <translation>苯甲醚</translation>
-    </message>
-    <message>
-        <source>Annulene</source>
-        <translation>轮烯</translation>
-    </message>
-    <message>
-        <source>Anthracene</source>
-        <translation>蒽</translation>
-    </message>
-    <message>
-        <source>Aromatics</source>
-        <translation>芳烃</translation>
-    </message>
-    <message>
-        <source>Azepane</source>
-        <translation>氮杂环庚烷</translation>
-    </message>
-    <message>
-        <source>Azulene</source>
-        <translation>薁</translation>
-    </message>
-    <message>
-        <source>BENZENE (L)</source>
-        <translation>苯 (L)</translation>
-    </message>
-    <message>
-        <source>Benz-a-anthracene</source>
-        <translation>苯并[a]蒽</translation>
-    </message>
-    <message>
-        <source>Benzaldehyde</source>
-        <translation>苯甲醛</translation>
-    </message>
-    <message>
-        <source>Benzo-c-phenanthrene</source>
-        <translation>苯并[c]菲</translation>
-    </message>
-    <message>
-        <source>Benzofuran</source>
-        <translation>苯并呋喃</translation>
-    </message>
-    <message>
-        <source>Benzoic acid</source>
-        <translation>苯甲酸</translation>
-    </message>
-    <message>
-        <source>Benzothiophene</source>
-        <translation>苯并噻吩</translation>
-    </message>
-    <message>
-        <source>Benzoyl chloride</source>
-        <translation>苯甲酰氯</translation>
-    </message>
-    <message>
-        <source>Boron Groups</source>
-        <translation>硼基团</translation>
-    </message>
-    <message>
-        <source>Boronic Acid</source>
-        <translation>硼酸</translation>
-    </message>
-    <message>
-        <source>Buckminsterfullerene</source>
-        <translation>巴基敏斯特富勒烯</translation>
-    </message>
-    <message>
-        <source>But-1-ene</source>
-        <translation>1-丁烯</translation>
-    </message>
-    <message>
-        <source>Butanoic acid</source>
-        <translation>丁酸</translation>
-    </message>
-    <message>
-        <source>Butanone</source>
-        <translation>丁酮</translation>
-    </message>
-    <message>
-        <source>CCL4 (L)</source>
-        <translation>四氯化碳 (L)</translation>
-    </message>
-    <message>
-        <source>CYTOSINE C1 (L)</source>
-        <translation>胞嘧啶 C1 (L)</translation>
-    </message>
-    <message>
-        <source>CYTOSINE C2A (L)</source>
-        <translation>胞嘧啶 C2A (L)</translation>
-    </message>
-    <message>
-        <source>CYTOSINE C2B (L)</source>
-        <translation>胞嘧啶 C2B (L)</translation>
-    </message>
-    <message>
-        <source>CYTOSINE C3A (L)</source>
-        <translation>胞嘧啶 C3A (L)</translation>
-    </message>
-    <message>
-        <source>CYTOSINE C3B (L)</source>
-        <translation>胞嘧啶 C3B (L)</translation>
-    </message>
-    <message>
-        <source>Caffeine</source>
-        <translation>咖啡因</translation>
-    </message>
-    <message>
-        <source>Calix-4-arene</source>
-        <translation>杯[4]芳烃</translation>
-    </message>
-    <message>
-        <source>Carbamides</source>
-        <translation>氨基甲酸酯类</translation>
-    </message>
-    <message>
-        <source>Carbohydrates</source>
-        <translation>糖类</translation>
-    </message>
-    <message>
-        <source>Carboxylate</source>
-        <translation>羧酸根</translation>
-    </message>
-    <message>
-        <source>Carboxylic Acid</source>
-        <translation>羧酸</translation>
-    </message>
-    <message>
-        <source>Carboxylic Acids</source>
-        <translation>羧酸类</translation>
-    </message>
-    <message>
-        <source>Cholesterol</source>
-        <translation>胆固醇</translation>
-    </message>
-    <message>
-        <source>Chrysene</source>
-        <translation>䓛</translation>
-    </message>
-    <message>
-        <source>Circumcoronene</source>
-        <translation>周晕苯</translation>
-    </message>
-    <message>
-        <source>Citric acid</source>
-        <translation>柠檬酸</translation>
-    </message>
-    <message>
-        <source>Coordination</source>
-        <translation>配位化合物</translation>
-    </message>
-    <message>
-        <source>Corannulene</source>
-        <translation>碗烯</translation>
-    </message>
-    <message>
-        <source>Coronene</source>
-        <translation>晕苯</translation>
-    </message>
-    <message>
-        <source>Cubane</source>
-        <translation>立方烷</translation>
-    </message>
-    <message>
-        <source>Cucurbit-4-uril</source>
-        <translation>葫芦[4]脲</translation>
-    </message>
-    <message>
-        <source>Cucurbit-5-uril</source>
-        <translation>葫芦[5]脲</translation>
-    </message>
-    <message>
-        <source>Cucurbit-6-uril</source>
-        <translation>葫芦[6]脲</translation>
-    </message>
-    <message>
-        <source>Cucurbit-7-uril</source>
-        <translation>葫芦[7]脲</translation>
-    </message>
-    <message>
-        <source>Cucurbit-8-uril</source>
-        <translation>葫芦[8]脲</translation>
-    </message>
-    <message>
-        <source>Cyanate</source>
-        <translation>氰酸酯</translation>
-    </message>
-    <message>
-        <source>Cyclic Alkanes</source>
-        <translation>环烷烃</translation>
-    </message>
-    <message>
-        <source>Cyclic Alkenes</source>
-        <translation>环烯烃</translation>
-    </message>
-    <message>
-        <source>Cyclic Sugars</source>
-        <translation>环状糖</translation>
-    </message>
-    <message>
-        <source>Cyclobutane</source>
-        <translation>环丁烷</translation>
-    </message>
-    <message>
-        <source>Cycloheptane</source>
-        <translation>环庚烷</translation>
-    </message>
-    <message>
-        <source>Cyclohexane</source>
-        <translation>环己烷</translation>
-    </message>
-    <message>
-        <source>Cyclopentane</source>
-        <translation>环戊烷</translation>
-    </message>
-    <message>
-        <source>Cyclopropane</source>
-        <translation>环丙烷</translation>
-    </message>
-    <message>
-        <source>Cytosine</source>
-        <translation>胞嘧啶</translation>
-    </message>
-    <message>
-        <source>D-Alanine</source>
-        <translation>D-丙氨酸</translation>
-    </message>
-    <message>
-        <source>D-Allo-threonine</source>
-        <translation>D-别苏氨酸</translation>
-    </message>
-    <message>
-        <source>D-Allose</source>
-        <translation>D-阿洛糖</translation>
-    </message>
-    <message>
-        <source>D-Altrose</source>
-        <translation>D-阿卓糖</translation>
-    </message>
-    <message>
-        <source>D-Arabinose</source>
-        <translation>D-阿拉伯糖</translation>
-    </message>
-    <message>
-        <source>D-Arginine</source>
-        <translation>D-精氨酸</translation>
-    </message>
-    <message>
-        <source>D-Asparagine</source>
-        <translation>D-天冬酰胺</translation>
-    </message>
-    <message>
-        <source>D-Aspartic acid</source>
-        <translation>D-天冬氨酸</translation>
-    </message>
-    <message>
-        <source>D-Cysteine</source>
-        <translation>D-半胱氨酸</translation>
-    </message>
-    <message>
-        <source>D-Erythrose</source>
-        <translation>D-赤藓糖</translation>
-    </message>
-    <message>
-        <source>D-Erythrulose</source>
-        <translation>D-赤藓酮糖</translation>
-    </message>
-    <message>
-        <source>D-Fructose</source>
-        <translation>D-果糖</translation>
-    </message>
-    <message>
-        <source>D-Galactose</source>
-        <translation>D-半乳糖</translation>
-    </message>
-    <message>
-        <source>D-Glucose</source>
-        <translation>D-葡萄糖</translation>
-    </message>
-    <message>
-        <source>D-Glutamic acid</source>
-        <translation>D-谷氨酸</translation>
-    </message>
-    <message>
-        <source>D-Glutamine</source>
-        <translation>D-谷氨酰胺</translation>
-    </message>
-    <message>
-        <source>D-Glyceraldehyde</source>
-        <translation>D-甘油醛</translation>
-    </message>
-    <message>
-        <source>D-Gulose</source>
-        <translation>D-古洛糖</translation>
-    </message>
-    <message>
-        <source>D-Histidine</source>
-        <translation>D-组氨酸</translation>
-    </message>
-    <message>
-        <source>D-Idose</source>
-        <translation>D-艾杜糖</translation>
-    </message>
-    <message>
-        <source>D-Isoleucine</source>
-        <translation>D-异亮氨酸</translation>
-    </message>
-    <message>
-        <source>D-Lactic acid</source>
-        <translation>D-乳酸</translation>
-    </message>
-    <message>
-        <source>D-Leucine</source>
-        <translation>D-亮氨酸</translation>
-    </message>
-    <message>
-        <source>D-Lysine</source>
-        <translation>D-赖氨酸</translation>
-    </message>
-    <message>
-        <source>D-Lyxose</source>
-        <translation>D-来苏糖</translation>
-    </message>
-    <message>
-        <source>D-Malic acid</source>
-        <translation>D-苹果酸</translation>
-    </message>
-    <message>
-        <source>D-Mannose</source>
-        <translation>D-甘露糖</translation>
-    </message>
-    <message>
-        <source>D-Methionine</source>
-        <translation>D-甲硫氨酸</translation>
-    </message>
-    <message>
-        <source>D-Phenylalanine</source>
-        <translation>D-苯丙氨酸</translation>
-    </message>
-    <message>
-        <source>D-Proline</source>
-        <translation>D-脯氨酸</translation>
-    </message>
-    <message>
-        <source>D-Psicose</source>
-        <translation>D-阿洛酮糖</translation>
-    </message>
-    <message>
-        <source>D-Ribose</source>
-        <translation>D-核糖</translation>
-    </message>
-    <message>
-        <source>D-Ribulose</source>
-        <translation>D-核酮糖</translation>
-    </message>
-    <message>
-        <source>D-Serine</source>
-        <translation>D-丝氨酸</translation>
-    </message>
-    <message>
-        <source>D-Sorbose</source>
-        <translation>D-山梨糖</translation>
-    </message>
-    <message>
-        <source>D-Tagatose</source>
-        <translation>D-塔格糖</translation>
-    </message>
-    <message>
-        <source>D-Talose</source>
-        <translation>D-塔罗糖</translation>
-    </message>
-    <message>
-        <source>D-Tartaric acid</source>
-        <translation>D-酒石酸</translation>
-    </message>
-    <message>
-        <source>D-Threonine</source>
-        <translation>D-苏氨酸</translation>
-    </message>
-    <message>
-        <source>D-Threose</source>
-        <translation>D-苏糖</translation>
-    </message>
-    <message>
-        <source>D-Tryptophan</source>
-        <translation>D-色氨酸</translation>
-    </message>
-    <message>
-        <source>D-Tyrosine</source>
-        <translation>D-酪氨酸</translation>
-    </message>
-    <message>
-        <source>D-Valine</source>
-        <translation>D-缬氨酸</translation>
-    </message>
-    <message>
-        <source>D-Xylulose</source>
-        <translation>D-木酮糖</translation>
-    </message>
-    <message>
-        <source>D-Zylose</source>
-        <translation>D-木糖</translation>
-    </message>
-    <message>
-        <source>DCM (L)</source>
-        <translation>二氯甲烷 (L)</translation>
-    </message>
-    <message>
-        <source>DMSO (L)</source>
-        <translation>二甲基亚砜 (L)</translation>
-    </message>
-    <message>
-        <source>Decanoic acid</source>
-        <translation>癸酸</translation>
-    </message>
-    <message>
-        <source>Di-tert-butylether</source>
-        <translation>二叔丁醚</translation>
-    </message>
-    <message>
-        <source>Diamond Nanoparticles</source>
-        <translation>金刚石纳米颗粒</translation>
-    </message>
-    <message>
-        <source>Dibutylether</source>
-        <translation>二丁醚</translation>
-    </message>
-    <message>
-        <source>Diethylether</source>
-        <translation>乙醚</translation>
-    </message>
-    <message>
-        <source>Dihydroxyacetone</source>
-        <translation>二羟基丙酮</translation>
-    </message>
-    <message>
-        <source>Diisopropylether</source>
-        <translation>二异丙醚</translation>
-    </message>
-    <message>
-        <source>Dimethyl sulfoxide</source>
-        <translation>二甲基亚砜</translation>
-    </message>
-    <message>
-        <source>Dimethylether</source>
-        <translation>二甲醚</translation>
-    </message>
-    <message>
-        <source>Dipropylether</source>
-        <translation>二丙醚</translation>
-    </message>
-    <message>
-        <source>Estradiol</source>
-        <translation>雌二醇</translation>
-    </message>
-    <message>
-        <source>Ethane</source>
-        <translation>乙烷</translation>
-    </message>
-    <message>
-        <source>Ethanethiol</source>
-        <translation>乙硫醇</translation>
-    </message>
-    <message>
-        <source>Ethanol</source>
-        <translation>乙醇</translation>
-    </message>
-    <message>
-        <source>Ethelene Glycol</source>
-        <translation>乙二醇</translation>
-    </message>
-    <message>
-        <source>Ethene</source>
-        <translation>乙烯</translation>
-    </message>
-    <message>
-        <source>Ethers</source>
-        <translation>醚类</translation>
-    </message>
-    <message>
-        <source>Ethyl carbamate</source>
-        <translation>氨基甲酸乙酯</translation>
-    </message>
-    <message>
-        <source>Ethylamine</source>
-        <translation>乙胺</translation>
-    </message>
-    <message>
-        <source>Ethylmethylether</source>
-        <translation>甲乙醚</translation>
-    </message>
-    <message>
-        <source>Fatty Acids</source>
-        <translation>脂肪酸</translation>
-    </message>
-    <message>
-        <source>Ferrocene</source>
-        <translation>二茂铁</translation>
-    </message>
-    <message>
-        <source>Fluorene</source>
-        <translation>芴</translation>
-    </message>
-    <message>
-        <source>Formaldehyde</source>
-        <translation>甲醛</translation>
-    </message>
-    <message>
-        <source>Formic acid</source>
-        <translation>甲酸</translation>
-    </message>
-    <message>
-        <source>Fullerenes</source>
-        <translation>富勒烯</translation>
-    </message>
-    <message>
-        <source>Functional Groups</source>
-        <translation>官能团</translation>
-    </message>
-    <message>
-        <source>Furan</source>
-        <translation>呋喃</translation>
-    </message>
-    <message>
-        <source>GUANINE EN7 (L)</source>
-        <translation>鸟嘌呤 EN7 (L)</translation>
-    </message>
-    <message>
-        <source>GUANINE EN9 (L)</source>
-        <translation>鸟嘌呤 EN9 (L)</translation>
-    </message>
-    <message>
-        <source>GUANINE EN9RN7 (L)</source>
-        <translation>鸟嘌呤 EN9RN7 (L)</translation>
-    </message>
-    <message>
-        <source>GUANINE KN7 (L)</source>
-        <translation>鸟嘌呤 KN7 (L)</translation>
-    </message>
-    <message>
-        <source>GUANINE KN9 (L)</source>
-        <translation>鸟嘌呤 KN9 (L)</translation>
-    </message>
-    <message>
-        <source>Glycerol</source>
-        <translation>甘油</translation>
-    </message>
-    <message>
-        <source>Glycine</source>
-        <translation>甘氨酸</translation>
-    </message>
-    <message>
-        <source>Guanine</source>
-        <translation>鸟嘌呤</translation>
-    </message>
-    <message>
-        <source>Heptacene</source>
-        <translation>并七苯</translation>
-    </message>
-    <message>
-        <source>Heteroaromatics</source>
-        <translation>杂芳烃</translation>
-    </message>
-    <message>
-        <source>Hexacene</source>
-        <translation>并六苯</translation>
-    </message>
-    <message>
-        <source>Hexanoic acid</source>
-        <translation>己酸</translation>
-    </message>
-    <message>
-        <source>Host Guest</source>
-        <translation>主客体</translation>
-    </message>
-    <message>
-        <source>Isobutyric acid</source>
-        <translation>异丁酸</translation>
-    </message>
-    <message>
-        <source>Isocyanate</source>
-        <translation>异氰酸酯</translation>
-    </message>
-    <message>
-        <source>Isopropanol</source>
-        <translation>异丙醇</translation>
-    </message>
-    <message>
-        <source>Isothiocyanate</source>
-        <translation>异硫氰酸酯</translation>
-    </message>
-    <message>
-        <source>Kekulene</source>
-        <translation>凯库勒烯</translation>
-    </message>
-    <message>
-        <source>Ketones</source>
-        <translation>酮类</translation>
-    </message>
-    <message>
-        <source>L-4-Nitrophenylalanine</source>
-        <translation>L-4-硝基苯丙氨酸</translation>
-    </message>
-    <message>
-        <source>L-Alanine</source>
-        <translation>L-丙氨酸</translation>
-    </message>
-    <message>
-        <source>L-Allo-isoleucine</source>
-        <translation>L-别异亮氨酸</translation>
-    </message>
-    <message>
-        <source>L-Arginine</source>
-        <translation>L-精氨酸</translation>
-    </message>
-    <message>
-        <source>L-Ascorbic acid</source>
-        <translation>L-抗坏血酸</translation>
-    </message>
-    <message>
-        <source>L-Asparagine</source>
-        <translation>L-天冬酰胺</translation>
-    </message>
-    <message>
-        <source>L-Aspartic acid</source>
-        <translation>L-天冬氨酸</translation>
-    </message>
-    <message>
-        <source>L-Cysteine</source>
-        <translation>L-半胱氨酸</translation>
-    </message>
-    <message>
-        <source>L-Glutamic acid</source>
-        <translation>L-谷氨酸</translation>
-    </message>
-    <message>
-        <source>L-Glutamine</source>
-        <translation>L-谷氨酰胺</translation>
-    </message>
-    <message>
-        <source>L-Histidine</source>
-        <translation>L-组氨酸</translation>
-    </message>
-    <message>
-        <source>L-Isoleucine</source>
-        <translation>L-异亮氨酸</translation>
-    </message>
-    <message>
-        <source>L-Lactic acid</source>
-        <translation>L-乳酸</translation>
-    </message>
-    <message>
-        <source>L-Leucine</source>
-        <translation>L-亮氨酸</translation>
-    </message>
-    <message>
-        <source>L-Lysine</source>
-        <translation>L-赖氨酸</translation>
-    </message>
-    <message>
-        <source>L-Malic acid</source>
-        <translation>L-苹果酸</translation>
-    </message>
-    <message>
-        <source>L-Methionine</source>
-        <translation>L-甲硫氨酸</translation>
-    </message>
-    <message>
-        <source>L-Phenylalanine</source>
-        <translation>L-苯丙氨酸</translation>
-    </message>
-    <message>
-        <source>L-Proline</source>
-        <translation>L-脯氨酸</translation>
-    </message>
-    <message>
-        <source>L-Serine</source>
-        <translation>L-丝氨酸</translation>
-    </message>
-    <message>
-        <source>L-Tartaric acid</source>
-        <translation>L-酒石酸</translation>
-    </message>
-    <message>
-        <source>L-Threonine</source>
-        <translation>L-苏氨酸</translation>
-    </message>
-    <message>
-        <source>L-Tryptophan</source>
-        <translation>L-色氨酸</translation>
-    </message>
-    <message>
-        <source>L-Tyrosine</source>
-        <translation>L-酪氨酸</translation>
-    </message>
-    <message>
-        <source>L-Valine</source>
-        <translation>L-缬氨酸</translation>
-    </message>
-    <message>
-        <source>Lauric acid</source>
-        <translation>月桂酸</translation>
-    </message>
-    <message>
-        <source>Linoleic acid</source>
-        <translation>亚油酸</translation>
-    </message>
-    <message>
-        <source>METHANE (L)</source>
-        <translation>甲烷 (L)</translation>
-    </message>
-    <message>
-        <source>METHANOL (L)</source>
-        <translation>甲醇 (L)</translation>
-    </message>
-    <message>
-        <source>Macrocycles</source>
-        <translation>大环化合物</translation>
-    </message>
-    <message>
-        <source>Methanethiol</source>
-        <translation>甲硫醇</translation>
-    </message>
-    <message>
-        <source>Methanol</source>
-        <translation>甲醇</translation>
-    </message>
-    <message>
-        <source>Methoxy</source>
-        <translation>甲氧基</translation>
-    </message>
-    <message>
-        <source>Methyl</source>
-        <translation>甲基</translation>
-    </message>
-    <message>
-        <source>Methylamine</source>
-        <translation>甲胺</translation>
-    </message>
-    <message>
-        <source>N N-Dimethylacetamide</source>
-        <translation>N,N-二甲基乙酰胺</translation>
-    </message>
-    <message>
-        <source>N N-Dimethylformamide</source>
-        <translation>N,N-二甲基甲酰胺</translation>
-    </message>
-    <message>
-        <source>Naphthalene</source>
-        <translation>萘</translation>
-    </message>
-    <message>
-        <source>Nitrate</source>
-        <translation>硝酸酯</translation>
-    </message>
-    <message>
-        <source>Nitrile</source>
-        <translation>腈</translation>
-    </message>
-    <message>
-        <source>Nitrite</source>
-        <translation>亚硝酸酯</translation>
-    </message>
-    <message>
-        <source>Nitro</source>
-        <translation>硝基</translation>
-    </message>
-    <message>
-        <source>Nitrobenzene</source>
-        <translation>硝基苯</translation>
-    </message>
-    <message>
-        <source>Nitrogen Groups</source>
-        <translation>氮基团</translation>
-    </message>
-    <message>
-        <source>Nitroso</source>
-        <translation>亚硝基</translation>
-    </message>
-    <message>
-        <source>Norbornane</source>
-        <translation>降冰片烷</translation>
-    </message>
-    <message>
-        <source>Nucleobases</source>
-        <translation>核碱基</translation>
-    </message>
-    <message>
-        <source>O2 (L)</source>
-        <translation>氧气 (L)</translation>
-    </message>
-    <message>
-        <source>Octanoic acid</source>
-        <translation>辛酸</translation>
-    </message>
-    <message>
-        <source>Oleic acid</source>
-        <translation>油酸</translation>
-    </message>
-    <message>
-        <source>Olympicene</source>
-        <translation>奥林匹克烯</translation>
-    </message>
-    <message>
-        <source>Organometalics</source>
-        <translation>有机金属化合物</translation>
-    </message>
-    <message>
-        <source>Ovalene</source>
-        <translation>卵烯</translation>
-    </message>
-    <message>
-        <source>Oxalic acid</source>
-        <translation>草酸</translation>
-    </message>
-    <message>
-        <source>Oxamide</source>
-        <translation>草酰胺</translation>
-    </message>
-    <message>
-        <source>PHENOL (L)</source>
-        <translation>苯酚 (L)</translation>
-    </message>
-    <message>
-        <source>Palmitic acid</source>
-        <translation>棕榈酸</translation>
-    </message>
-    <message>
-        <source>Pentacene</source>
-        <translation>并五苯</translation>
-    </message>
-    <message>
-        <source>Pentane-1-thiol</source>
-        <translation>1-戊硫醇</translation>
-    </message>
-    <message>
-        <source>Phenalene</source>
-        <translation>吩蒽</translation>
-    </message>
-    <message>
-        <source>Phenanthrene</source>
-        <translation>菲</translation>
-    </message>
-    <message>
-        <source>Phenol</source>
-        <translation>苯酚</translation>
-    </message>
-    <message>
-        <source>Phenyl</source>
-        <translation>苯基</translation>
-    </message>
-    <message>
-        <source>Phosphate</source>
-        <translation>磷酸酯</translation>
-    </message>
-    <message>
-        <source>Phosphine</source>
-        <translation>膦</translation>
-    </message>
-    <message>
-        <source>Phosphonic Acid</source>
-        <translation>膦酸</translation>
-    </message>
-    <message>
-        <source>Phosphorus Groups</source>
-        <translation>磷基团</translation>
-    </message>
-    <message>
-        <source>Pleaidene</source>
-        <translation>昴苯</translation>
-    </message>
-    <message>
-        <source>Polyaromatic Hydrocarbons</source>
-        <translation>多环芳烃</translation>
-    </message>
-    <message>
-        <source>Porphin</source>
-        <translation>卟吩</translation>
-    </message>
-    <message>
-        <source>Propan-1-ol</source>
-        <translation>1-丙醇</translation>
-    </message>
-    <message>
-        <source>Propane</source>
-        <translation>丙烷</translation>
-    </message>
-    <message>
-        <source>Propanoic acid</source>
-        <translation>丙酸</translation>
-    </message>
-    <message>
-        <source>Propyne</source>
-        <translation>丙炔</translation>
-    </message>
-    <message>
-        <source>Pyrene</source>
-        <translation>芘</translation>
-    </message>
-    <message>
-        <source>Pyridine</source>
-        <translation>吡啶</translation>
-    </message>
-    <message>
-        <source>Stearic acid</source>
-        <translation>硬脂酸</translation>
-    </message>
-    <message>
-        <source>Steroids</source>
-        <translation>甾体</translation>
-    </message>
-    <message>
-        <source>Sulfonic Acid</source>
-        <translation>磺酸</translation>
-    </message>
-    <message>
-        <source>Sulfoxide</source>
-        <translation>亚砜</translation>
-    </message>
-    <message>
-        <source>Sulfoxides</source>
-        <translation>亚砜类</translation>
-    </message>
-    <message>
-        <source>Sulfur Groups</source>
-        <translation>硫基团</translation>
-    </message>
-    <message>
-        <source>THYMINE (L)</source>
-        <translation>胸腺嘧啶 (L)</translation>
-    </message>
-    <message>
-        <source>TMS</source>
-        <translation>四甲基硅烷</translation>
-    </message>
-    <message>
-        <source>TOLUENE (L)</source>
-        <translation>甲苯 (L)</translation>
-    </message>
-    <message>
-        <source>Testosterone</source>
-        <translation>睾酮</translation>
-    </message>
-    <message>
-        <source>Tetrabenzoporphyrin</source>
-        <translation>四苯并卟啉</translation>
-    </message>
-    <message>
-        <source>Tetracene</source>
-        <translation>并四苯</translation>
-    </message>
-    <message>
-        <source>Tetrahydrofuran</source>
-        <translation>四氢呋喃</translation>
-    </message>
-    <message>
-        <source>Thial</source>
-        <translation>硫醛</translation>
-    </message>
-    <message>
-        <source>Thiocyanate</source>
-        <translation>硫氰酸酯</translation>
-    </message>
-    <message>
-        <source>Thiol</source>
-        <translation>硫醇</translation>
-    </message>
-    <message>
-        <source>Thiols</source>
-        <translation>硫醇类</translation>
-    </message>
-    <message>
-        <source>Thiophene</source>
-        <translation>噻吩</translation>
-    </message>
-    <message>
-        <source>Thymine</source>
-        <translation>胸腺嘧啶</translation>
-    </message>
-    <message>
-        <source>Toluene</source>
-        <translation>甲苯</translation>
-    </message>
-    <message>
-        <source>Triphenylene</source>
-        <translation>三亚苯</translation>
-    </message>
-    <message>
-        <source>Uracil</source>
-        <translation>尿嘧啶</translation>
-    </message>
-    <message>
-        <source>Urea</source>
-        <translation>尿素</translation>
-    </message>
-    <message>
-        <source>WATER (L)</source>
-        <translation>水 (L)</translation>
-    </message>
-    <message>
-        <source>Zethrene</source>
-        <translation>泽蒽烯</translation>
-    </message>
+        <message>
+            <source>1 2-Oxazole</source>
+            <translation>1,2-噁唑</translation>
+        </message>
+        <message>
+            <source>1 2-Thiazole</source>
+            <translation>1,2-噻唑</translation>
+        </message>
+        <message>
+            <source>1 3-Oxazole</source>
+            <translation>1,3-噁唑</translation>
+        </message>
+        <message>
+            <source>1 3-Thiazole</source>
+            <translation>1,3-噻唑</translation>
+        </message>
+        <message>
+            <source>12-Crown-4</source>
+            <translation>12-冠-4</translation>
+        </message>
+        <message>
+            <source>15-Crown-5</source>
+            <translation>15-冠-5</translation>
+        </message>
+        <message>
+            <source>18-Crown-6</source>
+            <translation>18-冠-6</translation>
+        </message>
+        <message>
+            <source>1H-Indene</source>
+            <translation>1H-茚</translation>
+        </message>
+        <message>
+            <source>1H-Indole</source>
+            <translation>1H-吲哚</translation>
+        </message>
+        <message>
+            <source>1H-Pyrazole</source>
+            <translation>1H-吡唑</translation>
+        </message>
+        <message>
+            <source>1H-Pyrrole</source>
+            <translation>1H-吡咯</translation>
+        </message>
+        <message>
+            <source>2 2 2-Trichloroacetic acid</source>
+            <translation>2,2,2-三氯乙酸</translation>
+        </message>
+        <message>
+            <source>2 2 2-Trifluoroacetic acid</source>
+            <translation>2,2,2-三氟乙酸</translation>
+        </message>
+        <message>
+            <source>2 2-Dichloroacetic acid</source>
+            <translation>2,2-二氯乙酸</translation>
+        </message>
+        <message>
+            <source>2-Methylpropane</source>
+            <translation>2-甲基丙烷</translation>
+        </message>
+        <message>
+            <source>3-Trigonal-planar</source>
+            <translation>3-平面三角形</translation>
+        </message>
+        <message>
+            <source>3-Trigonal-pyramidal</source>
+            <translation>3-三角锥形</translation>
+        </message>
+        <message>
+            <source>4-Planar</source>
+            <translation>4-平面形</translation>
+        </message>
+        <message>
+            <source>4-Tetrahedral</source>
+            <translation>4-四面体形</translation>
+        </message>
+        <message>
+            <source>5-Square-pyramidal</source>
+            <translation>5-四方锥形</translation>
+        </message>
+        <message>
+            <source>5-Trigonal-bipyramidal</source>
+            <translation>5-三角双锥形</translation>
+        </message>
+        <message>
+            <source>6-Octahedral</source>
+            <translation>6-八面体形</translation>
+        </message>
+        <message>
+            <source>ACETONE (L)</source>
+            <translation>丙酮 (L)</translation>
+        </message>
+        <message>
+            <source>ACETONITRILE (L)</source>
+            <translation>乙腈 (L)</translation>
+        </message>
+        <message>
+            <source>ADENINE (L)</source>
+            <translation>腺嘌呤 (L)</translation>
+        </message>
+        <message>
+            <source>AMMONIA (L)</source>
+            <translation>氨 (L)</translation>
+        </message>
+        <message>
+            <source>Acenaphthene</source>
+            <translation>苊</translation>
+        </message>
+        <message>
+            <source>Acetaldehyde</source>
+            <translation>乙醛</translation>
+        </message>
+        <message>
+            <source>Acetamide</source>
+            <translation>乙酰胺</translation>
+        </message>
+        <message>
+            <source>Acetic acid</source>
+            <translation>乙酸</translation>
+        </message>
+        <message>
+            <source>Acetylene</source>
+            <translation>乙炔</translation>
+        </message>
+        <message>
+            <source>Adamantane</source>
+            <translation>金刚烷</translation>
+        </message>
+        <message>
+            <source>Adenine</source>
+            <translation>腺嘌呤</translation>
+        </message>
+        <message>
+            <source>Alcohol</source>
+            <translation>醇</translation>
+        </message>
+        <message>
+            <source>Alcohols</source>
+            <translation>醇类</translation>
+        </message>
+        <message>
+            <source>Aldehyde</source>
+            <translation>醛</translation>
+        </message>
+        <message>
+            <source>Aldehydes</source>
+            <translation>醛类</translation>
+        </message>
+        <message>
+            <source>Alkanes</source>
+            <translation>烷烃</translation>
+        </message>
+        <message>
+            <source>Alkenes</source>
+            <translation>烯烃</translation>
+        </message>
+        <message>
+            <source>Alkynes</source>
+            <translation>炔烃</translation>
+        </message>
+        <message>
+            <source>Amide-C</source>
+            <translation>酰胺（C 位）</translation>
+        </message>
+        <message>
+            <source>Amide-N</source>
+            <translation>酰胺（N 位）</translation>
+        </message>
+        <message>
+            <source>Amides</source>
+            <translation>酰胺类</translation>
+        </message>
+        <message>
+            <source>Amine</source>
+            <translation>胺</translation>
+        </message>
+        <message>
+            <source>Amines</source>
+            <translation>胺类</translation>
+        </message>
+        <message>
+            <source>Amino Acids</source>
+            <translation>氨基酸</translation>
+        </message>
+        <message>
+            <source>Aniline</source>
+            <translation>苯胺</translation>
+        </message>
+        <message>
+            <source>Anisole</source>
+            <translation>苯甲醚</translation>
+        </message>
+        <message>
+            <source>Annulene</source>
+            <translation>轮烯</translation>
+        </message>
+        <message>
+            <source>Anthracene</source>
+            <translation>蒽</translation>
+        </message>
+        <message>
+            <source>Aromatics</source>
+            <translation>芳烃</translation>
+        </message>
+        <message>
+            <source>Azepane</source>
+            <translation>氮杂环庚烷</translation>
+        </message>
+        <message>
+            <source>Azulene</source>
+            <translation>薁</translation>
+        </message>
+        <message>
+            <source>BENZENE (L)</source>
+            <translation>苯 (L)</translation>
+        </message>
+        <message>
+            <source>Benz-a-anthracene</source>
+            <translation>苯并[a]蒽</translation>
+        </message>
+        <message>
+            <source>Benzaldehyde</source>
+            <translation>苯甲醛</translation>
+        </message>
+        <message>
+            <source>Benzo-c-phenanthrene</source>
+            <translation>苯并[c]菲</translation>
+        </message>
+        <message>
+            <source>Benzofuran</source>
+            <translation>苯并呋喃</translation>
+        </message>
+        <message>
+            <source>Benzoic acid</source>
+            <translation>苯甲酸</translation>
+        </message>
+        <message>
+            <source>Benzothiophene</source>
+            <translation>苯并噻吩</translation>
+        </message>
+        <message>
+            <source>Benzoyl chloride</source>
+            <translation>苯甲酰氯</translation>
+        </message>
+        <message>
+            <source>Boron Groups</source>
+            <translation>硼基团</translation>
+        </message>
+        <message>
+            <source>Boronic Acid</source>
+            <translation>硼酸</translation>
+        </message>
+        <message>
+            <source>Buckminsterfullerene</source>
+            <translation>巴基敏斯特富勒烯</translation>
+        </message>
+        <message>
+            <source>But-1-ene</source>
+            <translation>1-丁烯</translation>
+        </message>
+        <message>
+            <source>Butanoic acid</source>
+            <translation>丁酸</translation>
+        </message>
+        <message>
+            <source>Butanone</source>
+            <translation>丁酮</translation>
+        </message>
+        <message>
+            <source>CCL4 (L)</source>
+            <translation>四氯化碳 (L)</translation>
+        </message>
+        <message>
+            <source>CYTOSINE C1 (L)</source>
+            <translation>胞嘧啶 C1 (L)</translation>
+        </message>
+        <message>
+            <source>CYTOSINE C2A (L)</source>
+            <translation>胞嘧啶 C2A (L)</translation>
+        </message>
+        <message>
+            <source>CYTOSINE C2B (L)</source>
+            <translation>胞嘧啶 C2B (L)</translation>
+        </message>
+        <message>
+            <source>CYTOSINE C3A (L)</source>
+            <translation>胞嘧啶 C3A (L)</translation>
+        </message>
+        <message>
+            <source>CYTOSINE C3B (L)</source>
+            <translation>胞嘧啶 C3B (L)</translation>
+        </message>
+        <message>
+            <source>Caffeine</source>
+            <translation>咖啡因</translation>
+        </message>
+        <message>
+            <source>Calix-4-arene</source>
+            <translation>杯[4]芳烃</translation>
+        </message>
+        <message>
+            <source>Carbamides</source>
+            <translation>氨基甲酸酯类</translation>
+        </message>
+        <message>
+            <source>Carbohydrates</source>
+            <translation>糖类</translation>
+        </message>
+        <message>
+            <source>Carboxylate</source>
+            <translation>羧酸根</translation>
+        </message>
+        <message>
+            <source>Carboxylic Acid</source>
+            <translation>羧酸</translation>
+        </message>
+        <message>
+            <source>Carboxylic Acids</source>
+            <translation>羧酸类</translation>
+        </message>
+        <message>
+            <source>Cholesterol</source>
+            <translation>胆固醇</translation>
+        </message>
+        <message>
+            <source>Chrysene</source>
+            <translation>䓛</translation>
+        </message>
+        <message>
+            <source>Circumcoronene</source>
+            <translation>周晕苯</translation>
+        </message>
+        <message>
+            <source>Citric acid</source>
+            <translation>柠檬酸</translation>
+        </message>
+        <message>
+            <source>Coordination</source>
+            <translation>配位化合物</translation>
+        </message>
+        <message>
+            <source>Corannulene</source>
+            <translation>碗烯</translation>
+        </message>
+        <message>
+            <source>Coronene</source>
+            <translation>晕苯</translation>
+        </message>
+        <message>
+            <source>Cubane</source>
+            <translation>立方烷</translation>
+        </message>
+        <message>
+            <source>Cucurbit-4-uril</source>
+            <translation>葫芦[4]脲</translation>
+        </message>
+        <message>
+            <source>Cucurbit-5-uril</source>
+            <translation>葫芦[5]脲</translation>
+        </message>
+        <message>
+            <source>Cucurbit-6-uril</source>
+            <translation>葫芦[6]脲</translation>
+        </message>
+        <message>
+            <source>Cucurbit-7-uril</source>
+            <translation>葫芦[7]脲</translation>
+        </message>
+        <message>
+            <source>Cucurbit-8-uril</source>
+            <translation>葫芦[8]脲</translation>
+        </message>
+        <message>
+            <source>Cyanate</source>
+            <translation>氰酸酯</translation>
+        </message>
+        <message>
+            <source>Cyclic Alkanes</source>
+            <translation>环烷烃</translation>
+        </message>
+        <message>
+            <source>Cyclic Alkenes</source>
+            <translation>环烯烃</translation>
+        </message>
+        <message>
+            <source>Cyclic Sugars</source>
+            <translation>环状糖</translation>
+        </message>
+        <message>
+            <source>Cyclobutane</source>
+            <translation>环丁烷</translation>
+        </message>
+        <message>
+            <source>Cycloheptane</source>
+            <translation>环庚烷</translation>
+        </message>
+        <message>
+            <source>Cyclohexane</source>
+            <translation>环己烷</translation>
+        </message>
+        <message>
+            <source>Cyclopentane</source>
+            <translation>环戊烷</translation>
+        </message>
+        <message>
+            <source>Cyclopropane</source>
+            <translation>环丙烷</translation>
+        </message>
+        <message>
+            <source>Cytosine</source>
+            <translation>胞嘧啶</translation>
+        </message>
+        <message>
+            <source>D-Alanine</source>
+            <translation>D-丙氨酸</translation>
+        </message>
+        <message>
+            <source>D-Allo-threonine</source>
+            <translation>D-别苏氨酸</translation>
+        </message>
+        <message>
+            <source>D-Allose</source>
+            <translation>D-阿洛糖</translation>
+        </message>
+        <message>
+            <source>D-Altrose</source>
+            <translation>D-阿卓糖</translation>
+        </message>
+        <message>
+            <source>D-Arabinose</source>
+            <translation>D-阿拉伯糖</translation>
+        </message>
+        <message>
+            <source>D-Arginine</source>
+            <translation>D-精氨酸</translation>
+        </message>
+        <message>
+            <source>D-Asparagine</source>
+            <translation>D-天冬酰胺</translation>
+        </message>
+        <message>
+            <source>D-Aspartic acid</source>
+            <translation>D-天冬氨酸</translation>
+        </message>
+        <message>
+            <source>D-Cysteine</source>
+            <translation>D-半胱氨酸</translation>
+        </message>
+        <message>
+            <source>D-Erythrose</source>
+            <translation>D-赤藓糖</translation>
+        </message>
+        <message>
+            <source>D-Erythrulose</source>
+            <translation>D-赤藓酮糖</translation>
+        </message>
+        <message>
+            <source>D-Fructose</source>
+            <translation>D-果糖</translation>
+        </message>
+        <message>
+            <source>D-Galactose</source>
+            <translation>D-半乳糖</translation>
+        </message>
+        <message>
+            <source>D-Glucose</source>
+            <translation>D-葡萄糖</translation>
+        </message>
+        <message>
+            <source>D-Glutamic acid</source>
+            <translation>D-谷氨酸</translation>
+        </message>
+        <message>
+            <source>D-Glutamine</source>
+            <translation>D-谷氨酰胺</translation>
+        </message>
+        <message>
+            <source>D-Glyceraldehyde</source>
+            <translation>D-甘油醛</translation>
+        </message>
+        <message>
+            <source>D-Gulose</source>
+            <translation>D-古洛糖</translation>
+        </message>
+        <message>
+            <source>D-Histidine</source>
+            <translation>D-组氨酸</translation>
+        </message>
+        <message>
+            <source>D-Idose</source>
+            <translation>D-艾杜糖</translation>
+        </message>
+        <message>
+            <source>D-Isoleucine</source>
+            <translation>D-异亮氨酸</translation>
+        </message>
+        <message>
+            <source>D-Lactic acid</source>
+            <translation>D-乳酸</translation>
+        </message>
+        <message>
+            <source>D-Leucine</source>
+            <translation>D-亮氨酸</translation>
+        </message>
+        <message>
+            <source>D-Lysine</source>
+            <translation>D-赖氨酸</translation>
+        </message>
+        <message>
+            <source>D-Lyxose</source>
+            <translation>D-来苏糖</translation>
+        </message>
+        <message>
+            <source>D-Malic acid</source>
+            <translation>D-苹果酸</translation>
+        </message>
+        <message>
+            <source>D-Mannose</source>
+            <translation>D-甘露糖</translation>
+        </message>
+        <message>
+            <source>D-Methionine</source>
+            <translation>D-甲硫氨酸</translation>
+        </message>
+        <message>
+            <source>D-Phenylalanine</source>
+            <translation>D-苯丙氨酸</translation>
+        </message>
+        <message>
+            <source>D-Proline</source>
+            <translation>D-脯氨酸</translation>
+        </message>
+        <message>
+            <source>D-Psicose</source>
+            <translation>D-阿洛酮糖</translation>
+        </message>
+        <message>
+            <source>D-Ribose</source>
+            <translation>D-核糖</translation>
+        </message>
+        <message>
+            <source>D-Ribulose</source>
+            <translation>D-核酮糖</translation>
+        </message>
+        <message>
+            <source>D-Serine</source>
+            <translation>D-丝氨酸</translation>
+        </message>
+        <message>
+            <source>D-Sorbose</source>
+            <translation>D-山梨糖</translation>
+        </message>
+        <message>
+            <source>D-Tagatose</source>
+            <translation>D-塔格糖</translation>
+        </message>
+        <message>
+            <source>D-Talose</source>
+            <translation>D-塔罗糖</translation>
+        </message>
+        <message>
+            <source>D-Tartaric acid</source>
+            <translation>D-酒石酸</translation>
+        </message>
+        <message>
+            <source>D-Threonine</source>
+            <translation>D-苏氨酸</translation>
+        </message>
+        <message>
+            <source>D-Threose</source>
+            <translation>D-苏糖</translation>
+        </message>
+        <message>
+            <source>D-Tryptophan</source>
+            <translation>D-色氨酸</translation>
+        </message>
+        <message>
+            <source>D-Tyrosine</source>
+            <translation>D-酪氨酸</translation>
+        </message>
+        <message>
+            <source>D-Valine</source>
+            <translation>D-缬氨酸</translation>
+        </message>
+        <message>
+            <source>D-Xylulose</source>
+            <translation>D-木酮糖</translation>
+        </message>
+        <message>
+            <source>D-Zylose</source>
+            <translation>D-木糖</translation>
+        </message>
+        <message>
+            <source>DCM (L)</source>
+            <translation>二氯甲烷 (L)</translation>
+        </message>
+        <message>
+            <source>DMSO (L)</source>
+            <translation>二甲基亚砜 (L)</translation>
+        </message>
+        <message>
+            <source>Decanoic acid</source>
+            <translation>癸酸</translation>
+        </message>
+        <message>
+            <source>Di-tert-butylether</source>
+            <translation>二叔丁醚</translation>
+        </message>
+        <message>
+            <source>Diamond Nanoparticles</source>
+            <translation>金刚石纳米颗粒</translation>
+        </message>
+        <message>
+            <source>Dibutylether</source>
+            <translation>二丁醚</translation>
+        </message>
+        <message>
+            <source>Diethylether</source>
+            <translation>乙醚</translation>
+        </message>
+        <message>
+            <source>Dihydroxyacetone</source>
+            <translation>二羟基丙酮</translation>
+        </message>
+        <message>
+            <source>Diisopropylether</source>
+            <translation>二异丙醚</translation>
+        </message>
+        <message>
+            <source>Dimethyl sulfoxide</source>
+            <translation>二甲基亚砜</translation>
+        </message>
+        <message>
+            <source>Dimethylether</source>
+            <translation>二甲醚</translation>
+        </message>
+        <message>
+            <source>Dipropylether</source>
+            <translation>二丙醚</translation>
+        </message>
+        <message>
+            <source>Estradiol</source>
+            <translation>雌二醇</translation>
+        </message>
+        <message>
+            <source>Ethane</source>
+            <translation>乙烷</translation>
+        </message>
+        <message>
+            <source>Ethanethiol</source>
+            <translation>乙硫醇</translation>
+        </message>
+        <message>
+            <source>Ethanol</source>
+            <translation>乙醇</translation>
+        </message>
+        <message>
+            <source>Ethelene Glycol</source>
+            <translation>乙二醇</translation>
+        </message>
+        <message>
+            <source>Ethene</source>
+            <translation>乙烯</translation>
+        </message>
+        <message>
+            <source>Ethers</source>
+            <translation>醚类</translation>
+        </message>
+        <message>
+            <source>Ethyl carbamate</source>
+            <translation>氨基甲酸乙酯</translation>
+        </message>
+        <message>
+            <source>Ethylamine</source>
+            <translation>乙胺</translation>
+        </message>
+        <message>
+            <source>Ethylmethylether</source>
+            <translation>甲乙醚</translation>
+        </message>
+        <message>
+            <source>Fatty Acids</source>
+            <translation>脂肪酸</translation>
+        </message>
+        <message>
+            <source>Ferrocene</source>
+            <translation>二茂铁</translation>
+        </message>
+        <message>
+            <source>Fluorene</source>
+            <translation>芴</translation>
+        </message>
+        <message>
+            <source>Formaldehyde</source>
+            <translation>甲醛</translation>
+        </message>
+        <message>
+            <source>Formic acid</source>
+            <translation>甲酸</translation>
+        </message>
+        <message>
+            <source>Fullerenes</source>
+            <translation>富勒烯</translation>
+        </message>
+        <message>
+            <source>Functional Groups</source>
+            <translation>官能团</translation>
+        </message>
+        <message>
+            <source>Furan</source>
+            <translation>呋喃</translation>
+        </message>
+        <message>
+            <source>GUANINE EN7 (L)</source>
+            <translation>鸟嘌呤 EN7 (L)</translation>
+        </message>
+        <message>
+            <source>GUANINE EN9 (L)</source>
+            <translation>鸟嘌呤 EN9 (L)</translation>
+        </message>
+        <message>
+            <source>GUANINE EN9RN7 (L)</source>
+            <translation>鸟嘌呤 EN9RN7 (L)</translation>
+        </message>
+        <message>
+            <source>GUANINE KN7 (L)</source>
+            <translation>鸟嘌呤 KN7 (L)</translation>
+        </message>
+        <message>
+            <source>GUANINE KN9 (L)</source>
+            <translation>鸟嘌呤 KN9 (L)</translation>
+        </message>
+        <message>
+            <source>Glycerol</source>
+            <translation>甘油</translation>
+        </message>
+        <message>
+            <source>Glycine</source>
+            <translation>甘氨酸</translation>
+        </message>
+        <message>
+            <source>Guanine</source>
+            <translation>鸟嘌呤</translation>
+        </message>
+        <message>
+            <source>Heptacene</source>
+            <translation>并七苯</translation>
+        </message>
+        <message>
+            <source>Heteroaromatics</source>
+            <translation>杂芳烃</translation>
+        </message>
+        <message>
+            <source>Hexacene</source>
+            <translation>并六苯</translation>
+        </message>
+        <message>
+            <source>Hexanoic acid</source>
+            <translation>己酸</translation>
+        </message>
+        <message>
+            <source>Host Guest</source>
+            <translation>主客体</translation>
+        </message>
+        <message>
+            <source>Isobutyric acid</source>
+            <translation>异丁酸</translation>
+        </message>
+        <message>
+            <source>Isocyanate</source>
+            <translation>异氰酸酯</translation>
+        </message>
+        <message>
+            <source>Isopropanol</source>
+            <translation>异丙醇</translation>
+        </message>
+        <message>
+            <source>Isothiocyanate</source>
+            <translation>异硫氰酸酯</translation>
+        </message>
+        <message>
+            <source>Kekulene</source>
+            <translation>凯库勒烯</translation>
+        </message>
+        <message>
+            <source>Ketones</source>
+            <translation>酮类</translation>
+        </message>
+        <message>
+            <source>L-4-Nitrophenylalanine</source>
+            <translation>L-4-硝基苯丙氨酸</translation>
+        </message>
+        <message>
+            <source>L-Alanine</source>
+            <translation>L-丙氨酸</translation>
+        </message>
+        <message>
+            <source>L-Allo-isoleucine</source>
+            <translation>L-别异亮氨酸</translation>
+        </message>
+        <message>
+            <source>L-Arginine</source>
+            <translation>L-精氨酸</translation>
+        </message>
+        <message>
+            <source>L-Ascorbic acid</source>
+            <translation>L-抗坏血酸</translation>
+        </message>
+        <message>
+            <source>L-Asparagine</source>
+            <translation>L-天冬酰胺</translation>
+        </message>
+        <message>
+            <source>L-Aspartic acid</source>
+            <translation>L-天冬氨酸</translation>
+        </message>
+        <message>
+            <source>L-Cysteine</source>
+            <translation>L-半胱氨酸</translation>
+        </message>
+        <message>
+            <source>L-Glutamic acid</source>
+            <translation>L-谷氨酸</translation>
+        </message>
+        <message>
+            <source>L-Glutamine</source>
+            <translation>L-谷氨酰胺</translation>
+        </message>
+        <message>
+            <source>L-Histidine</source>
+            <translation>L-组氨酸</translation>
+        </message>
+        <message>
+            <source>L-Isoleucine</source>
+            <translation>L-异亮氨酸</translation>
+        </message>
+        <message>
+            <source>L-Lactic acid</source>
+            <translation>L-乳酸</translation>
+        </message>
+        <message>
+            <source>L-Leucine</source>
+            <translation>L-亮氨酸</translation>
+        </message>
+        <message>
+            <source>L-Lysine</source>
+            <translation>L-赖氨酸</translation>
+        </message>
+        <message>
+            <source>L-Malic acid</source>
+            <translation>L-苹果酸</translation>
+        </message>
+        <message>
+            <source>L-Methionine</source>
+            <translation>L-甲硫氨酸</translation>
+        </message>
+        <message>
+            <source>L-Phenylalanine</source>
+            <translation>L-苯丙氨酸</translation>
+        </message>
+        <message>
+            <source>L-Proline</source>
+            <translation>L-脯氨酸</translation>
+        </message>
+        <message>
+            <source>L-Serine</source>
+            <translation>L-丝氨酸</translation>
+        </message>
+        <message>
+            <source>L-Tartaric acid</source>
+            <translation>L-酒石酸</translation>
+        </message>
+        <message>
+            <source>L-Threonine</source>
+            <translation>L-苏氨酸</translation>
+        </message>
+        <message>
+            <source>L-Tryptophan</source>
+            <translation>L-色氨酸</translation>
+        </message>
+        <message>
+            <source>L-Tyrosine</source>
+            <translation>L-酪氨酸</translation>
+        </message>
+        <message>
+            <source>L-Valine</source>
+            <translation>L-缬氨酸</translation>
+        </message>
+        <message>
+            <source>Lauric acid</source>
+            <translation>月桂酸</translation>
+        </message>
+        <message>
+            <source>Linoleic acid</source>
+            <translation>亚油酸</translation>
+        </message>
+        <message>
+            <source>METHANE (L)</source>
+            <translation>甲烷 (L)</translation>
+        </message>
+        <message>
+            <source>METHANOL (L)</source>
+            <translation>甲醇 (L)</translation>
+        </message>
+        <message>
+            <source>Macrocycles</source>
+            <translation>大环化合物</translation>
+        </message>
+        <message>
+            <source>Methanethiol</source>
+            <translation>甲硫醇</translation>
+        </message>
+        <message>
+            <source>Methanol</source>
+            <translation>甲醇</translation>
+        </message>
+        <message>
+            <source>Methoxy</source>
+            <translation>甲氧基</translation>
+        </message>
+        <message>
+            <source>Methyl</source>
+            <translation>甲基</translation>
+        </message>
+        <message>
+            <source>Methylamine</source>
+            <translation>甲胺</translation>
+        </message>
+        <message>
+            <source>N N-Dimethylacetamide</source>
+            <translation>N,N-二甲基乙酰胺</translation>
+        </message>
+        <message>
+            <source>N N-Dimethylformamide</source>
+            <translation>N,N-二甲基甲酰胺</translation>
+        </message>
+        <message>
+            <source>Naphthalene</source>
+            <translation>萘</translation>
+        </message>
+        <message>
+            <source>Nitrate</source>
+            <translation>硝酸酯</translation>
+        </message>
+        <message>
+            <source>Nitrile</source>
+            <translation>腈</translation>
+        </message>
+        <message>
+            <source>Nitrite</source>
+            <translation>亚硝酸酯</translation>
+        </message>
+        <message>
+            <source>Nitro</source>
+            <translation>硝基</translation>
+        </message>
+        <message>
+            <source>Nitrobenzene</source>
+            <translation>硝基苯</translation>
+        </message>
+        <message>
+            <source>Nitrogen Groups</source>
+            <translation>氮基团</translation>
+        </message>
+        <message>
+            <source>Nitroso</source>
+            <translation>亚硝基</translation>
+        </message>
+        <message>
+            <source>Norbornane</source>
+            <translation>降冰片烷</translation>
+        </message>
+        <message>
+            <source>Nucleobases</source>
+            <translation>核碱基</translation>
+        </message>
+        <message>
+            <source>O2 (L)</source>
+            <translation>氧气 (L)</translation>
+        </message>
+        <message>
+            <source>Octanoic acid</source>
+            <translation>辛酸</translation>
+        </message>
+        <message>
+            <source>Oleic acid</source>
+            <translation>油酸</translation>
+        </message>
+        <message>
+            <source>Olympicene</source>
+            <translation>奥林匹克烯</translation>
+        </message>
+        <message>
+            <source>Organometalics</source>
+            <translation>有机金属化合物</translation>
+        </message>
+        <message>
+            <source>Ovalene</source>
+            <translation>卵烯</translation>
+        </message>
+        <message>
+            <source>Oxalic acid</source>
+            <translation>草酸</translation>
+        </message>
+        <message>
+            <source>Oxamide</source>
+            <translation>草酰胺</translation>
+        </message>
+        <message>
+            <source>PHENOL (L)</source>
+            <translation>苯酚 (L)</translation>
+        </message>
+        <message>
+            <source>Palmitic acid</source>
+            <translation>棕榈酸</translation>
+        </message>
+        <message>
+            <source>Pentacene</source>
+            <translation>并五苯</translation>
+        </message>
+        <message>
+            <source>Pentane-1-thiol</source>
+            <translation>1-戊硫醇</translation>
+        </message>
+        <message>
+            <source>Phenalene</source>
+            <translation>吩蒽</translation>
+        </message>
+        <message>
+            <source>Phenanthrene</source>
+            <translation>菲</translation>
+        </message>
+        <message>
+            <source>Phenol</source>
+            <translation>苯酚</translation>
+        </message>
+        <message>
+            <source>Phenyl</source>
+            <translation>苯基</translation>
+        </message>
+        <message>
+            <source>Phosphate</source>
+            <translation>磷酸酯</translation>
+        </message>
+        <message>
+            <source>Phosphine</source>
+            <translation>膦</translation>
+        </message>
+        <message>
+            <source>Phosphonic Acid</source>
+            <translation>膦酸</translation>
+        </message>
+        <message>
+            <source>Phosphorus Groups</source>
+            <translation>磷基团</translation>
+        </message>
+        <message>
+            <source>Pleaidene</source>
+            <translation>昴苯</translation>
+        </message>
+        <message>
+            <source>Polyaromatic Hydrocarbons</source>
+            <translation>多环芳烃</translation>
+        </message>
+        <message>
+            <source>Porphin</source>
+            <translation>卟吩</translation>
+        </message>
+        <message>
+            <source>Propan-1-ol</source>
+            <translation>1-丙醇</translation>
+        </message>
+        <message>
+            <source>Propane</source>
+            <translation>丙烷</translation>
+        </message>
+        <message>
+            <source>Propanoic acid</source>
+            <translation>丙酸</translation>
+        </message>
+        <message>
+            <source>Propyne</source>
+            <translation>丙炔</translation>
+        </message>
+        <message>
+            <source>Pyrene</source>
+            <translation>芘</translation>
+        </message>
+        <message>
+            <source>Pyridine</source>
+            <translation>吡啶</translation>
+        </message>
+        <message>
+            <source>Stearic acid</source>
+            <translation>硬脂酸</translation>
+        </message>
+        <message>
+            <source>Steroids</source>
+            <translation>甾体</translation>
+        </message>
+        <message>
+            <source>Sulfonic Acid</source>
+            <translation>磺酸</translation>
+        </message>
+        <message>
+            <source>Sulfoxide</source>
+            <translation>亚砜</translation>
+        </message>
+        <message>
+            <source>Sulfoxides</source>
+            <translation>亚砜类</translation>
+        </message>
+        <message>
+            <source>Sulfur Groups</source>
+            <translation>硫基团</translation>
+        </message>
+        <message>
+            <source>THYMINE (L)</source>
+            <translation>胸腺嘧啶 (L)</translation>
+        </message>
+        <message>
+            <source>TMS</source>
+            <translation>四甲基硅烷</translation>
+        </message>
+        <message>
+            <source>TOLUENE (L)</source>
+            <translation>甲苯 (L)</translation>
+        </message>
+        <message>
+            <source>Testosterone</source>
+            <translation>睾酮</translation>
+        </message>
+        <message>
+            <source>Tetrabenzoporphyrin</source>
+            <translation>四苯并卟啉</translation>
+        </message>
+        <message>
+            <source>Tetracene</source>
+            <translation>并四苯</translation>
+        </message>
+        <message>
+            <source>Tetrahydrofuran</source>
+            <translation>四氢呋喃</translation>
+        </message>
+        <message>
+            <source>Thial</source>
+            <translation>硫醛</translation>
+        </message>
+        <message>
+            <source>Thiocyanate</source>
+            <translation>硫氰酸酯</translation>
+        </message>
+        <message>
+            <source>Thiol</source>
+            <translation>硫醇</translation>
+        </message>
+        <message>
+            <source>Thiols</source>
+            <translation>硫醇类</translation>
+        </message>
+        <message>
+            <source>Thiophene</source>
+            <translation>噻吩</translation>
+        </message>
+        <message>
+            <source>Thymine</source>
+            <translation>胸腺嘧啶</translation>
+        </message>
+        <message>
+            <source>Toluene</source>
+            <translation>甲苯</translation>
+        </message>
+        <message>
+            <source>Triphenylene</source>
+            <translation>三亚苯</translation>
+        </message>
+        <message>
+            <source>Uracil</source>
+            <translation>尿嘧啶</translation>
+        </message>
+        <message>
+            <source>Urea</source>
+            <translation>尿素</translation>
+        </message>
+        <message>
+            <source>WATER (L)</source>
+            <translation>水 (L)</translation>
+        </message>
+        <message>
+            <source>Zethrene</source>
+            <translation>泽蒽烯</translation>
+        </message>
 </context>
 <context>
     <name>FreezingStringTab</name>
@@ -3238,22 +3193,22 @@ QToolButton:pressed {
     <message>
         <location filename="../src/Configurator/GeminalOrbitalsConfigurator.ui" line="305"/>
         <source>Type:</source>
-<translation>类型：</translation>
+        <translation>类型：</translation>
     </message>
     <message>
         <location filename="../src/Configurator/GeminalOrbitalsConfigurator.ui" line="312"/>
         <source>Isovalue:</source>
-<translation>等值面值：</translation>
+        <translation>等值面值：</translation>
     </message>
     <message>
         <location filename="../src/Configurator/GeminalOrbitalsConfigurator.ui" line="319"/>
         <source>Opacity:</source>
-<translation>不透明度：</translation>
+        <translation>不透明度：</translation>
     </message>
     <message>
         <location filename="../src/Configurator/GeminalOrbitalsConfigurator.ui" line="326"/>
         <source>Quality:</source>
-<translation>质量：</translation>
+        <translation>质量：</translation>
     </message>
     <message>
         <location filename="../src/Configurator/GeminalOrbitalsConfigurator.ui" line="333"/>
@@ -3595,6 +3550,16 @@ QToolButton:pressed {
     </message>
 </context>
 <context>
+        <name>Handler::Build</name>
+    <message>
+        <location filename="../src/Viewer/BuildHandler.C" line="69"/>
+        <source>No molecule available.
+Please select one in the Model View</source>
+        <translation>没有可用的分子。
+请在模型视图中选择一个</translation>
+    </message>
+</context>
+<context>
     <name>Handler::BuildEfpFragment</name>
     <message>
         <location filename="../src/Viewer/BuildEfpFragmentHandler.C" line="88"/>
@@ -3616,102 +3581,6 @@ QToolButton:pressed {
         <location filename="../src/Main/HelpBrowser.ui" line="14"/>
         <source>Help Browser</source>
         <translation>帮助浏览器</translation>
-    </message>
-    <message>
-        <source>QToolButton {
-   color: #333;
-   background-color: QLinearGradient( x1: 0, y1: 0, x2: 0, y2: 1, 
-          stop: 0 #fff,
-          stop: 0.5 #eee, 
-          stop: 1 #999);
-   border-width: 2px;
-   border-color: #333;
-   border-style: solid;
-   border-radius: 5;
-   padding: 0px;
-   font-size: 24px;
-   min-width: 34px;
-   max-width: 34px;
-   min-height: 34px;
-   max-height: 34px;
-}
-
-QToolButton:disabled {
-  background-color: QLinearGradient( x1: 0, y1: 0, x2: 0, y2: 1, 
-          stop: 0 #fff,
-          stop: 0.5 #eee, 
-          stop: 1 #bbb);
-   border-color: #aaa;
-   color: #aaa;
-}
-
-QToolButton:pressed {
-   border-color: #b00;
-}
-
-
-QToolButton:checked {
-   border-color: #b00;
-}
-
-QToolTip {
-   border: 2px solid darkkhaki;
-   padding: 2px;
-   border-radius: 3px;
-   opacity: 500;
-   font-size: 12px;
-}
-
-QTextBrowser#content { 
-   padding: 20px;
-}</source>
-        <translation>QToolButton {
-   color: #333;
-   background-color: QLinearGradient( x1: 0, y1: 0, x2: 0, y2: 1, 
-          stop: 0 #fff,
-          stop: 0.5 #eee, 
-          stop: 1 #999);
-   border-width: 2px;
-   border-color: #333;
-   border-style: solid;
-   border-radius: 5;
-   padding: 0px;
-   font-size: 24px;
-   min-width: 34px;
-   max-width: 34px;
-   min-height: 34px;
-   max-height: 34px;
-}
-
-QToolButton:disabled {
-  background-color: QLinearGradient( x1: 0, y1: 0, x2: 0, y2: 1, 
-          stop: 0 #fff,
-          stop: 0.5 #eee, 
-          stop: 1 #bbb);
-   border-color: #aaa;
-   color: #aaa;
-}
-
-QToolButton:pressed {
-   border-color: #b00;
-}
-
-
-QToolButton:checked {
-   border-color: #b00;
-}
-
-QToolTip {
-   border: 2px solid darkkhaki;
-   padding: 2px;
-   border-radius: 3px;
-   opacity: 500;
-   font-size: 12px;
-}
-
-QTextBrowser#content { 
-   padding: 20px;
-}</translation>
     </message>
     <message>
         <location filename="../src/Main/HelpBrowser.ui" line="17"/>
@@ -3903,30 +3772,17 @@ QTextBrowser#content {
 <context>
     <name>IQmol::Color::StopButton</name>
     <message>
-        <source>Select color</source>
-        <comment>预置：需配合源码补 tr() 后由 lupdate 匹配</comment>
-        <translation>选择颜色</translation>
-    </message>
-    <message>
         <location filename="../src/Util/ColorDialog.C" line="460"/>
         <source>Select color</source>
         <translation>选择颜色</translation>
     </message>
 </context>
 <context>
-    <name>IQmol::Command::AddComponent</name>
+        <name>IQmol::Configurator::ExcitedStates</name>
     <message>
-        <source>Load file %1</source>
-        <comment>预置：需配合源码补 tr() 后由 lupdate 匹配</comment>
-        <translation>加载文件 %1</translation>
-    </message>
-</context>
-<context>
-    <name>IQmol::Configurator::ExcitedStates</name>
-    <message>
-        <source>Rel. Strength</source>
-        <comment>预置：需配合源码补 tr() 后由 lupdate 匹配</comment>
-        <translation>相对强度</translation>
+        <location filename="../src/Configurator/ExcitedStatesConfigurator.C" line="112"/>
+        <source>Energy / Hartree</source>
+        <translation>能量 / Hartree</translation>
     </message>
     <message>
         <location filename="../src/Configurator/ExcitedStatesConfigurator.C" line="116"/>
@@ -3950,12 +3806,12 @@ QTextBrowser#content {
     <message>
         <location filename="../src/Configurator/FrequenciesConfigurator.C" line="47"/>
         <source>Freq. (cm⁻¹)</source>
-<translation>频率（cm⁻¹）</translation>
+        <translation>频率（cm⁻¹）</translation>
     </message>
     <message>
         <location filename="../src/Configurator/FrequenciesConfigurator.C" line="48"/>
         <source>Intens. (km/mol)</source>
-<translation>强度（km/mol）</translation>
+        <translation>强度（km/mol）</translation>
     </message>
     <message>
         <location filename="../src/Configurator/FrequenciesConfigurator.C" line="49"/>
@@ -3984,16 +3840,6 @@ QTextBrowser#content {
         <translation>相对强度</translation>
     </message>
     <message>
-        <source>Frequency</source>
-        <comment>预置：需配合源码补 tr() 后由 lupdate 匹配</comment>
-        <translation>频率</translation>
-    </message>
-    <message>
-        <source>Rel. Intensity</source>
-        <comment>预置：需配合源码补 tr() 后由 lupdate 匹配</comment>
-        <translation>相对强度</translation>
-    </message>
-    <message>
         <location filename="../src/Configurator/FrequenciesConfigurator.C" line="94"/>
         <location filename="../src/Configurator/FrequenciesConfigurator.C" line="225"/>
         <source>Intensity</source>
@@ -4001,7 +3847,7 @@ QTextBrowser#content {
     </message>
 </context>
 <context>
-    <name>IQmol::Configurator::GeminalOrbitals</name>
+        <name>IQmol::Configurator::GeminalOrbitals</name>
     <message>
         <location filename="../src/Configurator/GeminalOrbitalsConfigurator.C" line="45"/>
         <source>Geminal</source>
@@ -4012,19 +3858,14 @@ QTextBrowser#content {
         <source>Geminal Correlation</source>
         <translation>成对相关</translation>
     </message>
+    <message>
+        <location filename="../src/Configurator/GeminalOrbitalsConfigurator.C" line="133"/>
+        <source>Energy/Hartree</source>
+        <translation>能量/Hartree</translation>
+    </message>
 </context>
 <context>
     <name>IQmol::Configurator::GeometryList</name>
-    <message>
-        <source>Geometry</source>
-        <comment>预置：需配合源码补 tr() 后由 lupdate 匹配</comment>
-        <translation>几何</translation>
-    </message>
-    <message>
-        <source>Geometric Parameter</source>
-        <comment>预置：需配合源码补 tr() 后由 lupdate 匹配</comment>
-        <translation>几何参数</translation>
-    </message>
     <message>
         <location filename="../src/Configurator/GeometryListConfigurator.C" line="71"/>
         <location filename="../src/Configurator/GeometryListConfigurator.C" line="135"/>
@@ -4071,7 +3912,7 @@ QTextBrowser#content {
         <location filename="../src/Configurator/MolecularSurfacesConfigurator.C" line="65"/>
         <location filename="../src/Configurator/MolecularSurfacesConfigurator.C" line="71"/>
         <source>Isovalue</source>
-<translation>等值面值</translation>
+        <translation>等值面值</translation>
     </message>
     <message>
         <location filename="../src/Configurator/MolecularSurfacesConfigurator.C" line="38"/>
@@ -4117,33 +3958,13 @@ QTextBrowser#content {
         <translation>相对强度</translation>
     </message>
     <message>
-        <source>Nuclear Shielding (ppm)</source>
-        <comment>预置：需配合源码补 tr() 后由 lupdate 匹配</comment>
-        <translation>核屏蔽 (ppm)</translation>
-    </message>
-    <message>
-        <source>Chemical Shift (ppm)</source>
-        <comment>预置：需配合源码补 tr() 后由 lupdate 匹配</comment>
-        <translation>化学位移 (ppm)</translation>
-    </message>
-    <message>
-        <source>Count</source>
-        <comment>预置：需配合源码补 tr() 后由 lupdate 匹配</comment>
-        <translation>计数</translation>
-    </message>
-    <message>
-        <source>Relative Intensity</source>
-        <comment>预置：需配合源码补 tr() 后由 lupdate 匹配</comment>
-        <translation>相对强度</translation>
-    </message>
-    <message>
         <location filename="../src/Configurator/NmrConfigurator.C" line="83"/>
         <source>Shieldings</source>
         <translation>屏蔽</translation>
     </message>
 </context>
 <context>
-    <name>IQmol::Configurator::Orbitals</name>
+        <name>IQmol::Configurator::Orbitals</name>
     <message>
         <location filename="../src/Configurator/OrbitalsConfigurator.C" line="793"/>
         <source>Orbital(s):</source>
@@ -4153,11 +3974,6 @@ QTextBrowser#content {
         <location filename="../src/Configurator/OrbitalsConfigurator.C" line="816"/>
         <source>Function(s):</source>
         <translation>函数：</translation>
-    </message>
-    <message>
-        <source>Occupancy</source>
-        <comment>预置：需配合源码补 tr() 后由 lupdate 匹配</comment>
-        <translation>占据数</translation>
     </message>
     <message>
         <location filename="../src/Configurator/OrbitalsConfigurator.C" line="84"/>
@@ -4225,24 +4041,13 @@ QTextBrowser#content {
         <translation>占据数</translation>
     </message>
     <message>
-        <source>Alpha</source>
-        <translation>Alpha</translation>
-    </message>
-    <message>
-        <source>Beta</source>
-        <translation>Beta</translation>
-    </message>
-    <message>
-        <source>Intensity</source>
-        <translation>强度</translation>
-    </message>
-    <message>
-        <source>Rel. Intensity</source>
-        <translation>相对强度</translation>
+        <location filename="../src/Configurator/OrbitalsConfigurator.C" line="322"/>
+        <source>Energy/Hartree</source>
+        <translation>能量/Hartree</translation>
     </message>
 </context>
 <context>
-    <name>IQmol::Configurator::ScalarConstraint</name>
+        <name>IQmol::Configurator::ScalarConstraint</name>
     <message>
         <location filename="../src/Configurator/ConstraintConfigurator.C" line="127"/>
         <source>Configure Distance</source>
@@ -4252,6 +4057,11 @@ QTextBrowser#content {
         <location filename="../src/Configurator/ConstraintConfigurator.C" line="141"/>
         <source>Distance between atoms %1</source>
         <translation>原子间距离 %1</translation>
+    </message>
+    <message>
+        <location filename="../src/Configurator/ConstraintConfigurator.C" line="142"/>
+        <source>Distance </source>
+        <translation>距离 </translation>
     </message>
     <message>
         <location filename="../src/Configurator/ConstraintConfigurator.C" line="148"/>
@@ -4264,23 +4074,28 @@ QTextBrowser#content {
         <translation>原子间夹角 %1</translation>
     </message>
     <message>
+        <location filename="../src/Configurator/ConstraintConfigurator.C" line="164"/>
+        <source>Angle </source>
+        <translation>角度 </translation>
+    </message>
+    <message>
         <location filename="../src/Configurator/ConstraintConfigurator.C" line="170"/>
         <source>Configure Torsion</source>
         <translation>配置扭转</translation>
     </message>
     <message>
-        <source>Distance between atoms %1</source>
-        <comment>预置：需配合源码补 tr() 后由 lupdate 匹配</comment>
-        <translation>原子间距离 %1</translation>
+        <location filename="../src/Configurator/ConstraintConfigurator.C" line="186"/>
+        <source>Torsion between atoms </source>
+        <translation>原子间二面角 </translation>
     </message>
     <message>
-        <source>Angle between atoms %1</source>
-        <comment>预置：需配合源码补 tr() 后由 lupdate 匹配</comment>
-        <translation>原子间夹角 %1</translation>
+        <location filename="../src/Configurator/ConstraintConfigurator.C" line="187"/>
+        <source>Torsion </source>
+        <translation>二面角 </translation>
     </message>
 </context>
 <context>
-    <name>IQmol::Configurator::VectorConstraint</name>
+        <name>IQmol::Configurator::VectorConstraint</name>
     <message>
         <location filename="../src/Configurator/ConstraintConfigurator.C" line="41"/>
         <source>Set Position</source>
@@ -4292,9 +4107,9 @@ QTextBrowser#content {
         <translation>设置原子位置 %1</translation>
     </message>
     <message>
-        <source>Set position of atom %1</source>
-        <comment>预置：需配合源码补 tr() 后由 lupdate 匹配</comment>
-        <translation>设置原子位置 %1</translation>
+        <location filename="../src/Configurator/ConstraintConfigurator.C" line="56"/>
+        <source>Position </source>
+        <translation>位置 </translation>
     </message>
 </context>
 <context>
@@ -4336,11 +4151,6 @@ QTextBrowser#content {
         <location filename="../src/Plot/CustomPlot.C" line="55"/>
         <source>Save File</source>
         <translation>保存文件</translation>
-    </message>
-    <message>
-        <source>Save Image As</source>
-        <comment>预置：需配合源码补 tr() 后由 lupdate 匹配</comment>
-        <translation>图像另存为</translation>
     </message>
 </context>
 <context>
@@ -4492,16 +4302,6 @@ QTextBrowser#content {
 <context>
     <name>IQmol::GridInfoDialog</name>
     <message>
-        <source>Export Cube File</source>
-        <comment>预置：需配合源码补 tr() 后由 lupdate 匹配</comment>
-        <translation>导出 Cube 文件</translation>
-    </message>
-    <message>
-        <source>Export Cube File (Switch Phase)</source>
-        <comment>预置：需配合源码补 tr() 后由 lupdate 匹配</comment>
-        <translation>导出 Cube 文件（反转相位）</translation>
-    </message>
-    <message>
         <location filename="../src/Grid/GridInfoDialog.C" line="124"/>
         <source>Delete</source>
         <translation>删除</translation>
@@ -4633,16 +4433,6 @@ QTextBrowser#content {
 <context>
     <name>IQmol::Layer::GeminalOrbitalProperty</name>
     <message>
-        <source>Geminal Alpha %1</source>
-        <comment>预置：需配合源码补 tr() 后由 lupdate 匹配</comment>
-        <translation>成对 Alpha %1</translation>
-    </message>
-    <message>
-        <source>Geminal Beta %1</source>
-        <comment>预置：需配合源码补 tr() 后由 lupdate 匹配</comment>
-        <translation>成对 Beta %1</translation>
-    </message>
-    <message>
         <location filename="../src/Layer/GeminalOrbitalsLayer.C" line="812"/>
         <source>Geminal Alpha %1</source>
         <translation>成对 Alpha %1</translation>
@@ -4654,7 +4444,7 @@ QTextBrowser#content {
     </message>
 </context>
 <context>
-    <name>IQmol::Layer::GeminalOrbitals</name>
+        <name>IQmol::Layer::GeminalOrbitals</name>
     <message>
         <location filename="../src/Layer/GeminalOrbitalsLayer.C" line="68"/>
         <source>Show Grid Info</source>
@@ -4664,6 +4454,11 @@ QTextBrowser#content {
         <location filename="../src/Layer/GeminalOrbitalsLayer.C" line="70"/>
         <source>Edit Bounding Box</source>
         <translation>编辑包围盒</translation>
+    </message>
+    <message>
+        <location filename="../src/Layer/GeminalOrbitalsLayer.C" line="275"/>
+        <source>Problem calculating grid data</source>
+        <translation>计算网格数据时出现问题</translation>
     </message>
     <message>
         <location filename="../src/Layer/GeminalOrbitalsLayer.C" line="56"/>
@@ -4686,7 +4481,7 @@ QTextBrowser#content {
     </message>
 </context>
 <context>
-    <name>IQmol::Layer::Group</name>
+        <name>IQmol::Layer::Group</name>
     <message>
         <location filename="../src/Layer/GroupLayer.C" line="57"/>
         <source>Add Hydrogens</source>
@@ -4696,6 +4491,16 @@ QTextBrowser#content {
         <location filename="../src/Layer/GroupLayer.C" line="60"/>
         <source>Reperceive Bonds</source>
         <translation>重新识别键</translation>
+    </message>
+    <message>
+        <location filename="../src/Layer/GroupLayer.C" line="169"/>
+        <source>Coordinate mismatch in Group alignment</source>
+        <translation>组对齐时坐标数目不匹配</translation>
+    </message>
+    <message>
+        <location filename="../src/Layer/GroupLayer.C" line="183"/>
+        <source>Alignment failed in Group::align</source>
+        <translation>对齐失败（Group::align）</translation>
     </message>
 </context>
 <context>
@@ -4723,7 +4528,7 @@ QTextBrowser#content {
     </message>
 </context>
 <context>
-    <name>IQmol::Layer::Molecule</name>
+        <name>IQmol::Layer::Molecule</name>
     <message>
         <location filename="../src/Layer/MoleculeLayer.C" line="394"/>
         <source>XYZ</source>
@@ -4816,9 +4621,30 @@ QTextBrowser#content {
         <translation>另存为</translation>
     </message>
     <message>
+        <location filename="../src/Layer/MoleculeLayer.C" line="957"/>
+        <location filename="../src/Layer/MoleculeLayer.C" line="1043"/>
+        <source>Atom selection required</source>
+        <translation>需要先选择原子</translation>
+    </message>
+    <message>
+        <location filename="../src/Layer/MoleculeLayer.C" line="1428"/>
+        <source>Attempt to add unknown primitive type to molecule</source>
+        <translation>尝试向分子添加未知图元类型</translation>
+    </message>
+    <message>
+        <location filename="../src/Layer/MoleculeLayer.C" line="1482"/>
+        <source>Atempt to remove unknown primitive type to molecule</source>
+        <translation>尝试从分子移除未知图元类型</translation>
+    </message>
+    <message>
         <location filename="../src/Layer/MoleculeLayer.C" line="1559"/>
         <source>Remove atoms/bonds</source>
         <translation>移除原子/键</translation>
+    </message>
+    <message>
+        <location filename="../src/Layer/MoleculeLayer.C" line="1618"/>
+        <source>Unable to nest fragments</source>
+        <translation>无法嵌套片段</translation>
     </message>
     <message>
         <location filename="../src/Layer/MoleculeLayer.C" line="2193"/>
@@ -4939,7 +4765,7 @@ QTextBrowser#content {
     </message>
 </context>
 <context>
-    <name>IQmol::Layer::Orbitals</name>
+        <name>IQmol::Layer::Orbitals</name>
     <message>
         <location filename="../src/Layer/OrbitalsLayer.C" line="77"/>
         <source>Show Grid Info</source>
@@ -4949,6 +4775,11 @@ QTextBrowser#content {
         <location filename="../src/Layer/OrbitalsLayer.C" line="79"/>
         <source>Edit Bounding Box</source>
         <translation>编辑包围盒</translation>
+    </message>
+    <message>
+        <location filename="../src/Layer/OrbitalsLayer.C" line="250"/>
+        <source>Still processing previous grid data request</source>
+        <translation>仍在处理上一个网格数据请求</translation>
     </message>
 </context>
 <context>
@@ -4960,7 +4791,12 @@ QTextBrowser#content {
     </message>
 </context>
 <context>
-    <name>IQmol::Layer::Surface</name>
+        <name>IQmol::Layer::Surface</name>
+    <message>
+        <location filename="../src/Layer/SurfaceLayer.C" line="64"/>
+        <source>Configure Surface: </source>
+        <translation>配置表面：</translation>
+    </message>
     <message>
         <location filename="../src/Layer/SurfaceLayer.C" line="66"/>
         <source>Show Vertex Normals</source>
@@ -4981,6 +4817,11 @@ QTextBrowser#content {
         <source>Print Mesh Info</source>
         <translation>打印网格信息</translation>
     </message>
+    <message>
+        <location filename="../src/Layer/SurfaceLayer.C" line="576"/>
+        <source>Mesh simplification in progress</source>
+        <translation>网格简化正在进行中</translation>
+    </message>
 </context>
 <context>
     <name>IQmol::Layer::Symmetry</name>
@@ -4991,7 +4832,7 @@ QTextBrowser#content {
     </message>
 </context>
 <context>
-    <name>IQmol::Layer::System</name>
+        <name>IQmol::Layer::System</name>
     <message>
         <location filename="../src/Layer/SystemLayer.C" line="57"/>
         <source>Ribbons</source>
@@ -5007,6 +4848,11 @@ QTextBrowser#content {
         <location filename="../src/Layer/SystemLayer.C" line="123"/>
         <source>Info</source>
         <translation>信息</translation>
+    </message>
+    <message>
+        <location filename="../src/Layer/SystemLayer.C" line="183"/>
+        <source>Failed to open PDB file for writing</source>
+        <translation>打开 PDB 文件写入失败</translation>
     </message>
     <message>
         <location filename="../src/Layer/SystemLayer.C" line="59"/>
@@ -5041,402 +4887,425 @@ QTextBrowser#content {
     </message>
 </context>
 <context>
-    <name>IQmol::MainWindow</name>
+        <name>IQmol::MainWindow</name>
     <message>
-        <location filename="../src/Main/MainWindow.C" line="75"/>
+        <location filename="../src/Main/MainWindow.C" line="81"/>
+        <location filename="../src/Main/MainWindow.C" line="807"/>
+        <location filename="../src/Main/MainWindow.C" line="816"/>
+        <location filename="../src/Main/MainWindow.C" line="826"/>
         <source>IQmol</source>
         <translation>IQmol</translation>
     </message>
     <message>
-        <location filename="../src/Main/MainWindow.C" line="85"/>
+        <location filename="../src/Main/MainWindow.C" line="91"/>
         <source>History:</source>
         <translation>历史记录：</translation>
     </message>
     <message>
-        <location filename="../src/Main/MainWindow.C" line="122"/>
+        <location filename="../src/Main/MainWindow.C" line="128"/>
         <source>Welcome to IQmol</source>
         <translation>欢迎使用 IQmol</translation>
     </message>
     <message>
-        <location filename="../src/Main/MainWindow.C" line="321"/>
+        <location filename="../src/Main/MainWindow.C" line="327"/>
         <source>Save Changes?</source>
         <translation>保存更改？</translation>
     </message>
     <message>
-        <location filename="../src/Main/MainWindow.C" line="322"/>
-        <location filename="../src/Main/MainWindow.C" line="402"/>
+        <location filename="../src/Main/MainWindow.C" line="328"/>
+        <location filename="../src/Main/MainWindow.C" line="408"/>
         <source>Save</source>
         <translation>保存</translation>
     </message>
     <message>
-        <location filename="../src/Main/MainWindow.C" line="323"/>
+        <location filename="../src/Main/MainWindow.C" line="329"/>
         <source>Discard</source>
         <translation>放弃</translation>
     </message>
     <message>
-        <location filename="../src/Main/MainWindow.C" line="324"/>
+        <location filename="../src/Main/MainWindow.C" line="330"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="../src/Main/MainWindow.C" line="366"/>
+        <location filename="../src/Main/MainWindow.C" line="372"/>
         <source>File</source>
         <translation>文件</translation>
     </message>
     <message>
-        <location filename="../src/Main/MainWindow.C" line="368"/>
+        <location filename="../src/Main/MainWindow.C" line="374"/>
         <source>About</source>
         <translation>关于</translation>
     </message>
     <message>
-        <location filename="../src/Main/MainWindow.C" line="372"/>
+        <location filename="../src/Main/MainWindow.C" line="378"/>
         <source>New Molecule</source>
         <translation>新建分子</translation>
     </message>
     <message>
-        <location filename="../src/Main/MainWindow.C" line="377"/>
+        <location filename="../src/Main/MainWindow.C" line="383"/>
         <source>New Viewer</source>
         <translation>新建查看器</translation>
     </message>
     <message>
-        <location filename="../src/Main/MainWindow.C" line="381"/>
+        <location filename="../src/Main/MainWindow.C" line="387"/>
         <source>Open</source>
         <translation>打开</translation>
     </message>
     <message>
-        <location filename="../src/Main/MainWindow.C" line="386"/>
+        <location filename="../src/Main/MainWindow.C" line="392"/>
         <source>Open Dir</source>
         <translation>打开目录</translation>
     </message>
     <message>
-        <location filename="../src/Main/MainWindow.C" line="391"/>
+        <location filename="../src/Main/MainWindow.C" line="397"/>
         <source>Open Recent</source>
         <translation>最近打开</translation>
     </message>
     <message>
-        <location filename="../src/Main/MainWindow.C" line="397"/>
+        <location filename="../src/Main/MainWindow.C" line="403"/>
         <source>Close Viewer</source>
         <translation>关闭查看器</translation>
     </message>
     <message>
-        <location filename="../src/Main/MainWindow.C" line="407"/>
+        <location filename="../src/Main/MainWindow.C" line="413"/>
         <source>Save As</source>
         <translation>另存为</translation>
     </message>
     <message>
-        <location filename="../src/Main/MainWindow.C" line="414"/>
+        <location filename="../src/Main/MainWindow.C" line="420"/>
         <source>Save Picture</source>
         <translation>保存图片</translation>
     </message>
     <message>
-        <location filename="../src/Main/MainWindow.C" line="425"/>
+        <location filename="../src/Main/MainWindow.C" line="431"/>
         <source>Record Animation</source>
         <translation>录制动画</translation>
     </message>
     <message>
-        <location filename="../src/Main/MainWindow.C" line="433"/>
+        <location filename="../src/Main/MainWindow.C" line="439"/>
         <source>Show Message Log</source>
         <translation>显示消息日志</translation>
     </message>
     <message>
-        <location filename="../src/Main/MainWindow.C" line="438"/>
+        <location filename="../src/Main/MainWindow.C" line="444"/>
         <source>Quit</source>
         <translation>退出</translation>
     </message>
     <message>
-        <location filename="../src/Main/MainWindow.C" line="445"/>
+        <location filename="../src/Main/MainWindow.C" line="451"/>
         <source>Edit</source>
         <translation>编辑</translation>
     </message>
     <message>
-        <location filename="../src/Main/MainWindow.C" line="447"/>
+        <location filename="../src/Main/MainWindow.C" line="453"/>
         <source>Undo</source>
         <translation>撤销</translation>
     </message>
     <message>
-        <location filename="../src/Main/MainWindow.C" line="453"/>
+        <location filename="../src/Main/MainWindow.C" line="459"/>
         <source>Redo</source>
         <translation>重做</translation>
     </message>
     <message>
-        <location filename="../src/Main/MainWindow.C" line="461"/>
+        <location filename="../src/Main/MainWindow.C" line="467"/>
         <source>Cut</source>
         <translation>剪切</translation>
     </message>
     <message>
-        <location filename="../src/Main/MainWindow.C" line="466"/>
+        <location filename="../src/Main/MainWindow.C" line="472"/>
         <source>Copy</source>
         <translation>复制</translation>
     </message>
     <message>
-        <location filename="../src/Main/MainWindow.C" line="471"/>
+        <location filename="../src/Main/MainWindow.C" line="477"/>
         <source>Paste</source>
         <translation>粘贴</translation>
     </message>
     <message>
-        <location filename="../src/Main/MainWindow.C" line="478"/>
+        <location filename="../src/Main/MainWindow.C" line="484"/>
         <source>Select All</source>
         <translation>全选</translation>
     </message>
     <message>
-        <location filename="../src/Main/MainWindow.C" line="483"/>
+        <location filename="../src/Main/MainWindow.C" line="489"/>
         <source>Select None</source>
         <translation>取消选择</translation>
     </message>
     <message>
-        <location filename="../src/Main/MainWindow.C" line="488"/>
+        <location filename="../src/Main/MainWindow.C" line="494"/>
         <source>Invert Selection</source>
         <translation>反选</translation>
     </message>
     <message>
-        <location filename="../src/Main/MainWindow.C" line="495"/>
+        <location filename="../src/Main/MainWindow.C" line="501"/>
         <source>Reindex Atoms</source>
         <translation>原子重新编号</translation>
     </message>
     <message>
-        <location filename="../src/Main/MainWindow.C" line="502"/>
+        <location filename="../src/Main/MainWindow.C" line="508"/>
         <source>Preferences</source>
         <translation>首选项</translation>
     </message>
     <message>
-        <location filename="../src/Main/MainWindow.C" line="508"/>
+        <location filename="../src/Main/MainWindow.C" line="514"/>
         <source>Display</source>
         <translation>显示</translation>
     </message>
     <message>
-        <location filename="../src/Main/MainWindow.C" line="510"/>
+        <location filename="../src/Main/MainWindow.C" line="516"/>
         <source>Full Screen</source>
         <translation>全屏</translation>
     </message>
     <message>
-        <location filename="../src/Main/MainWindow.C" line="518"/>
+        <location filename="../src/Main/MainWindow.C" line="524"/>
         <source>Reset View</source>
         <translation>重置视图</translation>
     </message>
     <message>
-        <location filename="../src/Main/MainWindow.C" line="523"/>
+        <location filename="../src/Main/MainWindow.C" line="529"/>
         <source>Show Axes</source>
         <translation>显示坐标轴</translation>
     </message>
     <message>
-        <location filename="../src/Main/MainWindow.C" line="534"/>
+        <location filename="../src/Main/MainWindow.C" line="540"/>
         <source>Camera</source>
         <translation>相机</translation>
     </message>
     <message>
-        <location filename="../src/Main/MainWindow.C" line="538"/>
+        <location filename="../src/Main/MainWindow.C" line="544"/>
         <source>Appearance</source>
         <translation>外观</translation>
     </message>
     <message>
-        <location filename="../src/Main/MainWindow.C" line="544"/>
+        <location filename="../src/Main/MainWindow.C" line="550"/>
         <source>Atom Labels</source>
         <translation>原子标签</translation>
     </message>
     <message>
-        <location filename="../src/Main/MainWindow.C" line="547"/>
+        <location filename="../src/Main/MainWindow.C" line="553"/>
         <source>Element</source>
         <translation>元素</translation>
     </message>
     <message>
-        <location filename="../src/Main/MainWindow.C" line="555"/>
+        <location filename="../src/Main/MainWindow.C" line="561"/>
         <source>Index</source>
         <translation>序号</translation>
     </message>
     <message>
-        <location filename="../src/Main/MainWindow.C" line="563"/>
+        <location filename="../src/Main/MainWindow.C" line="569"/>
         <source>Mass</source>
         <translation>质量</translation>
     </message>
     <message>
-        <location filename="../src/Main/MainWindow.C" line="571"/>
+        <location filename="../src/Main/MainWindow.C" line="577"/>
         <source>NMR</source>
         <translation>核磁共振（NMR）</translation>
     </message>
     <message>
-        <location filename="../src/Main/MainWindow.C" line="579"/>
+        <location filename="../src/Main/MainWindow.C" line="585"/>
         <source>Partial Charge</source>
         <translation>部分电荷</translation>
     </message>
     <message>
-        <location filename="../src/Main/MainWindow.C" line="587"/>
+        <location filename="../src/Main/MainWindow.C" line="593"/>
         <source>Spin Densities</source>
         <translation>自旋密度</translation>
     </message>
     <message>
-        <location filename="../src/Main/MainWindow.C" line="595"/>
+        <location filename="../src/Main/MainWindow.C" line="601"/>
         <source>Atom Label</source>
         <translation>原子标签</translation>
     </message>
     <message>
-        <location filename="../src/Main/MainWindow.C" line="605"/>
+        <location filename="../src/Main/MainWindow.C" line="611"/>
         <source>Build</source>
         <translation>构建</translation>
     </message>
     <message>
-        <location filename="../src/Main/MainWindow.C" line="607"/>
+        <location filename="../src/Main/MainWindow.C" line="613"/>
         <source>Insert Molecule by ID</source>
         <translation>按 ID 插入分子</translation>
     </message>
     <message>
-        <location filename="../src/Main/MainWindow.C" line="614"/>
+        <location filename="../src/Main/MainWindow.C" line="620"/>
         <source>Fill Valencies With Hydrogens</source>
         <translation>用氢饱和化合价</translation>
     </message>
     <message>
-        <location filename="../src/Main/MainWindow.C" line="619"/>
+        <location filename="../src/Main/MainWindow.C" line="625"/>
         <source>Reperceive Bonds</source>
         <translation>重新识别键</translation>
     </message>
     <message>
-        <location filename="../src/Main/MainWindow.C" line="623"/>
+        <location filename="../src/Main/MainWindow.C" line="629"/>
         <source>Set Isotopes</source>
         <translation>设置同位素</translation>
     </message>
     <message>
-        <location filename="../src/Main/MainWindow.C" line="629"/>
+        <location filename="../src/Main/MainWindow.C" line="635"/>
         <source>Set Geometric Constraint</source>
         <translation>设置几何约束</translation>
     </message>
     <message>
-        <location filename="../src/Main/MainWindow.C" line="634"/>
+        <location filename="../src/Main/MainWindow.C" line="640"/>
         <source>Freeze Selected Atoms</source>
         <translation>冻结所选原子</translation>
     </message>
     <message>
-        <location filename="../src/Main/MainWindow.C" line="638"/>
+        <location filename="../src/Main/MainWindow.C" line="644"/>
         <source>Minimize Structure</source>
         <translation>结构最小化</translation>
     </message>
     <message>
-        <location filename="../src/Main/MainWindow.C" line="643"/>
+        <location filename="../src/Main/MainWindow.C" line="649"/>
         <source>Select Force Field</source>
         <translation>选择力场</translation>
     </message>
     <message>
-        <location filename="../src/Main/MainWindow.C" line="690"/>
+        <location filename="../src/Main/MainWindow.C" line="696"/>
         <source>Translate To Center</source>
         <translation>平移到中心</translation>
     </message>
     <message>
-        <location filename="../src/Main/MainWindow.C" line="695"/>
+        <location filename="../src/Main/MainWindow.C" line="701"/>
         <source>Symmetrize Molecule</source>
         <translation>分子对称化</translation>
     </message>
     <message>
-        <location filename="../src/Main/MainWindow.C" line="700"/>
+        <location filename="../src/Main/MainWindow.C" line="706"/>
         <source>Set Symmetry Tolerance</source>
         <translation>设置对称容差</translation>
     </message>
     <message>
-        <location filename="../src/Main/MainWindow.C" line="704"/>
+        <location filename="../src/Main/MainWindow.C" line="710"/>
         <source>Auto-detect Symmetry</source>
         <translation>自动检测对称性</translation>
     </message>
     <message>
-        <location filename="../src/Main/MainWindow.C" line="713"/>
+        <location filename="../src/Main/MainWindow.C" line="719"/>
         <source>Calculation</source>
         <translation>计算</translation>
     </message>
     <message>
-        <location filename="../src/Main/MainWindow.C" line="715"/>
+        <location filename="../src/Main/MainWindow.C" line="721"/>
         <source>Q-Chem Setup</source>
         <translation>Q-Chem 设置</translation>
     </message>
     <message>
-        <location filename="../src/Main/MainWindow.C" line="721"/>
+        <location filename="../src/Main/MainWindow.C" line="727"/>
         <source>Job Monitor</source>
         <translation>任务监视器</translation>
     </message>
     <message>
-        <location filename="../src/Main/MainWindow.C" line="726"/>
+        <location filename="../src/Main/MainWindow.C" line="732"/>
         <source>Edit Servers</source>
         <translation>编辑服务器</translation>
     </message>
     <message>
-        <location filename="../src/Main/MainWindow.C" line="736"/>
+        <location filename="../src/Main/MainWindow.C" line="742"/>
         <source>Gromacs Setup</source>
         <translation>GROMACS 设置</translation>
     </message>
     <message>
-        <location filename="../src/Main/MainWindow.C" line="741"/>
+        <location filename="../src/Main/MainWindow.C" line="747"/>
         <source>Edit Gromacs Config</source>
         <translation>编辑 GROMACS 配置</translation>
     </message>
     <message>
-        <location filename="../src/Main/MainWindow.C" line="745"/>
+        <location filename="../src/Main/MainWindow.C" line="751"/>
         <source>Edit Gomacs Server</source>
         <translation>编辑 GROMACS 服务器</translation>
     </message>
     <message>
-        <location filename="../src/Main/MainWindow.C" line="757"/>
+        <location filename="../src/Main/MainWindow.C" line="763"/>
         <source>Edit Amber Config</source>
         <translation>编辑 Amber 配置</translation>
     </message>
     <message>
-        <location filename="../src/Main/MainWindow.C" line="761"/>
+        <location filename="../src/Main/MainWindow.C" line="767"/>
         <source>Amber System Builder</source>
         <translation>Amber 系统构建器</translation>
     </message>
     <message>
-        <location filename="../src/Main/MainWindow.C" line="771"/>
+        <location filename="../src/Main/MainWindow.C" line="777"/>
         <source>Help</source>
         <translation>帮助</translation>
     </message>
     <message>
-        <location filename="../src/Main/MainWindow.C" line="773"/>
+        <location filename="../src/Main/MainWindow.C" line="779"/>
         <source>Show Help</source>
         <translation>显示帮助</translation>
     </message>
     <message>
-        <location filename="../src/Main/MainWindow.C" line="805"/>
+        <location filename="../src/Main/MainWindow.C" line="785"/>
+        <source>User Manual (PDF)</source>
+        <translation>用户手册 (PDF)</translation>
+    </message>
+    <message>
+        <location filename="../src/Main/MainWindow.C" line="808"/>
+        <source>Could not open the user manual PDF resource. Please check that the installation is complete.</source>
+        <translation>无法打开用户手册 PDF 资源，请检查安装是否完整。</translation>
+    </message>
+    <message>
+        <location filename="../src/Main/MainWindow.C" line="817"/>
+        <source>Could not create a temporary file to open the user manual.</source>
+        <translation>无法创建临时文件以打开用户手册。</translation>
+    </message>
+    <message>
+        <location filename="../src/Main/MainWindow.C" line="827"/>
+        <source>Could not launch the PDF viewer. Please open it manually: </source>
+        <translation>未能启动 PDF 查看器，请手动打开：</translation>
+    </message>
+    <message>
+        <location filename="../src/Main/MainWindow.C" line="852"/>
         <source>Network access available</source>
         <translation>网络可用</translation>
     </message>
     <message>
-        <location filename="../src/Main/MainWindow.C" line="832"/>
+        <location filename="../src/Main/MainWindow.C" line="879"/>
         <source>Open File</source>
         <translation>打开文件</translation>
     </message>
     <message>
-        <location filename="../src/Main/MainWindow.C" line="835"/>
-        <location filename="../src/Main/MainWindow.C" line="846"/>
-        <location filename="../src/Main/MainWindow.C" line="857"/>
+        <location filename="../src/Main/MainWindow.C" line="882"/>
+        <location filename="../src/Main/MainWindow.C" line="893"/>
+        <location filename="../src/Main/MainWindow.C" line="904"/>
         <source>Loading</source>
         <translation>正在加载</translation>
     </message>
     <message>
-        <location filename="../src/Main/MainWindow.C" line="843"/>
+        <location filename="../src/Main/MainWindow.C" line="890"/>
         <source>Open Job Directory</source>
         <translation>打开任务目录</translation>
     </message>
     <message>
-        <location filename="../src/Main/MainWindow.C" line="879"/>
+        <location filename="../src/Main/MainWindow.C" line="926"/>
         <source>Only one molecule can be visible when reindexing atoms.</source>
         <translation>重新编号原子时仅可显示一个分子。</translation>
     </message>
     <message>
-        <location filename="../src/Main/MainWindow.C" line="955"/>
+        <location filename="../src/Main/MainWindow.C" line="1002"/>
         <source>Clear List</source>
         <translation>清空列表</translation>
     </message>
     <message>
-        <location filename="../src/Main/MainWindow.C" line="985"/>
+        <location filename="../src/Main/MainWindow.C" line="1032"/>
         <source>Use &lt;esc&gt; to exit full screen mode</source>
         <translation>按 Esc 退出全屏</translation>
     </message>
     <message>
-        <location filename="../src/Main/MainWindow.C" line="1019"/>
+        <location filename="../src/Main/MainWindow.C" line="1066"/>
         <source>Wonky molecule detected</source>
         <translation>检测到异常分子</translation>
     </message>
     <message>
-        <location filename="../src/Main/MainWindow.C" line="1020"/>
+        <location filename="../src/Main/MainWindow.C" line="1067"/>
         <source>Do you want to proceed?</source>
         <translation>是否继续？</translation>
     </message>
     <message>
-        <location filename="../src/Main/MainWindow.C" line="1037"/>
+        <location filename="../src/Main/MainWindow.C" line="1084"/>
         <source>(none)</source>
         <translation>（无）</translation>
     </message>
@@ -5444,14 +5313,25 @@ QTextBrowser#content {
 <context>
     <name>IQmol::MullikenDecompositionsDialog</name>
     <message>
-        <source>Mulliken decomposition for %1</source>
-        <comment>预置：需配合源码补 tr() 后由 lupdate 匹配</comment>
-        <translation>Mulliken 分解：%1</translation>
-    </message>
-    <message>
         <location filename="../src/Configurator/MullikenDecompositionsDialog.C" line="35"/>
         <source>Mulliken decomposition for %1</source>
         <translation>Mulliken 分解：%1</translation>
+    </message>
+</context>
+<context>
+        <name>IQmol::Network</name>
+    <message>
+        <location filename="../src/Network/Network.C" line="211"/>
+        <source>Invalid username or password</source>
+        <translation>用户名或密码无效</translation>
+    </message>
+</context>
+<context>
+        <name>IQmol::Network::AwsConnection</name>
+    <message>
+        <location filename="../src/Network/AwsConnection.C" line="230"/>
+        <source>Passwords do not match</source>
+        <translation>两次输入的密码不一致</translation>
     </message>
 </context>
 <context>
@@ -5460,6 +5340,14 @@ QTextBrowser#content {
         <location filename="../src/Parser/OpenBabelParser.C" line="359"/>
         <source>Energy</source>
         <translation>能量</translation>
+    </message>
+</context>
+<context>
+        <name>IQmol::Parser::QChemOutput</name>
+    <message>
+        <location filename="../src/Parser/QChemOutputParser.C" line="1156"/>
+        <source> energy</source>
+        <translation> 能量</translation>
     </message>
 </context>
 <context>
@@ -5485,7 +5373,15 @@ QTextBrowser#content {
     </message>
 </context>
 <context>
-    <name>IQmol::Process::JobMonitor</name>
+        <name>IQmol::Process::AwsConfigurationDialog</name>
+    <message>
+        <location filename="../src/Process/AwsConfigurationDialog.C" line="70"/>
+        <source>Cognito Pool ID should start with the AWS region</source>
+        <translation>Cognito Pool ID 应以 AWS 区域开头</translation>
+    </message>
+</context>
+<context>
+        <name>IQmol::Process::JobMonitor</name>
     <message>
         <location filename="../src/Process/JobMonitor.C" line="119"/>
         <location filename="../src/Process/save/JobMonitor.C" line="128"/>
@@ -5509,6 +5405,26 @@ QTextBrowser#content {
         <location filename="../src/Process/save/JobMonitor.C" line="135"/>
         <source>Close</source>
         <translation>关闭</translation>
+    </message>
+    <message>
+        <location filename="../src/Process/JobMonitor.C" line="308"/>
+        <source>Invalid username or password</source>
+        <translation>用户名或密码无效</translation>
+    </message>
+    <message>
+        <location filename="../src/Process/JobMonitor.C" line="313"/>
+        <source>Network timeout</source>
+        <translation>网络超时</translation>
+    </message>
+    <message>
+        <location filename="../src/Process/JobMonitor.C" line="321"/>
+        <source>Error encountered</source>
+        <translation>遇到错误</translation>
+    </message>
+    <message>
+        <location filename="../src/Process/JobMonitor.C" line="447"/>
+        <source>Directory name cannot contain spaces</source>
+        <translation>目录名不能包含空格</translation>
     </message>
     <message>
         <location filename="../src/Process/JobMonitor.C" line="743"/>
@@ -5544,9 +5460,14 @@ QTextBrowser#content {
         <translation>查看输出文件</translation>
     </message>
     <message>
-        <source>View Output File</source>
-        <comment>View 此处是动词。</comment>
-        <translation>查看输出文件</translation>
+        <location filename="../src/Process/JobMonitor.C" line="845"/>
+        <source>Copy results from server?</source>
+        <translation>要从服务器复制结果吗？</translation>
+    </message>
+    <message>
+        <location filename="../src/Process/JobMonitor.C" line="934"/>
+        <source>Output file no longer exists</source>
+        <translation>输出文件已不存在</translation>
     </message>
     <message>
         <location filename="../src/Process/JobMonitor.C" line="756"/>
@@ -5559,21 +5480,6 @@ QTextBrowser#content {
         <location filename="../src/Process/save/JobMonitor.C" line="781"/>
         <source>Copy Results From Server</source>
         <translation>从服务器复制结果</translation>
-    </message>
-    <message>
-        <source>Delete Job From Queue</source>
-        <comment>预置：需配合源码补 tr() 后由 lupdate 匹配</comment>
-        <translation>从队列中删除任务</translation>
-    </message>
-    <message>
-        <source>Cancel Copy</source>
-        <comment>预置：需配合源码补 tr() 后由 lupdate 匹配</comment>
-        <translation>取消复制</translation>
-    </message>
-    <message>
-        <source>Kill Job</source>
-        <comment>预置：需配合源码补 tr() 后由 lupdate 匹配</comment>
-        <translation>终止任务</translation>
     </message>
 </context>
 <context>
@@ -5596,7 +5502,60 @@ QTextBrowser#content {
     </message>
 </context>
 <context>
-    <name>IQmol::Process::ServerConfigurationDialog</name>
+        <name>IQmol::Process::QueueResourcesDialog</name>
+    <message>
+        <location filename="../src/Process/QueueResourcesDialog.C" line="42"/>
+        <source>No queues found on server</source>
+        <translation>服务器上未找到队列</translation>
+    </message>
+    <message>
+        <location filename="../src/Process/QueueResourcesDialog.C" line="71"/>
+        <source>Wall time must be in the format h:mm:ss</source>
+        <translation>墙钟时间格式必须为 h:mm:ss</translation>
+    </message>
+    <message>
+        <location filename="../src/Process/QueueResourcesDialog.C" line="82"/>
+        <source>Validated wall time not in the format h:mm:ss</source>
+        <translation>校验后的墙钟时间格式不是 h:mm:ss</translation>
+    </message>
+    <message>
+        <location filename="../src/Process/QueueResourcesDialog.C" line="95"/>
+        <source>Wall time exceeds queue maximum of </source>
+        <translation>墙钟时间超过队列上限 </translation>
+    </message>
+    <message>
+        <location filename="../src/Process/QueueResourcesDialog.C" line="98"/>
+        <source>Memory exceeds queue limit of </source>
+        <translation>内存超过队列限制 </translation>
+    </message>
+    <message>
+        <location filename="../src/Process/QueueResourcesDialog.C" line="102"/>
+        <source>Scratch exceeds queue limit of </source>
+        <translation>临时目录超过队列限制 </translation>
+    </message>
+    <message>
+        <location filename="../src/Process/QueueResourcesDialog.C" line="106"/>
+        <source>Number of CPUs exceeds queue limit of </source>
+        <translation>CPU 数量超过队列限制 </translation>
+    </message>
+</context>
+<context>
+        <name>IQmol::Process::ServerConfigurationDialog</name>
+    <message>
+        <location filename="../src/Process/ServerConfigurationDialog.C" line="69"/>
+        <source>Server name not set</source>
+        <translation>未设置服务器名称</translation>
+    </message>
+    <message>
+        <location filename="../src/Process/ServerConfigurationDialog.C" line="88"/>
+        <source>Host address not set</source>
+        <translation>未设置主机地址</translation>
+    </message>
+    <message>
+        <location filename="../src/Process/ServerConfigurationDialog.C" line="98"/>
+        <source>User name must be set</source>
+        <translation>必须设置用户名称</translation>
+    </message>
     <message>
         <location filename="../src/Process/ServerConfigurationDialog.C" line="465"/>
         <source>Open Server Configuration</source>
@@ -5612,6 +5571,11 @@ QTextBrowser#content {
         <location filename="../src/Process/ServerConfigurationDialog.C" line="520"/>
         <source>Save File</source>
         <translation>保存文件</translation>
+    </message>
+    <message>
+        <location filename="../src/Process/ServerConfigurationDialog.C" line="526"/>
+        <source>Failed to export server configuration</source>
+        <translation>导出服务器配置失败</translation>
     </message>
 </context>
 <context>
@@ -5676,6 +5640,24 @@ QTextBrowser#content {
     </message>
 </context>
 <context>
+        <name>IQmol::Snapshot</name>
+    <message>
+        <location filename="../src/Viewer/Snapshot.C" line="185"/>
+        <source>Movie making already in progress, please wait</source>
+        <translation>影片录制已在进行中，请稍候</translation>
+    </message>
+    <message>
+        <location filename="../src/Viewer/Snapshot.C" line="192"/>
+        <source>ffmpeg executable not found</source>
+        <translation>未找到 ffmpeg 可执行文件</translation>
+    </message>
+    <message>
+        <location filename="../src/Viewer/Snapshot.C" line="199"/>
+        <source>Could not remove existing file </source>
+        <translation>无法删除已存在的文件 </translation>
+    </message>
+</context>
+<context>
     <name>IQmol::SurfaceAnimatorDialog</name>
     <message>
         <location filename="../src/Configurator/SurfaceAnimatorDialog.C" line="355"/>
@@ -5693,23 +5675,18 @@ QTextBrowser#content {
         <source>Interpolation Frame %1</source>
         <translation>插值帧 %1</translation>
     </message>
-    <message>
-        <source>Cube Data %1</source>
-        <comment>预置：需配合源码补 tr() 后由 lupdate 匹配</comment>
-        <translation>Cube 数据 %1</translation>
-    </message>
-    <message>
-        <source>Interpolation Frame %1</source>
-        <comment>预置：需配合源码补 tr() 后由 lupdate 匹配</comment>
-        <translation>插值帧 %1</translation>
-    </message>
 </context>
 <context>
-    <name>IQmol::ViewerModel</name>
+        <name>IQmol::ViewerModel</name>
     <message>
         <location filename="../src/Viewer/ViewerModel.C" line="70"/>
         <source>Model View</source>
         <translation>模型视图</translation>
+    </message>
+    <message>
+        <location filename="../src/Viewer/ViewerModel.C" line="233"/>
+        <source>Invalid string</source>
+        <translation>无效的字符串</translation>
     </message>
     <message>
         <location filename="../src/Viewer/ViewerModel.C" line="64"/>
@@ -5719,21 +5696,6 @@ QTextBrowser#content {
 </context>
 <context>
     <name>IQmol::ViewerModelView</name>
-    <message>
-        <source>Merge Molecules</source>
-        <comment>预置：需配合源码补 tr() 后由 lupdate 匹配</comment>
-        <translation>合并分子</translation>
-    </message>
-    <message>
-        <source>Show Molecules</source>
-        <comment>预置：需配合源码补 tr() 后由 lupdate 匹配</comment>
-        <translation>显示分子</translation>
-    </message>
-    <message>
-        <source>Hide Molecules</source>
-        <comment>预置：需配合源码补 tr() 后由 lupdate 匹配</comment>
-        <translation>隐藏分子</translation>
-    </message>
     <message>
         <location filename="../src/Viewer/ViewerModelView.C" line="75"/>
         <source>Merge Molecules</source>
@@ -5808,11 +5770,6 @@ QTextBrowser#content {
         <translation>点群：</translation>
     </message>
     <message>
-        <source>Point group:</source>
-        <comment>点群对称性，与“使用点群对称性”统一。</comment>
-        <translation>点群：</translation>
-    </message>
-    <message>
         <location filename="../src/Configurator/InfoConfigurator.ui" line="85"/>
         <source>atoms</source>
         <translation>原子</translation>
@@ -5875,7 +5832,7 @@ p, li { white-space: pre-wrap; }
     </message>
 </context>
 <context>
-    <name>InputDialog</name>
+        <name>InputDialog</name>
     <message>
         <location filename="../src/Qui/InputDialog.C" line="86"/>
         <location filename="../src/Qui/InputDialog.C" line="491"/>
@@ -5931,6 +5888,30 @@ p, li { white-space: pre-wrap; }
         <location filename="../src/Qui/InputDialog.C" line="471"/>
         <source>Save Input File</source>
         <translation>保存输入文件</translation>
+    </message>
+    <message>
+        <location filename="../src/Qui/InputDialog.C" line="493"/>
+        <source>Could not write to file &apos;%1&apos;
+Input file not saved
+</source>
+        <translation>无法写入文件 &apos;%1&apos;
+输入文件未保存
+</translation>
+    </message>
+    <message>
+        <location filename="../src/Qui/InputDialog.C" line="495"/>
+        <source>File Not Saved</source>
+        <translation>文件未保存</translation>
+    </message>
+    <message>
+        <location filename="../src/Qui/InputDialog.C" line="772"/>
+        <source>Are you sure you want to delete the section %1?</source>
+        <translation>确定要删除节 %1 吗？</translation>
+    </message>
+    <message>
+        <location filename="../src/Qui/InputDialog.C" line="775"/>
+        <source>Delete Section?</source>
+        <translation>删除该节吗？</translation>
     </message>
     <message>
         <location filename="../src/Qui/InputDialog.C" line="804"/>
@@ -6346,11 +6327,6 @@ p, li { white-space: pre-wrap; }
         <translation>相关</translation>
     </message>
     <message>
-        <source>Multiplicity</source>
-        <comment>自旋多重度 2S+1；multiplet 才是多重态。</comment>
-        <translation>多重度</translation>
-    </message>
-    <message>
         <location filename="../src/Qui/InputDialog.ui" line="215"/>
         <source>Charge</source>
         <translation>电荷</translation>
@@ -6361,151 +6337,9 @@ p, li { white-space: pre-wrap; }
         <translation>向输入文件添加段</translation>
     </message>
     <message>
-        <source>QToolButton {
-   color: #333;
-   background-color: QLinearGradient( x1: 0, y1: 0, x2: 0, y2: 1, 
-          stop: 0 #fff,
-          stop: 0.5 #eee, 
-          stop: 1 #999);
-   border-width: 2px;
-   border-color: #333;
-   border-style: solid;
-   border-radius: 5;
-   padding: 0px;
-   font-size: 24px;
-   min-width: 24px;
-   max-width: 24px;
-   min-height: 24px;
-   max-height: 24px;
-}
-
-QToolButton:disabled {
-  background-color: QLinearGradient( x1: 0, y1: 0, x2: 0, y2: 1, 
-          stop: 0 #fff,
-          stop: 0.5 #eee, 
-          stop: 1 #bbb);
-   border-color: #aaa;
-   color: #aaa;
-}
-
-QToolButton:pressed {
-   border-color: #222;
-}
-
-QToolButton:checked {
-   border-color: #b00;
-}</source>
-        <translation>QToolButton {
-   color: #333;
-   background-color: QLinearGradient( x1: 0, y1: 0, x2: 0, y2: 1, 
-          stop: 0 #fff,
-          stop: 0.5 #eee, 
-          stop: 1 #999);
-   border-width: 2px;
-   border-color: #333;
-   border-style: solid;
-   border-radius: 5;
-   padding: 0px;
-   font-size: 24px;
-   min-width: 24px;
-   max-width: 24px;
-   min-height: 24px;
-   max-height: 24px;
-}
-
-QToolButton:disabled {
-  background-color: QLinearGradient( x1: 0, y1: 0, x2: 0, y2: 1, 
-          stop: 0 #fff,
-          stop: 0.5 #eee, 
-          stop: 1 #bbb);
-   border-color: #aaa;
-   color: #aaa;
-}
-
-QToolButton:pressed {
-   border-color: #222;
-}
-
-QToolButton:checked {
-   border-color: #b00;
-}</translation>
-    </message>
-    <message>
         <location filename="../src/Qui/InputDialog.ui" line="334"/>
         <source>Remove current section from input file</source>
         <translation>从输入文件移除当前段</translation>
-    </message>
-    <message>
-        <source>QToolButton {
-   color: #333;
-   background-color: QLinearGradient( x1: 0, y1: 0, x2: 0, y2: 1, 
-          stop: 0 #fff,
-          stop: 0.5 #eee, 
-          stop: 1 #999);
-   border-width: 2px;
-   border-color: #333;
-   border-style: solid;
-   border-radius: 5;
-   padding: 0px;
-   font-size: 24px;
-   min-width: 24px;
-   max-width: 24px;
-   min-height: 24px;
-   max-height: 24px;
-}
-
-QToolButton:disabled {
-  background-color: QLinearGradient( x1: 0, y1: 0, x2: 0, y2: 1, 
-          stop: 0 #fff,
-          stop: 0.5 #eee, 
-          stop: 1 #bbb);
-   border-color: #aaa;
-   color: #aaa;
-}
-
-QToolButton:pressed {
-   border-color: #222;
-}
-
-
-QToolButton:checked {
-   border-color: #b00;
-}</source>
-        <translation>QToolButton {
-   color: #333;
-   background-color: QLinearGradient( x1: 0, y1: 0, x2: 0, y2: 1, 
-          stop: 0 #fff,
-          stop: 0.5 #eee, 
-          stop: 1 #999);
-   border-width: 2px;
-   border-color: #333;
-   border-style: solid;
-   border-radius: 5;
-   padding: 0px;
-   font-size: 24px;
-   min-width: 24px;
-   max-width: 24px;
-   min-height: 24px;
-   max-height: 24px;
-}
-
-QToolButton:disabled {
-  background-color: QLinearGradient( x1: 0, y1: 0, x2: 0, y2: 1, 
-          stop: 0 #fff,
-          stop: 0.5 #eee, 
-          stop: 1 #bbb);
-   border-color: #aaa;
-   color: #aaa;
-}
-
-QToolButton:pressed {
-   border-color: #222;
-}
-
-
-QToolButton:checked {
-   border-color: #b00;
-}</translation>
     </message>
     <message>
         <location filename="../src/Qui/InputDialog.ui" line="402"/>
@@ -6813,11 +6647,6 @@ QToolButton:checked {
         <translation>RCA 切换阈值</translation>
     </message>
     <message>
-        <source>Pure/Cartesian</source>
-        <comment>基函数类型：纯球谐型或笛卡尔型。</comment>
-        <translation>纯球谐/笛卡尔</translation>
-    </message>
-    <message>
         <location filename="../src/Qui/InputDialog.ui" line="1038"/>
         <source>MOM Start Cycle</source>
         <translation>MOM 起始循环</translation>
@@ -7059,7 +6888,7 @@ QToolButton:checked {
     <message>
         <location filename="../src/Qui/InputDialog.ui" line="1859"/>
         <source>Number of Roots</source>
-<translation>根数</translation>
+        <translation>根数</translation>
     </message>
     <message>
         <location filename="../src/Qui/InputDialog.ui" line="1879"/>
@@ -7193,11 +7022,6 @@ QToolButton:checked {
         <location filename="../src/Qui/InputDialog.ui" line="2508"/>
         <source>Functional</source>
         <translation>泛函</translation>
-    </message>
-    <message>
-        <source>Frozen Core</source>
-        <comment>计算化学标准术语：冻结核近似。</comment>
-        <translation>冻结核</translation>
     </message>
     <message>
         <location filename="../src/Qui/InputDialog.ui" line="2563"/>
@@ -7342,16 +7166,6 @@ QToolButton:checked {
         <translation>增加打印输出</translation>
     </message>
     <message>
-        <source>Restricted Open-Shell Kohn-Sham</source>
-        <comment>restricted=限制性，open-shell=开壳层。</comment>
-        <translation>限制开壳层 Kohn-Sham</translation>
-    </message>
-    <message>
-        <source>Level Shift</source>
-        <comment>SCF 收敛技巧 level shift。</comment>
-        <translation>能级平移</translation>
-    </message>
-    <message>
         <location filename="../src/Qui/InputDialog.ui" line="3077"/>
         <location filename="../src/Qui/InputDialog.ui" line="3189"/>
         <source>Guess Options</source>
@@ -7362,11 +7176,6 @@ QToolButton:checked {
         <location filename="../src/Qui/InputDialog.ui" line="3195"/>
         <source>Singles Guess Vectors</source>
         <translation>单激发初始猜测向量</translation>
-    </message>
-    <message>
-        <source>Doubles Guess Vectors</source>
-        <comment>Doubles 指双激发，与 Singles 单激发对应。</comment>
-        <translation>双激发初始猜测向量</translation>
     </message>
     <message>
         <location filename="../src/Qui/InputDialog.ui" line="3106"/>
@@ -7399,11 +7208,6 @@ QToolButton:checked {
         <location filename="../src/Qui/InputDialog.ui" line="3284"/>
         <source>DIIS Options</source>
         <translation>DIIS 选项</translation>
-    </message>
-    <message>
-        <source>Res. Convergence</source>
-        <comment>Res. = Residual 残差。</comment>
-        <translation>残差收敛</translation>
     </message>
     <message>
         <location filename="../src/Qui/InputDialog.ui" line="205"/>
@@ -8234,7 +8038,7 @@ QToolButton:pressed {
     <message>
         <location filename="../src/Configurator/MoleculeConfigurator.ui" line="55"/>
         <source>Tubes</source>
-<translation>管状</translation>
+        <translation>管状</translation>
     </message>
     <message>
         <location filename="../src/Configurator/MoleculeConfigurator.ui" line="62"/>
@@ -8915,11 +8719,6 @@ QToolButton:pressed {
         <translation>多重度</translation>
     </message>
     <message>
-        <source>Multiplicity</source>
-        <comment>自旋多重度 2S+1；multiplet 才是多重态。</comment>
-        <translation>多重度</translation>
-    </message>
-    <message>
         <location filename="../src/Amber/ParametrizeMoleculeDialog.ui" line="78"/>
         <source>Force Field</source>
         <translation>力场</translation>
@@ -8953,632 +8752,632 @@ QToolButton:pressed {
 <context>
     <name>PeriodicTable</name>
     <message>
-        <location filename="../src/Main/PeriodicTable.ui" line="26"/>
         <location filename="../src/Main/PeriodicTableMac.ui" line="26"/>
+        <location filename="../src/Main/PeriodicTable.ui" line="26"/>
         <source>Periodic Table</source>
         <translation>元素周期表</translation>
     </message>
     <message>
-        <location filename="../src/Main/PeriodicTable.ui" line="101"/>
         <location filename="../src/Main/PeriodicTableMac.ui" line="82"/>
+        <location filename="../src/Main/PeriodicTable.ui" line="101"/>
         <source>H</source>
         <translation>H</translation>
     </message>
     <message>
-        <location filename="../src/Main/PeriodicTable.ui" line="117"/>
         <location filename="../src/Main/PeriodicTableMac.ui" line="92"/>
+        <location filename="../src/Main/PeriodicTable.ui" line="117"/>
         <source>He</source>
         <translation>He</translation>
     </message>
     <message>
-        <location filename="../src/Main/PeriodicTable.ui" line="127"/>
         <location filename="../src/Main/PeriodicTableMac.ui" line="102"/>
+        <location filename="../src/Main/PeriodicTable.ui" line="127"/>
         <source>Li</source>
         <translation>Li</translation>
     </message>
     <message>
-        <location filename="../src/Main/PeriodicTable.ui" line="137"/>
         <location filename="../src/Main/PeriodicTableMac.ui" line="112"/>
+        <location filename="../src/Main/PeriodicTable.ui" line="137"/>
         <source>Be</source>
         <translation>Be</translation>
     </message>
     <message>
-        <location filename="../src/Main/PeriodicTable.ui" line="147"/>
         <location filename="../src/Main/PeriodicTableMac.ui" line="122"/>
+        <location filename="../src/Main/PeriodicTable.ui" line="147"/>
         <source>B</source>
         <translation>B</translation>
     </message>
     <message>
-        <location filename="../src/Main/PeriodicTable.ui" line="154"/>
         <location filename="../src/Main/PeriodicTableMac.ui" line="129"/>
+        <location filename="../src/Main/PeriodicTable.ui" line="154"/>
         <source>Carbon</source>
         <translation>碳</translation>
     </message>
     <message>
-        <location filename="../src/Main/PeriodicTable.ui" line="160"/>
         <location filename="../src/Main/PeriodicTableMac.ui" line="135"/>
+        <location filename="../src/Main/PeriodicTable.ui" line="160"/>
         <source>C</source>
         <translation>C</translation>
     </message>
     <message>
-        <location filename="../src/Main/PeriodicTable.ui" line="170"/>
         <location filename="../src/Main/PeriodicTableMac.ui" line="145"/>
+        <location filename="../src/Main/PeriodicTable.ui" line="170"/>
         <source>N</source>
         <translation>N</translation>
     </message>
     <message>
-        <location filename="../src/Main/PeriodicTable.ui" line="180"/>
         <location filename="../src/Main/PeriodicTableMac.ui" line="155"/>
+        <location filename="../src/Main/PeriodicTable.ui" line="180"/>
         <source>O</source>
         <translation>O</translation>
     </message>
     <message>
-        <location filename="../src/Main/PeriodicTable.ui" line="190"/>
         <location filename="../src/Main/PeriodicTableMac.ui" line="165"/>
+        <location filename="../src/Main/PeriodicTable.ui" line="190"/>
         <source>F</source>
         <translation>F</translation>
     </message>
     <message>
-        <location filename="../src/Main/PeriodicTable.ui" line="200"/>
         <location filename="../src/Main/PeriodicTableMac.ui" line="175"/>
+        <location filename="../src/Main/PeriodicTable.ui" line="200"/>
         <source>Ne</source>
         <translation>Ne</translation>
     </message>
     <message>
-        <location filename="../src/Main/PeriodicTable.ui" line="210"/>
         <location filename="../src/Main/PeriodicTableMac.ui" line="185"/>
+        <location filename="../src/Main/PeriodicTable.ui" line="210"/>
         <source>Na</source>
         <translation>Na</translation>
     </message>
     <message>
-        <location filename="../src/Main/PeriodicTable.ui" line="220"/>
         <location filename="../src/Main/PeriodicTableMac.ui" line="195"/>
+        <location filename="../src/Main/PeriodicTable.ui" line="220"/>
         <source>Mg</source>
         <translation>Mg</translation>
     </message>
     <message>
-        <location filename="../src/Main/PeriodicTable.ui" line="230"/>
         <location filename="../src/Main/PeriodicTableMac.ui" line="205"/>
+        <location filename="../src/Main/PeriodicTable.ui" line="230"/>
         <source>Al</source>
         <translation>Al</translation>
     </message>
     <message>
-        <location filename="../src/Main/PeriodicTable.ui" line="240"/>
         <location filename="../src/Main/PeriodicTableMac.ui" line="215"/>
+        <location filename="../src/Main/PeriodicTable.ui" line="240"/>
         <source>Si</source>
         <translation>Si</translation>
     </message>
     <message>
-        <location filename="../src/Main/PeriodicTable.ui" line="250"/>
         <location filename="../src/Main/PeriodicTableMac.ui" line="225"/>
+        <location filename="../src/Main/PeriodicTable.ui" line="250"/>
         <source>P</source>
         <translation>P</translation>
     </message>
     <message>
-        <location filename="../src/Main/PeriodicTable.ui" line="260"/>
         <location filename="../src/Main/PeriodicTableMac.ui" line="235"/>
+        <location filename="../src/Main/PeriodicTable.ui" line="260"/>
         <source>S</source>
         <translation>S</translation>
     </message>
     <message>
-        <location filename="../src/Main/PeriodicTable.ui" line="270"/>
         <location filename="../src/Main/PeriodicTableMac.ui" line="245"/>
+        <location filename="../src/Main/PeriodicTable.ui" line="270"/>
         <source>Cl</source>
         <translation>Cl</translation>
     </message>
     <message>
-        <location filename="../src/Main/PeriodicTable.ui" line="280"/>
         <location filename="../src/Main/PeriodicTableMac.ui" line="255"/>
+        <location filename="../src/Main/PeriodicTable.ui" line="280"/>
         <source>Ar</source>
         <translation>Ar</translation>
     </message>
     <message>
-        <location filename="../src/Main/PeriodicTable.ui" line="290"/>
         <location filename="../src/Main/PeriodicTableMac.ui" line="265"/>
+        <location filename="../src/Main/PeriodicTable.ui" line="290"/>
         <source>K</source>
         <translation>K</translation>
     </message>
     <message>
-        <location filename="../src/Main/PeriodicTable.ui" line="300"/>
         <location filename="../src/Main/PeriodicTableMac.ui" line="275"/>
+        <location filename="../src/Main/PeriodicTable.ui" line="300"/>
         <source>Ca</source>
         <translation>Ca</translation>
     </message>
     <message>
-        <location filename="../src/Main/PeriodicTable.ui" line="310"/>
         <location filename="../src/Main/PeriodicTableMac.ui" line="1121"/>
+        <location filename="../src/Main/PeriodicTable.ui" line="310"/>
         <source>Sc</source>
         <translation>Sc</translation>
     </message>
     <message>
-        <location filename="../src/Main/PeriodicTable.ui" line="320"/>
         <location filename="../src/Main/PeriodicTableMac.ui" line="285"/>
+        <location filename="../src/Main/PeriodicTable.ui" line="320"/>
         <source>Ti</source>
         <translation>Ti</translation>
     </message>
     <message>
-        <location filename="../src/Main/PeriodicTable.ui" line="330"/>
         <location filename="../src/Main/PeriodicTableMac.ui" line="295"/>
+        <location filename="../src/Main/PeriodicTable.ui" line="330"/>
         <source>V</source>
         <translation>V</translation>
     </message>
     <message>
-        <location filename="../src/Main/PeriodicTable.ui" line="340"/>
         <location filename="../src/Main/PeriodicTableMac.ui" line="305"/>
+        <location filename="../src/Main/PeriodicTable.ui" line="340"/>
         <source>Cr</source>
         <translation>Cr</translation>
     </message>
     <message>
-        <location filename="../src/Main/PeriodicTable.ui" line="350"/>
         <location filename="../src/Main/PeriodicTableMac.ui" line="315"/>
+        <location filename="../src/Main/PeriodicTable.ui" line="350"/>
         <source>Mn</source>
         <translation>Mn</translation>
     </message>
     <message>
-        <location filename="../src/Main/PeriodicTable.ui" line="360"/>
         <location filename="../src/Main/PeriodicTableMac.ui" line="325"/>
+        <location filename="../src/Main/PeriodicTable.ui" line="360"/>
         <source>Fe</source>
         <translation>Fe</translation>
     </message>
     <message>
-        <location filename="../src/Main/PeriodicTable.ui" line="370"/>
         <location filename="../src/Main/PeriodicTableMac.ui" line="335"/>
+        <location filename="../src/Main/PeriodicTable.ui" line="370"/>
         <source>Co</source>
         <translation>Co</translation>
     </message>
     <message>
-        <location filename="../src/Main/PeriodicTable.ui" line="380"/>
         <location filename="../src/Main/PeriodicTableMac.ui" line="345"/>
+        <location filename="../src/Main/PeriodicTable.ui" line="380"/>
         <source>Ni</source>
         <translation>Ni</translation>
     </message>
     <message>
-        <location filename="../src/Main/PeriodicTable.ui" line="390"/>
         <location filename="../src/Main/PeriodicTableMac.ui" line="355"/>
+        <location filename="../src/Main/PeriodicTable.ui" line="390"/>
         <source>Cu</source>
         <translation>Cu</translation>
     </message>
     <message>
-        <location filename="../src/Main/PeriodicTable.ui" line="400"/>
         <location filename="../src/Main/PeriodicTableMac.ui" line="365"/>
+        <location filename="../src/Main/PeriodicTable.ui" line="400"/>
         <source>Zn</source>
         <translation>Zn</translation>
     </message>
     <message>
-        <location filename="../src/Main/PeriodicTable.ui" line="410"/>
         <location filename="../src/Main/PeriodicTableMac.ui" line="375"/>
+        <location filename="../src/Main/PeriodicTable.ui" line="410"/>
         <source>Ga</source>
         <translation>Ga</translation>
     </message>
     <message>
-        <location filename="../src/Main/PeriodicTable.ui" line="420"/>
         <location filename="../src/Main/PeriodicTableMac.ui" line="385"/>
+        <location filename="../src/Main/PeriodicTable.ui" line="420"/>
         <source>Ge</source>
         <translation>Ge</translation>
     </message>
     <message>
-        <location filename="../src/Main/PeriodicTable.ui" line="430"/>
         <location filename="../src/Main/PeriodicTableMac.ui" line="395"/>
+        <location filename="../src/Main/PeriodicTable.ui" line="430"/>
         <source>As</source>
         <translation>As</translation>
     </message>
     <message>
-        <location filename="../src/Main/PeriodicTable.ui" line="440"/>
         <location filename="../src/Main/PeriodicTableMac.ui" line="405"/>
+        <location filename="../src/Main/PeriodicTable.ui" line="440"/>
         <source>Se</source>
         <translation>Se</translation>
     </message>
     <message>
-        <location filename="../src/Main/PeriodicTable.ui" line="450"/>
         <location filename="../src/Main/PeriodicTableMac.ui" line="415"/>
+        <location filename="../src/Main/PeriodicTable.ui" line="450"/>
         <source>Br</source>
         <translation>Br</translation>
     </message>
     <message>
-        <location filename="../src/Main/PeriodicTable.ui" line="460"/>
         <location filename="../src/Main/PeriodicTableMac.ui" line="425"/>
+        <location filename="../src/Main/PeriodicTable.ui" line="460"/>
         <source>Kr</source>
         <translation>Kr</translation>
     </message>
     <message>
-        <location filename="../src/Main/PeriodicTable.ui" line="470"/>
         <location filename="../src/Main/PeriodicTableMac.ui" line="435"/>
+        <location filename="../src/Main/PeriodicTable.ui" line="470"/>
         <source>Rb</source>
         <translation>Rb</translation>
     </message>
     <message>
-        <location filename="../src/Main/PeriodicTable.ui" line="480"/>
         <location filename="../src/Main/PeriodicTableMac.ui" line="445"/>
+        <location filename="../src/Main/PeriodicTable.ui" line="480"/>
         <source>Sr</source>
         <translation>Sr</translation>
     </message>
     <message>
-        <location filename="../src/Main/PeriodicTable.ui" line="490"/>
         <location filename="../src/Main/PeriodicTableMac.ui" line="455"/>
+        <location filename="../src/Main/PeriodicTable.ui" line="490"/>
         <source>Y</source>
         <translation>Y</translation>
     </message>
     <message>
-        <location filename="../src/Main/PeriodicTable.ui" line="500"/>
         <location filename="../src/Main/PeriodicTableMac.ui" line="465"/>
+        <location filename="../src/Main/PeriodicTable.ui" line="500"/>
         <source>Zr</source>
         <translation>Zr</translation>
     </message>
     <message>
-        <location filename="../src/Main/PeriodicTable.ui" line="510"/>
         <location filename="../src/Main/PeriodicTableMac.ui" line="475"/>
+        <location filename="../src/Main/PeriodicTable.ui" line="510"/>
         <source>Nb</source>
         <translation>Nb</translation>
     </message>
     <message>
-        <location filename="../src/Main/PeriodicTable.ui" line="520"/>
         <location filename="../src/Main/PeriodicTableMac.ui" line="485"/>
+        <location filename="../src/Main/PeriodicTable.ui" line="520"/>
         <source>Mo</source>
         <translation>Mo</translation>
     </message>
     <message>
-        <location filename="../src/Main/PeriodicTable.ui" line="530"/>
         <location filename="../src/Main/PeriodicTableMac.ui" line="495"/>
+        <location filename="../src/Main/PeriodicTable.ui" line="530"/>
         <source>Tc</source>
         <translation>Tc</translation>
     </message>
     <message>
-        <location filename="../src/Main/PeriodicTable.ui" line="540"/>
         <location filename="../src/Main/PeriodicTableMac.ui" line="505"/>
+        <location filename="../src/Main/PeriodicTable.ui" line="540"/>
         <source>Ru</source>
         <translation>Ru</translation>
     </message>
     <message>
-        <location filename="../src/Main/PeriodicTable.ui" line="550"/>
         <location filename="../src/Main/PeriodicTableMac.ui" line="515"/>
+        <location filename="../src/Main/PeriodicTable.ui" line="550"/>
         <source>Rh</source>
         <translation>Rh</translation>
     </message>
     <message>
-        <location filename="../src/Main/PeriodicTable.ui" line="560"/>
         <location filename="../src/Main/PeriodicTableMac.ui" line="525"/>
+        <location filename="../src/Main/PeriodicTable.ui" line="560"/>
         <source>Pd</source>
         <translation>Pd</translation>
     </message>
     <message>
-        <location filename="../src/Main/PeriodicTable.ui" line="570"/>
         <location filename="../src/Main/PeriodicTableMac.ui" line="535"/>
+        <location filename="../src/Main/PeriodicTable.ui" line="570"/>
         <source>Ag</source>
         <translation>Ag</translation>
     </message>
     <message>
-        <location filename="../src/Main/PeriodicTable.ui" line="580"/>
         <location filename="../src/Main/PeriodicTableMac.ui" line="545"/>
+        <location filename="../src/Main/PeriodicTable.ui" line="580"/>
         <source>Cd</source>
         <translation>Cd</translation>
     </message>
     <message>
-        <location filename="../src/Main/PeriodicTable.ui" line="590"/>
         <location filename="../src/Main/PeriodicTableMac.ui" line="555"/>
+        <location filename="../src/Main/PeriodicTable.ui" line="590"/>
         <source>In</source>
         <translation>In</translation>
     </message>
     <message>
-        <location filename="../src/Main/PeriodicTable.ui" line="600"/>
         <location filename="../src/Main/PeriodicTableMac.ui" line="565"/>
+        <location filename="../src/Main/PeriodicTable.ui" line="600"/>
         <source>Sn</source>
         <translation>Sn</translation>
     </message>
     <message>
-        <location filename="../src/Main/PeriodicTable.ui" line="610"/>
         <location filename="../src/Main/PeriodicTableMac.ui" line="575"/>
+        <location filename="../src/Main/PeriodicTable.ui" line="610"/>
         <source>Sb</source>
         <translation>Sb</translation>
     </message>
     <message>
-        <location filename="../src/Main/PeriodicTable.ui" line="620"/>
         <location filename="../src/Main/PeriodicTableMac.ui" line="585"/>
+        <location filename="../src/Main/PeriodicTable.ui" line="620"/>
         <source>Te</source>
         <translation>Te</translation>
     </message>
     <message>
-        <location filename="../src/Main/PeriodicTable.ui" line="630"/>
         <location filename="../src/Main/PeriodicTableMac.ui" line="595"/>
+        <location filename="../src/Main/PeriodicTable.ui" line="630"/>
         <source>I</source>
         <translation>I</translation>
     </message>
     <message>
-        <location filename="../src/Main/PeriodicTable.ui" line="640"/>
         <location filename="../src/Main/PeriodicTableMac.ui" line="605"/>
+        <location filename="../src/Main/PeriodicTable.ui" line="640"/>
         <source>Xe</source>
         <translation>Xe</translation>
     </message>
     <message>
-        <location filename="../src/Main/PeriodicTable.ui" line="650"/>
         <location filename="../src/Main/PeriodicTableMac.ui" line="615"/>
+        <location filename="../src/Main/PeriodicTable.ui" line="650"/>
         <source>Cs</source>
         <translation>Cs</translation>
     </message>
     <message>
-        <location filename="../src/Main/PeriodicTable.ui" line="660"/>
         <location filename="../src/Main/PeriodicTableMac.ui" line="625"/>
+        <location filename="../src/Main/PeriodicTable.ui" line="660"/>
         <source>Ba</source>
         <translation>Ba</translation>
     </message>
     <message>
-        <location filename="../src/Main/PeriodicTable.ui" line="670"/>
         <location filename="../src/Main/PeriodicTableMac.ui" line="635"/>
+        <location filename="../src/Main/PeriodicTable.ui" line="670"/>
         <source>Hf</source>
         <translation>Hf</translation>
     </message>
     <message>
-        <location filename="../src/Main/PeriodicTable.ui" line="680"/>
         <location filename="../src/Main/PeriodicTableMac.ui" line="645"/>
+        <location filename="../src/Main/PeriodicTable.ui" line="680"/>
         <source>Ta</source>
         <translation>Ta</translation>
     </message>
     <message>
-        <location filename="../src/Main/PeriodicTable.ui" line="690"/>
         <location filename="../src/Main/PeriodicTableMac.ui" line="655"/>
+        <location filename="../src/Main/PeriodicTable.ui" line="690"/>
         <source>W</source>
         <translation>W</translation>
     </message>
     <message>
-        <location filename="../src/Main/PeriodicTable.ui" line="700"/>
         <location filename="../src/Main/PeriodicTableMac.ui" line="665"/>
+        <location filename="../src/Main/PeriodicTable.ui" line="700"/>
         <source>Re</source>
         <translation>Re</translation>
     </message>
     <message>
-        <location filename="../src/Main/PeriodicTable.ui" line="710"/>
         <location filename="../src/Main/PeriodicTableMac.ui" line="675"/>
+        <location filename="../src/Main/PeriodicTable.ui" line="710"/>
         <source>Os</source>
         <translation>Os</translation>
     </message>
     <message>
-        <location filename="../src/Main/PeriodicTable.ui" line="720"/>
         <location filename="../src/Main/PeriodicTableMac.ui" line="685"/>
+        <location filename="../src/Main/PeriodicTable.ui" line="720"/>
         <source>Ir</source>
         <translation>Ir</translation>
     </message>
     <message>
-        <location filename="../src/Main/PeriodicTable.ui" line="730"/>
         <location filename="../src/Main/PeriodicTableMac.ui" line="695"/>
+        <location filename="../src/Main/PeriodicTable.ui" line="730"/>
         <source>Pt</source>
         <translation>Pt</translation>
     </message>
     <message>
-        <location filename="../src/Main/PeriodicTable.ui" line="740"/>
         <location filename="../src/Main/PeriodicTableMac.ui" line="705"/>
+        <location filename="../src/Main/PeriodicTable.ui" line="740"/>
         <source>Au</source>
         <translation>Au</translation>
     </message>
     <message>
-        <location filename="../src/Main/PeriodicTable.ui" line="750"/>
         <location filename="../src/Main/PeriodicTableMac.ui" line="715"/>
+        <location filename="../src/Main/PeriodicTable.ui" line="750"/>
         <source>Hg</source>
         <translation>Hg</translation>
     </message>
     <message>
-        <location filename="../src/Main/PeriodicTable.ui" line="760"/>
         <location filename="../src/Main/PeriodicTableMac.ui" line="725"/>
+        <location filename="../src/Main/PeriodicTable.ui" line="760"/>
         <source>Tl</source>
         <translation>Tl</translation>
     </message>
     <message>
-        <location filename="../src/Main/PeriodicTable.ui" line="770"/>
         <location filename="../src/Main/PeriodicTableMac.ui" line="735"/>
+        <location filename="../src/Main/PeriodicTable.ui" line="770"/>
         <source>Pb</source>
         <translation>Pb</translation>
     </message>
     <message>
-        <location filename="../src/Main/PeriodicTable.ui" line="780"/>
         <location filename="../src/Main/PeriodicTableMac.ui" line="745"/>
+        <location filename="../src/Main/PeriodicTable.ui" line="780"/>
         <source>Bi</source>
         <translation>Bi</translation>
     </message>
     <message>
-        <location filename="../src/Main/PeriodicTable.ui" line="790"/>
         <location filename="../src/Main/PeriodicTableMac.ui" line="755"/>
+        <location filename="../src/Main/PeriodicTable.ui" line="790"/>
         <source>Po</source>
         <translation>Po</translation>
     </message>
     <message>
-        <location filename="../src/Main/PeriodicTable.ui" line="800"/>
         <location filename="../src/Main/PeriodicTableMac.ui" line="765"/>
+        <location filename="../src/Main/PeriodicTable.ui" line="800"/>
         <source>At</source>
         <translation>At</translation>
     </message>
     <message>
-        <location filename="../src/Main/PeriodicTable.ui" line="810"/>
         <location filename="../src/Main/PeriodicTableMac.ui" line="775"/>
+        <location filename="../src/Main/PeriodicTable.ui" line="810"/>
         <source>Rn</source>
         <translation>Rn</translation>
     </message>
     <message>
-        <location filename="../src/Main/PeriodicTable.ui" line="820"/>
         <location filename="../src/Main/PeriodicTableMac.ui" line="785"/>
+        <location filename="../src/Main/PeriodicTable.ui" line="820"/>
         <source>Fr</source>
         <translation>Fr</translation>
     </message>
     <message>
-        <location filename="../src/Main/PeriodicTable.ui" line="830"/>
         <location filename="../src/Main/PeriodicTableMac.ui" line="795"/>
+        <location filename="../src/Main/PeriodicTable.ui" line="830"/>
         <source>Ra</source>
         <translation>Ra</translation>
     </message>
     <message>
-        <location filename="../src/Main/PeriodicTable.ui" line="856"/>
         <location filename="../src/Main/PeriodicTableMac.ui" line="821"/>
+        <location filename="../src/Main/PeriodicTable.ui" line="856"/>
         <source>La</source>
         <translation>La</translation>
     </message>
     <message>
-        <location filename="../src/Main/PeriodicTable.ui" line="866"/>
         <location filename="../src/Main/PeriodicTableMac.ui" line="831"/>
+        <location filename="../src/Main/PeriodicTable.ui" line="866"/>
         <source>Ce</source>
         <translation>Ce</translation>
     </message>
     <message>
-        <location filename="../src/Main/PeriodicTable.ui" line="876"/>
         <location filename="../src/Main/PeriodicTableMac.ui" line="841"/>
+        <location filename="../src/Main/PeriodicTable.ui" line="876"/>
         <source>Pr</source>
         <translation>Pr</translation>
     </message>
     <message>
-        <location filename="../src/Main/PeriodicTable.ui" line="886"/>
         <location filename="../src/Main/PeriodicTableMac.ui" line="851"/>
+        <location filename="../src/Main/PeriodicTable.ui" line="886"/>
         <source>Nd</source>
         <translation>Nd</translation>
     </message>
     <message>
-        <location filename="../src/Main/PeriodicTable.ui" line="896"/>
         <location filename="../src/Main/PeriodicTableMac.ui" line="861"/>
+        <location filename="../src/Main/PeriodicTable.ui" line="896"/>
         <source>Pm</source>
         <translation>Pm</translation>
     </message>
     <message>
-        <location filename="../src/Main/PeriodicTable.ui" line="906"/>
         <location filename="../src/Main/PeriodicTableMac.ui" line="871"/>
+        <location filename="../src/Main/PeriodicTable.ui" line="906"/>
         <source>Sm</source>
         <translation>Sm</translation>
     </message>
     <message>
-        <location filename="../src/Main/PeriodicTable.ui" line="916"/>
         <location filename="../src/Main/PeriodicTableMac.ui" line="881"/>
+        <location filename="../src/Main/PeriodicTable.ui" line="916"/>
         <source>Eu</source>
         <translation>Eu</translation>
     </message>
     <message>
-        <location filename="../src/Main/PeriodicTable.ui" line="926"/>
         <location filename="../src/Main/PeriodicTableMac.ui" line="891"/>
+        <location filename="../src/Main/PeriodicTable.ui" line="926"/>
         <source>Gd</source>
         <translation>Gd</translation>
     </message>
     <message>
-        <location filename="../src/Main/PeriodicTable.ui" line="936"/>
         <location filename="../src/Main/PeriodicTableMac.ui" line="901"/>
+        <location filename="../src/Main/PeriodicTable.ui" line="936"/>
         <source>Tb</source>
         <translation>Tb</translation>
     </message>
     <message>
-        <location filename="../src/Main/PeriodicTable.ui" line="946"/>
         <location filename="../src/Main/PeriodicTableMac.ui" line="911"/>
+        <location filename="../src/Main/PeriodicTable.ui" line="946"/>
         <source>Dy</source>
         <translation>Dy</translation>
     </message>
     <message>
-        <location filename="../src/Main/PeriodicTable.ui" line="956"/>
         <location filename="../src/Main/PeriodicTableMac.ui" line="921"/>
+        <location filename="../src/Main/PeriodicTable.ui" line="956"/>
         <source>Ho</source>
         <translation>Ho</translation>
     </message>
     <message>
-        <location filename="../src/Main/PeriodicTable.ui" line="966"/>
         <location filename="../src/Main/PeriodicTableMac.ui" line="931"/>
+        <location filename="../src/Main/PeriodicTable.ui" line="966"/>
         <source>Er</source>
         <translation>Er</translation>
     </message>
     <message>
-        <location filename="../src/Main/PeriodicTable.ui" line="976"/>
         <location filename="../src/Main/PeriodicTableMac.ui" line="941"/>
+        <location filename="../src/Main/PeriodicTable.ui" line="976"/>
         <source>Tm</source>
         <translation>Tm</translation>
     </message>
     <message>
-        <location filename="../src/Main/PeriodicTable.ui" line="986"/>
         <location filename="../src/Main/PeriodicTableMac.ui" line="951"/>
+        <location filename="../src/Main/PeriodicTable.ui" line="986"/>
         <source>Yb</source>
         <translation>Yb</translation>
     </message>
     <message>
-        <location filename="../src/Main/PeriodicTable.ui" line="996"/>
         <location filename="../src/Main/PeriodicTableMac.ui" line="961"/>
+        <location filename="../src/Main/PeriodicTable.ui" line="996"/>
         <source>Lu</source>
         <translation>Lu</translation>
     </message>
     <message>
-        <location filename="../src/Main/PeriodicTable.ui" line="1006"/>
         <location filename="../src/Main/PeriodicTableMac.ui" line="971"/>
+        <location filename="../src/Main/PeriodicTable.ui" line="1006"/>
         <source>Ac</source>
         <translation>Ac</translation>
     </message>
     <message>
-        <location filename="../src/Main/PeriodicTable.ui" line="1016"/>
         <location filename="../src/Main/PeriodicTableMac.ui" line="981"/>
+        <location filename="../src/Main/PeriodicTable.ui" line="1016"/>
         <source>Th</source>
         <translation>Th</translation>
     </message>
     <message>
-        <location filename="../src/Main/PeriodicTable.ui" line="1026"/>
         <location filename="../src/Main/PeriodicTableMac.ui" line="991"/>
+        <location filename="../src/Main/PeriodicTable.ui" line="1026"/>
         <source>Pa</source>
         <translation>Pa</translation>
     </message>
     <message>
-        <location filename="../src/Main/PeriodicTable.ui" line="1036"/>
         <location filename="../src/Main/PeriodicTableMac.ui" line="1001"/>
+        <location filename="../src/Main/PeriodicTable.ui" line="1036"/>
         <source>U</source>
         <translation>U</translation>
     </message>
     <message>
-        <location filename="../src/Main/PeriodicTable.ui" line="1046"/>
         <location filename="../src/Main/PeriodicTableMac.ui" line="1011"/>
+        <location filename="../src/Main/PeriodicTable.ui" line="1046"/>
         <source>Np</source>
         <translation>Np</translation>
     </message>
     <message>
-        <location filename="../src/Main/PeriodicTable.ui" line="1056"/>
         <location filename="../src/Main/PeriodicTableMac.ui" line="1021"/>
+        <location filename="../src/Main/PeriodicTable.ui" line="1056"/>
         <source>Pu</source>
         <translation>Pu</translation>
     </message>
     <message>
-        <location filename="../src/Main/PeriodicTable.ui" line="1066"/>
         <location filename="../src/Main/PeriodicTableMac.ui" line="1031"/>
+        <location filename="../src/Main/PeriodicTable.ui" line="1066"/>
         <source>Am</source>
         <translation>Am</translation>
     </message>
     <message>
-        <location filename="../src/Main/PeriodicTable.ui" line="1076"/>
         <location filename="../src/Main/PeriodicTableMac.ui" line="1041"/>
+        <location filename="../src/Main/PeriodicTable.ui" line="1076"/>
         <source>Cm</source>
         <translation>Cm</translation>
     </message>
     <message>
-        <location filename="../src/Main/PeriodicTable.ui" line="1086"/>
         <location filename="../src/Main/PeriodicTableMac.ui" line="1051"/>
+        <location filename="../src/Main/PeriodicTable.ui" line="1086"/>
         <source>Bk</source>
         <translation>Bk</translation>
     </message>
     <message>
-        <location filename="../src/Main/PeriodicTable.ui" line="1096"/>
         <location filename="../src/Main/PeriodicTableMac.ui" line="1061"/>
+        <location filename="../src/Main/PeriodicTable.ui" line="1096"/>
         <source>Cf</source>
         <translation>Cf</translation>
     </message>
     <message>
-        <location filename="../src/Main/PeriodicTable.ui" line="1106"/>
         <location filename="../src/Main/PeriodicTableMac.ui" line="1071"/>
+        <location filename="../src/Main/PeriodicTable.ui" line="1106"/>
         <source>Es</source>
         <translation>Es</translation>
     </message>
     <message>
-        <location filename="../src/Main/PeriodicTable.ui" line="1116"/>
         <location filename="../src/Main/PeriodicTableMac.ui" line="1081"/>
+        <location filename="../src/Main/PeriodicTable.ui" line="1116"/>
         <source>Fm</source>
         <translation>Fm</translation>
     </message>
     <message>
-        <location filename="../src/Main/PeriodicTable.ui" line="1126"/>
         <location filename="../src/Main/PeriodicTableMac.ui" line="1091"/>
+        <location filename="../src/Main/PeriodicTable.ui" line="1126"/>
         <source>Md</source>
         <translation>Md</translation>
     </message>
     <message>
-        <location filename="../src/Main/PeriodicTable.ui" line="1136"/>
         <location filename="../src/Main/PeriodicTableMac.ui" line="1101"/>
+        <location filename="../src/Main/PeriodicTable.ui" line="1136"/>
         <source>No</source>
         <translation>No</translation>
     </message>
     <message>
-        <location filename="../src/Main/PeriodicTable.ui" line="1146"/>
         <location filename="../src/Main/PeriodicTableMac.ui" line="1111"/>
+        <location filename="../src/Main/PeriodicTable.ui" line="1146"/>
         <source>Lr</source>
         <translation>Lr</translation>
     </message>
@@ -9945,16 +9744,6 @@ in the run file template</source>
 <context>
     <name>Qui::GeometryConstraint</name>
     <message>
-        <source>Are you sure you want to delete the selected constraint?</source>
-        <comment>预置：需配合源码补 tr() 后由 lupdate 匹配</comment>
-        <translation>确定要删除所选约束吗？</translation>
-    </message>
-    <message>
-        <source>Delete Constraint?</source>
-        <comment>预置：需配合源码补 tr() 后由 lupdate 匹配</comment>
-        <translation>删除约束？</translation>
-    </message>
-    <message>
         <location filename="../src/Qui/GeometryConstraint.C" line="35"/>
         <source>Stretch</source>
         <translation>伸缩</translation>
@@ -10006,42 +9795,11 @@ in the run file template</source>
     </message>
 </context>
 <context>
-    <name>Qui::GeometryConstraint::Dialog</name>
+        <name>Qui::GeometryConstraint::Dialog</name>
     <message>
         <location filename="../src/Qui/GeometryConstraint.C" line="104"/>
         <source>Delete</source>
         <translation>删除</translation>
-    </message>
-    <message>
-        <source>The following constraint is invalid:
-</source>
-        <comment>预置：需配合源码补 tr() 后由 lupdate 匹配</comment>
-        <translation>以下约束无效：
-</translation>
-    </message>
-    <message>
-        <source>Most likely this is because your atom numbers are not unique or out of range. Please correct this before proceeding.
-</source>
-        <comment>预置：需配合源码补 tr() 后由 lupdate 匹配</comment>
-        <translation>原因很可能是原子编号重复或超出范围。请在继续之前更正。
-</translation>
-    </message>
-    <message>
-        <source>Invalid Constraint</source>
-        <comment>预置：需配合源码补 tr() 后由 lupdate 匹配</comment>
-        <translation>无效约束</translation>
-    </message>
-    <message>
-        <source>A constraint involving the following atoms has already been defined:
-</source>
-        <comment>预置：需配合源码补 tr() 后由 lupdate 匹配</comment>
-        <translation>涉及以下原子的约束已定义：
-</translation>
-    </message>
-    <message>
-        <source>Duplicate Constraint</source>
-        <comment>预置：需配合源码补 tr() 后由 lupdate 匹配</comment>
-        <translation>重复约束</translation>
     </message>
     <message>
         <location filename="../src/Qui/GeometryConstraint.C" line="142"/>
@@ -10084,46 +9842,48 @@ in the run file template</source>
         <source>Delete Constraint?</source>
         <translation>删除约束？</translation>
     </message>
-</context>
-<context>
-    <name>Qui::InputDialog</name>
     <message>
-        <source>Are you sure you want to delete all generated input?</source>
-        <comment>预置：需配合源码补 tr() 后由 lupdate 匹配</comment>
-        <translation>确定要删除所有已生成的输入吗？</translation>
+        <location filename="../src/Qui/GeometryConstraint.C" line="406"/>
+        <source>Constraints that reference this dummy atom (%1) and any with a higher id will become invalid</source>
+        <translation>引用此虚拟原子（%1）及更高 id 的任何约束将变为无效</translation>
     </message>
     <message>
-        <source>Delete input?</source>
-        <comment>预置：需配合源码补 tr() 后由 lupdate 匹配</comment>
-        <translation>删除输入？</translation>
+        <location filename="../src/Qui/GeometryConstraint.C" line="408"/>
+        <source>Warning</source>
+        <translation>警告</translation>
     </message>
 </context>
 <context>
-    <name>Qui::LJParametersSection</name>
+        <name>Qui::OptionDatabase</name>
     <message>
-        <source>LJ Parameter Error</source>
-        <comment>预置：需配合源码补 tr() 后由 lupdate 匹配</comment>
-        <translation>LJ 参数错误</translation>
+        <location filename="../src/Qui/OptionDatabase.C" line="169"/>
+        <source>Option name %1 already exists in database, overwrite?</source>
+        <translation>选项名称 %1 已存在于数据库中，是否覆盖？</translation>
     </message>
     <message>
-        <source>The molecule contains atoms for which there are no inbuilt Lennard-Jones parameters:</source>
-        <comment>预置：需配合源码补 tr() 后由 lupdate 匹配</comment>
-        <translation>分子中含有未内置 Lennard-Jones 参数的原子：</translation>
-    </message>
-</context>
-<context>
-    <name>Qui::MoleculeSection</name>
-    <message>
-        <source>Problem reading $molecule section: 
-</source>
-        <comment>预置：需配合源码补 tr() 后由 lupdate 匹配</comment>
-        <translation>读取 $molecule 段时出现问题：
-</translation>
+        <location filename="../src/Qui/OptionDatabase.C" line="171"/>
+        <source>Option Exists</source>
+        <translation>选项已存在</translation>
     </message>
     <message>
-        <source>Parse Error</source>
-        <comment>预置：需配合源码补 tr() 后由 lupdate 匹配</comment>
-        <translation>解析错误</translation>
+        <location filename="../src/Qui/OptionDatabase.C" line="206"/>
+        <source>Permanently delete the %1 record from the option database?</source>
+        <translation>确定要从选项数据库中永久删除 %1 记录吗？</translation>
+    </message>
+    <message>
+        <location filename="../src/Qui/OptionDatabase.C" line="209"/>
+        <source>Delete Option?</source>
+        <translation>删除该选项吗？</translation>
+    </message>
+    <message>
+        <location filename="../src/Qui/OptionDatabase.C" line="263"/>
+        <source>More than one record for %1 found in database.</source>
+        <translation>数据库中存在多条 %1 的记录。</translation>
+    </message>
+    <message>
+        <location filename="../src/Qui/OptionDatabase.C" line="265"/>
+        <source>EGAD!</source>
+        <translation>天哪！</translation>
     </message>
 </context>
 <context>
@@ -10150,21 +9910,6 @@ in the run file template</source>
         <location filename="../src/Qui/OptionEditors.C" line="41"/>
         <source>New option</source>
         <translation>新建选项</translation>
-    </message>
-</context>
-<context>
-    <name>Qui::RemSection</name>
-    <message>
-        <source>An error occured when parsing the following options:
-</source>
-        <comment>预置：需配合源码补 tr() 后由 lupdate 匹配</comment>
-        <translation>解析以下选项时出错：
-</translation>
-    </message>
-    <message>
-        <source>Input File Error</source>
-        <comment>预置：需配合源码补 tr() 后由 lupdate 匹配</comment>
-        <translation>输入文件错误</translation>
     </message>
 </context>
 <context>
@@ -10742,11 +10487,6 @@ Use Web for HTTP/HTTPS servers</source>
         <translation>另存为默认</translation>
     </message>
     <message>
-        <source>Save As Default</source>
-        <comment>与 Make Default(设为默认) 区分。</comment>
-        <translation>另存为默认</translation>
-    </message>
-    <message>
         <location filename="../src/Viewer/ShaderDialog.ui" line="676"/>
         <source>OK</source>
         <translation>确定</translation>
@@ -11011,113 +10751,6 @@ QToolButton:pressed {
    border-color: #222;
 }
 </translation>
-    </message>
-    <message>
-        <source>QToolButton {
-   color: #333;
-   background-color: QLinearGradient( x1: 0, y1: 0, x2: 0, y2: 1, 
-          stop: 0 #fff,
-          stop: 0.5 #eee, 
-          stop: 1 #999);
-   border-width: 2px;
-   border-color: #333;
-   border-style: solid;
-   border-radius: 5;
-   padding: 0px;
-   font-size: 24px;
-   min-width: 34px;
-   max-width: 34px;
-   min-height: 34px;
-   max-height: 34px;
-}
-
-QToolButton:disabled {
-  background-color: QLinearGradient( x1: 0, y1: 0, x2: 0, y2: 1, 
-          stop: 0 #fff,
-          stop: 0.5 #eee, 
-          stop: 1 #bbb);
-   border-color: #aaa;
-   color: #aaa;
-}
-
-QToolButton:pressed {
-   background-color: QLinearGradient( x1: 0, y1: 0, x2: 0, y2: 1, 
-          stop: 0 #999,
-          stop: 0.5 #eee, 
-          stop: 1 #fff);
-}
-
-
-QToolButton:checked {
-   border-color: #b00;
-   background-color: QLinearGradient( x1: 0, y1: 0, x2: 0, y2: 1, 
-          stop: 0 #999,
-          stop: 0.5 #eee, 
-          stop: 1 #fff);
-}
-
-QToolTip {
-   border: 2px solid darkkhaki;
-   padding: 2px;
-   border-radius: 3px;
-   opacity: 500;
-   font-size: 12px;
-}</source>
-        <translation>QToolButton {
-   color: #333;
-   background-color: QLinearGradient( x1: 0, y1: 0, x2: 0, y2: 1, 
-          stop: 0 #fff,
-          stop: 0.5 #eee, 
-          stop: 1 #999);
-   border-width: 2px;
-   border-color: #333;
-   border-style: solid;
-   border-radius: 5;
-   padding: 0px;
-   font-size: 24px;
-   min-width: 34px;
-   max-width: 34px;
-   min-height: 34px;
-   max-height: 34px;
-}
-
-QToolButton:disabled {
-  background-color: QLinearGradient( x1: 0, y1: 0, x2: 0, y2: 1, 
-          stop: 0 #fff,
-          stop: 0.5 #eee, 
-          stop: 1 #bbb);
-   border-color: #aaa;
-   color: #aaa;
-}
-
-QToolButton:pressed {
-   background-color: QLinearGradient( x1: 0, y1: 0, x2: 0, y2: 1, 
-          stop: 0 #999,
-          stop: 0.5 #eee, 
-          stop: 1 #fff);
-}
-
-
-QToolButton:checked {
-   border-color: #b00;
-   background-color: QLinearGradient( x1: 0, y1: 0, x2: 0, y2: 1, 
-          stop: 0 #999,
-          stop: 0.5 #eee, 
-          stop: 1 #fff);
-}
-
-QToolTip {
-   border: 2px solid darkkhaki;
-   padding: 2px;
-   border-radius: 3px;
-   opacity: 500;
-   font-size: 12px;
-}</translation>
-    </message>
-    <message>
-        <source>Cube File Frames</source>
-        <comment>Cube 为文件格式专名，保留英文。</comment>
-        <translation>Cube 文件帧</translation>
     </message>
     <message>
         <location filename="../src/Configurator/SurfaceAnimatorDialog.ui" line="46"/>
@@ -11428,102 +11061,6 @@ QToolTip {
 }</translation>
     </message>
     <message>
-        <source>QToolButton {
-   color: #333;
-   background-color: QLinearGradient( x1: 0, y1: 0, x2: 0, y2: 1, 
-          stop: 0 #fff,
-          stop: 0.5 #eee, 
-          stop: 1 #999);
-   border-width: 2px;
-   border-color: #333;
-   border-style: solid;
-   border-radius: 5;
-   padding: 0px;
-   font-size: 24px;
-   min-width: 34px;
-   max-width: 34px;
-   min-height: 34px;
-   max-height: 34px;
-}
-
-QToolButton:disabled {
-  background-color: QLinearGradient( x1: 0, y1: 0, x2: 0, y2: 1, 
-          stop: 0 #fff,
-          stop: 0.5 #eee, 
-          stop: 1 #bbb);
-   border-color: #aaa;
-   color: #aaa;
-}
-
-
-QToolButton:pressed {
-   background-color: QLinearGradient( x1: 0, y1: 0, x2: 0, y2: 1, 
-          stop: 0 #999,
-          stop: 0.5 #eee, 
-          stop: 1 #fff);
-}
-
-
-QToolButton:checked {
-   border-color: #b00;
-}
-
-QToolTip {
-   border: 2px solid darkkhaki;
-   padding: 2px;
-   border-radius: 3px;
-   opacity: 500;
-   font-size: 10px;
-}</source>
-        <translation>QToolButton {
-   color: #333;
-   background-color: QLinearGradient( x1: 0, y1: 0, x2: 0, y2: 1, 
-          stop: 0 #fff,
-          stop: 0.5 #eee, 
-          stop: 1 #999);
-   border-width: 2px;
-   border-color: #333;
-   border-style: solid;
-   border-radius: 5;
-   padding: 0px;
-   font-size: 24px;
-   min-width: 34px;
-   max-width: 34px;
-   min-height: 34px;
-   max-height: 34px;
-}
-
-QToolButton:disabled {
-  background-color: QLinearGradient( x1: 0, y1: 0, x2: 0, y2: 1, 
-          stop: 0 #fff,
-          stop: 0.5 #eee, 
-          stop: 1 #bbb);
-   border-color: #aaa;
-   color: #aaa;
-}
-
-
-QToolButton:pressed {
-   background-color: QLinearGradient( x1: 0, y1: 0, x2: 0, y2: 1, 
-          stop: 0 #999,
-          stop: 0.5 #eee, 
-          stop: 1 #fff);
-}
-
-
-QToolButton:checked {
-   border-color: #b00;
-}
-
-QToolTip {
-   border: 2px solid darkkhaki;
-   padding: 2px;
-   border-radius: 3px;
-   opacity: 500;
-   font-size: 10px;
-}</translation>
-    </message>
-    <message>
         <location filename="../src/Configurator/SurfaceAnimatorDialog.ui" line="506"/>
         <source>Playback</source>
         <translation>回放</translation>
@@ -11585,7 +11122,7 @@ QToolTip {
     <message>
         <location filename="../src/Configurator/SurfaceAnimatorDialog.ui" line="654"/>
         <source>Controls the speed of animation</source>
-<translation>调节动画速度</translation>
+        <translation>调节动画速度</translation>
     </message>
     <message>
         <location filename="../src/Configurator/SurfaceAnimatorDialog.ui" line="693"/>
@@ -12061,11 +11598,6 @@ p, li { white-space: pre-wrap; }
         <translation>选择模式（Shift）</translation>
     </message>
     <message>
-        <source>Select Mode (Shift)</source>
-        <comment>Shift 是快捷键名，应保留；原译误作“位移”。</comment>
-        <translation>选择模式（Shift）</translation>
-    </message>
-    <message>
         <location filename="../src/Main/ToolBar.ui" line="387"/>
         <source>Delete Selection</source>
         <translation>删除所选</translation>
@@ -12110,11 +11642,6 @@ p, li { white-space: pre-wrap; }
         <location filename="../src/Viewer/UndoCommands.C" line="269"/>
         <source>Add constraint</source>
         <translation>添加约束</translation>
-    </message>
-    <message>
-        <source>Add scan coordinated</source>
-        <comment>源码 coordinated 系 coordinate 笔误。</comment>
-        <translation>添加扫描坐标</translation>
     </message>
     <message>
         <location filename="../src/Viewer/UndoCommands.C" line="154"/>
@@ -12303,15 +11830,6 @@ p, li { white-space: pre-wrap; }
         <location filename="../src/Configurator/VibronicConfigurator.ui" line="314"/>
         <source>Close</source>
         <translation>关闭</translation>
-    </message>
-</context>
-
-<context>
-    <name>MainWindow</name>
-    <message>
-        <location filename="../src/Main/MainWindow.C" line="778"/>
-        <source>User Manual (PDF)</source>
-        <translation>用户手册 (PDF)</translation>
     </message>
 </context>
 </TS>

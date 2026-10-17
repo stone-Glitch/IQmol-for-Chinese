@@ -166,7 +166,7 @@ void Group::align(QList<Vec> const& current)
    AtomList atoms(getAtoms());
    int nAtoms(atoms.size());
    if (current.size() != nAtoms) {
-      QMsgBox::warning(0, "IQmol", "Coordinate mismatch in Group alignment");
+      QMsgBox::warning(0, "IQmol", tr("Coordinate mismatch in Group alignment"));
       return;
    }
 
@@ -180,7 +180,7 @@ void Group::align(QList<Vec> const& current)
 
    Math::Align align(reference, current, weights);
    if (!align.computeAlignment()) {
-      QMsgBox::warning(0, "IQmol", "Alignment failed in Group::align");
+      QMsgBox::warning(0, "IQmol", tr("Alignment failed in Group::align"));
       return;
    }
 

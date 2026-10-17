@@ -53,7 +53,7 @@ void VectorConstraint::init()
 {
    QString atoms(QString::number(m_constraint.m_atoms[0]->getIndex()));
    m_constraintConfigurator.label->setText(tr("Set position of atom %1").arg(atoms));
-   m_constraint.setText("Position " + atoms);
+   m_constraint.setText(tr("Position ") + atoms);
 }
 
 
@@ -139,7 +139,7 @@ void ScalarConstraint::initDistance()
                  QString::number(m_constraint.m_atoms[1]->getIndex()));
 
    m_constraintConfigurator.label->setText(tr("Distance between atoms %1").arg(atoms));
-   m_constraint.setText("Distance " + atoms);
+   m_constraint.setText(tr("Distance ") + atoms);
 }
 
 
@@ -161,7 +161,7 @@ void ScalarConstraint::initAngle()
                  QString::number(m_constraint.m_atoms[2]->getIndex()));
 
    m_constraintConfigurator.label->setText(tr("Angle between atoms %1").arg(atoms));
-   m_constraint.setText("Angle " + atoms);
+   m_constraint.setText(tr("Angle ") + atoms);
 }
 
 
@@ -183,8 +183,8 @@ void ScalarConstraint::initTorsion()
                  QString::number(m_constraint.m_atoms[2]->getIndex()) + "-" +
                  QString::number(m_constraint.m_atoms[3]->getIndex()));
 
-   m_constraintConfigurator.label->setText("Torsion between atoms " + atoms);
-   m_constraint.setText("Torsion " + atoms);
+   m_constraintConfigurator.label->setText(tr("Torsion between atoms ") + atoms);
+   m_constraint.setText(tr("Torsion ") + atoms);
 }
 
 

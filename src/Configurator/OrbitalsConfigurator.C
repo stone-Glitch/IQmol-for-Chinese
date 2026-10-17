@@ -319,7 +319,7 @@ void Orbitals::initPlot()
          yMax  = m_orbitals.alphaOrbitalEnergy(index);
       }
       yMax = std::min(yMax, 0.5*std::abs(yMin));
-      m_customPlot->yAxis->setLabel("Energy/Hartree");
+      m_customPlot->yAxis->setLabel(tr("Energy/Hartree"));
 
    }
 

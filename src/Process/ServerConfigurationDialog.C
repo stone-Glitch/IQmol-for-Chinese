@@ -66,7 +66,7 @@ void ServerConfigurationDialog::finished()
 bool ServerConfigurationDialog::verify()
 {
    if (m_dialog.serverName->text().trimmed().isEmpty()) {
-      QMsgBox::warning(this, "IQmol", "Server name not set");
+      QMsgBox::warning(this, "IQmol", tr("Server name not set"));
       return false;
    }
 
@@ -85,7 +85,7 @@ bool ServerConfigurationDialog::verify()
 
    if (connection != Network::Local) {
       if (m_dialog.hostAddress->text().trimmed().isEmpty()) {
-         QMsgBox::warning(this, "IQmol", "Host address not set");
+         QMsgBox::warning(this, "IQmol", tr("Host address not set"));
          return false;
       }
    }
@@ -95,7 +95,7 @@ bool ServerConfigurationDialog::verify()
 
    if (authentication == Network::Password) {
       if (m_dialog.userName->text().trimmed().isEmpty()) {
-         QMsgBox::warning(this, "IQmol", "User name must be set");
+         QMsgBox::warning(this, "IQmol", tr("User name must be set"));
          return false;
       }
    }
@@ -523,7 +523,7 @@ void ServerConfigurationDialog::on_exportButton_clicked(bool)
    if (filePath.isEmpty()) return;
    Data::YamlNode node(m_currentConfiguration.toYamlNode());
    if (!node.saveToFile(filePath)) {
-      QMsgBox::warning(this, "IQmol", "Failed to export server configuration");
+      QMsgBox::warning(this, "IQmol", tr("Failed to export server configuration"));
    }
 }
 

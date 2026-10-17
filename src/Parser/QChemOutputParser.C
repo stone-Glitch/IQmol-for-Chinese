@@ -54,6 +54,7 @@
 #include <QRegularExpression>
 #include <QFile>
 #include <QtDebug>
+#include <QCoreApplication>
 
 
 
@@ -1152,7 +1153,7 @@ void QChemOutput::setTotalEnergy(QString const& field, Data::Geometry* geometry,
    if (!ok) return;
    Data::TotalEnergy& data(geometry->getProperty<Data::TotalEnergy>());
    data.setValue(energy, Data::Energy::Hartree);
-   if (!label.isEmpty()) data.setLabel(label + " energy");
+   if (!label.isEmpty()) data.setLabel(label + QCoreApplication::translate("IQmol::Parser::QChemOutput", " energy"));
 }
 
 

@@ -29,6 +29,7 @@
 #include "NetworkException.h"
 #include <QEventLoop>
 #include <QRegularExpressionValidator>
+#include <QCoreApplication>
 #include "Network.h"
 
 #ifdef WIN32
@@ -207,7 +208,7 @@ bool TestNetworkConnection()
 
    // These catch the connection errors, not the reply errors
    }catch (AuthenticationError& err) {
-      QMsgBox::warning(0, "IQmol", "Invalid username or password");
+      QMsgBox::warning(0, "IQmol", QCoreApplication::translate("IQmol::Network", "Invalid username or password"));
 
    }catch (Exception& err) {
       okay = false;

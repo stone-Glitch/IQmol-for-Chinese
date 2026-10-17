@@ -403,9 +403,9 @@ void Dialog::deleteConstraint() {
 
 
          if (type == Type::DummyNormal || type == Type::DummyBisector) {
-            msg = "Constraints that reference this dummy atom (";
-            msg += list[5]->text() + ") and any with a higher id will become invalid";
-            QMessageBox::warning(this, "Warning", msg);
+            msg = tr("Constraints that reference this dummy atom (%1) and any with a "
+               "higher id will become invalid").arg(list[5]->text());
+            QMessageBox::warning(this, tr("Warning"), msg);
             on_constraintType_currentIndexChanged(m_ui.constraintType->currentIndex());
             m_nAtoms--;
          }

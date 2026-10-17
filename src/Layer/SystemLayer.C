@@ -180,7 +180,7 @@ void System::exportPdb()
     QFile pdbFile(path);
 
     if (!pdbFile.open(QIODevice::WriteOnly | QIODevice::Text)) {
-       QMsgBox::critical(0, "IQmol",  "Failed to open PDB file for writing");
+       QMsgBox::critical(0, "IQmol",  tr("Failed to open PDB file for writing"));
        return;
     }
 

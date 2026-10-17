@@ -109,7 +109,7 @@ void ExcitedStates::initMoPlot()
    frame->setLayout(layout);
    layout->addWidget(m_moPlot);
 
-   m_moPlot->yAxis->setLabel("Energy / Hartree");
+   m_moPlot->yAxis->setLabel(tr("Energy / Hartree"));
    QSharedPointer<QCPAxisTickerText> textTicker(new QCPAxisTickerText);
    m_moPlot->xAxis->setTicker(textTicker);
    m_moPlot->xAxis->setRange(0,3.25);
