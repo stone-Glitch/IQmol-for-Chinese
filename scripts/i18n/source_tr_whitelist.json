@@ -1,0 +1,15 @@
+{
+  "description": "源码侧 tr() 门禁白名单（P2-10）。列出允许保留英文的 source 字面量（精确匹配）。判定标准：非用户可见文本，或属物理符号/单位/品牌/Q-Chem 关键字等惯例保留项。凡界面可见文本（错误信息、标签、菜单）一律不得入此表——应通过补 tr() + 译文消除。",
+  "updated": "2026-10-11",
+  "whitelist": [
+    {"text": "IQmol", "reason": "应用名/品牌，作为 QMsgBox 对话框标题保留英文（产品名惯例）"},
+    {"text": " D", "reason": "偶极矩单位符号 Debye（Dipole/Info 配置器数值展示），物理单位保留"},
+    {"text": "q = ", "reason": "电荷物理符号标签，q 为电荷符号保留不译"},
+    {"text": "energy", "reason": "OpenBabel/SDF 解析器内部字段名匹配，非界面文本"},
+    {"text": "opt", "reason": "Q-Chem 作业关键字/段名（Qui 模块），非界面文本"},
+    {"text": "scan", "reason": "Q-Chem 作业关键字/段名（Qui 模块），非界面文本"},
+    {"text": "comment", "reason": "Q-Chem 作业关键字/段名（Qui 模块），非界面文本"},
+    {"text": "efp_fragments", "reason": "Q-Chem EFP 段名（Qui 模块），非界面文本"},
+    {"text": "efp_parameters", "reason": "Q-Chem EFP 段名（Qui 模块），非界面文本"}
+  ]
+}
