@@ -1,0 +1,86 @@
+# dependencies.lock — IQmol-for-Chinese 第三方依赖锁定清单
+#
+# 用途（应对审计报告 §5.1/§5.3/§16.3）：把 9 个 git submodule 的精确 commit、
+#       来源 URL 与许可证集中登记，供供应链审计复核。
+#
+# 说明：
+#   · 本仓已通过 git 对象级（gitlink，模式 160000）将每个子模块锁定到下方 commit，
+#     即「已锁定到精确 commit」在技术层面成立；本文件是其人类可读清单。
+#   · `expected_sha256` 列为上游归档/ vendored tarball 的预期哈希，需在引入时补齐
+#     （当前多为 待填，待随包 SHA256SUMS.txt 或上游归档核对后填入）。
+#   · 许可证以各上游仓库 LICENSE 为准，此处为常见 SPDX 提示，标记「需复核」。
+#   · 生成方式：`git ls-files -s modules/` 取 commit；`.gitmodules` 取 URL。
+
+submodules:
+  - name: libssh2
+    url: https://github.com/libssh2/libssh2.git
+    commit: 88a960a86b9ffbabd17a4bbcf767e26514c4678e
+    license: BSD-3-Clause        # 需复核
+    expected_sha256: 待填
+  - name: openmesh
+    url: https://github.com/Lawrencemm/openmesh.git
+    commit: 4e2e481f438747d64e62899021da9f469fd9daf8
+    license: BSD-3-Clause        # 需复核
+    expected_sha256: 待填
+  - name: yaml-cpp
+    url: https://github.com/jbeder/yaml-cpp.git
+    commit: 016b2e77691c5578f90e35d772fea80540f2b30e
+    license: MIT                 # 需复核
+    expected_sha256: 待填
+  - name: openbabel
+    url: https://github.com/openbabel/openbabel.git
+    commit: ea4710f04120df713a6806ffb56baae29f16f58f
+    license: GPL-2.0-or-later    # 需复核（OpenBabel 上游为 GPL-2.0）
+    expected_sha256: 待填
+  - name: libxml2
+    url: https://github.com/GNOME/libxml2.git
+    commit: c9925454fd384a17c8c03d358c6778a552e9287b
+    license: MIT                 # 需复核
+    expected_sha256: 待填
+  - name: libQGLViewer
+    url: https://github.com/GillesDebunne/libQGLViewer.git
+    commit: b397d1aa56479de9db24424832835d557143b040
+    license: GPL-2.0-or-later / Commercial   # 需复核
+    expected_sha256: 待填
+  - name: libarchive
+    url: https://github.com/libarchive/libarchive.git
+    commit: 2961b132d053f4a8eb2723fe9476cf50457f3ea7
+    license: BSD-3-Clause        # 需复核
+    expected_sha256: 待填
+  - name: hdf5
+    url: https://github.com/HDFGroup/hdf5.git
+    commit: a0edeee49f77a1cb59c7969a451164dd595e0d01
+    license: BSD-3-Clause / HDF5 License   # 需复核
+    expected_sha256: 待填
+  - name: HighFive
+    url: https://github.com/BlueBrain/HighFive.git
+    commit: c987a51efc8de275155079351acc5cdfeb195fe7
+    license: BSD-3-Clause        # 需复核
+    expected_sha256: 待填
+
+# 构建期动态依赖（审计报告 §7.3：当前为版本区间，需固定精确版本 + 哈希）
+build_dependencies:
+  - name: qt
+    current_range: 5.15.x
+    license: LGPL-3.0-only
+    pinned_version: 待填          # 例如 5.15.17
+    expected_sha256: 待填
+  - name: cmake
+    current_version: 3.31.6       # build_windows.sh 自动下载（已改为 strict 校验）
+    license: BSD-3-Clause
+    expected_sha256: 待填          # 置环境变量 CMAKE_ZIP_SHA256 提供
+  - name: boost
+    current_range: 1.8x
+    license: BSL-1.0
+    pinned_version: 待填
+    expected_sha256: 待填
+  - name: openssl
+    current_range: 3.x
+    license: Apache-2.0 / OpenSSL
+    pinned_version: 待填
+    expected_sha256: 待填
+  - name: mingw-w64
+    current_version: 未固定
+    license: GPL / Runtime Exception
+    pinned_version: 待填
+    expected_sha256: 待填

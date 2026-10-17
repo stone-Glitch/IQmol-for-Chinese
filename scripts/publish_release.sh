@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# 一键发布 GitHub Release —— IQmol-for-Chinese v3.2.3-zh_CN
+# 一键发布 GitHub Release —— IQmol-for-Chinese（版本号自动取自 CMakeLists.txt）
 # 用法：
 #   GITHUB_TOKEN=ghp_xxxxxxxx bash publish_release.sh
 #   或先把 token 写进同目录 .token 文件：echo 'ghp_xxx' > .token && bash publish_release.sh
@@ -13,11 +13,14 @@
 set -euo pipefail
 
 REPO="stone-Glitch/IQmol-for-Chinese"
-TAG="v3.2.3-zh_CN"
-TITLE="IQmol 简体中文本地化版 v3.2.3-zh_CN"
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # 仓库根（scripts/ 的上一级），用于定位文档真源与回退查找附件
 REPO_ROOT="$(cd "$DIR/.." && pwd)"
+# 版本号取自 CMakeLists.txt 的 project(... VERSION x.y.z)，与打包产物自动一致，
+# 避免「发布标签 / 资产文件名」与 CMake 实际版本互相矛盾（审计报告 §3.1/§3.3）。
+VER="$(sed -n 's/^project([^)]*VERSION[[:space:]]*\([0-9][0-9.]*\).*/\1/p' "$REPO_ROOT/CMakeLists.txt" | head -1)"
+TAG="v${VER}-zh_CN"
+TITLE="IQmol 简体中文本地化版 v${VER}-zh_CN"
 API="https://api.github.com"
 UPLOADS="https://uploads.github.com"
 
@@ -34,7 +37,7 @@ fi
 
 # 附件清单（相对脚本目录）
 ASSETS=(
-  "IQmol-win64-3.2.3-zh_CN.zip"
+  "IQmol-win64-${VER}-zh_CN.zip"
   "IQmol-linux-x86_64.tar.gz"
   "SHA256SUMS.txt"
 )
@@ -103,23 +106,13 @@ upload_one() {
     -H "Content-Type: $ctype" \
     --data-binary "@$af" "$upload_base?name=$f")"
   if [ "$code" = "201" ]; then return 0; fi
-  # 同名附件已存在 → 先删旧的后重试
+  # 同名附件已存在 → 拒绝静默覆盖（审计报告 §3.3：不覆盖已发布同名文件）。
+  # 若确属同内容重发，请改用唯一文件名（如带构建日期后缀），或先在 GitHub 删除旧资产后再发布。
   if [ "$code" = "422" ]; then
-    local old_id
-    old_id="$(printf '%s' "$resp" | python3 -c "
-import json,sys
-for a in json.load(sys.stdin).get('assets', []):
-    if a['name'] == sys.argv[1]:
-        print(a['id']); break
-" "$f" 2>/dev/null || true)"
-    if [ -n "$old_id" ]; then
-      curl -sS -o /dev/null -X DELETE "${auth[@]}" "$API/repos/$REPO/releases/assets/$old_id"
-      code="$(curl -sS -o /tmp/_up.json -w '%{http_code}' -X POST \
-        -H "Authorization: Bearer $TOKEN" -H "Accept: application/vnd.github+json" \
-        -H "Content-Type: $ctype" \
-        --data-binary "@$af" "$upload_base?name=$f")"
-      [ "$code" = "201" ] && return 0
-    fi
+    echo "  ✗ 附件 $f 在 Release 中已存在同名文件，按发布治理策略拒绝静默覆盖。"
+    echo "    请使用唯一文件名（如 IQmol-win64-${VER}-zh_CN-<构建日期>.zip），"
+    echo "    或先在 GitHub 删除该旧资产后重发。"
+    return 1
   fi
   echo "  ✗ 上传失败 $f（HTTP $code）：$(head -c 400 /tmp/_up.json)"
   return 1

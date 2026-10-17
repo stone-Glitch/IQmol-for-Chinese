@@ -60,14 +60,19 @@ fetch_from_github() {
 }
 
 # ===== 0b. 下载完整性校验（SHA256）=====
-# 用法: verify_sha256 <文件> <期望SHA256> [名称]
-#   · 期望值为空 → 跳过（不阻断弱网用户），仅提示
-#   · 不匹配      → 返回 1，由调用方决定是否删除并重试
+# 用法: verify_sha256 <文件> <期望SHA256> [名称] [strict]
+#   · 期望值为空且非 strict → 跳过（不阻断弱网用户），仅提示
+#   · 期望值为空且 strict    → 返回 1（按安全策略拒绝未校验文件，审计报告 §5.3）
+#   · 不匹配（无论 strict）  → 返回 1，由调用方决定是否删除并重试
 # 校验值来源：submodules-package/SHA256SUMS.txt（随包提供）或环境变量
 verify_sha256() {
   local FILE="$1"; local EXPECT="$2"; local NAME="${3:-$(basename "$1")}"
   [ -f "$FILE" ] || { echo "    校验跳过：文件不存在"; return 1; }
   if [ -z "$EXPECT" ]; then
+    if [ "${4:-}" = "strict" ]; then
+      echo "    ✗ 无 $NAME 的校验值，按安全策略拒绝（请提供 SHA256 或随包 SHA256SUMS.txt）"
+      return 1
+    fi
     echo "    ⚠ 无 $NAME 的校验值，跳过完整性校验（建议随包提供 SHA256SUMS.txt）"
     return 0
   fi
@@ -111,6 +116,7 @@ if [ ! -f "$MODULES_DIR/CMakeLists.txt" ]; then
     echo "    已从本地 $LOCAL_FIX 复制"
   else
     URL="https://raw.githubusercontent.com/stone-Glitch/IQmol-for-Chinese/main/modules/CMakeLists.txt"
+    echo "    ⚠ 将从仓库 raw 下载 modules/CMakeLists.txt 并覆盖本地（未做签名/哈希校验）"
     echo "    下载补全文件..."
     fetch_from_github "$MODULES_DIR/CMakeLists.txt" "$URL" || {
       echo "ERROR: 下载失败。请手动放置 modules_CMakeLists.txt 到 $SCRIPT_DIR/"
@@ -149,8 +155,8 @@ auto_get_cmake_3_31() {
     echo "       解压后运行: CMAKE_BIN=\"解压目录/bin/cmake.exe\" bash build_windows.sh"
     return 1
   fi
-  # 完整性校验（校验值可选：置环境变量 CMAKE_ZIP_SHA256 或随包提供）
-  verify_sha256 "$ZIP" "${CMAKE_ZIP_SHA256:-}" "cmake-$VER-windows-x86_64.zip" || {
+  # 完整性校验（校验值必填：置环境变量 CMAKE_ZIP_SHA256 或随包提供，缺失即拒绝）
+  verify_sha256 "$ZIP" "${CMAKE_ZIP_SHA256:-}" "cmake-$VER-windows-x86_64.zip" strict || {
     echo "ERROR: CMake 压缩包完整性校验失败（可能下载被劫持/损坏），已删除，请重试。"
     rm -f "$ZIP"; return 1
   }
@@ -186,7 +192,8 @@ if [ ! -f "$MODULES_DIR/openbabel/CMakeLists.txt" ] && [ -f "$SUB_TGZ" ]; then
   SUB_SUMS="$SRC_DIR/submodules-package/SHA256SUMS.txt"
   SUB_EXPECT="$(lookup_sha256 "$SUB_SUMS" "IQmol-submodules.tar.gz")"
   [ -z "$SUB_EXPECT" ] && SUB_EXPECT="${SUB_TGZ_SHA256:-}"
-  verify_sha256 "$SUB_TGZ" "$SUB_EXPECT" "IQmol-submodules.tar.gz" || {
+  # 子模块源码包强制校验（strict）：未签名/未校验的压缩包不得解压覆盖源码（审计报告 §5.3）
+  verify_sha256 "$SUB_TGZ" "$SUB_EXPECT" "IQmol-submodules.tar.gz" strict || {
     echo "ERROR: 子模块离线包完整性校验失败，解压可能产出损坏源码，已中止。" >&2
     echo "       如确认包无误，可跳过校验：SUB_TGZ_SHA256= bash $(basename "$0")" >&2
     exit 1
