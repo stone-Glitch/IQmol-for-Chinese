@@ -17,8 +17,19 @@ on:
   push:
     branches: [ main ]
     tags: [ 'v*' ]
+    # paths-ignore：纯文档改动（md / docs/）不影响 Windows 产物，跳过省 ~20 分钟构建。
+    # ⚠️ 注意：paths-ignore 对 tag 推送同样生效。正常发版 tag 前必有代码/脚本/译文
+    #    改动（发版即出包），不会被误跳过；唯一漏网场景是「对旧 commit 重打 tag 且
+    #    累计 diff 仅含文档」——此时运行不出现，用 Actions 页面 workflow_dispatch
+    #    手动补跑即可。
+    paths-ignore:
+      - '**.md'
+      - 'docs/**'
   pull_request:
     branches: [ main ]
+    paths-ignore:
+      - '**.md'
+      - 'docs/**'
   workflow_dispatch:
 
 concurrency:
