@@ -38,6 +38,11 @@
 - **治理文件**：新增 `GOVERNANCE.md` / `RELEASING.md` / `SUPPORTED_PLATFORMS.md` / `THIRD_PARTY_ASSETS.md`；`.gitignore` 补 `.token`（发布凭证勿提交）
 - **源码侧漏翻清零**：P2-10 将 49 处未 `tr()` 的界面字符串全部包裹，新增 61 条译文并剔除陈旧/错 context 条目；源码侧 `tr` 覆盖门禁收紧为硬上限 0（此前负向有效于 `--baseline 48`）
 
+### CI 构建触发优化（2026-10-18）
+
+- **两个构建工作流加 `paths-ignore`（`**.md` / `docs/**`）**：此前纯文档推送会白烧 Ubuntu 4 个矩阵 job 与 Windows 约 20 分钟全量构建；`windows-mingw.yml` 的 `concurrency: cancel-in-progress: true` 还会使连续推送互相取消（run #7–#10 连续 cancelled 的 churn）。源码 / 脚本 / CI 配置 / 译文改动仍照常触发——实证：仅改工作流的 f55de11 与 de54391 均正常触发并出包
+- **tag 发布语义说明**（已写入 `windows-mingw.yml` 注释）：`paths-ignore` 对 tag 推送同样生效；正常发版 tag 前必有代码改动不会被误跳过，唯一漏网场景「对旧 commit 重打 tag 且累计 diff 仅文档」用 workflow_dispatch 手动补跑
+
 ### 文档
 
 - 整理仓库文档一致性：修复指向已删除 `submodules-package` 分支的死链（统一改为 `main` 分支）
