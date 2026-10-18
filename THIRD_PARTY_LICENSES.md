@@ -5,7 +5,7 @@
 # 第三方许可证清单（Third-Party Licenses）
 
 IQmol 中文版基于上游 **IQmol 3.2.3**，本仓库根目录 `LICENSE` 为上游继承的
-**GPL-3.0-or-later**。在源码构建与 Windows 分发包（`IQmol-win64-3.2.3-zh_CN.zip`）
+**GPL-3.0-or-later**。在源码构建与 Windows 分发包（`IQmol-win64-<版本>-zh_CN.zip`）
 中，还会捆绑或链接以下第三方组件。请遵守各自许可证条款。
 
 > 说明：版本号取上游 3.2.3 发布时对应的主流版本；若你的构建环境使用了不同版本，
@@ -32,8 +32,9 @@ IQmol 中文版基于上游 **IQmol 3.2.3**，本仓库根目录 `LICENSE` 为�
 
 - **GPL 传染性**：IQmol 本体与 OpenBabel、libQGLViewer 均为 GPL 系列，
   衍生分发需以 GPL 兼容方式提供完整对应源码（本仓库 `main` 分支即完整源码树）。
-- **Qt LGPL 动态链接**：若以 LGPL 方式合规，Qt 必须以动态库形式提供并允许用户替换；
-  当前 Windows 包为便于「双击即用」采用静态/捆绑方式，请按 Qt 商业或 GPL 条款评估。
+- **Qt LGPL 动态链接**：若以 LGPL 方式合规，Qt 必须以动态库形式提供并允许用户替换——当前
+  Windows / Linux 包均为**动态链接 + 随包附 Qt 运行 DLL/so**（路径 A 已满足，用户可直接替换），
+  重链接指引见 [`RELINKING-NOTICE.md`](RELINKING-NOTICE.md)。
 - **Q-Chem 选项库（`qchem_option.db`）**：为 Q-Chem 输入关键词参考数据库，
   属上游文档性数据；汉化仅翻译其展示文案，不嵌入任何专有可执行代码。
 - **重链接说明（Relinking Notice）**：关于如何以 LGPL 方式合规地重新链接 / 替换 Qt

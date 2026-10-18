@@ -1,8 +1,8 @@
 # 重链接与合规说明（Relinking Notice）
 
-> 适用对象：本仓库分发的 **IQmol 简体中文版** 及其 Windows / Linux / macOS 分发包。
+> 适用对象：本仓库分发的 **IQmol 简体中文版** 及其 Windows / Linux 分发包（macOS 暂无预编译包，可按构建指南自行编译）。
 > 关联文档：[THIRD_PARTY_LICENSES.md](THIRD_PARTY_LICENSES.md)
-> 维护者：@stone-Glitch ｜ 最后更新：2026-10-11
+> 维护者：@stone-Glitch ｜ 最后更新：2026-10-18
 
 本软件在构建与分发时链接了 **Qt 5**（QtCore / Gui / Widgets / OpenGL / Sql /
 PrintSupport / Xml + LinguistTools），其许可为 **LGPL-3.0-only**。依据 LGPL-3.0
@@ -15,7 +15,7 @@ PrintSupport / Xml + LinguistTools），其许可为 **LGPL-3.0-only**。依据 
 
 | 平台 | Qt 版本 | 备注 |
 |---|---|---|
-| macOS | 5.15.13_1 | `scripts/mac_deploy.sh` 锁定 `qt@5/5.15.13_1` |
+| macOS | 5.15.13_1 | `scripts/mac_deploy.sh` 锁定 `qt@5/5.15.13_1`（脚本在库，但**未构建验证**、无预编译包） |
 | Linux | 5.15.x（随发行版，如 Ubuntu 24.04 的 `qtbase5-dev`） | 由包管理器提供 |
 | Windows | 5.15.x（MinGW-w64 构建） | `scripts/build_windows.sh` 使用的 MinGW Qt |
 
@@ -52,8 +52,7 @@ PrintSupport / Xml + LinguistTools），其许可为 **LGPL-3.0-only**。依据 
 修改后的 Qt 静态库重新链接。本仓库在 `main` 分支提供**完整源码树**，等价地满足
 "可重新构建/重链接"要求——接收者可按上述构建指南自行编译出目标文件并完成重链接。
 
-> 当前 Windows 包为便于「双击即用」默认采用静态/捆绑方式；如希望以纯 LGPL 方式合规，
-> 采用路径 A（改为动态链接并随包附 Qt DLL）即可，无需额外提供目标文件。
+> **现状**：Windows 包已采用**动态链接 + 随包附 Qt 运行 DLL**（`deploy_windows.sh` 闭包扫描复制 Qt5Core/Gui/Widgets/Xml/Network/Sql 等），即路径 A **已满足**——接收者可直接替换包内 Qt DLL 使用其修改版本，无需重新编译 IQmol。Linux 包同理随附 Qt 运行库。若未来改为静态链接分发，则须按路径 B 提供目标文件。
 
 ---
 
