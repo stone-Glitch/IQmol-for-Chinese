@@ -17,6 +17,19 @@
 #
 set -euo pipefail
 
+# ---- 跨平台确定性（Windows CI 实测教训，2026-10-18）----
+# 本检查曾在 Windows CI 上连续三次误报"modules/hdf5 版本漂移"（run #3/#4/#5），
+# 而 Linux 本地与 Ubuntu CI 全部通过。根因是两件事叠加：
+#   1. LC_ALL 未固定 —— sort 的排序随 locale 变：en_US.UTF-8 下 modules/hdf5
+#      排到 HighFive 之前（字典序忽略大小写），C locale 下相反。于是"第一个
+#      被比对的条目"在不同环境不同，报错点名不稳定；
+#   2. python3 的 stdout 换行 —— Windows runner 上的 python3 是 hostedtoolcache
+#      原生 Windows Python，stdout 文本模式把 \n 写成 \r\n，清单侧每个 sha 带
+#      尾随 \r，与 gitlink 侧永远失配；且错误消息里的 \r 会让日志渲染器在
+#      该处截断，只剩"清单 <sha>"半句，极难排查。
+# 修复：固定 C locale + 双侧剥 \r + python 侧写字节。下面三处措施缺一不可。
+export LC_ALL=C
+
 cd "$(dirname "$0")/.."
 MANIFEST="submodules-package/MANIFEST.json"
 WARN_ONLY="${DRIFT_WARN_ONLY:-0}"
@@ -47,17 +60,21 @@ echo "清单：$MANIFEST"
 
 # ---- 读取当前 gitlink（真实值）----
 cur="$(mktemp)"; trap 'rm -f "$cur"' EXIT
-git ls-tree HEAD modules/ | awk '$1=="160000"{print $4"\t"$3}' | sort > "$cur"
+git ls-tree HEAD modules/ | awk '$1=="160000"{print $4"\t"$3}' | tr -d '\r' | sort > "$cur"
 
 # ---- 从 MANIFEST 提取 path\tcommit（用 python 解析，避免 jq 依赖）----
 man="$(mktemp)"; trap 'rm -f "$cur" "$man"' EXIT
 python3 - "$MANIFEST" > "$man" <<'PY'
 import json, sys
 d = json.load(open(sys.argv[1], encoding="utf-8"))
+out = []
 for s in d.get("submodules", []):
-    sys.stdout.write("%s\t%s\n" % (s["path"], s["commit"]))
+    out.append("%s\t%s\n" % (s["path"], s["commit"]))
+# 用 buffer 写字节而非文本流：规避 Windows Python stdout 的 \n -> \r\n 转换
+sys.stdout.buffer.write("".join(out).encode("utf-8"))
 PY
-sort -o "$man" "$man"
+# 双保险：再剥一次 \r（防 MSYS2 管道引入的 CR），并用 C locale 排序保证顺序确定
+tr -d '\r' < "$man" | sort > "$man.tmp" && mv "$man.tmp" "$man"
 
 drift=0
 
@@ -65,16 +82,18 @@ drift=0
 echo "--- 逐子模块比对 ---"
 while IFS=$'\t' read -r path sha; do
    [ -z "$path" ] && continue
-   cur_sha="$(awk -F'\t' -v p="$path" '$1==p{print $2}' "$cur")"
+   cur_sha="$(awk -F'\t' -v p="$path" '$1==p{print $2}' "$cur" | tr -d '\r')"
    if [ -z "$cur_sha" ]; then
+      # 详情先打印再 fail：fail() 内部 exit 1，写在它后面的 echo 是死代码
+      echo "  ✗ $path        MISSING(gitlink)"
       fail "子模块 $path 在仓库 gitlink 中不存在（.gitmodules 与索引不一致）"
-      echo "  $path        MISSING(gitlink)"
       drift=1
    elif [ "$cur_sha" != "$sha" ]; then
-      fail "子模块 $path 版本漂移：清单 $sha != 仓库 $cur_sha"
-      echo "  $path"
+      # 同上：先详情后 fail。历史上这里只有一行被 \r 截断的错误，排查极难
+      echo "  ✗ $path"
       echo "     MANIFEST : $sha"
       echo "     仓库实际 : $cur_sha"
+      fail "子模块 $path 版本漂移：清单 $sha != 仓库 $cur_sha（详见上方日志）"
       drift=1
    else
       echo "  ✅ $path  $sha"
@@ -85,8 +104,8 @@ done < "$man"
 while IFS=$'\t' read -r path sha; do
    [ -z "$path" ] && continue
    if ! awk -F'\t' -v p="$path" '$1==p{found=1} END{exit !found}' "$man"; then
+      echo "  ✗ $path        EXTRA(gitlink, 清单缺失)"
       fail "仓库存在子模块 $path，但不在 MANIFEST 中（离线包可能漏打包）"
-      echo "  $path        EXTRA(gitlink, 清单缺失)"
       drift=1
    fi
 done < "$cur"
