@@ -41,7 +41,10 @@ for entry in "${MAP[@]}"; do
   page_files["$page"]+=" $path"
 done
 
-if [ "${#page_files[@]}" -eq 0 ]; then
+# set -u 下空关联数组不能写 "${#page_files[@]}"（bash 5.1 实测报 unbound variable
+# 且使 [ 命令中止、if 误入 else 打印空提醒框）；${arr[@]+x} 是 nounset 安全的
+# 空判写法：数组为空/未设置时展开为空串，有元素时展开为 x。
+if [ -z "${page_files[@]+x}" ]; then
   exit 0
 fi
 
