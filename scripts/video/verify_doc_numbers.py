@@ -16,7 +16,9 @@
 # 做什么：
 #   1. 从translations/zh_CN.ts 实时统计 message / context / unfinished；
 #   2. 用 pdfinfo 实读 doc/IQmolUserGuide.pdf 的页数；
-#   3. 扫描 docs/推广视频/ 下所有 md，把陈旧数字揪出来；
+#   3. 扫描所有"当前状态"公开面的数字宣称并揪出陈旧值——
+#      docs/推广视频/*.md（文案）、README.md（门面）、docs/汉化展示主页.md（落地页）；
+#      release_notes.md 按版本冻结，不在扫描范围；
 #   4. 顺带核对成片的实测时长/分辨率是否与文档写的一致。
 #
 # 用法：
@@ -39,9 +41,11 @@ STALE = {
     "2112": "2026-10-02 快照（错数字，曾上屏）",
     "2035": "2026-10-02 快照（错数字，曾进简介）",
     "153": "2026-10-02 快照的 context 数",
+    "2125": "2026-10-03 快照（v3.2.4.1 发布时口径）",
+    "2126": "2026-10-11 快照（P2-10 清零前）",
+    "155": "2026-10-03 快照的 context 数",
+    "156": "2026-10-11 快照的 context 数",
 }
-# 这些词出现在正常语境里时不当作数字误报
-STALE_ALLOW = {"111": [], "153": []}
 
 fail = []
 warn = []
@@ -102,10 +106,19 @@ if n_unf:
     fail.append(f"存在 {n_unf} 条 unfinished 翻译，不能发布")
 
 # ---------- 扫文档 ----------
-DOCDIR = "docs/推广视频"
-docs = sorted(glob.glob(f"{DOCDIR}/*.md"))
+# 覆盖所有"当前状态"公开面的数字宣称：推广视频、README、汉化展示主页。
+# 不含 release_notes.md——它按版本冻结（某版本当年确实发了 2125/155），
+# 判为陈旧会误报；其当前/未发布小节由发布流程另行核对。
+SCAN_TARGETS = [
+    "docs/推广视频/*.md",
+    "README.md",
+    "docs/汉化展示主页.md",
+]
+docs = []
+for _pat in SCAN_TARGETS:
+    docs.extend(sorted(glob.glob(_pat)))
 print("-" * 62)
-print(f"扫描 {len(docs)} 个推广文档")
+print(f"扫描 {len(docs)} 个公开文档")
 print("-" * 62)
 
 # 只在这些数字紧邻"翻译/context/条/个/页"等语境时才判定，
@@ -122,9 +135,14 @@ for f in docs:
                     rf"=\s*{re.escape(num)}\s*[（(]"]
             for pat in pats:
                 if re.search(pat, line):
-                    # 允许行内自带"已废弃/历史快照"说明的自我标注行
-                    if any(k in line for k in ("已废弃", "历史快照", "快照，均已废弃")):
-                        warn.append(f"{f}:{i} 提及历史快照 {num}（已标注废弃）")
+                    # 允许行内自带回溯说明的自我标注行——这类行是在"讲述曾经
+                    # 写错并已改正"（如 原写2125…修正为474），并非当前宣称，不应判失败。
+                    if any(k in line for k in (
+                        "已废弃", "历史快照", "快照，均已废弃",
+                        "原写", "修正为", "改为", "数字不准", "错数字",
+                        "曾上屏", "曾进简介", "旧值", "此前", "曾用",
+                    )):
+                        warn.append(f"{f}:{i} 提及历史数字 {num}（行内已标注为回溯/已改正）")
                     else:
                         fail.append(f"{f}:{i} 陈旧数字 {num}（{why}）→ 应为 "
                                     f"{n_msg}/{n_ctx}/{n_pages}\n      {line.strip()[:110]}")

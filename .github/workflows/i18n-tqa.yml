@@ -13,6 +13,9 @@ name: i18n TQA（翻译质量门禁）
 #
 # 另跑 extract_tr_rules.py --verify：tr() 包裹规则表覆盖率必须 100%
 # （保证 patches/ 重放链路不会因规则缺失而丢翻译）。
+#
+# 再跑 verify_doc_numbers.py：README / 展示主页 / 推广文案里的
+# "2110 条 · 158 context · 34 页"必须与仓库实时统计一致（数字不打架）。
 
 on:
   push:
@@ -123,6 +126,16 @@ jobs:
           cp /tmp/zh_CN.ts.bak translations/zh_CN.ts
           # 还原后必须重新变绿，确认自测没有污染仓库
           python3 scripts/i18n/tqa.py --gate --no-lupdate
+
+      - name: 宣传数字核验门禁（文档宣称 vs 仓库实测）
+        # README / 汉化展示主页 / 推广文案里的"2110 条 · 158 context · 34 页"
+        # 必须与 translations/zh_CN.ts、手册 PDF 的实时统计一致。
+        # 数字打架是推广物料翻车重灾区（历史上已漂移三次），故做成硬门禁：
+        # 谁改翻译忘了同步文案，这里就红。
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y poppler-utils   # pdfinfo：实读手册页数
+          python3 scripts/video/verify_doc_numbers.py
 
       - name: 写入任务摘要
         if: always()
