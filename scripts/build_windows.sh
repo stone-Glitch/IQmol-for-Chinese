@@ -97,10 +97,11 @@ verify_sha256() {
 }
 
 # 从 SHA256SUMS.txt 查某个文件名对应的期望校验值（找不到则输出空）
+# 剥 \r：Windows 上若文件被 CRLF 检出，行尾 \r 会混进期望值导致误判不匹配
 lookup_sha256() {
   local SUMS="$1"; local NAME="$2"
   [ -f "$SUMS" ] || { echo ""; return; }
-  awk -v n="$NAME" '$2==n || $2=="*"n {print $1}' "$SUMS" | head -1
+  tr -d '\r' < "$SUMS" | awk -v n="$NAME" '$2==n || $2=="*"n {print $1}' | head -1
 }
 
 # ===== 1. 检查/补全 modules/CMakeLists.txt（构建 libQGLViewer 的聚合脚本）=====
@@ -131,6 +132,15 @@ if [ ! -f "$MODULES_DIR/CMakeLists.txt" ]; then
 fi
 
 # ===== 自动获取 CMake 3.31（portable，Windows x86_64）=====
+# 固定版本官方发布包 SHA256 表（与 Kitware 官方 cmake-3.31.6-SHA-256.txt 核对，
+# 2026-10-18 下载自 github.com/Kitware/CMake/releases）。
+# strict 校验的期望值优先级：环境变量 CMAKE_ZIP_SHA256 > 本表 > 空（拒绝构建）。
+# 升级下面 VER 时必须同步更新本表——否则 strict 会以"无校验值"拒绝下载，
+# 把正常的版本升级误报成"下载被劫持"（CI 上曾因此空转过）。
+declare -A CMAKE_ZIP_SHA256_KNOWN=(
+  ["3.31.6"]="d163cd3ab4959b0a53fa8988f2ddbd2e6c501658201e6a154386bad9dbe4f836"
+)
+
 auto_get_cmake_3_31() {
   local VER="3.31.6"
   local DEST="$SRC_DIR/.tools/cmake-$VER"
@@ -155,8 +165,10 @@ auto_get_cmake_3_31() {
     echo "       解压后运行: CMAKE_BIN=\"解压目录/bin/cmake.exe\" bash build_windows.sh"
     return 1
   fi
-  # 完整性校验（校验值必填：置环境变量 CMAKE_ZIP_SHA256 或随包提供，缺失即拒绝）
-  verify_sha256 "$ZIP" "${CMAKE_ZIP_SHA256:-}" "cmake-$VER-windows-x86_64.zip" strict || {
+  # 完整性校验（strict）：期望值来自环境变量 CMAKE_ZIP_SHA256，缺省用上方
+  # CMAKE_ZIP_SHA256_KNOWN 固定表；两者皆无则拒绝（失败关闭，审计报告 §5.3）
+  local ZIP_SHA="${CMAKE_ZIP_SHA256:-${CMAKE_ZIP_SHA256_KNOWN[$VER]:-}}"
+  verify_sha256 "$ZIP" "$ZIP_SHA" "cmake-$VER-windows-x86_64.zip" strict || {
     echo "ERROR: CMake 压缩包完整性校验失败（可能下载被劫持/损坏），已删除，请重试。"
     rm -f "$ZIP"; return 1
   }

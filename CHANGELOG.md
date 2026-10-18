@@ -17,6 +17,8 @@
 
 ### 工程与发布
 
+- **Windows CI 三连败根因修复**（run #3/#4/#5）：`check_submodules_drift.sh` 在 Windows runner 上从未通过——连续误报「modules/hdf5 版本漂移」而 Linux 全绿。根因双重叠加：① Windows 原生 Python（hostedtoolcache）stdout 文本模式把 `\n` 写成 `\r\n`，清单侧每个 sha 带尾随 `\r`，与 gitlink 侧永远失配（错误消息里的 `\r` 还会让 CI 注释渲染到该处截断，只剩半句）；② `en_US.UTF-8` locale 下 `sort` 把 `modules/hdf5` 排到 HighFive 之前，第一个被比对的条目随环境变化。修复：固定 `LC_ALL=C`、gitlink/清单双侧剥 `\r`、Python 改走 `sys.stdout.buffer` 写字节、漂移详情先于 `fail()` 打印（原 `fail()` 内 `exit 1` 使详情 echo 成为死代码）。已做三重回归：CRLF 模拟环境下旧脚本复现失败 / 新脚本通过、篡改清单仍能抓出、还原后归绿
+- **build_windows.sh**：CMake 3.31.6 官方发布包 SHA256 钉入脚本（`d163cd3a…4f836`，与 Kitware 官方 `cmake-3.31.6-SHA-256.txt` 核对）——strict 完整性校验此前在 CI 上因未设 `CMAKE_ZIP_SHA256` 环境变量而空转，遇 MSYS2 CMake 4.x 触发自动下载时会误报「下载被劫持」；期望值优先级：环境变量 > 内置表 > 空（拒绝，失败关闭）。`lookup_sha256` 增加 CRLF 防护
 - **版本口径统一为 `3.2.4.1-zh_CN`**：`CMakeLists.txt` 定为 3.2.4.1；发布脚本 `publish_release.sh` 改为从 CMakeLists 动态派生版本与资产名（消除 `v3.2.3` 硬编码，以及"两个 Release 同文件名不同哈希"的治理问题）；同名资产改为拒绝静默覆盖
 - **供应链 P0 止血**：`build_windows.sh` 的 SHA256 校验改为失败关闭（CMake 压缩包、子模块离线包强制校验，缺失即拒绝）；新增 `dependencies.lock`（9 子模块 gitlink commit + 许可证清单）；`LICENSE` 补 `SPDX-License-Identifier: GPL-3.0-or-later`
 - **治理文件**：新增 `GOVERNANCE.md` / `RELEASING.md` / `SUPPORTED_PLATFORMS.md` / `THIRD_PARTY_ASSETS.md`；`.gitignore` 补 `.token`（发布凭证勿提交）
