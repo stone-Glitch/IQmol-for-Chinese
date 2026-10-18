@@ -22,7 +22,7 @@
 | 应用主图标 | `iqmol.png` | 主窗口/快捷方式图标 |
 | 对话框 | `dlg_appearance.png` `dlg_camera.png` `dlg_insmol.png` `dlg_jobmonitor.png` `dlg_qchem.png` `dlg_server.png` | 外观 / 相机 / 插入分子 / 任务监视器 / Q-Chem 设置 / 服务器配置 |
 | 顶部菜单 | `menu_文件.png` `menu_编辑.png` `menu_显示.png` `menu_构建.png` `menu_计算.png` `menu_帮助.png` | 六大主菜单展开态 |
-| 3D 视图 | `view3d_viagra_demo.png` | 3D 分子视图示例 |
+| 3D 视图 | `view3d_porphyrin.png` | 3D 分子视图示例（卟啉，实机 OpenGL 渲染） |
 
 ## 引用方式
 
