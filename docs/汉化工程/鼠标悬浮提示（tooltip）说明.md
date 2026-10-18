@@ -79,7 +79,7 @@ python3 scripts/i18n/qchem_db_translate.py verify
 | 关键词上不弹提示 | 该关键词不在 `qchem_option.db` 中（自定义/新版本新增） | 查 Q-Chem 官方手册；可把新关键词补进数据库 |
 | 提示是英文 | 数据库未随包更新 | Windows：`deploy_windows.sh` 会复制 `share/qchem_option.db`；Linux：`package_linux.sh` 同样随包，重打包即可 |
 | 提示框乱码 | HTML 头部的 charset 被破坏 | 用 `qchem_db_translate.py verify` 检查；不要手工改 HTML |
-| 按钮提示仍是英文 | `zh_CN.qm` 未加载（路径问题） | 见 `docs/验证记录/2026-09-24-Linux分发包中文翻译加载失败定位.md` |
+| 按钮提示仍是英文 | `zh_CN.qm` 未加载（路径问题） | 见 `docs/验证记录/翻译与仓库核查.md` §三（reA22A 定位） |
 
 ---
 
