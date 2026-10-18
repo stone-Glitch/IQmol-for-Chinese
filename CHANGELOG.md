@@ -8,12 +8,20 @@
 
 ## [Unreleased]
 
+### 工程与发布
+
+- **版本口径统一为 `3.2.4.1-zh_CN`**：`CMakeLists.txt` 定为 3.2.4.1；发布脚本 `publish_release.sh` 改为从 CMakeLists 动态派生版本与资产名（消除 `v3.2.3` 硬编码，以及"两个 Release 同文件名不同哈希"的治理问题）；同名资产改为拒绝静默覆盖
+- **供应链 P0 止血**：`build_windows.sh` 的 SHA256 校验改为失败关闭（CMake 压缩包、子模块离线包强制校验，缺失即拒绝）；新增 `dependencies.lock`（9 子模块 gitlink commit + 许可证清单）；`LICENSE` 补 `SPDX-License-Identifier: GPL-3.0-or-later`
+- **治理文件**：新增 `GOVERNANCE.md` / `RELEASING.md` / `SUPPORTED_PLATFORMS.md` / `THIRD_PARTY_ASSETS.md`；`.gitignore` 补 `.token`（发布凭证勿提交）
+- **源码侧漏翻清零**：P2-10 将 49 处未 `tr()` 的界面字符串全部包裹，新增 61 条译文并剔除陈旧/错 context 条目；源码侧 `tr` 覆盖门禁收紧为硬上限 0（此前负向有效于 `--baseline 48`）
+
 ### 文档
 
 - 整理仓库文档一致性：修复指向已删除 `submodules-package` 分支的死链（统一改为 `main` 分支）
-- 统一翻译条数口径为 **2125 条 / 155 context**（此前 README 记 2035、部分文档记 2111，再早统一为 2112）
+- 统一翻译条数口径为 **2110 条 / 158 context**（P2-10 清零后；此前 README 记 2035、部分文档记 2111，再早 2112 → 2125 → 2126）
 - 消解 OpenBabel 补丁包定性冲突（标注为「旧版冗余包」）
 - `docs/仓库结构.md` 补列根目录分发包、许可证清单、SBOM、审校数据等顶层条目
+- 新增供应链/安全/可复现性审计的本地核验回应（`docs/审校与排查/外部评审/03-供应链安全审计-本地核验回应-2026-10-18.md`）
 
 ### 新增
 

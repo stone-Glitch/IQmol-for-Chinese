@@ -61,6 +61,10 @@ part_0?
 # ---- build_windows.sh 自动下载的 portable CMake（生成于源码树下 .tools/，勿提交）----
 .tools/
 
+# ---- 发布凭证（publish_release.sh 读取的 GitHub Token，切勿提交）----
+.token
+scripts/.token
+
 # Python 缓存
 __pycache__/
 *.pyc

@@ -75,7 +75,7 @@
 ## 验证方式
 
 1. `lupdate @filelist.txt -ts zh_CN_full.ts` 重新提取 → 1514 条源串（37 new + 3 UndoCommand 修正后共 41 新增）。
-2. `translate_iqmol.py` 注入译文 → 1514 条全部 finished，0 unfinished。（注：此为第 2 阶段验证时数值；当前 HEAD 全量为 2126 条）
+2. `translate_iqmol.py` 注入译文 → 1514 条全部 finished，0 unfinished。（注：此为第 2 阶段验证时数值；截至 2026-10-17 P2-10 清零后全量为 2110 条）
 3. `lrelease` 编译 `zh_CN.qm` → 1514 finished。
 4. `cmake --build` 重编 IQmol 可执行文件（含新 tr 代码）→ 0 错误。
 5. `verify_ext.cpp` 按真实 `(context, source)` 全量核对 qm → **1514 通过, 0 失败**。`
