@@ -1,5 +1,15 @@
 name: Build on Ubuntu 24.04
-on: [ push, pull_request ]
+# paths-ignore：纯文档改动（md / docs/）不影响构建产物，跳过矩阵省 runner。
+# 本工作流无 tag 触发、不发布 Release，加过滤无发布侧风险。
+on:
+  push:
+    paths-ignore:
+      - '**.md'
+      - 'docs/**'
+  pull_request:
+    paths-ignore:
+      - '**.md'
+      - 'docs/**'
 jobs:
   build-project:
     name: Build Project
