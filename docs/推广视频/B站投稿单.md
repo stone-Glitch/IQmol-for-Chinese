@@ -42,7 +42,7 @@ IQmol 是一款开源的分子编辑与可视化软件（GPL-3.0），
 ▍数据可核验
 视频里说的三个数字都能在仓库里逐条核对，不接受「据说」：
   grep -c '<message'   translations/zh_CN.ts   # → 2110
-  grep -c '<context>'   translations/zh_CN.ts   # → 156
+  grep -c '<context>'   translations/zh_CN.ts   # → 158
   pdfinfo               doc/IQmolUserGuide.pdf # → Pages: 34
 
 ▍获取
