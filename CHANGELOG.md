@@ -40,7 +40,7 @@
 
 ### CI 构建触发优化（2026-10-18）
 
-- **两个构建工作流加 `paths-ignore`（`**.md` / `docs/**`）**：此前纯文档推送会白烧 Ubuntu 4 个矩阵 job 与 Windows 约 20 分钟全量构建；`windows-mingw.yml` 的 `concurrency: cancel-in-progress: true` 还会使连续推送互相取消（run #7–#10 连续 cancelled 的 churn）。源码 / 脚本 / CI 配置 / 译文改动仍照常触发——实证：仅改工作流的 f55de11 与 de54391 均正常触发并出包
+- **两个构建工作流加 `paths-ignore`（`**.md` / `docs/**`）**：此前纯文档推送会白烧 Ubuntu 4 个矩阵 job 与 Windows 约 20 分钟全量构建；`windows-mingw.yml` 的 `concurrency: cancel-in-progress: true` 还会使连续推送互相取消（run #7–#10 连续 cancelled 的 churn）。源码 / 脚本 / CI 配置 / 译文改动仍照常触发。实证矩阵（2026-10-18）：纯文档提交 3ab5431（仅 `CHANGELOG.md`）在两个工作流均被过滤、无 run；工作流配置提交 f55de11 / de54391 与脚本提交 f530b97 均正常触发——Windows #13 全绿 20m19s 并产出 54.9 MB 分发包（`IQmol-windows-x64-zh_CN`），Ubuntu #182/#183/#184 全绿（约 6 分钟/次）。Windows #12 于构建中被 #13 按 concurrency 设计取消，属预期的在跑构建让位、非失败
 - **tag 发布语义说明**（已写入 `windows-mingw.yml` 注释）：`paths-ignore` 对 tag 推送同样生效；正常发版 tag 前必有代码改动不会被误跳过，唯一漏网场景「对旧 commit 重打 tag 且累计 diff 仅文档」用 workflow_dispatch 手动补跑
 - **修复 wiki 同步钩子的 `set -u` 空数组 bug**（`scripts/check_wiki_sync.sh`）：空判写作 `"${#page_files[@]}" -eq 0` 在 bash 5.1 下触发 `unbound variable` 并使 `[` 命令中止、if 误入 else 打印无内容提醒框（每次无 Wiki 映射改动的提交都刷一条错误）；改用 nounset 安全写法 `${page_files[@]+x}`。双分支回归：无映射改动静默退出 / 有映射改动正确列项。钩子以软链方式安装（`.git/hooks/pre-commit -> ../../scripts/check_wiki_sync.sh`），源脚本修改即生效
 
