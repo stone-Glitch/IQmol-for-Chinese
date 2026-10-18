@@ -251,7 +251,7 @@ cd build/bin && ./IQmol.exe
 - **OpenBabel 力场插件自注册**：静态构建下若 OpenBabel 的力场 / 格式插件未被整体保留，运行期会报 `Failed to load force field: UFF`。本仓库 `CMakeLists.txt` 已用 `$<LINK_LIBRARY:WHOLE_ARCHIVE,openbabel>` 修复；手工构建或旧包若未启用该修复则可能遇到。
 - **帮助文档内嵌截图为英文**：`doc/IQmolUserGuide.*` 中的部分配图为上游英文截图，汉化尚未重渲染（计划见待办：帮助文档截图汉化，下个版本处理）。
 - **MinGW-w64 为唯一验证工具链**：Windows 构建仅验证 MinGW-w64（Qt5 + MinGW），MSVC 路径未验证、未支持。
-- **Qt 静态 / 捆绑许可**：Windows 包为「双击即用」采用捆绑 / 静态链接 Qt，请按 Qt LGPL-3.0 或 GPL 条款评估合规，详见 [`THIRD_PARTY_LICENSES.md`](THIRD_PARTY_LICENSES.md)。
+- **Qt 许可（LGPL-3.0-only）**：Windows / Linux 包采用**动态链接并随包附 Qt 运行库**（用户可直接替换包内 Qt DLL/so，已满足 LGPL 重链接要求）；如未来改为静态链接分发，将随包提供目标文件。详见 [`RELINKING-NOTICE.md`](RELINKING-NOTICE.md) 与 [`THIRD_PARTY_LICENSES.md`](THIRD_PARTY_LICENSES.md)。
 - **未提供官方 Release 资产签名**：Windows / Linux 预编译包经 GitHub Releases 分发（附 `SHA256SUMS.txt`），未做 GPG 签名；校验请使用发布说明中的 SHA256。
 
 ---
