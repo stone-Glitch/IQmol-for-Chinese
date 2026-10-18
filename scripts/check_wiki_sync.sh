@@ -29,7 +29,6 @@ MAP=(
   "docs/推广视频|Video"
   "scripts/video|Video"
   "scripts/video/narration.py|Video"
-  "docs/汉化工程/文档整理报告.md|Home"
 )
 
 declare -A page_files

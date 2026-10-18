@@ -88,3 +88,9 @@ build-video/
 # 注意：上面「子模块离线包」一节里的 IQmol-submodules.zip / IQmol-submodules.tar.gz /
 # part_0? 规则只忽略**根目录散落**的同名压缩包，不会覆盖本目录内的文件；
 # 若日后清理，请只删根目录散落的临时包，勿误删本目录。
+
+# P6 审校工单 Markdown 是 scripts/i18n/semantic_audit.py sample 的生成物，
+# 与 CSV/JSON 数据文件同源。2026-10-18 起不再跟踪该生成文件（审校已结论，
+# 记录表为收敛视图）；CSV/JSON 仍跟踪（score 阶段读取）。重跑 sample 会重新
+# 生成它，故加入忽略，避免污染工作区。
+docs/审校与排查/P6-审校工单.md
