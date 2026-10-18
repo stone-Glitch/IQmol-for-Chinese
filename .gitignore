@@ -82,8 +82,8 @@ promo_scripts/
 build-video/
 
 # ==================== 须保持 git 跟踪（勿忽略） ====================
-# submodules-package/ 是 **CI 离线构建依赖**（见 .github/workflows/windows-msvc.yml
-# 第 111–138 行：解压 IQmol-submodules.tar.gz 做内嵌离线构建）。
+# submodules-package/ 是 **CI 离线构建依赖**（见 .github/workflows/windows-mingw.yml
+# 「解包子模块源码」步骤：解压 IQmol-submodules.tar.gz 做内嵌离线构建）。
 # 它必须保持 git 跟踪，请勿加入忽略规则。
 # 注意：上面「子模块离线包」一节里的 IQmol-submodules.zip / IQmol-submodules.tar.gz /
 # part_0? 规则只忽略**根目录散落**的同名压缩包，不会覆盖本目录内的文件；
