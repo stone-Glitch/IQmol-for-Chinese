@@ -21,6 +21,12 @@
 #      release_notes.md 按版本冻结，不在扫描范围；
 #   4. 顺带核对成片的实测时长/分辨率是否与文档写的一致。
 #
+# 匹配模式（2026-10-18 加固，曾漏放两处）：
+#   原模式只认"数字在后"（2112 条翻译 / 2112/153/34 / = 2112（）），
+#   漏掉了"context = 156"（词在前）与"grep -c ... # → 156"（代码块箭头）
+#   两种写法——2026-10-18 全仓扫描各抓到 1 处（制作计划 / 投稿单）。
+#   现五类紧邻用法全覆盖；回溯叙述行（"原写…修正为…"）仍只提示不判失败。
+#
 # 用法：
 #   python3 scripts/video/verify_doc_numbers.py
 #   退出码 0 = 全部一致；1 = 发现漂移（CI 可直接拿它当门禁）
@@ -129,10 +135,17 @@ for f in docs:
     lines = open(f, encoding="utf-8").read().splitlines()
     for i, line in enumerate(lines, 1):
         for num, why in STALE.items():
-            # 匹配 "2112 条翻译" / "2112/153/34" / "= 2112（" 这类紧邻用法
+            # 匹配五类紧邻用法（2026-10-18 加固）：
+            #   "2112 条翻译" / "2112 context"     数字在后
+            #   "context = 2112" / "context：2112" 词在前（等号/冒号连接）
+            #   "2112/153/34"                       三数连写
+            #   "= 2112（"                          等号 + 中文括号
+            #   "→ 2112"                            代码块期望输出（# → 156）
             pats = [rf"(?<![\d.]){re.escape(num)}\s*{CTX}",
+                    rf"{CTX}\s*[=＝:：]?\s*(?<![\d.]){re.escape(num)}(?![\d.])",
                     rf"{re.escape(num)}\s*/\s*\d+\s*/\s*\d+",
-                    rf"=\s*{re.escape(num)}\s*[（(]"]
+                    rf"=\s*{re.escape(num)}\s*[（(]",
+                    rf"→\s*{re.escape(num)}(?![\d.])"]
             for pat in pats:
                 if re.search(pat, line):
                     # 允许行内自带回溯说明的自我标注行——这类行是在"讲述曾经

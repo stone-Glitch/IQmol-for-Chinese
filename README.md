@@ -47,8 +47,8 @@ IQmol version 3
 |---|---|
 | **译文** | 2110 条（158 个界面模块，0 未译） |
 | **中文手册** | 34 页（PDF，随包提供） |
-| **平台** | Windows / macOS / Linux |
-| **宣传视频** | 90 秒实机录屏，已发布 B 站 |
+| **平台** | Windows / Linux（x86_64 已实测；macOS 暂无预编译包） |
+| **宣传视频** | 90 秒实机录屏（成片与投稿物料就绪，见 [`docs/推广视频/`](docs/推广视频/README.md)） |
 
 👉 **[打开汉化成果速览网页面板 →](docs/汉化成果速览.html)**（模拟 IQmol 界面，菜单可点开）
 👉 **[文字版：汉化展示主页 →](docs/汉化展示主页.md)** ｜ [下载 Releases](https://github.com/stone-Glitch/IQmol-for-Chinese/releases)
@@ -252,7 +252,7 @@ cd build/bin && ./IQmol.exe
 - **帮助文档内嵌截图为英文**：`doc/IQmolUserGuide.*` 中的部分配图为上游英文截图，汉化尚未重渲染（计划见待办：帮助文档截图汉化，下个版本处理）。
 - **MinGW-w64 为唯一验证工具链**：Windows 构建仅验证 MinGW-w64（Qt5 + MinGW），MSVC 路径未验证、未支持。
 - **Qt 静态 / 捆绑许可**：Windows 包为「双击即用」采用捆绑 / 静态链接 Qt，请按 Qt LGPL-3.0 或 GPL 条款评估合规，详见 [`THIRD_PARTY_LICENSES.md`](THIRD_PARTY_LICENSES.md)。
-- **未提供官方 Release 资产签名**：当前 Windows 包以 git LFS/Commit 形式分发，未做 GPG 签名；校验请使用发布说明中的 SHA256。
+- **未提供官方 Release 资产签名**：Windows / Linux 预编译包经 GitHub Releases 分发（附 `SHA256SUMS.txt`），未做 GPG 签名；校验请使用发布说明中的 SHA256。
 
 ---
 
@@ -273,4 +273,4 @@ cd build/bin && ./IQmol.exe
 
 ---
 
-> 维护者：@stone-Glitch ｜ 最后整理：2026-10-11
+> 维护者：@stone-Glitch ｜ 最后整理：2026-10-18
