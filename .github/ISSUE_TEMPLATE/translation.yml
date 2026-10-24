@@ -1,0 +1,73 @@
+name: 翻译问题 / Translation issue
+description: 误译、漏译、术语不一致、界面显示不下
+title: "[i18n] "
+labels: ["i18n", "translation"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        翻译问题请提供**出现位置**和**上下文**。同一个英文词在不同模块可能译法不同（这是有意为之的消歧），
+        只说"Surface 译错了"无法判断。
+
+  - type: dropdown
+    id: category
+    attributes:
+      label: 问题类型
+      options:
+        - 误译（意思错了）
+        - 术语不一致（同一概念多处译法不同）
+        - 未翻译（界面上仍是英文）
+        - 界面适配（文字被截断 / 按钮变宽 / 错位）
+        - 占位符或格式问题（%1 丢失、HTML 标签破坏）
+        - 术语表建议（新增或修改既有译法）
+    validations:
+      required: true
+
+  - type: input
+    id: location
+    attributes:
+      label: 出现位置
+      description: 哪个窗口 / 菜单 / 对话框。有截图请直接贴在下面
+      placeholder: 例如：Preferences → Server → 高级设置 对话框
+    validations:
+      required: true
+
+  - type: textarea
+    id: strings
+    attributes:
+      label: 源串与当前译文
+      description: |
+        请从 translations/zh_CN.ts 中找到对应条目粘贴，或给出唯一的英文原文。
+        用英文原文搜索是最快的定位方式。
+      placeholder: |
+        英文原文（source）：
+        当前译文（translation）：
+        所在 context：
+        ts 文件行号：
+      render: xml
+    validations:
+      required: true
+
+  - type: textarea
+    id: suggestion
+    attributes:
+      label: 建议译法与理由
+      description: 术语类建议请说明依据（如某本中文教材、某篇文献的通行译法）
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: selfcheck
+    attributes:
+      label: 已自查
+      options:
+        - label: 查过 CONTRIBUTING.md 里的术语表
+        - label: 该词不是 Q-Chem 关键字值（关键字值不应翻译）
+        - label: 占位符（%1、%2）与 HTML 标签已原样保留
+        - label: 修改后在界面上看过实际显示效果（未被截断）
+
+  - type: textarea
+    id: screenshot
+    attributes:
+      label: 截图
+      description: 界面适配类问题请务必附截图
