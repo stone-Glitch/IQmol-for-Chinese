@@ -9,3 +9,9 @@ contact_links:
   - name: 🔐 报告安全漏洞（请勿公开）
     url: https://github.com/stone-Glitch/IQmol-for-Chinese/security/advisories/new
     about: 涉及密钥、SSH、文件安全的问题请走私密渠道，见 SECURITY.md
+  - name: 上游功能缺陷（请回报上游）
+    url: https://github.com/nutjunkie/IQmol3/issues
+    about: IQmol 本身的功能 bug 请回报上游，本仓库只负责中文界面与构建可用性
+  - name: Q-Chem 使用讨论
+    url: https://talk.q-chem.com/
+    about: 计算方法、收敛问题、输入文件语法请到 Q-Chem 官方论坛

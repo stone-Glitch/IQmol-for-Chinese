@@ -1,0 +1,74 @@
+name: 功能建议 / Feature request
+description: 建议新增功能、改进流程或补充文档
+title: "[Feature] "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **提交前请先确认：这是「本仓库」的事，还是「上游」的事？**
+
+        本仓库只做三件事：**中文界面、中文文档、构建与打包的可用性**。
+        IQmol 软件本身的功能（新的计算方法支持、新的可视化类型、新的文件格式）属于上游，
+        请到 [nutjunkie/IQmol3](https://github.com/nutjunkie/IQmol3/issues) 提。
+
+        典型属于本仓库的建议：补一份 macOS 构建说明、给某个对话框补中文、改进离线包脚本、
+        补充术语表条目、把某个已知坑写进文档。
+        典型属于上游的建议：支持 ORCA 输入、增加某种轨道分析、修复某个崩溃。
+
+  - type: dropdown
+    id: layer
+    attributes:
+      label: 属于哪一层
+      options:
+        - 第二层：翻译基础设施（tr()、ts/qm、术语）
+        - 第三层：构建 / 部署 / 打包（scripts、CI、离线包）
+        - 第四层：中文交付物（手册、docs、截图、发布说明）
+        - 第一层：上游源码 —— 我会转去上游提
+        - 不确定，需要讨论
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: 想解决什么问题
+      description: |
+        写清楚你遇到的具体场景，不要直接写方案。
+        "我每次都要手动改 X" 比 "请增加 Y 功能" 更容易讨论出好方案。
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: 建议怎么做
+      description: 如果你已经想好了方案就写；没想好可以留空，先讨论问题本身
+    validations:
+      required: false
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: 考虑过的其他方案
+      description: 以及为什么否掉了它们
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: selfcheck
+    attributes:
+      label: 已确认
+      options:
+        - label: 这不是 IQmol 软件本身的功能请求（那应去上游提）
+        - label: 搜过现有 issue，没有重复
+        - label: 查过 FAQ与故障速查.md，不是已知问题
+
+  - type: checkboxes
+    id: contribute
+    attributes:
+      label: 参与
+      description: 本仓库目前是单人维护，愿意动手的贡献者非常受欢迎
+      options:
+        - label: 我愿意提交 PR 来实现这个
+        - label: 我可以帮忙测试 / 提供截图 / 补充文档

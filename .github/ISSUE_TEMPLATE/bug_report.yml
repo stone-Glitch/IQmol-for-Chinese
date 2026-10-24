@@ -1,67 +1,100 @@
-name: 🐞 Bug 报告
-description: 反馈软件运行、功能或打包方面的缺陷
+name: 缺陷报告 / Bug report
+description: 构建失败、启动崩溃、界面或功能异常
 title: "[Bug] "
-labels: ["bug"]
+labels: ["bug", "triage"]
 body:
   - type: markdown
     attributes:
       value: |
-        感谢反馈！请尽量填写完整，便于定位问题。
-        > ⚠️ 请先确认这不是**上游 IQmol 本身**的已知问题——见 [README「已知问题（源自上游）」](../../README.md#已知问题源自上游)。
+        请尽量填满。**"构建失败"四个字加一句"我按 README 做的"无法定位任何问题。**
+        最常见的问题来自三个地方：Qt5 路径、CMake 版本、OpenBabel 补丁包解压顺序——提交前请先自查这三项。
+
+  - type: dropdown
+    id: kind
+    attributes:
+      label: 问题类型
+      options:
+        - 构建失败（configure / compile）
+        - 部署或启动失败
+        - 界面显示异常（乱码、截断、错位）
+        - 功能异常（读取文件、提交计算、可视化）
+        - 翻译错误（请用「翻译问题」模板）
+    validations:
+      required: true
+
   - type: dropdown
     id: platform
     attributes:
-      label: 运行平台
+      label: 操作系统
       options:
-        - Windows 10/11 x64
-        - Linux x86_64
-        - macOS
-        - 其它（请在描述中说明）
+        - Windows 10 / 11
+        - Ubuntu 22.04 / 24.04
+        - 其他 Linux（请在下方说明发行版）
+        - macOS Intel
+        - macOS Apple Silicon
     validations:
       required: true
-  - type: input
-    id: version
+
+  - type: textarea
+    id: env
     attributes:
-      label: 版本 / 获取方式
-      description: 例如「Windows 预编译包 IQmol-win64-3.2.3-zh_CN.zip」或「自行编译，main 分支 <commit>」
-      placeholder: 3.2.3-zh_CN
+      label: 环境信息
+      description: 请粘贴命令的实际输出，不要凭记忆写版本号
+      placeholder: |
+        Qt 版本：        (qmake --version)
+        CMake 版本：     (cmake --version)
+        编译器：         (g++ --version 或 gcc --version；Windows 请写 MinGW-w64 版本)
+        Fortran 编译器： (gfortran --version)
+        本仓库 commit：  (git rev-parse HEAD)
+        上游基线 tag：
+      render: shell
     validations:
       required: true
+
   - type: textarea
     id: steps
     attributes:
       label: 复现步骤
-      description: 从启动开始，一步步写清如何触发
       placeholder: |
-        1. 打开 IQmol
-        2. 点击「构建」→「..."
-        3. ...
+        1. 解压了哪几个离线包（子模块 / openbabel-deps / openbabel-fix / openbabel-formats-fix）
+        2. 解压顺序
+        3. 用什么工具解压（MINGW64 tar / 7-Zip / 360压缩 / 其他）
+        4. 执行的命令
     validations:
       required: true
+
+  - type: textarea
+    id: log
+    attributes:
+      label: 完整日志
+      description: |
+        请粘贴完整输出，不要只贴最后几行报错。
+        构建问题请附上 build/CMakeCache.txt 中 CMAKE_PREFIX_PATH 与 Qt5_DIR 的实际值。
+      render: shell
+    validations:
+      required: true
+
   - type: textarea
     id: expected
     attributes:
-      label: 期望行为
+      label: 预期结果 vs 实际结果
     validations:
       required: true
+
+  - type: checkboxes
+    id: selfcheck
+    attributes:
+      label: 已自查
+      options:
+        - label: CMAKE_PREFIX_PATH 指向包含 Qt5Config.cmake 的目录
+        - label: CMake 是 3.x，不是 4.x
+        - label: 四个离线包都已解压，且顺序是「先完整包 → 再补丁包」
+        - label: 用 MINGW64 终端的 tar 解压，没用 7-Zip / 360压缩
+        - label: 执行过 scripts/deploy_windows.sh（或对应平台的部署步骤）
+        - label: 仓库路径是短路径（如 D:\IQmol），无中文与空格
+
   - type: textarea
-    id: actual
+    id: extra
     attributes:
-      label: 实际行为
-    validations:
-      required: true
-  - type: textarea
-    id: logs
-    attributes:
-      label: 日志 / 截图
-      description: 粘贴相关日志或拖入截图。⚠️ **请先脱敏**：不要上传密钥、主机名、用户名或完整输入文件。
-      render: text
-    validations:
-      required: false
-  - type: input
-    id: env
-    attributes:
-      label: 环境信息
-      description: 操作系统版本、显卡 / 驱动、是否启用 OpenMP 等
-    validations:
-      required: false
+      label: 补充信息
+      description: 截图、样本文件、能触发问题的最小输入文件

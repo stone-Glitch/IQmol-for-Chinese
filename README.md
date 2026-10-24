@@ -58,6 +58,23 @@ IQmol version 3
 
 ---
 
+### 🧭 适用边界（什么场景更适合别的工具）
+
+IQmol 是面向 **Q-Chem** 的图形前端，不是通用分子编辑器。以下场景它有更合适的选择：
+
+| 你的需求 | 更合适的工具 |
+|---|---|
+| 建好结构交给别的量化程序（Gaussian / ORCA / GAMESS） | [Gabedit](https://gabedit.sourceforge.net/)（覆盖九个量化程序） |
+| 以建模 / 力场 / 插件生态为主 | [Avogadro2](https://avogadro.cc/) |
+| 大分子 MD 轨迹、生物体系 | [VMD](https://www.ks.uiuc.edu/Research/vmd/) |
+| 波函数深度分析（AIM、ELF、NCI 等） | [Multiwfn](http://sobereva.com/multiwfn/) |
+| 发表级出图、批量脚本 | [PyMOL](https://pymol.org/)（Python API 与渲染更成熟） |
+| 网页嵌入、教学演示 | [Jmol/JSmol](https://jmol.sourceforge.net/) |
+
+一句话类比：Gaussian 用户手里的 GaussView，在 Q-Chem 生态里对应的就是 IQmol。
+
+---
+
 ### 📂 仓库布局速览
 
 顶层目录分四类，避免混淆：
@@ -130,6 +147,7 @@ make
   ```
   > `lupdate` 已加 `-extensions C,ui`：IQmol 源码多为大写 `.C`，默认 `lupdate` 只认
   > 小写 `.c`，不加该参数会导致 292 个 `.C` 源文件的 `tr()` 零提取。
+- **翻译质量检查**：提交前可用 `scripts/check_translations.sh` 自动查条目数 / unfinished / 占位符 / 术语一致性（秒级、不需要编译）；发布前用 `scripts/verify_replay.sh` 验证汉化改动能在干净上游树上完整重放，产出 `verify-reports/` 可复查报告（审校步骤见 [翻译审校清单.md](翻译审校清单.md)）。
 - **界面语言切换**：偏好设置中可切换「中文 / English / 跟随系统」（默认中文）。
   切回英文便于与上游比对、排查误译；切换为静态生效（重启后应用）。
 - **界面截图**：`dialog_screenshots/` 保存了中文界面下各对话框的运行时截图，

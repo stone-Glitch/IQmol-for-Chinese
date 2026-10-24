@@ -1,0 +1,98 @@
+name: 汉化重放验证
+
+# 用途：每次上游发新版，或想验证「汉化改动能在干净上游树上完整重放」时运行。
+# 产出 verify-reports/ 目录作为 artifact —— 这才是「69/69 100% 复现」的可审计证据。
+#
+# 两种触发方式：
+#   1. 手动触发（推荐）：在 Actions 页面点 Run workflow，填入上游 tag
+#   2. 定时：每月跑一次，跟进上游最新状态
+#
+# ⚠️ 这个 workflow 默认不参与 PR 门禁 —— 它耗时长（要编译），
+#    放进 PR 会让每次 PR 都等十几分钟。等它稳定后再考虑。
+
+on:
+  workflow_dispatch:
+    inputs:
+      upstream_tag:
+        description: '上游 tag 或 commit（留空用默认分支最新）'
+        required: false
+        default: ''
+      skip_build:
+        description: '跳过编译（只做文件比对与翻译检查）'
+        type: boolean
+        default: false
+  schedule:
+    # 每月 1 号 03:00 UTC
+    - cron: '0 3 1 * *'
+
+jobs:
+  verify:
+    name: 重放验证
+    runs-on: ubuntu-latest
+    steps:
+      - name: 检出本仓库
+        uses: actions/checkout@v4
+        with:
+          path: iqmol-zh
+
+      - name: 检出上游
+        run: |
+          git clone --depth 1 https://github.com/nutjunkie/IQmol3.git upstream
+          cd upstream
+          if [ -n "${{ inputs.upstream_tag }}" ]; then
+            git fetch --depth 1 origin tag "${{ inputs.upstream_tag }}"
+            git checkout "${{ inputs.upstream_tag }}"
+          fi
+          echo "上游 commit: $(git rev-parse HEAD)"
+          echo "上游 describe: $(git describe --tags 2>/dev/null || echo 无tag)"
+
+      - name: 安装构建依赖
+        if: ${{ !inputs.skip_build }}
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            qtbase5-dev qttools5-dev-tools qttools5-dev \
+            libopenbabel-dev libqglviewer-dev-qt5 \
+            libboost-all-dev zlib1g-dev libssl-dev \
+            cmake g++ gfortran python3
+
+      - name: 运行重放验证
+        id: verify
+        working-directory: iqmol-zh
+        continue-on-error: true
+        run: |
+          args="--target ../upstream"
+          [ -n "${{ inputs.upstream_tag }}" ] && args="$args --tag ${{ inputs.upstream_tag }}"
+          [ "${{ inputs.skip_build }}" = "true" ] && args="$args --skip-build --skip-smoke"
+          bash scripts/verify_replay.sh $args --report-dir verify-reports/ci
+          echo "exit=$?" >> "$GITHUB_OUTPUT"
+
+      - name: 上传验证报告
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: verify-replay-report
+          path: iqmol-zh/verify-reports/ci
+          if-no-files-found: warn
+
+      - name: 写入摘要
+        if: always()
+        run: |
+          f="iqmol-zh/verify-reports/ci/report.md"
+          if [ -f "$f" ]; then
+            cat "$f" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "未生成报告，请查看日志" >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: 判定
+        run: |
+          f="iqmol-zh/verify-reports/ci/VERDICT.txt"
+          if [ -f "$f" ]; then
+            grep -q '结论     : PASS' "$f" && exit 0
+            echo "验证未通过："
+            sed -n '4,9p' "$f"
+            exit 1
+          fi
+          echo "无 VERDICT.txt，按失败处理"
+          exit 1

@@ -8,6 +8,19 @@
 
 ## [Unreleased]
 
+### 参考文档改进（2026-10-24）
+
+基于 IQmol 汉化交付包（2026-10-22）的参考文档体系，对仓库贡献/翻译参考做整体升级（先交叉核对、后挑拣并入，避免死链与重复 CI）：
+
+- **CONTRIBUTING 整体替换**：采用交付包版（252 行，覆盖四层工作树判定流程、翻译规范、CI 说明、Release 流程、上手建议），并订正两处与仓库现状不符的描述——§6 原称「当前仓库 CI 是失败状态，先建立 `check-translations.yml` 稳定门禁」**与事实相反**（仓库已有 `i18n-tqa.yml` 翻译门禁且在工作），已改为如实描述 `i18n-tqa.yml`（阻断门禁）+ `verify-replay.yml`（发布门）；同时订正 FAQ 相对路径
+- **新增术语参考**：根目录新增 `术语表.md`（9 节，含消歧注释规范与标点排版）、`翻译审校清单.md`（6 步人工审校 + 常见错误速记），CONTRIBUTING 已引用
+- **补缺失脚本**：新增 `scripts/check_translations.sh`、`scripts/verify_replay.sh`（README / CONTRIBUTING 长期引用但仓库一直缺失，现已补齐），并在 `docs/验证记录/` 补 `verify_replay-示例输出.md`
+- **补 FAQ**：根目录新增 `FAQ与故障速查.md`（README 顶部引用，症状→原因→解法直连）
+- **`.github` 模板升级与合并**：ISSUE 模板采用交付包版 `bug_report.yml`（问题类型下拉 + 环境 + 自查清单）、`translation.yml`（替换旧 `translation_issue.yml`，统一命名避免双翻译模板）、新增 `feature_request.yml`；保留 `build_issue.yml`；PR 模板采用交付包版（分层勾选 + 验证矩阵 + 自查）；`config.yml` 合并两份链接集（保留安全漏洞私密上报、文档中心，补入「上游功能缺陷→nutjunkie/IQmol3」「Q-Chem 论坛」重定向）
+- **仅新增 `verify-replay.yml` workflow**：交付包另含 `check-translations.yml`，但与现有 `i18n-tqa.yml` 功能重复，故**不新增**，改以 `check_translations.sh` 作为本地等价工具接入
+- **README 增量**：吸收交付包「适用边界」对照表（什么场景更适合别的工具），并在「翻译维护」处补 `check_translations.sh` / `verify_replay.sh` 指针；翻译条目数维持实测 2110（交付包 README 的 2112 为过时数字，以仓库实测为准）
+- 复验：两脚本 `bash -n` 通过；6 个 `.github` YAML 全部解析通过；CONTRIBUTING / FAQ / 术语表 / 审校清单相对链接在本仓根目录自洽
+
 ### 仓库整理（2026-10-18 第二轮）
 
 - **删除整合漏网文件**：`docs/验证记录/2026-09-24-Linux分发包中文翻译加载失败定位.md`——2026-09-25「16 篇压成 3 篇」整合时的幸存遗漏。删除前将合并版遗漏的「防回退」章节（`check_translation_deploy.py` 只读校验、11/11 CI 卡点）补入 `翻译与仓库核查.md` §3.6，信息零丢失后移除原件；相关 3 处活引用（tooltip 说明、量化评估方案、重放机制说明）改指合并文档
