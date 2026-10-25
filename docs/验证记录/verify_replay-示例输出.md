@@ -246,8 +246,8 @@ verify_replay 会**委托**它做翻译检查（检查项更全），输出并�
 
 # 四、CI 接入
 
-翻译门禁（秒级，先进 CI）：见 `03-贡献指南/.github/workflows/check-translations.yml`
-重放验证（长耗时，手动/定时）：见 `03-贡献指南/.github/workflows/verify-replay.yml`
+翻译门禁（秒级，先进 CI）：见 `.github/workflows/i18n-tqa.yml`
+重放验证（长耗时，手动/定时）：见 `.github/workflows/verify-replay.yml`
 
 **接入顺序很重要**：先让轻量的翻译门禁稳定变绿，再考虑加构建矩阵。
 当前仓库 CI 是失败状态——**红叉比没有 CI 更伤可信度**。
