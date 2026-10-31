@@ -222,3 +222,48 @@ target_link_libraries (${targetName}
 if (WIN32)
    target_link_libraries (${targetName} ws2_32)
 endif ()
+
+#-------------------------------------------------------------------
+# Translations
+#
+# Compile the .ts catalogues to .qm at build time and place them where
+# IQmolApplication::loadTranslations() looks for them, i.e. in a
+# "translations" directory next to the executable:
+#   Linux          : <build>/translations/
+#   Windows        : <build>/bin/translations/      (next to IQmol.exe)
+#   macOS bundle   : IQmol.app/Contents/MacOS/translations/
+#
+# Qt5LinguistTools is optional: when it is missing the build still
+# succeeds and the application falls back to the source strings.
+#-------------------------------------------------------------------
+find_package(Qt5LinguistTools QUIET)
+
+if (TARGET Qt5::lrelease)
+   if (WIN32)
+      set(TRANSLATIONS_DIR ${CMAKE_BINARY_DIR}/bin/translations)
+   elseif (APPLE)
+      set(TRANSLATIONS_DIR ${CMAKE_BINARY_DIR}/bin/${targetName}.app/Contents/MacOS/translations)
+   else ()
+      set(TRANSLATIONS_DIR ${CMAKE_BINARY_DIR}/translations)
+   endif ()
+
+   file(GLOB TS_FILES ${CMAKE_SOURCE_DIR}/translations/*.ts)
+   set(QM_FILES)
+   foreach (ts_file ${TS_FILES})
+      get_filename_component(lang ${ts_file} NAME_WE)
+      set(qm_file ${TRANSLATIONS_DIR}/${lang}.qm)
+      add_custom_command(
+         OUTPUT  ${qm_file}
+         COMMAND ${CMAKE_COMMAND} -E make_directory ${TRANSLATIONS_DIR}
+         COMMAND $<TARGET_FILE:Qt5::lrelease> -nounfinished ${ts_file} -qm ${qm_file}
+         DEPENDS ${ts_file}
+         COMMENT "lrelease: ${lang}.qm"
+         VERBATIM)
+      list(APPEND QM_FILES ${qm_file})
+   endforeach ()
+
+   if (QM_FILES)
+      add_custom_target(translations ALL DEPENDS ${QM_FILES})
+      add_dependencies(${targetName} translations)
+   endif ()
+endif ()
