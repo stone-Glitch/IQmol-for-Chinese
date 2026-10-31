@@ -129,19 +129,30 @@ echo "     bin : $(stat -c%s "$STAGE/bin/translations/zh_CN.qm") 字节"
 # 6. 运行库 + 插件（用 ldd 递归收集）
 #--------------------------------------------------------------------
 collect_libs() {
-  local bin="$1" out="$2"
+  # 用法: collect_libs <目标目录> <可执行文件或 .so 列表...>
+  # 会把这些输入及其全部间接依赖复制到目标目录（递归、按 basename 去重）。
+  local out="$1"; shift
   mkdir -p "$out"
   local seen="/tmp/.iqmol_pkg_libs.$$"
   : > "$seen"
-  local queue="$bin"
-  while [ -n "$queue" ]; do
-    local cur="${queue%% *}"
-    if [ "$cur" = "$queue" ]; then queue=""; else queue="${queue#* }"; fi
-    [ -z "$cur" ] && continue
-    ldd "$cur" 2>/dev/null | awk '/=> \//{print $3}' | while read -r lib; do
+
+  # 【递归收集】把输入与"已收集库"的依赖逐层展开。
+  # 早期实现只处理了二进制的直接依赖（queue 从不追加），导致 libQt5Svg、
+  # libinchi、libmaeparser 等间接依赖缺失；在没装系统 Qt/OpenBabel 的机器上
+  # 表现为启动即崩或个别格式不可用。
+  local -a queue=("$@")
+  local i=0
+  while [ "$i" -lt "${#queue[@]}" ]; do
+    local cur="${queue[$i]}"
+    i=$((i + 1))
+    [ -f "$cur" ] || continue
+    # ldd 必须带 $out：已复制进来的库自身也依赖别的库，
+    # 不带路径时这些依赖会输出 "not found" 而被漏掉（递归就断在第一层）。
+    while IFS= read -r lib; do
       [ -z "$lib" ] && continue
+      local base; base="$(basename "$lib")"
       # 跳过系统基础库：glibc / 动态链接器 / 内核接口库
-      case "$(basename "$lib")" in
+      case "$base" in
         libc.so.*|libm.so.*|libdl.so.*|libpthread.so.*|librt.so.*|\
         libgcc_s.so.*|libstdc++.so.*|ld-linux*|libresolv.so.*|libutil.so.*|\
         libnsl.so.*|libcrypt.so.*|libz.so.*|libexpat.so.*|libuuid.so.*|\
@@ -152,17 +163,19 @@ collect_libs() {
         libtasn1.so.*|libp11-kit.so.*|libcap.so.*|libgcrypt.so.*|libsystemd.so.*)
           continue ;;
       esac
-      if ! grep -qx "$lib" "$seen" 2>/dev/null; then
-        echo "$lib" >> "$seen"
+      if ! grep -qxF "$base" "$seen" 2>/dev/null; then
+        echo "$base" >> "$seen"
         cp -L "$lib" "$out/" 2>/dev/null || true
+        queue+=("$out/$base")
       fi
-    done
+    done < <(LD_LIBRARY_PATH="$out${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}" \
+             ldd "$cur" 2>/dev/null | awk '/=> \//{print $3}')
   done
   rm -f "$seen"
 }
 
 echo "==> 正在收集运行库（可能需要一分钟）..."
-collect_libs "$STAGE/bin/IQmol" "$STAGE/lib"
+collect_libs "$STAGE/lib" "$STAGE/bin/IQmol"
 
 # Qt 插件
 # 构建目录通常没有插件（Qt 插件来自 Qt 安装目录），故回退到系统 Qt 插件路径。
@@ -179,12 +192,21 @@ for _pdir in "${QT_PLUGIN_CANDIDATES[@]}"; do
   [ -z "$_pdir" ] && continue
   if [ -d "$_pdir/platforms" ]; then
     mkdir -p "$STAGE/lib/plugins"
-    # 只收运行必需的几类插件，避免包体膨胀
-    for _sub in platforms platformthemes imageformats iconengines \
+    # 只收运行必需的几类插件，避免包体膨胀。
+    # 剔除 platformthemes（libqgtk3 → 整条 GTK3 依赖）与 printsupport（cups），
+    # 这两类只影响"跟随系统主题/打印对话框"，不影响主功能。
+    for _sub in platforms imageformats iconengines \
                 platforminputcontexts xcbglintegrations sqldrivers \
-                printsupport styles; do
+                styles; do
       [ -d "$_pdir/$_sub" ] && cp -rL "$_pdir/$_sub" "$STAGE/lib/plugins/" 2>/dev/null
     done
+    # platforms 只留 X11(xcb) 与 offscreen：
+    #   wayland/eglfs/linuxfb/vnc/minimal 各带额外依赖（如 libQt5WaylandClient），
+    #   普通桌面用 xcb（Wayland 会话走 XWayland）即可，剔除可大幅减小依赖面。
+    if [ -d "$STAGE/lib/plugins/platforms" ]; then
+      find "$STAGE/lib/plugins/platforms" -maxdepth 1 -type f \
+        ! -name 'libqxcb.so' ! -name 'libqoffscreen.so' -delete 2>/dev/null
+    fi
     echo "     插件 <- $_pdir"
     _plugins_done=1
     break
@@ -287,6 +309,18 @@ cat > "$STAGE/samples/示例说明.md" <<'SAMPLE'
 > 说明：原仓库 samples/ 含多个十几 MB 的体数据文件（cube / 大 fchk / 谱图目录），
 > 为控制包体未随包分发，可从项目仓库单独获取。
 SAMPLE
+# 插件自身也有依赖（Qt5Svg、libtiff、libinchi、libmaeparser……），
+# 这些不出现在主程序的 ldd 里，必须单独补齐，否则缺库机器上会出现
+# "图片打不开 / InChI 不可用"，严重时插件加载失败。
+_plug_inputs=()
+for _pf in "$STAGE"/lib/plugins/*/*.so "$STAGE"/lib/openbabel/*/*.so; do
+  [ -f "$_pf" ] && _plug_inputs+=("$_pf")
+done
+if [ "${#_plug_inputs[@]}" -gt 0 ]; then
+  collect_libs "$STAGE/lib" "${_plug_inputs[@]}"
+  echo "==> 已补齐插件依赖"
+fi
+
 echo "==> 运行库: $(ls "$STAGE/lib" 2>/dev/null | wc -l) 个"
 echo "==> 插件目录: $(ls "$STAGE/lib/plugins" 2>/dev/null | wc -l) 个"
 
