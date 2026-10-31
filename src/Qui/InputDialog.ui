@@ -284,7 +284,7 @@
                   <string>Add section to input file</string>
                  </property>
                  <property name="styleSheet">
-                  <string>QToolButton {
+                  <string notr="true">QToolButton {
    color: #333;
    background-color: QLinearGradient( x1: 0, y1: 0, x2: 0, y2: 1, 
           stop: 0 #fff,
@@ -334,7 +334,7 @@ QToolButton:checked {
                   <string>Remove current section from input file</string>
                  </property>
                  <property name="styleSheet">
-                  <string>QToolButton {
+                  <string notr="true">QToolButton {
    color: #333;
    background-color: QLinearGradient( x1: 0, y1: 0, x2: 0, y2: 1, 
           stop: 0 #fff,

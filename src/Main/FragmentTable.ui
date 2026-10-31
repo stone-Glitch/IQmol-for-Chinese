@@ -179,7 +179,7 @@
           </size>
          </property>
          <property name="styleSheet">
-          <string>background: white</string>
+          <string notr="true">background: white</string>
          </property>
          <property name="frameShape">
           <enum>QFrame::Panel</enum>

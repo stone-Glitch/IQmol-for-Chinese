@@ -20,7 +20,7 @@
    <string>Configure Background</string>
   </property>
   <property name="styleSheet">
-   <string>QToolButton {
+   <string notr="true">QToolButton {
    color: #333;
    background-color: #666;
    border-width: 2px;

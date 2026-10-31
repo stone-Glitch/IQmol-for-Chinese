@@ -20,7 +20,7 @@
    <string>Create Animation</string>
   </property>
   <property name="styleSheet">
-   <string>QToolButton {
+   <string notr="true">QToolButton {
    color: #333;
    background-color: #666;
    border-width: 2px;
@@ -43,7 +43,7 @@ QToolButton:pressed {
    <item>
     <widget class="QGroupBox" name="groupBox">
      <property name="styleSheet">
-      <string>QToolButton {
+      <string notr="true">QToolButton {
    color: #333;
    background-color: QLinearGradient( x1: 0, y1: 0, x2: 0, y2: 1, 
           stop: 0 #fff,
@@ -454,7 +454,7 @@ QToolTip {
    <item>
     <widget class="QGroupBox" name="playbackBox">
      <property name="styleSheet">
-      <string>QToolButton {
+      <string notr="true">QToolButton {
    color: #333;
    background-color: QLinearGradient( x1: 0, y1: 0, x2: 0, y2: 1, 
           stop: 0 #fff,
@@ -534,7 +534,7 @@ QToolTip {
            <string>Start and stop animation</string>
           </property>
           <property name="styleSheet">
-           <string>QToolButton:checked {
+           <string notr="true">QToolButton:checked {
    border-color: #333;
 }</string>
           </property>

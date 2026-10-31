@@ -176,7 +176,7 @@ QToolButton:pressed {
          <item row="5" column="0">
           <widget class="QLabel" name="label5">
            <property name="text">
-            <string>Lable6</string>
+            <string>Label6</string>
            </property>
           </widget>
          </item>

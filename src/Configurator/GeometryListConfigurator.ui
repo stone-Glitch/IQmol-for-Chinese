@@ -126,7 +126,7 @@ QToolTip {
           <string>Start and stop animation</string>
          </property>
          <property name="styleSheet">
-          <string>QToolButton:checked {
+          <string notr="true">QToolButton:checked {
    border-color: #333;
 }</string>
          </property>

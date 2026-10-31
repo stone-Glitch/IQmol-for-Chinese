@@ -59,7 +59,7 @@ QGraphicsView {
       <item>
        <widget class="QGraphicsView" name="gradientView">
         <property name="styleSheet">
-         <string>QGraphicsView {
+         <string notr="true">QGraphicsView {
    background-color: QLinearGradient( x1: 0, y1: 1, x2: 1, y2: 1, 
           stop: 0 #f00,
           stop: 0.5 #fff, 
@@ -73,7 +73,7 @@ QGraphicsView {
         <item>
          <widget class="QToolButton" name="color31">
           <property name="styleSheet">
-           <string>QToolButton {
+           <string notr="true">QToolButton {
    background-color: #f00;
 }</string>
           </property>
@@ -98,7 +98,7 @@ QGraphicsView {
         <item>
          <widget class="QToolButton" name="color32">
           <property name="styleSheet">
-           <string>QToolButton {
+           <string notr="true">QToolButton {
    background-color: #fff;
 }</string>
           </property>
@@ -123,7 +123,7 @@ QGraphicsView {
         <item>
          <widget class="QToolButton" name="color33">
           <property name="styleSheet">
-           <string>QToolButton {
+           <string notr="true">QToolButton {
    background-color: #00f;
 }</string>
           </property>
@@ -211,7 +211,7 @@ QGraphicsView {
    <item>
     <widget class="QDialogButtonBox" name="buttonBox">
      <property name="styleSheet">
-      <string>QToolButton {
+      <string notr="true">QToolButton {
    color: #333;
    border-width: 1px;
    border-color: #333;
