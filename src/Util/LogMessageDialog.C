@@ -65,7 +65,7 @@ void LogMessageDialog::update(QString const& filePath)
    if (!m_active) return;
 
    if (!Preferences::LoggingEnabled()) {
-      m_logMessageDialog.logTextBrowser->setText("Logging disabled");
+      m_logMessageDialog.logTextBrowser->setText(tr("Logging disabled"));
       return;
    }
 

@@ -98,9 +98,11 @@ namespace Command {
    class MoveObjects : public QUndoCommand 
    {
       public:
-         MoveObjects(Layer::Component*, QString const& text = "Move items", 
+         // text 为撤销栈中显示的操作名。默认空串由 UndoCommands.C 兜底为
+         // 「Move items」的可翻译文本（lupdate 不扫描 .h，字面量必须放在 .C 中）。
+         MoveObjects(Layer::Component*, QString const& text = QString(), 
             bool const animiate = false, bool invalidateSymmetry = true);
-         MoveObjects(GLObjectList const&, QString const& text = "Move items", 
+         MoveObjects(GLObjectList const&, QString const& text = QString(), 
             bool const animiate = false, bool invalidateSymmetry = true);
          ~MoveObjects();
            
@@ -143,12 +145,18 @@ namespace Command {
 
 
    // Specialized cases of the above
+   //
+   // 注意：操作名文本（Add Charges / Minimize energy / Symmetrize structure）
+   // 不在本头文件里直接写 QCoreApplication::translate —— lupdate 不扫描 .h，
+   // 写在头文件里的字面量抽不进士林表、译文永不生效。改由调用点传入可翻译文本
+   // （见 src/Layer/MoleculeLayer.C 的 tr("Minimize energy") 等）。
 
    class AddCharges: public EditPrimitives 
    {
       public:
-         AddCharges(Layer::Molecule* molecule, Layer::PrimitiveList const& chargeList)
-            : EditPrimitives("Add Charges", molecule) {
+         AddCharges(Layer::Molecule* molecule, Layer::PrimitiveList const& chargeList,
+                    QString const& text)
+            : EditPrimitives(text, molecule) {
             add(chargeList);
          }
    };
@@ -157,16 +165,16 @@ namespace Command {
    class MinimizeStructure: public MoveObjects 
    {
       public:
-         MinimizeStructure(Layer::Molecule* molecule) 
-            : MoveObjects(molecule, "Minimize energy", true, true) { }
+         MinimizeStructure(Layer::Molecule* molecule, QString const& text) 
+            : MoveObjects(molecule, text, true, true) { }
    };
  
 
    class SymmetrizeStructure : public MoveObjects 
    {
       public:
-         SymmetrizeStructure(Layer::Molecule* molecule)
-            : MoveObjects(molecule, "Symmetrize structure", true, false) { }
+         SymmetrizeStructure(Layer::Molecule* molecule, QString const& text)
+            : MoveObjects(molecule, text, true, false) { }
    };
 
 

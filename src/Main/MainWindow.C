@@ -72,7 +72,7 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent),
    m_viewer = new Viewer(m_viewerModel, this);
 
    setStatusBar(0);
-   setWindowTitle("IQmol");
+   setWindowTitle(tr("IQmol"));
    setWindowModified(false);
    setAcceptDrops(false);
    setWindowIcon(QIcon(":/resources/icons/iqmol.png"));
@@ -82,7 +82,7 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent),
    createConnections(); 
 
    m_undoStack.setUndoLimit(Preferences::UndoLimit());
-   m_undoStackView.setEmptyLabel("History:");
+   m_undoStackView.setEmptyLabel(tr("History:"));
    m_undoStackView.setSelectionMode(QAbstractItemView::SingleSelection);
 
    m_viewerView.setModel(&m_viewerModel);
@@ -119,7 +119,7 @@ void MainWindow::createLayout()
 
    mainLayout->addWidget(&m_toolBar);
    m_helpBrowser.setWindowFlags(Qt::Tool);
-   m_statusWidget.showMessage("Welcome to IQmol");
+   m_statusWidget.showMessage(tr("Welcome to IQmol"));
 
    // sideSplitter (ha ha) is a data member as we need to control its visibility
    m_sideSplitter = new QSplitter(Qt::Vertical, this);
@@ -318,10 +318,10 @@ void MainWindow::closeEvent(QCloseEvent* event)
 
    QPixmap pixmap;
    pixmap.load(":/imageQuestion");
-   QMessageBox messageBox(QMessageBox::NoIcon, "IQmol", "Save Changes?");
-   QPushButton* saveButton    = messageBox.addButton("Save", QMessageBox::AcceptRole);
-   QPushButton* discardButton = messageBox.addButton("Discard", QMessageBox::RejectRole);
-   QPushButton* cancelButton  = messageBox.addButton("Cancel", QMessageBox::RejectRole);
+   QMessageBox messageBox(QMessageBox::NoIcon, "IQmol", tr("Save Changes?"));
+   QPushButton* saveButton    = messageBox.addButton(tr("Save"), QMessageBox::AcceptRole);
+   QPushButton* discardButton = messageBox.addButton(tr("Discard"), QMessageBox::RejectRole);
+   QPushButton* cancelButton  = messageBox.addButton(tr("Cancel"), QMessageBox::RejectRole);
    messageBox.setIconPixmap(pixmap);
    messageBox.exec();
 
@@ -363,55 +363,55 @@ void MainWindow::createMenus()
    QMenu*   subMenu;
 
    // ----- File Menu -----
-   menu = menuBar()->addMenu("File");
+   menu = menuBar()->addMenu(tr("File"));
 
-      name = "About";
+      name = tr("About");
       action = menu->addAction(name);
       connect(action, SIGNAL(triggered()), this, SLOT(showAbout()));
 
-      name = "New Molecule";
+      name = tr("New Molecule");
       action = menu->addAction(name);
       connect(action, SIGNAL(triggered()), &m_viewerModel, SLOT(newMoleculeMenu()));
       action->setShortcut(QKeySequence::New);
 
-      name = "New Viewer";
+      name = tr("New Viewer");
       action = menu->addAction(name);
       connect(action, SIGNAL(triggered()), this, SLOT(newViewer()));
 
-      name = "Open";
+      name = tr("Open");
       action = menu->addAction(name);
       connect(action, SIGNAL(triggered()), this, SLOT(openFile()));
       action->setShortcut(QKeySequence::Open);
 
-      name = "Open Dir";
+      name = tr("Open Dir");
       action = menu->addAction(name);
       connect(action, SIGNAL(triggered()), this, SLOT(openDir()));
       action->setShortcut(Qt::SHIFT | Qt::CTRL | Qt::Key_O);
 
-      name = "Open Recent";
+      name = tr("Open Recent");
       m_recentFilesMenu = menu->addMenu(name);
       updateRecentFilesMenu();
 
       menu->addSeparator();
 
-      name = "Close Viewer";
+      name = tr("Close Viewer");
       action = menu->addAction(name);
       connect(action, SIGNAL(triggered()), this, SLOT(close()));
       action->setShortcut(QKeySequence::Close);
 
-      name = "Save";
+      name = tr("Save");
       action = menu->addAction(name);
       connect(action, SIGNAL(triggered()), &m_viewerModel, SLOT(saveAll()));
       action->setShortcut(QKeySequence::Save);
 
-      name = "Save As";
+      name = tr("Save As");
       action = menu->addAction(name);
       connect(action, SIGNAL(triggered()), &m_viewerModel, SLOT(saveAs()));
       action->setShortcut(Qt::SHIFT | Qt::CTRL | Qt::Key_S);
 
       menu->addSeparator();
 
-      name = "Save Picture";
+      name = tr("Save Picture");
       action = menu->addAction(name);
       connect(action, SIGNAL(triggered()), m_viewer, SLOT(takeSnapshot()));
       action->setShortcut(Qt::CTRL | Qt::Key_P);
@@ -422,7 +422,7 @@ void MainWindow::createMenus()
       connect(action, SIGNAL(triggered()), this, SLOT(generatePovRay()));
 */
 
-      name = "Record Animation";
+      name = tr("Record Animation");
       action = menu->addAction(name);
       action->setCheckable(true);
       action->setChecked(false);
@@ -430,27 +430,27 @@ void MainWindow::createMenus()
       action->setShortcut(Qt::SHIFT | Qt::CTRL | Qt::Key_P);
       m_recordAnimationAction = action;
 
-      name = "Show Message Log";
+      name = tr("Show Message Log");
       action = menu->addAction(name);
       connect(action, SIGNAL(triggered()), this, SLOT(showLogMessages()));
       action->setShortcut(Qt::CTRL | Qt::Key_L);
 
-      name = "Quit";
+      name = tr("Quit");
       action = menu->addAction(name);
       connect(action, SIGNAL(triggered()), this, SIGNAL(quit()));
       action->setShortcut(Qt::CTRL | Qt::Key_Q);
 
 
    // ----- Edit Menu -----
-   menu = menuBar()->addMenu("Edit");
+   menu = menuBar()->addMenu(tr("Edit"));
   
-      name = "Undo";
+      name = tr("Undo");
       action = menu->addAction(name);
       connect(action, SIGNAL(triggered()), &m_undoStack, SLOT(undo()));
       action->setShortcut(Qt::CTRL | Qt::Key_Z); 
       connect(&m_undoStack, SIGNAL(canUndoChanged(bool)), action, SLOT(setEnabled(bool)));
 
-      name = "Redo";
+      name = tr("Redo");
       action = menu->addAction(name);
       connect(action, SIGNAL(triggered()), &m_undoStack, SLOT(redo()));
       action->setShortcut(Qt::SHIFT | Qt::CTRL | Qt::Key_Z); 
@@ -458,56 +458,56 @@ void MainWindow::createMenus()
 
       menu->addSeparator();
 
-      name = "Cut";
+      name = tr("Cut");
       action = menu->addAction(name);
       connect(action, SIGNAL(triggered()), &m_viewerModel, SLOT(cutSelection()));
       action->setShortcut(Qt::CTRL | Qt::Key_X);
 
-      name = "Copy";
+      name = tr("Copy");
       action = menu->addAction(name);
       connect(action, SIGNAL(triggered()), &m_viewerModel, SLOT(copySelectionToClipboard()));
       action->setShortcut(Qt::CTRL | Qt::Key_C);
 
-      name = "Paste";
+      name = tr("Paste");
       action = menu->addAction(name);
       connect(action, SIGNAL(triggered()), &m_viewerModel, SLOT(pasteSelectionFromClipboard()));
       action->setShortcut(Qt::CTRL | Qt::Key_V);
 
       menu->addSeparator();
 
-      name = "Select All";
+      name = tr("Select All");
       action = menu->addAction(name);
       connect(action, SIGNAL(triggered()), &m_viewerModel, SLOT(selectAll()));
       action->setShortcut(Qt::CTRL | Qt::Key_A);
 
-      name = "Select None";
+      name = tr("Select None");
       action = menu->addAction(name);
       connect(action, SIGNAL(triggered()), &m_viewerModel, SIGNAL(clearSelection()));
       action->setShortcut(Qt::SHIFT | Qt::CTRL | Qt::Key_A);
 
-      name = "Invert Selection";
+      name = tr("Invert Selection");
       action = menu->addAction(name);
       connect(action, SIGNAL(triggered()), &m_viewerModel, SLOT(invertSelection()));
       action->setShortcut(Qt::CTRL | Qt::Key_I);
 
       menu->addSeparator();
 
-      name = "Reindex Atoms";
+      name = tr("Reindex Atoms");
       action = menu->addAction(name);
       connect(action, SIGNAL(triggered()), this, SLOT(reindexAtoms()));
 
 
       menu->addSeparator();
 
-      name = "Preferences";
+      name = tr("Preferences");
       action = menu->addAction(name);
       connect(action, SIGNAL(triggered()), this, SLOT(showPreferences()));
 
 
    // ----- Display Menu -----
-   menu = menuBar()->addMenu("Display");
+   menu = menuBar()->addMenu(tr("Display"));
 
-      name = "Full Screen";
+      name = tr("Full Screen");
       action = menu->addAction(name);
       action->setCheckable(true);
       action->setChecked(false);
@@ -515,12 +515,12 @@ void MainWindow::createMenus()
       action->setShortcut(Qt::CTRL | Qt::Key_0);
       m_fullScreenAction = action;
 
-      name = "Reset View";
+      name = tr("Reset View");
       action = menu->addAction(name);
       connect(action, SIGNAL(triggered()), m_viewer, SLOT(resetView()));
       action->setShortcut(Qt::CTRL | Qt::Key_R);
 
-      name = "Show Axes";
+      name = tr("Show Axes");
       action = menu->addAction(name);
       action->setCheckable(true);
       action->setChecked(false);
@@ -531,20 +531,20 @@ void MainWindow::createMenus()
 
       menu->addSeparator();
 
-      name = "Camera";
+      name = tr("Camera");
       action = menu->addAction(name);
       connect(action, SIGNAL(triggered()), this, SLOT(configureCamera()));
 
-      name = "Appearance";
+      name = tr("Appearance");
       action = menu->addAction(name);
       connect(action, SIGNAL(triggered()), this, SLOT(configureAppearance()));
 
       menu->addSeparator();
 
-      name = "Atom Labels";
+      name = tr("Atom Labels");
       subMenu = menu->addMenu(name);
 
-         name = "Element";
+         name = tr("Element");
          action = subMenu->addAction(name);
          connect(action, SIGNAL(triggered()), this, SLOT(setLabel()));
          action->setData(Layer::Atom::Element);
@@ -552,7 +552,7 @@ void MainWindow::createMenus()
          action->setCheckable(true);
          m_labelActions << action;
 
-         name = "Index";
+         name = tr("Index");
          action = subMenu->addAction(name);
          connect(action, SIGNAL(triggered()), this, SLOT(setLabel()));
          action->setData(Layer::Atom::Index);
@@ -560,7 +560,7 @@ void MainWindow::createMenus()
          action->setCheckable(true);
          m_labelActions << action;
    
-         name = "Mass";
+         name = tr("Mass");
          action = subMenu->addAction(name);
          connect(action, SIGNAL(triggered()), this, SLOT(setLabel()));
          action->setData(Layer::Atom::Mass);
@@ -568,7 +568,7 @@ void MainWindow::createMenus()
          action->setCheckable(true);
          m_labelActions << action;
 
-         name = "NMR";
+         name = tr("NMR");
          action = subMenu->addAction(name);
          connect(action, SIGNAL(triggered()), this, SLOT(setLabel()));
          action->setData(Layer::Atom::NmrShift);
@@ -576,7 +576,7 @@ void MainWindow::createMenus()
          action->setCheckable(true);
          m_labelActions << action;
 
-         name = "Partial Charge";
+         name = tr("Partial Charge");
          action = subMenu->addAction(name);
          connect(action, SIGNAL(triggered()), this, SLOT(setLabel()));
          action->setData(Layer::Atom::Charge);
@@ -584,7 +584,7 @@ void MainWindow::createMenus()
          action->setCheckable(true);
          m_labelActions << action;
 
-         name = "Spin Densities";
+         name = tr("Spin Densities");
          action = subMenu->addAction(name);
          connect(action, SIGNAL(triggered()), this, SLOT(setLabel()));
          action->setData(Layer::Atom::Spin);
@@ -592,7 +592,7 @@ void MainWindow::createMenus()
          action->setCheckable(true);
          m_labelActions << action;
 
-         name = "Atom Label";
+         name = tr("Atom Label");
          action = subMenu->addAction(name);
          connect(action, SIGNAL(triggered()), this, SLOT(setLabel()));
          action->setData(Layer::Atom::Label);
@@ -602,45 +602,45 @@ void MainWindow::createMenus()
 
 
    // ----- Build Menu -----
-   menu = menuBar()->addMenu("Build");
+   menu = menuBar()->addMenu(tr("Build"));
 
-      name = "Insert Molecule by ID";
+      name = tr("Insert Molecule by ID");
       action = menu->addAction(name);
       connect(action, SIGNAL(triggered()), this, SLOT(insertMoleculeDialog()));
       action->setShortcut(Qt::CTRL | Qt::Key_B);
 
       menu->addSeparator();
 
-      name = "Fill Valencies With Hydrogens";
+      name = tr("Fill Valencies With Hydrogens");
       action = menu->addAction(name);
       connect(action, SIGNAL(triggered()), &m_viewerModel, SLOT(addHydrogens()));
       action->setShortcut(Qt::CTRL | Qt::Key_F);
 
-      name = "Reperceive Bonds";
+      name = tr("Reperceive Bonds");
       action = menu->addAction(name);
       connect(action, SIGNAL(triggered()), &m_viewerModel, SLOT(reperceiveBonds()));
 
-      name = "Set Isotopes";
+      name = tr("Set Isotopes");
       action = menu->addAction(name);
       connect(action, SIGNAL(triggered()), &m_viewerModel, SLOT(setIsotopes()));
 
       menu->addSeparator();
 
-      name = "Set Geometric Constraint";
+      name = tr("Set Geometric Constraint");
       action = menu->addAction(name);
       connect(action, SIGNAL(triggered()), &m_viewerModel, SLOT(setConstraint()));
       action->setShortcut(Qt::CTRL | Qt::Key_K);
 
-      name = "Freeze Selected Atoms";
+      name = tr("Freeze Selected Atoms");
       action = menu->addAction(name);
       connect(action, SIGNAL(triggered()), &m_viewerModel, SLOT(freezeAtomPositions()));
 
-      name = "Minimize Structure";
+      name = tr("Minimize Structure");
       action = menu->addAction(name);
       connect(action, SIGNAL(triggered()), &m_viewerModel, SLOT(minimizeEnergy()));
       action->setShortcut(Qt::CTRL | Qt::Key_M);
 
-      name = "Select Force Field";
+      name = tr("Select Force Field");
 
       QActionGroup* forceFieldGroup = new QActionGroup(this);
       subMenu = menu->addMenu(name);
@@ -687,21 +687,21 @@ void MainWindow::createMenus()
 
       menu->addSeparator();
 
-      name = "Translate To Center";
+      name = tr("Translate To Center");
       action = menu->addAction(name);
       connect(action, SIGNAL(triggered()), &m_viewerModel, SLOT(translateToCenter()));
       action->setShortcut(Qt::CTRL | Qt::Key_T );
 
-      name = "Symmetrize Molecule";
+      name = tr("Symmetrize Molecule");
       action = menu->addAction(name);
       connect(action, SIGNAL(triggered()), &m_viewerModel, SLOT(symmetrize()));
       action->setShortcut(Qt::CTRL | Qt::Key_Y );
 
-      name = "Set Symmetry Tolerance";
+      name = tr("Set Symmetry Tolerance");
       action = menu->addAction(name);
       connect(action, SIGNAL(triggered()), &m_viewerModel, SLOT(adjustSymmetryTolerance()));
 
-      name = "Auto-detect Symmetry";
+      name = tr("Auto-detect Symmetry");
       action = menu->addAction(name);
       action->setCheckable(true);
       action->setChecked(false);
@@ -710,20 +710,20 @@ void MainWindow::createMenus()
 
 
    // ----- Calculation Menu -----
-   menu = menuBar()->addMenu("Calculation");
+   menu = menuBar()->addMenu(tr("Calculation"));
 
-      name = "Q-Chem Setup";
+      name = tr("Q-Chem Setup");
       action = menu->addAction(name);
       connect(action, SIGNAL(triggered()), this, SLOT(showQChemUI()));
       action->setShortcut(Qt::CTRL | Qt::Key_U );
       m_qchemSetupAction = action;
 
-      name = "Job Monitor";
+      name = tr("Job Monitor");
       action = menu->addAction(name);
       connect(action, SIGNAL(triggered()), this, SLOT(showJobMonitor()));
       action->setShortcut(Qt::CTRL | Qt::Key_J );
 
-      name = "Edit Servers";
+      name = tr("Edit Servers");
       action = menu->addAction(name);
       connect(action, SIGNAL(triggered()), this, SLOT(editNewServers()));
 
@@ -733,16 +733,16 @@ void MainWindow::createMenus()
 
 #ifdef GROMACS
       menu->addSeparator();
-      name = "Gromacs Setup";
+      name = tr("Gromacs Setup");
       action = menu->addAction(name);
       connect(action, SIGNAL(triggered()), this, SLOT(showGromacsDialog()));
       action->setShortcut(Qt::CTRL | Qt::Key_G );
 
-      name = "Edit Gromacs Config";
+      name = tr("Edit Gromacs Config");
       action = menu->addAction(name);
       connect(action, SIGNAL(triggered()), this, SLOT(showGromacsConfigDialog()));
 
-      name = "Edit Gomacs Server";
+      name = tr("Edit Gomacs Server");
       action = menu->addAction(name);
       connect(action, SIGNAL(triggered()), this, SLOT(showGromacsServerDialog()));
 
@@ -754,11 +754,11 @@ void MainWindow::createMenus()
    // ----- Amber Menu -----
    if (Preferences::AmberEnabled()) {
       menu->addSeparator();
-      name = "Edit Amber Config";
+      name = tr("Edit Amber Config");
       action = menu->addAction(name);
       connect(action, SIGNAL(triggered()), this, SLOT(showAmberConfigDialog()));
 
-      name = "Amber System Builder";
+      name = tr("Amber System Builder");
       action = menu->addAction(name);
       connect(action, SIGNAL(triggered()), this, SLOT(showAmberSystemBuilderDialog()));
       connect(menu, &QMenu::aboutToShow, [this, action](){
@@ -768,9 +768,9 @@ void MainWindow::createMenus()
 #endif
 
    // ----- Help Menu -----
-   menu = menuBar()->addMenu("Help");
+   menu = menuBar()->addMenu(tr("Help"));
 
-      name = "Show Help";
+      name = tr("Show Help");
       action = menu->addAction(name);
       connect(action, SIGNAL(triggered()), this, SLOT(showHelp()));
 }
@@ -802,7 +802,7 @@ void MainWindow::showJobMonitor() {
 void MainWindow::testInternetConnection()
 {
    if (Network::TestNetworkConnection()) {
-      QMsgBox::information(this, "IQmol", "Network access available");
+      QMsgBox::information(this, "IQmol", tr("Network access available"));
    }
 }
 
@@ -832,7 +832,7 @@ void MainWindow::openFile()
    QString fileName = FileDialog::getOpenFileName(this, tr("Open File"), 
       Preferences::LastFileAccessed());
    if (!fileName.isEmpty()) {
-      m_statusWidget.showMessage("Loading", true);
+      m_statusWidget.showMessage(tr("Loading"), true);
       open(fileName);
    }
 }
@@ -843,7 +843,7 @@ void MainWindow::openDir()
    QString dirName = FileDialog::getExistingDirectory(this, tr("Open Job Directory"), 
       Preferences::LastFileAccessed());
    if (!dirName.isEmpty()) {
-      m_statusWidget.showMessage("Loading", true);
+      m_statusWidget.showMessage(tr("Loading"), true);
       open(dirName);
    }
 }
@@ -854,7 +854,7 @@ void MainWindow::openRecentFile()
    QAction* action = qobject_cast<QAction*>(sender());
    if (action) {
       QString name(action->data().toString());
-      m_statusWidget.showMessage("Loading", true);
+      m_statusWidget.showMessage(tr("Loading"), true);
       open(name);
    }
 }
@@ -876,7 +876,7 @@ void MainWindow::reindexAtoms()
 
    if (molecules.size() == 0) return;
    if (molecules.size() > 1) {
-      QString msg("Only one molecule can be visible when reindexing atoms.");
+      QString msg(tr("Only one molecule can be visible when reindexing atoms."));
       QMsgBox::warning(this, "IQmol", msg);
       return;
    }
@@ -952,7 +952,7 @@ void MainWindow::updateRecentFilesMenu()
       }
       
       m_recentFilesMenu->addSeparator();
-      action = m_recentFilesMenu->addAction("Clear List");
+      action = m_recentFilesMenu->addAction(tr("Clear List"));
       connect(action, SIGNAL(triggered()), this, SLOT(clearRecentFilesMenu()));
    }
 }
@@ -982,7 +982,7 @@ void MainWindow::fullScreen()
       m_sideSplitter->hide();
       m_viewer->setFullScreen(true);
       m_fullScreenAction->setChecked(true);
-      msg = "Use <esc> to exit full screen mode";
+      msg = tr("Use <esc> to exit full screen mode");
    }
 
    m_viewer->QGLViewer::displayMessage(msg, 5000);
@@ -1016,8 +1016,8 @@ void MainWindow::showQChemUI()
    
    if (!comp->sanityCheck()) {
       QMessageBox mbox;
-      mbox.setText("Wonky molecule detected");
-      mbox.setInformativeText("Do you want to proceed?");
+      mbox.setText(tr("Wonky molecule detected"));
+      mbox.setInformativeText(tr("Do you want to proceed?"));
       mbox.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
       mbox.setDefaultButton(QMessageBox::Ok);
    
@@ -1034,7 +1034,7 @@ void MainWindow::showQChemUI()
 
    // (Re-)Load the servers here in case the user has made any modifications
    QStringList serverList(Process::ServerRegistry::instance().availableServers());
-   if (serverList.isEmpty()) serverList.append("(none)");
+   if (serverList.isEmpty()) serverList.append(tr("(none)"));
    m_quiInputDialog->setServerList(serverList);
 
    m_viewer->setActiveViewerMode(Viewer::Manipulate);

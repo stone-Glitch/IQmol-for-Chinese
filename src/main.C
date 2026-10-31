@@ -37,6 +37,7 @@
 #include <QStringList>
 #include <QDir>
 #include <QSysInfo>
+#include <QCoreApplication>
 #include "Util/QsLog.h"
 #include "Util/QsLogDest.h"
 #include "version.h"

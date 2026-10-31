@@ -33,7 +33,7 @@ namespace Layer {
 
 
 Component::Component(QString const& label, QObject* parent) : Base(label, parent),
-   m_surfaceList(this, "Surfaces")
+   m_surfaceList(this, tr("Surfaces"))
 {
    setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsUserCheckable);
    setCheckState(Qt::Checked);
@@ -111,7 +111,7 @@ void Component::translateToCenter(GLObjectList const& selection)
 {
    bool animate(true);
    Command::MoveObjects* cmd =
-       new Command::MoveObjects(this, "Translate to center", animate);
+       new Command::MoveObjects(this, tr("Translate to center"), animate);
    
    // The ordering here is important!!
    Atom* atom;

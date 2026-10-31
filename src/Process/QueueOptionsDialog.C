@@ -57,16 +57,16 @@ QueueOptionsDialog::QueueOptionsDialog(ServerConfiguration* configuration, QWidg
       m_configuration->updateInterval());
 
    if (queue == ServerConfiguration::Web) {
-      m_dialog.queueInfoLabel->setText("Download");
+      m_dialog.queueInfoLabel->setText(tr("Download"));
       m_dialog.runFileGroupBox->setEnabled(false);
    }else if(queue == ServerConfiguration::AWS) {
-      m_dialog.jobFileListLabel->setText("Job Info");
-      m_dialog.queueInfoLabel->setText("Download");
+      m_dialog.jobFileListLabel->setText(tr("Job Info"));
+      m_dialog.queueInfoLabel->setText(tr("Download"));
       m_dialog.runFileGroupBox->setEnabled(false);
    }else if (queue == ServerConfiguration::Basic) {
       // Repurpose the QueueInfo field (which would otherwise be unused)
       // for specifying the qchem executable, which changed over time.
-      m_dialog.queueInfoLabel->setText("Executable");
+      m_dialog.queueInfoLabel->setText(tr("Executable"));
    }
 
    if (queue == ServerConfiguration::Basic) {

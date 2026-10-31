@@ -82,7 +82,8 @@ InputDialog::InputDialog(QWidget* parent) : QMainWindow(parent),
    QFileInfo file(Preferences::LastFileAccessed());
    file.setFile(file.dir(),"untitled.inp");
    
-   setWindowTitle("QChem Input File Editor - " + file.fileName());
+   // [i18n] 窗口标题需翻译；文件名不参与翻译，故拼接在 tr() 之外。
+   setWindowTitle(tr("QChem Input File Editor") + " - " + file.fileName());
    m_ui.previewText->setCurrentFont(Preferences::PreviewFont());
 
    setStatusBar(&m_statusBar);
@@ -370,13 +371,13 @@ void InputDialog::initializeMenus()
    menu = menubar->addMenu(tr("File"));
 
       // File -> Save As
-      name = "Save As";
+      name = tr("Save As");
       action = menu->addAction(name);
       connect(action, SIGNAL(triggered()), this, SLOT(menuSaveAs()));
       action->setShortcut(Qt::CTRL | Qt::Key_S );
 
       // File -> Close 
-      name = "Close";
+      name = tr("Close");
       action = menu->addAction(name);
       connect(action, SIGNAL(triggered()), this, SLOT(close()));
       action->setShortcut(QKeySequence::Close);
@@ -386,20 +387,20 @@ void InputDialog::initializeMenus()
    menu = menubar->addMenu(tr("Edit"));
 
       // Edit -> Copy
-      name = "Copy";
+      name = tr("Copy");
       action = menu->addAction(name);
 
       connect(action, SIGNAL(triggered()), m_ui.previewText, SLOT(copy()));
       action->setShortcut(QKeySequence::Copy);
 
       // Edit -> Paste
-      name = "Paste";
+      name = tr("Paste");
       action = menu->addAction(name);
       connect(action, SIGNAL(triggered()), m_ui.previewText, SLOT(paste()));
       action->setShortcut(QKeySequence::Paste);
 
       // Edit -> Cut
-      name = "Cut";
+      name = tr("Cut");
       action = menu->addAction(name);
       connect(action, SIGNAL(triggered()), m_ui.previewText, SLOT(cut()));
       action->setShortcut(QKeySequence::Cut);
@@ -409,13 +410,13 @@ void InputDialog::initializeMenus()
    menu = menubar->addMenu(tr("Job"));
 
       // Job -> New Job Section
-      name = "New Job Section";
+      name = tr("New Job Section");
       action = menu->addAction(name);
       connect(action, SIGNAL(triggered()), this, SLOT(addNewJob()));
       action->setShortcut(QKeySequence::New);
 
       // Job -> Reset
-      name = "Reset Input";
+      name = tr("Reset Input");
       action = menu->addAction(name);
       connect(action, SIGNAL(triggered()), this, SLOT(resetInput()));
       action->setShortcut(Qt::CTRL | Qt::Key_R );
@@ -423,7 +424,7 @@ void InputDialog::initializeMenus()
       menu->addSeparator();
 
       // Job -> Submit
-      name = "Submit";
+      name = tr("Submit");
       action = menu->addAction(name);
       connect(action, SIGNAL(triggered()), this, SLOT(submitJob()));
       action->setShortcut(Qt::CTRL | Qt::Key_U );
@@ -433,13 +434,13 @@ void InputDialog::initializeMenus()
    menu = menubar->addMenu(tr("Font"));
 
       // Font -> Bigger
-      name = "Bigger";
+      name = tr("Bigger");
       action = menu->addAction(name);
       connect(action, SIGNAL(triggered()), this, SLOT(fontBigger()));
       action->setShortcut(Qt::CTRL | Qt::Key_Plus);
 
       // Font -> Smaller 
-      name = "Smaller";
+      name = tr("Smaller");
       action = menu->addAction(name);
       connect(action, SIGNAL(triggered()), this, SLOT(fontSmaller()));
       action->setShortcut(Qt::CTRL | Qt::Key_Minus);
@@ -447,7 +448,7 @@ void InputDialog::initializeMenus()
       menu->addSeparator();
 
       // Font -> Set Font
-      name = "Set Font";
+      name = tr("Set Font");
       action = menu->addAction(name);
       connect(action, SIGNAL(triggered()), this, SLOT(setFont()));
       action->setShortcut(Qt::CTRL | Qt::Key_T);
@@ -486,11 +487,12 @@ bool InputDialog::saveFile(bool prompt)
    }
 
    if (saved) {
-      setWindowTitle("QChem Input File Editor - " + file.fileName());
+      // [i18n] 同构造函数：标题翻译，文件名保留原样。
+      setWindowTitle(tr("QChem Input File Editor") + " - " + file.fileName());
    }else {
-      QString msg("Could not write to file '");
-      msg += tmp.fileName() + "'\nInput file not saved\n";
-      QMsgBox::warning(0, "File Not Saved", msg);
+      QString msg(tr("Could not write to file '%1'\nInput file not saved\n")
+         .arg(tmp.fileName()));
+      QMsgBox::warning(0, tr("File Not Saved"), msg);
    }
 
    return saved;
@@ -767,10 +769,10 @@ void InputDialog::removeJobFromList(Job* job)
 
 void InputDialog::on_deleteJobButton_clicked(bool) 
 {
-   QString msg("Are you sure you want to delete the section ");
-   msg += m_ui.jobList->currentText() + "?";
+   QString msg(tr("Are you sure you want to delete the section %1?")
+      .arg(m_ui.jobList->currentText()));
 
-   if (QMsgBox::question(this, "Delete Section?", msg,
+   if (QMsgBox::question(this, tr("Delete Section?"), msg,
       QMessageBox::Ok | QMessageBox::Cancel) == QMessageBox::Cancel)  {
       return;
    }
@@ -861,8 +863,8 @@ void InputDialog::readChargesFinished()
 void InputDialog::deleteAllJobs(bool const prompt) 
 {
    if (prompt) {
-      QString msg("Are you sure you want to delete all generated input?");
-      if (QMessageBox::question(this, "Delete input?",msg,
+      QString msg(tr("Are you sure you want to delete all generated input?"));
+      if (QMessageBox::question(this, tr("Delete input?"),msg,
           QMessageBox::Ok | QMessageBox::Cancel) == QMessageBox::Cancel)  {
           return;
       }

@@ -31,6 +31,10 @@ namespace Layer {
 
 Nmr::Nmr(Data::Nmr& data) : Base("NMR"), m_data(data), m_configurator(0), m_molecule(0)
 {
+   // [i18n] 初始化列表中的标签为裸字符串，此处覆盖为译文，
+   // 使 lupdate 可提取、界面显示中文。
+   setText(tr("NMR"));
+
 }
 
 

@@ -33,10 +33,10 @@ namespace Layer {
 Background::Background() : m_backgroundColor(Preferences::BackgroundColor()), 
    m_foregroundColor(Preferences::ForegroundColor()), m_configurator(*this) 
 { 
-   setText("Background");
+   setText(tr("Background"));
    setCheckState(Qt::Checked);
    setConfigurator(&m_configurator);
-   connect(newAction("Edit Color"), SIGNAL(triggered()), this, SLOT(configure()));
+   connect(newAction(tr("Edit Color")), SIGNAL(triggered()), this, SLOT(configure()));
 }
 
 

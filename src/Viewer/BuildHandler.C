@@ -20,6 +20,7 @@
    
 ********************************************************************************/
 
+#include <QCoreApplication>
 #include "ViewerModel.h"
 #include "BuildHandler.h"
 #include "Layer/MoleculeLayer.h"
@@ -66,8 +67,8 @@ void Build::mousePressEvent(QMouseEvent* e)
    }
 
    if (!m_molecule) {
-      QMsgBox::warning(0, "IQmol", "No molecule available.\n"
-          "Please select one in the Model View");
+      QMsgBox::warning(0, "IQmol", QCoreApplication::translate("Handler::Build",
+         "No molecule available.\nPlease select one in the Model View"));
       return;
    }
 

@@ -32,7 +32,7 @@ MullikenDecompositionsDialog::MullikenDecompositionsDialog(Data::ShellList const
    m_shellList(shellList), m_density(density)
 {
    m_dialog.setupUi(this);
-   setWindowTitle("Mulliken decomposition for " + m_density.label());
+   setWindowTitle(tr("Mulliken decomposition for %1").arg(m_density.label()));
 }
 
 

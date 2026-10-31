@@ -190,7 +190,9 @@ QString HelpBrowser::createSearchResults(QString const& s)
    results  = "<html>"
               "<head><link href='style.css' rel='stylesheet' type='text/css' /></head>"
               "<body>"
-              "<center><h1>Search Results<br></h1></center>";
+              "<center><h1>" +
+              QCoreApplication::translate("HelpBrowser", "Search Results") +
+              "<br></h1></center>";
 
    QString contents, list;
    int index, start, finish;
@@ -225,7 +227,7 @@ QString HelpBrowser::createSearchResults(QString const& s)
    }
 
    if (list.isEmpty()) {
-      results += "<br>No results found.";
+      results += "<br>" + QCoreApplication::translate("HelpBrowser", "No results found.") + "";
    }else {
       results += "<ul>" + list + "</ul>";
    }

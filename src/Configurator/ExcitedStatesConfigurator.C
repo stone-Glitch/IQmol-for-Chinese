@@ -109,11 +109,11 @@ void ExcitedStates::initMoPlot()
    frame->setLayout(layout);
    layout->addWidget(m_moPlot);
 
-   m_moPlot->yAxis->setLabel("Energy / Hartree");
+   m_moPlot->yAxis->setLabel(tr("Energy / Hartree"));
    QSharedPointer<QCPAxisTickerText> textTicker(new QCPAxisTickerText);
    m_moPlot->xAxis->setTicker(textTicker);
    m_moPlot->xAxis->setRange(0,3.25);
-   textTicker->addTick(0.75, "Alpha");
+   textTicker->addTick(0.75, tr("Alpha"));
    textTicker->addTick(2.5, "Beta");
 
    Data::OrbitalSymmetries const& orbitals(m_excitedStates.stateData().orbitalSymmetries());
@@ -334,15 +334,15 @@ void ExcitedStates::updateSpectrum(Constants::Units const units)
 
    if (m_configurator.impulseButton->isChecked()) {
       plotImpulse();
-      m_spectrum->yAxis->setLabel("Strength");
+      m_spectrum->yAxis->setLabel(tr("Strength"));
 
    }else if (m_configurator.gaussianButton->isChecked()) {
       plotSpectrum(Gaussian, width);
-      m_spectrum->yAxis->setLabel("Rel. Strength");
+      m_spectrum->yAxis->setLabel(tr("Rel. Strength"));
 
    }else if (m_configurator.lorentzianButton->isChecked()) {
       plotSpectrum(Lorentzian, width);
-      m_spectrum->yAxis->setLabel("Rel. Strength");
+      m_spectrum->yAxis->setLabel(tr("Rel. Strength"));
    }
 
    m_spectrum->replot();

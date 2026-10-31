@@ -43,7 +43,7 @@ Solvent::Solvent(Data::Solvent const& solvent) : m_solvent(solvent)
 
    //setConfigurator(&m_configurator); 
    //m_configurator.setWindowTitle("Configure Surface: " + m_surface.description());
-   setText("Solvent");
+   setText(tr("Solvent"));
 }
 
 

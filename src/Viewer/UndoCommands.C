@@ -30,6 +30,7 @@
 #include "QsLog.h"
 #include "Layer/ConstraintLayer.h"
 #include "QVariantPtr.h"
+#include <QCoreApplication>
 
 
 using namespace qglviewer;
@@ -146,8 +147,12 @@ void EditPrimitives::undo()
 
 
 // --------------- MoveObjects ---------------
+// text 为空时兜底为「Move items」的可翻译文本。字面量必须放在 .C 而非 .h：
+// lupdate 不扫描头文件，写在 .h 里的字面量抽不进士林表、译文永不生效。
 MoveObjects::MoveObjects(Layer::Component* component, QString const& text, bool const animate,
-   bool const invalidateSymmetry) : QUndoCommand(text), m_component(component), 
+   bool const invalidateSymmetry) : QUndoCommand(text.isEmpty()
+      ? QCoreApplication::translate("UndoCommands", "Move items") : text),
+   m_component(component), 
    m_finalStateSaved(false), m_animate(animate), m_invalidateSymmetry(invalidateSymmetry)
 { 
    m_objectList = m_component->findLayers<Layer::GLObject>(Layer::Children);
@@ -156,7 +161,9 @@ MoveObjects::MoveObjects(Layer::Component* component, QString const& text, bool 
 
 
 MoveObjects::MoveObjects(GLObjectList const& objectList, QString const& text, 
-   bool const animate, bool const invalidateSymmetry) : QUndoCommand(text), m_component(0),
+   bool const animate, bool const invalidateSymmetry) : QUndoCommand(text.isEmpty()
+      ? QCoreApplication::translate("UndoCommands", "Move items") : text),
+   m_component(0),
    m_objectList(objectList), m_finalStateSaved(false), m_animate(animate), 
    m_invalidateSymmetry(invalidateSymmetry)
 { 
@@ -259,10 +266,10 @@ void MoveObjects::loadFrames(QList<Frame> const& frames)
 
 // --------------- AddConstraint ---------------
 AddConstraint::AddConstraint(Layer::Molecule* molecule, Layer::Constraint* constraint)
-   : QUndoCommand("Add constraint"), m_deleteConstraint(false), m_molecule(molecule),
+   : QUndoCommand(QCoreApplication::translate("UndoCommands", "Add constraint")), m_deleteConstraint(false), m_molecule(molecule),
      m_constraint(constraint) 
 { 
-   if (constraint->scanConstraint()) setText("Add scan coordinated");
+   if (constraint->scanConstraint()) setText(QCoreApplication::translate("UndoCommands", "Add scan coordinated"));
 }
 
 
@@ -291,7 +298,7 @@ void AddConstraint::redo()
 
 
 // --------------- ChangeAtomType ---------------
-ChangeAtomType::ChangeAtomType(Layer::Atom* atom) : QUndoCommand("Change atom type"),
+ChangeAtomType::ChangeAtomType(Layer::Atom* atom) : QUndoCommand(QCoreApplication::translate("UndoCommands", "Change atom type")),
    m_atom(atom), m_finalStateSaved(false), m_molecule(0)
 {
    MoleculeList parents(atom->findLayers<Layer::Molecule>(Layer::Parents));
@@ -337,7 +344,7 @@ void ChangeAtomType::undo()
 
 
 // --------------- ChangeBondOrder ---------------
-ChangeBondOrder::ChangeBondOrder(Layer::Bond* bond) : QUndoCommand("Change bond order"),
+ChangeBondOrder::ChangeBondOrder(Layer::Bond* bond) : QUndoCommand(QCoreApplication::translate("UndoCommands", "Change bond order")),
    m_bond(bond), m_finalStateSaved(false), m_molecule(0)
 {
    // Need a Molecule handle for the Viewer update (yugh)
@@ -382,12 +389,14 @@ AddComponent::AddComponent(Layer::Component* component, QStandardItem* parent)
    if (m_component->fileName().isEmpty()) {
       Layer::Molecule* molecule;
       if ( (molecule = qobject_cast<Layer::Molecule*>(component)) ) {
-         setText("New molecule");
+         setText(QCoreApplication::translate("UndoCommands", "New molecule"));
       }else {
-         setText("New system");
+         setText(QCoreApplication::translate("UndoCommands", "New system"));
       }
    }else {
-      setText("Load file " + m_component->fileName());
+      // [i18n] QUndoCommand 不是 QObject，没有 tr() 可用
+      setText(QCoreApplication::translate("UndoCommands", "Load file %1")
+         .arg(m_component->fileName()));
    }
 }
 
@@ -432,12 +441,12 @@ RemoveComponent::RemoveComponent(Layer::Component* component, QStandardItem* par
    if (m_component->fileName().isEmpty()) {
       Layer::Molecule* molecule;
       if ( (molecule = qobject_cast<Layer::Molecule*>(component)) ) {
-         setText("Remove molecule");
+         setText(QCoreApplication::translate("UndoCommands", "Remove molecule"));
       }else {
-         setText("Remove system");
+         setText(QCoreApplication::translate("UndoCommands", "Remove system"));
       }
    }else {
-      setText("Remove " + m_component->fileName());
+      setText(QCoreApplication::translate("UndoCommands", "Remove ") + m_component->fileName());
    }
 }
 

@@ -109,6 +109,12 @@ namespace Preferences {
    QString FFmpegPath();
    void    FFmpegPath(QString const&);
 
+   // UI language preference. Values: "system" (follow OS locale), "zh_CN",
+   // "en". Unset means first run, where loadTranslations() falls back to
+   // the locale shipped with the build.
+   QString Language();
+   void    Language(QString const&);
+
    double  SymmetryTolerance();
    void    SymmetryTolerance(double const);
    

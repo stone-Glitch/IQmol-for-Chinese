@@ -38,6 +38,10 @@ Dipole::Dipole(qglviewer::Vec const& dipoleMoment) : GLObject("Dipole"),
    m_color(softCyan), m_scale(0.25), m_configurator(*this), m_dipoleMoment(dipoleMoment), 
    m_sceneRadius(Preferences::DefaultSceneRadius())
 {
+   // [i18n] 初始化列表中的标签为裸字符串，此处覆盖为译文，
+   // 使 lupdate 可提取、界面显示中文。
+   setText(tr("Dipole"));
+
    setFlags(Qt::ItemIsEnabled | Qt::ItemIsUserCheckable);
    setCheckState(Qt::Unchecked);
    setConfigurator(&m_configurator);

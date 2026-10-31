@@ -96,7 +96,7 @@ void Atom::setVibrationVectorColor(QColor const& color)
 
 
 Atom::Atom(int Z, QString const& label) 
- : Primitive(label.isEmpty() ? "Atom" : label), 
+ : Primitive(label.isEmpty() ? tr("Atom") : label), 
    m_charge(0.0), 
    m_spin(0.0),
    m_nmr(0.0),

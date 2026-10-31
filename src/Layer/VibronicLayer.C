@@ -35,6 +35,10 @@ namespace Layer {
 Vibronic::Vibronic(Data::Vibronic const& vibronic) : Base("Vibronic"), 
    m_vibronic(vibronic), m_configurator(*this), m_initialFrequencies(0), m_finalFrequencies(0)
 {
+   // [i18n] 初始化列表中的标签为裸字符串，此处覆盖为译文，
+   // 使 lupdate 可提取、界面显示中文。
+   setText(tr("Vibronic"));
+
    m_configurator.load();
    setConfigurator(&m_configurator);
 }

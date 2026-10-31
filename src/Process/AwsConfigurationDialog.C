@@ -67,7 +67,7 @@ bool AwsConfigurationDialog::verify()
    QString poolId(m_dialog.userPool->text());
 
    if (!poolId.startsWith(region)) {
-      QMsgBox::warning(this, "IQmol", "Cognito Pool ID should start with the AWS region");
+      QMsgBox::warning(this, "IQmol", tr("Cognito Pool ID should start with the AWS region"));
       ok = false;
    }
 

@@ -33,6 +33,9 @@
 #include <QMessageBox>
 #include <QFileOpenEvent>
 #include <QSplashScreen>
+#include <QTranslator>
+#include <QLibraryInfo>
+#include <QLocale>
 
 #include <QDebug>
 #include <QThread>
@@ -44,13 +47,15 @@
 namespace IQmol {
 
 IQmolApplication::IQmolApplication(int &argc, char **argv )
-  : QApplication(argc, argv), m_splashScreen(0), 
+  : QApplication(argc, argv), m_splashScreen(0), m_qtTranslator(0), m_appTranslator(0),
     m_unhandledException(QMessageBox::Critical, "IQmol", "IQmol encountered an exception.\n"
     "See log file for details.", QMessageBox::Abort)
     
 {
    setOrganizationDomain("iqmol.org");
    setApplicationName("IQmol");
+   // 加载中文本地化翻译（Qt 基础翻译 + 应用翻译）
+   loadTranslations();
    if (argc > 1) {
       QString arg(argv[1]);
       if (arg == "--clear-jobs") {
@@ -59,6 +64,105 @@ IQmolApplication::IQmolApplication(int &argc, char **argv )
       }
   }
    // Can't log anything yet as the logger hasn't been initialized
+}
+
+
+void IQmolApplication::loadTranslations()
+{
+   // 计算目标 locale。三态偏好(见 Preferences::Language 注释):
+   //   "en"     -> 强制英文
+   //   "zh_CN"  -> 强制中文
+   //   "system" -> 跟随系统(系统非中文时, 应用自身翻译文件不存在则自然回退英文)
+   //   未设置    -> 首次运行: 保持汉化默认, 非中文环境也显示中文
+   QString locale = QLocale::system().name();
+   QString pref = Preferences::Language();
+   if (pref == "en") {
+      locale = QString("en");
+   } else if (pref == "zh_CN") {
+      locale = QString("zh_CN");
+   } else if (pref == "system") {
+      // 保留系统 locale; 若无对应翻译文件, 下面加载会失败并回退英文
+   } else if (!locale.startsWith("zh")) {
+      locale = QString("zh_CN");   // 首次运行: 汉化默认
+   }
+
+   // Qt 基础翻译（标准对话框按钮等），跟随最终 locale。
+   // 部署包中 Qt 安装目录不存在, 优先从程序目录 translations/ 加载
+   // 随包分发的 qt_zh_CN.qm / qtbase_zh_CN.qm（由 deploy_windows.sh 复制）,
+   // 开发环境再回退 Qt 安装目录。
+   m_qtTranslator = new QTranslator(this);
+   QString qtBasePath = QLibraryInfo::location(QLibraryInfo::TranslationsPath);
+   QStringList qtSearchPaths;
+   qtSearchPaths << QApplication::applicationDirPath() + "/translations"
+                 << qtBasePath;
+   bool qtLoaded(false);
+   foreach (QString const& path, qtSearchPaths) {
+      if (m_qtTranslator->load("qt_" + locale, path) ||
+          m_qtTranslator->load("qtbase_" + locale, path)) {
+         qtLoaded = true;
+         break;
+      }
+   }
+   if (qtLoaded) {
+      installTranslator(m_qtTranslator);
+   }
+
+   // 应用翻译（IQmol 界面字符串）
+   m_appTranslator = new QTranslator(this);
+
+   // 依次尝试多个候选路径。
+   //
+   // [i18n] 注意 applicationDirPath() 是**可执行文件所在目录**，
+   //   而不同平台的打包布局不同，qm 的相对位置也不同：
+   //     Windows : bin/IQmol        + bin/translations/zh_CN.qm   （deploy_windows.sh）
+   //     Linux   : bin/IQmol        + translations/zh_CN.qm       （包根，run.sh 布局）
+   //   早期只搜 bin/translations 与 cwd，导致 Linux 包**只有恰好
+   //   从包根目录启动时才加载成功**（偶然命中 cwd/translations），
+   //   从桌面图标或 run.sh 之外的路径启动都会静默回退英文。
+   //   故这里显式补上「可执行文件上一级的 translations/」。
+   QString const appDir(QApplication::applicationDirPath());
+   QStringList searchPaths;
+   searchPaths << appDir + "/translations"            // Windows: bin/translations/
+               << appDir + "/../translations"         // Linux  : 包根 translations/
+               << appDir + "/../share/iqmol/translations"  // 系统安装布局兜底
+               << appDir
+               << QDir::current().filePath("translations")
+               << QDir::currentPath();
+
+   // 去重并剔除不存在的目录，避免 QTranslator 反复做无谓的 stat
+   QStringList probePaths;
+   foreach (QString const& p, searchPaths) {
+      QString clean(QDir::cleanPath(p));
+      if (!probePaths.contains(clean)) probePaths << clean;
+   }
+
+   bool loaded(false);
+   foreach (QString const& path, probePaths) {
+      if (m_appTranslator->load("IQmol_" + locale, path)) {
+         loaded = true;
+         break;
+      }
+   }
+   // 也尝试不带前缀的文件名（与 lrelease 输出 zh_CN.qm 对应）
+   if (!loaded) {
+      foreach (QString const& path, probePaths) {
+         if (m_appTranslator->load(locale, path)) {
+            loaded = true;
+            break;
+         }
+      }
+   }
+   if (loaded) {
+      installTranslator(m_appTranslator);
+      QLOG_INFO() << "Loaded translation:" << locale;
+      qDebug() << "[i18n] Loaded translation:" << locale;
+   } else {
+      // 加载失败时把搜过的路径一并打出来，便于用户/打包方自查
+      QLOG_INFO() << "No translation file found for:" << locale
+                  << "searched:" << probePaths.join(", ");
+      qDebug() << "[i18n] No translation file found for:" << locale;
+      qDebug() << "[i18n] searched paths:" << probePaths;
+   }
 }
 
 

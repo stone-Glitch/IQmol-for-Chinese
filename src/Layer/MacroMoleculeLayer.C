@@ -41,7 +41,7 @@ MacroMolecule::MacroMolecule(Data::MacroMolecule const& macroMolecule, QObject* 
 
    AtomList m_atoms(findLayers<Atom>(Children));
 
-   Container* residues(new Container(this, "Residues"));
+   Container* residues(new Container(this, tr("Residues")));
 
    for (auto group : groups) {
        Data::AtomList const& atoms(group->atoms());

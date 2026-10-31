@@ -32,6 +32,10 @@ namespace Layer {
 ExcitedStates::ExcitedStates(Data::ExcitedStates const& states) : Base("Excited States"),
    m_excitedStates(states), m_configurator(0)
 {
+   // [i18n] 初始化列表中的标签为裸字符串，此处覆盖为译文，
+   // 使 lupdate 可提取、界面显示中文。
+   setText(tr("Excited States"));
+
 }
 
 

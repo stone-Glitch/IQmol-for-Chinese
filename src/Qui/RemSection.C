@@ -14,6 +14,7 @@
 #include <QtDebug>
 #include <QMessageBox>
 #include <QRegularExpression>
+#include <QCoreApplication>
 #include <math.h>
 
 
@@ -116,9 +117,12 @@ void RemSection::read(QString const& input) {
    }
 
    if (invalidLines.count() > 0) {
-      QString msg("An error occured when parsing the following options:\n");
+      // [i18n] KeywordSection 不是 QObject，本类无 tr() 可用
+      QString msg(QCoreApplication::translate("IQmol::Qui::RemSection",
+         "An error occured when parsing the following options:\n"));
       msg += invalidLines.join("\n");
-      QMessageBox::warning(0, "Input File Error", msg); 
+      QMessageBox::warning(0, QCoreApplication::translate(
+         "IQmol::Qui::RemSection", "Input File Error"), msg); 
    }
 }
 

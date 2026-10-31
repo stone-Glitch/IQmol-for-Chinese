@@ -25,6 +25,8 @@
 #include "Preferences.h"
 #include "QMsgBox.h"
 
+#include <QComboBox>
+#include <QCoreApplication>
 #include <QDebug>
 #include <QDir>
 
@@ -99,10 +101,15 @@ void ShaderDialog::setupShaderTab()
    }
 
    QStringList shaderNames(m_shaderLibrary.availableShaders());
-   m_dialog.shaderCombo->addItems(shaderNames);
+   for (QString const& shaderName : shaderNames) {
+      // 显示名走翻译, 数据键(原文)存入 userData, 供 findData/currentData 使用
+      m_dialog.shaderCombo->addItem(
+         QCoreApplication::translate("ShaderDialog", shaderName.toUtf8().constData()),
+         shaderName);
+   }
 
-   int index(m_dialog.shaderCombo->findText(Preferences::DefaultShader()));
-   if (index < 0) index = m_dialog.shaderCombo->findText(ShaderLibrary::NoShader);
+   int index(m_dialog.shaderCombo->findData(Preferences::DefaultShader()));
+   if (index < 0) index = m_dialog.shaderCombo->findData(ShaderLibrary::NoShader);
 
    m_dialog.shaderCombo->setCurrentIndex(index);
    on_shaderCombo_currentIndexChanged(index);
@@ -134,7 +141,7 @@ void ShaderDialog::setupEffectsTab()
 
 void ShaderDialog::on_shaderCombo_currentIndexChanged(int)
 {
-   QString name(m_dialog.shaderCombo->currentText());
+   QString name(m_dialog.shaderCombo->currentData().toString());
 
    if (!m_shaderLibrary.bindShader(name)) {
       QString msg("Shader not found: ");
@@ -263,7 +270,7 @@ QVariantMap ShaderDialog::getParametersFromDialog()
 
 void ShaderDialog::installShaderParameters(int)
 {
-   QString name(m_dialog.shaderCombo->currentText());
+   QString name(m_dialog.shaderCombo->currentData().toString());
    m_shaderLibrary.setUniformVariables(name, getParametersFromDialog());
    updated();
 }
@@ -271,14 +278,14 @@ void ShaderDialog::installShaderParameters(int)
 
 void ShaderDialog::on_saveAsDefault_clicked(bool)
 {
-   qDebug() << "Setting Default Shader" << m_dialog.shaderCombo->currentText();
+   qDebug() << "Setting Default Shader" << m_dialog.shaderCombo->currentData().toString();
    qDebug() << getParametersFromDialog();
    qDebug() << "Setting Default Shader";
    qDebug() << getFilterParametersFromDialog();
    qDebug() << "Setting Default PovRay Parameters";
    qDebug() << getPovRayParametersFromDialog();
 
-   Preferences::DefaultShader(m_dialog.shaderCombo->currentText());
+   Preferences::DefaultShader(m_dialog.shaderCombo->currentData().toString());
    Preferences::DefaultShaderParameters(getParametersFromDialog());
    Preferences::DefaultFilterParameters(getFilterParametersFromDialog());
    Preferences::DefaultPovRayParameters(getPovRayParametersFromDialog());
@@ -345,28 +352,49 @@ void ShaderDialog::installFilterParameters()
 
 void ShaderDialog::setupPovRayTab()
 {
-   QStringList textures;
-   textures << "None"
-            << "Chrome"
-            << "Crumpled"
-            << "Rippled"
-            << "Rough"
-            << "Marble"
-            << "BlackMarble";
+   // [i18n] "显示文本 / 数据键"分离：itemData 存英文原文（与 PovRayGen
+   // 约定的数据键），显示文本走 tr()。读取一律走 itemData，译文变化
+   // 不影响逻辑。
+   //
+   // 每条 tr("...") 都显式写出，不用循环里 tr(变量) ——
+   // lupdate 在源码上做静态扫描，参数是变量时提取不到，
+   // 译文不会进入 .ts 文件（运行时自然也就翻不出来）。
+   QComboBox* atomTexture(m_dialog.atomTexture);
+   QComboBox* bondTexture(m_dialog.bondTexture);
+   QComboBox* surfaceTexture(m_dialog.surfaceTexture);
 
-   m_dialog.atomTexture->clear();
-   m_dialog.atomTexture->addItems(textures);
-   m_dialog.bondTexture->clear();
-   m_dialog.bondTexture->addItems(textures);
+   atomTexture->clear();
+   bondTexture->clear();
+   surfaceTexture->clear();
 
-   textures << "Skin"
-            << "Swirl"
-            << "Bubble"
-            << "Shattered"
-            << "Mesh";
+   // atom/bond 与 surface 共用的前 7 项
+   struct { char const* key; char const* label; } const common[] = {
+      { "None",        QT_TRANSLATE_NOOP("ShaderDialog", "None")        },
+      { "Chrome",      QT_TRANSLATE_NOOP("ShaderDialog", "Chrome")      },
+      { "Crumpled",    QT_TRANSLATE_NOOP("ShaderDialog", "Crumpled")    },
+      { "Rippled",     QT_TRANSLATE_NOOP("ShaderDialog", "Rippled")     },
+      { "Rough",       QT_TRANSLATE_NOOP("ShaderDialog", "Rough")       },
+      { "Marble",      QT_TRANSLATE_NOOP("ShaderDialog", "Marble")      },
+      { "BlackMarble", QT_TRANSLATE_NOOP("ShaderDialog", "BlackMarble") },
+   };
+   for (size_t i = 0; i < sizeof(common)/sizeof(common[0]); ++i) {
+      atomTexture->addItem(tr(common[i].label), QVariant(QString(common[i].key)));
+      bondTexture->addItem(tr(common[i].label), QVariant(QString(common[i].key)));
+      surfaceTexture->addItem(tr(common[i].label), QVariant(QString(common[i].key)));
+   }
 
-   m_dialog.surfaceTexture->clear();
-   m_dialog.surfaceTexture->addItems(textures);
+   // 仅 surface 可用的额外 5 项
+   struct { char const* key; char const* label; } const surfaceOnly[] = {
+      { "Skin",      QT_TRANSLATE_NOOP("ShaderDialog", "Skin")      },
+      { "Swirl",     QT_TRANSLATE_NOOP("ShaderDialog", "Swirl")     },
+      { "Bubble",    QT_TRANSLATE_NOOP("ShaderDialog", "Bubble")    },
+      { "Shattered", QT_TRANSLATE_NOOP("ShaderDialog", "Shattered") },
+      { "Mesh",      QT_TRANSLATE_NOOP("ShaderDialog", "Mesh")      },
+   };
+   for (size_t i = 0; i < sizeof(surfaceOnly)/sizeof(surfaceOnly[0]); ++i) {
+      surfaceTexture->addItem(tr(surfaceOnly[i].label),
+                              QVariant(QString(surfaceOnly[i].key)));
+   }
 
    loadPovRayImages();
 
@@ -380,15 +408,26 @@ void ShaderDialog::setupPovRayTab()
 void ShaderDialog::on_background_currentIndexChanged(int index)
 {
    QPalette pal;
-   QString label(m_dialog.background->currentText());
+   // [i18n] 不可依赖 currentText() 做判断：combo 中显示的是译文，
+   // 而 PovRayGen::setBackground() 以英文原文作为数据键。因此这里
+   // 改用索引判断，译文变化不影响逻辑。
+   QString key(m_dialog.background->itemData(index).toString());
+   if (key.isEmpty()) {
+      // 兜底：兼容 ui 中未设置 itemData 的旧行为
+      QString label(m_dialog.background->currentText());
+      if      (label == "None" || label == tr("None"))    key = "None";
+      else if (label == "Default" || label == tr("Default")) key = "Default";
+      else if (label == "White" || label == tr("White"))  key = "White";
+      else if (label == "Black" || label == tr("Black"))  key = "Black";
+   }
 
-   if (label.contains("None")) {
+   if (key == "None") {
       pal.setColor(QPalette::Window, Qt::lightGray);
-   }else if (label.contains("Default")) {
+   }else if (key == "Default") {
       pal.setColor(QPalette::Window, Preferences::BackgroundColor());
-   }else if (label.contains("White")) {
+   }else if (key == "White") {
       pal.setColor(QPalette::Window, Qt::white);
-   }else if (label.contains("Black")) {
+   }else if (key == "Black") {
       pal.setColor(QPalette::Window, Qt::black);
    }
 
@@ -401,7 +440,8 @@ void ShaderDialog::on_background_currentIndexChanged(int index)
 
 void ShaderDialog::on_atomTexture_currentIndexChanged(int index)
 {
-   QString label(m_dialog.atomTexture->currentText());
+   // [i18n] 取数据键而非显示译文，见 setupPovRayTab 的说明
+   QString label(m_dialog.atomTexture->itemData(index).toString());
    label += "-structure";
    QString style("background-image: url(");
    style += m_povRayImages[label] + ");";
@@ -412,7 +452,8 @@ void ShaderDialog::on_atomTexture_currentIndexChanged(int index)
 
 void ShaderDialog::on_surfaceTexture_currentIndexChanged(int index)
 {
-   QString label(m_dialog.surfaceTexture->currentText());
+   // [i18n] 取数据键而非显示译文，见 setupPovRayTab 的说明
+   QString label(m_dialog.surfaceTexture->itemData(index).toString());
    label += "-surface";
    QString style("background-image: url(");
    style += m_povRayImages[label] + ");";
@@ -465,10 +506,15 @@ QVariantMap ShaderDialog::getPovRayParametersFromDialog()
 {
    QVariantMap map;
 
-   map.insert("background",     QVariant(m_dialog.background->currentText()));
-   map.insert("atomTexture",    QVariant(m_dialog.atomTexture->currentText()));
-   map.insert("bondTexture",    QVariant(m_dialog.bondTexture->currentText()));
-   map.insert("surfaceTexture", QVariant(m_dialog.surfaceTexture->currentText()));
+   // [i18n] 一律输出英文数据键，PovRayGen 依赖这些字面量做分支判断
+   map.insert("background",     QVariant(m_dialog.background->itemData(
+                                      m_dialog.background->currentIndex()).toString()));
+   map.insert("atomTexture",    QVariant(m_dialog.atomTexture->itemData(
+                                      m_dialog.atomTexture->currentIndex()).toString()));
+   map.insert("bondTexture",    QVariant(m_dialog.bondTexture->itemData(
+                                      m_dialog.bondTexture->currentIndex()).toString()));
+   map.insert("surfaceTexture", QVariant(m_dialog.surfaceTexture->itemData(
+                                      m_dialog.surfaceTexture->currentIndex()).toString()));
 
    map.insert("lightFront",     QVariant(m_dialog.povLightFront->isChecked()));
    map.insert("lightHighlight", QVariant(m_dialog.povLightHighlight->isChecked()));

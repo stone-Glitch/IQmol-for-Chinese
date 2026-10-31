@@ -43,7 +43,7 @@ using namespace qglviewer;
 namespace IQmol {
 namespace Layer {
 
-MolecularSurfaces::MolecularSurfaces(Layer::Molecule& molecule) : Base("Surfaces"), 
+MolecularSurfaces::MolecularSurfaces(Layer::Molecule& molecule) : Base(tr("Surfaces")), 
    m_molecule(molecule)
 {
    connect(&m_configurator, SIGNAL(calculateSurface(Data::SurfaceInfo const&)),
@@ -98,7 +98,11 @@ void MolecularSurfaces::processSurfaceQueue()
              connect(surfaceLayer, SIGNAL(updated()), this, SIGNAL(updated()));
              surfaceLayer->setFrame(m_molecule.getReferenceFrame());
 
-             QString text((*iter).type().toString());
+             // [i18n] 图层显示名用译文；同时把英文数据键存入
+             // Qt::UserRole，供需要区分类别的逻辑使用
+             QString key((*iter).type().toString());
+             surfaceLayer->setData(key, Qt::UserRole);
+             QString text((*iter).type().toDisplayString());
              surfaceLayer->setText(text);
              text += "\nScale = " + QString::number((*iter).isovalue());
              surfaceLayer->setToolTip(text);

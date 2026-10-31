@@ -35,7 +35,7 @@ AxesMesh::AxesMesh() : Global("Mesh"), m_configurator(*this)
 {
    init();
    setConfigurator(&m_configurator);
-   connect(newAction("Configure"), SIGNAL(triggered()), this, SLOT(configure()));
+   connect(newAction(tr("Configure")), SIGNAL(triggered()), this, SLOT(configure()));
 }
 
 

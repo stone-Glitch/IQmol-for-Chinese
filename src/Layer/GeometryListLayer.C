@@ -55,7 +55,7 @@ GeometryList::GeometryList(Data::GeometryList& geometryList)
        if (geometry) {
           Layer::Geometry* layer(new Layer::Geometry(*geometry));
           appendRow(layer);
-          QAction* remove(layer->newAction("Remove"));
+          QAction* remove(layer->newAction(tr("Remove")));
           connect(remove, SIGNAL(triggered()), this, SLOT(removeGeometry()));
        }
    }
@@ -64,7 +64,7 @@ GeometryList::GeometryList(Data::GeometryList& geometryList)
    // we have more than one geometry, and only allow adding additional
    // geometries if we start with at most one.
    if (geometryList.size() < 2) {
-      connect(newAction("Copy Geometry"), SIGNAL(triggered()), 
+      connect(newAction(tr("Copy Geometry")), SIGNAL(triggered()), 
          this, SLOT(cloneLastGeometry()));
       m_allowModifications = true;
    }else {
@@ -115,7 +115,7 @@ void GeometryList::cloneLastGeometry()
    label += QString::number(m_geometryList.size());
    geometry->setText(label);
 
-   QAction* remove(geometry->newAction("Remove"));
+   QAction* remove(geometry->newAction(tr("Remove")));
    connect(remove, SIGNAL(triggered()), this, SLOT(removeGeometry()));
    appendRow(geometry);
 
