@@ -74,13 +74,18 @@ QSet<QString> ControlServer::allowedCommands()
 
 QString ControlServer::runtimeDir() const
 {
-   QString dir = QStandardPaths::writableLocation(QStandardPaths::RuntimeLocation);
-   if (dir.isEmpty()) {
-      dir = QStandardPaths::writableLocation(QStandardPaths::TempLocation);
-   }
-   if (dir.isEmpty()) {
-      dir = QDir::homePath() + "/.iqmol";
-   }
+   // Both ends must agree on this directory, so do not simply delegate to
+   // QStandardPaths::RuntimeLocation. With XDG_RUNTIME_DIR set (the normal
+   // desktop case: /run/user/1000) Qt and a Node client agree. Without it,
+   // Qt falls back to /tmp/runtime-<user> while a Node client (os.tmpdir())
+   // falls back to /tmp, and the client would never find us - so we pick the
+   // temp dir ourselves in that case.
+   const QByteArray xdg(qgetenv("XDG_RUNTIME_DIR"));
+   if (!xdg.isEmpty()) return QString::fromLocal8Bit(xdg);
+
+   QString dir = QStandardPaths::writableLocation(QStandardPaths::TempLocation);
+   if (dir.isEmpty()) dir = QDir::tempPath();
+   if (dir.isEmpty()) dir = QDir::homePath() + "/.iqmol";
    return dir;
 }
 
