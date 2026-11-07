@@ -81,6 +81,9 @@ namespace Gmx {
          MainWindow(QWidget* parent = 0);
          ~MainWindow();
 
+         /// Read-only access for the local control channel (src/Main/ControlServer.C).
+         ViewerModel& viewerModel() { return m_viewerModel; }
+
       Q_SIGNALS:
          void recordingActive(bool);
          void quit();

@@ -25,14 +25,18 @@
 #include <QApplication>
 #include <QMessageBox>
 #include <QEvent>
+#include <QJsonObject>
 #include <QStringList>
 #include <QTranslator>
 
 
 class QSplashScreen;
+class QLocalSocket;
 
 
 namespace IQmol {
+
+   class ControlServer;
 
    /// QApplication subclassed to handle QFileOpenEvents for Mac.
    class IQmolApplication : public QApplication {
@@ -58,10 +62,14 @@ namespace IQmol {
       private:
          void initOpenBabel();
          void loadTranslations();
+         void startControlServer();
+         void onControlCommand(QLocalSocket* client, QJsonObject const& request);
          QSplashScreen* m_splashScreen;
          QMessageBox    m_unhandledException;
          QTranslator*   m_qtTranslator;
          QTranslator*   m_appTranslator;
+         ControlServer* m_controlServer;
+         bool           m_controlBusy;
    };
 
 
