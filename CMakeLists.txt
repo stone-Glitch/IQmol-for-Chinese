@@ -45,7 +45,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
 include_directories(${CMAKE_CURRENT_BINARY_DIR}/src)
 
 
-find_package(Qt5 COMPONENTS Core Gui Xml PrintSupport Widgets OpenGL Sql REQUIRED)
+find_package(Qt5 COMPONENTS Core Gui Xml PrintSupport Widgets OpenGL Sql Network REQUIRED)
 find_package(Qt5LinguistTools REQUIRED)
 find_package(Threads REQUIRED)
 find_package(OpenGL  REQUIRED)
@@ -469,6 +469,7 @@ target_link_libraries (${targetName}
    Qt5::Widgets
    Qt5::OpenGL
    Qt5::Sql
+   Qt5::Network
    ${LIBSSH2_LIBRARY}
    ${QGLVIEWER_LIBRARY}
    ${OPENMESH_LIBRARIES}

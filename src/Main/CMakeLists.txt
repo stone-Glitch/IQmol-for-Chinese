@@ -1,8 +1,9 @@
-find_package(Qt5 COMPONENTS Core Gui Widgets Xml OpenGL REQUIRED)
+find_package(Qt5 COMPONENTS Core Gui Widgets Xml OpenGL Network REQUIRED)
 set(LIB Main)
 
 set( HEADERS
    AboutDialog.h
+   ControlServer.h
    FragmentTable.h
    HelpBrowser.h
    IQmolApplication.h
@@ -15,6 +16,7 @@ set( HEADERS
 
 set( SOURCES
    AboutDialog.C
+   ControlServer.C
    FragmentTable.C
    HelpBrowser.C
    IQmolApplication.C
@@ -57,6 +59,7 @@ target_link_libraries(${LIB} PRIVATE
    Qt5::Widgets
    Qt5::Xml
    Qt5::OpenGL
+   Qt5::Network
 )
 
 if (WITH_GROMACS)

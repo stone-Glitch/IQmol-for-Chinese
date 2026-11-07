@@ -22,17 +22,26 @@
 
 #include "IQmolApplication.h"
 #include "MainWindow.h"
+#include "ControlServer.h"
+#include "ViewerModel.h"
 #include "JobMonitor.h"
 #include "ServerRegistry.h"
 #include "Preferences.h"
 #include "QMsgBox.h"
 #include "QsLog.h"
+#include "version.h"
 #include <QDir>
 #include <QString>
 #include <QLibrary>
 #include <QMessageBox>
 #include <QFileOpenEvent>
+#include <QFileInfo>
+#include <QEventLoop>
+#include <QJsonArray>
+#include <QJsonObject>
+#include <QLocalSocket>
 #include <QSplashScreen>
+#include <QTimer>
 #include <QTranslator>
 #include <QLibraryInfo>
 #include <QLocale>
@@ -49,7 +58,8 @@ namespace IQmol {
 IQmolApplication::IQmolApplication(int &argc, char **argv )
   : QApplication(argc, argv), m_splashScreen(0), m_qtTranslator(0), m_appTranslator(0),
     m_unhandledException(QMessageBox::Critical, "IQmol", "IQmol encountered an exception.\n"
-    "See log file for details.", QMessageBox::Abort)
+    "See log file for details.", QMessageBox::Abort),
+    m_controlServer(0), m_controlBusy(false)
     
 {
    setOrganizationDomain("iqmol.org");
@@ -63,7 +73,168 @@ IQmolApplication::IQmolApplication(int &argc, char **argv )
          Preferences::JobMonitorList(QVariantList());
       }
   }
+   // The control channel must never prevent IQmol from starting, so any
+   // failure here is logged and ignored.
+   startControlServer();
    // Can't log anything yet as the logger hasn't been initialized
+}
+
+
+void IQmolApplication::startControlServer()
+{
+   if (qEnvironmentVariableIsSet("IQMOL_NO_CONTROL")) {
+      qDebug() << "[control] disabled by IQMOL_NO_CONTROL";
+      return;
+   }
+
+   m_controlServer = new ControlServer(this);
+   connect(m_controlServer, &ControlServer::commandReceived,
+      this, &IQmolApplication::onControlCommand);
+
+   QString error;
+   if (!m_controlServer->start(&error)) {
+      qDebug() << "[control] unavailable:" << error;
+      delete m_controlServer;
+      m_controlServer = 0;
+      return;
+   }
+   qDebug() << "[control] listening, endpoint:" << m_controlServer->endpointPath();
+}
+
+
+namespace {
+
+   // How long a "load" request waits for the parser to finish before giving
+   // up. Parsing happens on a background task, so the reply cannot be sent
+   // synchronously.
+   const int kLoadTimeoutMs = 20000;
+
+   MainWindow* findMainWindow()
+   {
+      for (QWidget* widget : QApplication::topLevelWidgets()) {
+         MainWindow* mw(qobject_cast<MainWindow*>(widget));
+         if (mw) return mw;
+      }
+      return 0;
+   }
+
+}
+
+
+void IQmolApplication::onControlCommand(QLocalSocket* client, QJsonObject const& request)
+{
+   const QString     cmd (request.value("cmd").toString());
+   const QString     id  (request.value("id").toString());
+   const QJsonObject args(request.value("args").toObject());
+
+   auto respond = [&](QJsonObject const& result) {
+      QJsonObject res;
+      res["v"]      = 1;
+      res["id"]     = id;
+      res["ok"]     = true;
+      res["result"] = result;
+      m_controlServer->sendResponse(client, res);
+   };
+
+   auto fail = [&](QString const& code, QString const& message) {
+      QJsonObject err;
+      err["code"]    = code;
+      err["message"] = message;
+
+      QJsonObject res;
+      res["v"]     = 1;
+      res["id"]    = id;
+      res["ok"]    = false;
+      res["error"] = err;
+      m_controlServer->sendResponse(client, res);
+   };
+
+   // "load" runs a nested event loop while the parser works. Refuse anything
+   // that arrives meanwhile rather than re-entering.
+   if (m_controlBusy) {
+      fail("BUSY", "another command is being processed");
+      return;
+   }
+
+   if (cmd == "ping") {
+      QJsonObject result;
+      result["pong"] = true;
+      respond(result);
+      return;
+   }
+
+   if (cmd == "state") {
+      QJsonObject scene;
+      MainWindow* mw(findMainWindow());
+      if (mw) {
+         scene["molecules"] = mw->viewerModel().moleculeList(false).size();
+      }else {
+         scene["windowReady"] = false;
+      }
+
+      QJsonObject result;
+      result["pid"]      = (qint64)QCoreApplication::applicationPid();
+      result["version"]  = IQMOL_VERSION;
+      result["tag"]      = GIT_VERSION;
+      result["startedAt"] = m_controlServer->startedAt();
+      result["commands"] = QJsonArray::fromStringList(
+         QStringList(m_controlServer->allowedCommands().toList()));
+      result["scene"]    = scene;
+      respond(result);
+      return;
+   }
+
+   if (cmd == "load") {
+      const QString path(args.value("path").toString());
+      if (path.isEmpty()) {
+         fail("BAD_ARGS", "path required");
+         return;
+      }
+
+      QFileInfo info(path);
+      if (!info.exists()) {
+         fail("LOAD_FAILED", QString("no such file: %1").arg(path));
+         return;
+      }
+      if (!info.isFile()) {
+         fail("LOAD_FAILED", QString("not a regular file: %1").arg(path));
+         return;
+      }
+
+      MainWindow* mw(findMainWindow());
+      if (!mw) {
+         fail("NOT_READY", "main window is not up yet, retry in a moment");
+         return;
+      }
+
+      m_controlBusy = true;
+
+      bool opened(false);
+      QEventLoop loop;
+      QObject::connect(&mw->viewerModel(), &ViewerModel::fileOpened,
+         &loop, [&loop, &opened]() { opened = true; loop.quit(); });
+      QTimer::singleShot(kLoadTimeoutMs, &loop, SLOT(quit()));
+
+      mw->open(info.absoluteFilePath());
+      loop.exec();
+
+      m_controlBusy = false;
+
+      if (!opened) {
+         fail("LOAD_FAILED", "the file did not open within the time limit");
+         return;
+      }
+
+      QJsonObject result;
+      result["path"]      = info.absoluteFilePath();
+      result["loaded"]    = true;
+      result["molecules"] = mw->viewerModel().moleculeList(false).size();
+      respond(result);
+      return;
+   }
+
+   // Whitelisted for the view-control PR, but no viewer wiring in this build.
+   fail("NOT_IMPLEMENTED", "this command is not wired up in this build");
 }
 
 
