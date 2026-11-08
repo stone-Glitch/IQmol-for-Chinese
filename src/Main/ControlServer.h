@@ -90,7 +90,7 @@ class ControlServer : public QObject
    private:
       QByteArray takeFrame(QLocalSocket*, bool& gotOne);
       void handleFrame(QLocalSocket*, const QByteArray& raw);
-      void reject(QLocalSocket*, const QString& id, const QString& code,
+      void reject(QLocalSocket*, const QJsonValue& id, const QString& code,
                   const QString& message);
       bool authorised(const QJsonObject&) const;
       QString runtimeDir() const;

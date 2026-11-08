@@ -39,6 +39,7 @@
 #include <QEventLoop>
 #include <QJsonArray>
 #include <QJsonObject>
+#include <QStandardPaths>
 #include <QLocalSocket>
 #include <QSplashScreen>
 #include <QTimer>
@@ -124,7 +125,10 @@ namespace {
 void IQmolApplication::onControlCommand(QLocalSocket* client, QJsonObject const& request)
 {
    const QString     cmd (request.value("cmd").toString());
-   const QString     id  (request.value("id").toString());
+   // id 由客户端定义，按要求原样回显。历史实现用 toString()，客户端若传数字
+   // 就会回成空串、无法与请求配对，故保留 QJsonValue 的原始类型。
+   const QJsonValue  idValue(request.value("id"));
+   const QJsonValue  id(idValue.isUndefined() ? QJsonValue(QString()) : idValue);
    const QJsonObject args(request.value("args").toObject());
 
    auto respond = [&](QJsonObject const& result) {
@@ -174,11 +178,16 @@ void IQmolApplication::onControlCommand(QLocalSocket* client, QJsonObject const&
 
       QJsonObject result;
       result["pid"]      = (qint64)QCoreApplication::applicationPid();
-      result["version"]  = IQMOL_VERSION;
+      result["version"]  = IQMOL_VERSION;        // upstream src/version.h snapshot
       result["tag"]      = GIT_VERSION;
+#ifdef IQMOL_PACKAGE_VERSION
+      result["packageVersion"] = QString(IQMOL_PACKAGE_VERSION);  // CMake PROJECT_VERSION
+#endif
       result["startedAt"] = m_controlServer->startedAt();
-      result["commands"] = QJsonArray::fromStringList(
-         QStringList(m_controlServer->allowedCommands().toList()));
+      // QSet iteration order is unspecified; sort so callers can diff/assert.
+      QStringList commands(m_controlServer->allowedCommands().toList());
+      commands.sort();
+      result["commands"] = QJsonArray::fromStringList(commands);
       result["scene"]    = scene;
       respond(result);
       return;
@@ -229,6 +238,57 @@ void IQmolApplication::onControlCommand(QLocalSocket* client, QJsonObject const&
       result["path"]      = info.absoluteFilePath();
       result["loaded"]    = true;
       result["molecules"] = mw->viewerModel().moleculeList(false).size();
+      respond(result);
+      return;
+   }
+
+   // Snapshot: render the current scene to a PNG inside a confined directory.
+   // Only the file name is taken from the request, never a path - the channel
+   // must not be able to write anywhere the user did not already own.
+   if (cmd == "snapshot") {
+      MainWindow* mw(findMainWindow());
+      if (!mw || !mw->viewer()) {
+         fail("NOT_READY", "main window is not up yet, retry in a moment");
+         return;
+      }
+
+      QString name(args.value("out").toString());
+      if (name.isEmpty()) name = "snapshot.png";
+      name = QFileInfo(name).fileName();            // drop any directory part
+      if (name.isEmpty() || name == "." || name == "..") {
+         fail("BAD_ARGS", "invalid file name");
+         return;
+      }
+      if (!name.endsWith(".png", Qt::CaseInsensitive) &&
+          !name.endsWith(".jpg", Qt::CaseInsensitive)) {
+         name += ".png";
+      }
+
+      const int width (qBound(64, args.value("width").toInt(1200), 4096));
+      const int height(qBound(64, args.value("height").toInt(900), 4096));
+
+      QDir dir(QDir(QStandardPaths::writableLocation(QStandardPaths::TempLocation))
+               .filePath("iqmol-snapshots"));
+      if (!dir.exists() && !dir.mkpath(".")) {
+         fail("SNAPSHOT_FAILED", QString("cannot create %1").arg(dir.absolutePath()));
+         return;
+      }
+
+      const QString path(dir.filePath(name));
+      QFile::remove(path);
+      mw->viewer()->saveImage(path, QSize(width, height), 96, 4);
+
+      QFileInfo out(path);
+      if (!out.exists() || out.size() == 0) {
+         fail("SNAPSHOT_FAILED", "the renderer produced no image");
+         return;
+      }
+
+      QJsonObject result;
+      result["path"]   = out.absoluteFilePath();
+      result["width"]  = width;
+      result["height"] = height;
+      result["bytes"]  = (qint64)out.size();
       respond(result);
       return;
    }

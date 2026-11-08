@@ -142,7 +142,8 @@ bool ControlServer::start(QString* error)
    info["startedAt"] = m_startedAt;
 
    QJsonArray cmds;
-   const QSet<QString> allowed(allowedCommands());
+   QStringList allowed(allowedCommands().toList());
+   allowed.sort();                       // stable output, QSet order is unspecified
    for (const QString& c : allowed) cmds.append(c);
    info["commands"] = cmds;
 
@@ -301,11 +302,14 @@ void ControlServer::handleFrame(QLocalSocket* client, const QByteArray& raw)
 {
    QJsonParseError parseError;
    const QJsonDocument doc = QJsonDocument::fromJson(raw, &parseError);
-   const QString id = [&]() {
-      // Best effort id so the client can correlate even a malformed reply.
-      const QJsonDocument probe = QJsonDocument::fromJson(raw);
-      return probe.object().value("id").toString();
-   }();
+   // Best effort id so the client can correlate even a malformed reply. Keep the
+   // JSON type as sent: clients commonly use integers, and toString() would turn
+   // those into an empty string that no longer matches the request.
+   QJsonValue id = QJsonValue(QString());
+   if (doc.isObject()) {
+      const QJsonValue candidate(doc.object().value("id"));
+      if (!candidate.isUndefined()) id = candidate;
+   }
 
    if (parseError.error != QJsonParseError::NoError || !doc.isObject()) {
       reject(client, id, "BAD_JSON", "request is not a JSON object");
@@ -337,7 +341,7 @@ void ControlServer::handleFrame(QLocalSocket* client, const QByteArray& raw)
 }
 
 
-void ControlServer::reject(QLocalSocket* client, const QString& id,
+void ControlServer::reject(QLocalSocket* client, const QJsonValue& id,
                            const QString& code, const QString& message)
 {
    QJsonObject err;
