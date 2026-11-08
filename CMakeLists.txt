@@ -3,10 +3,52 @@ cmake_minimum_required(VERSION 3.14.4)
 set(targetName IQmol)
 project(${targetName} VERSION 3.2.4.1 LANGUAGES CXX C Fortran)
 
-# src/version.h 是上游生成的快照(固定为 v3.2.3 等), 与 project() 的包版本可能滞后。
-# 控制通道需要向调用方同时报告"包版本"和"上游源码版本", 故把 CMake 的
-# PROJECT_VERSION 作为编译期字符串传入, 避免在使用 dpkg -s 之外无从得知包版本。
-add_compile_definitions(IQMOL_PACKAGE_VERSION="${PROJECT_VERSION}")
+#---------------------------------------------------------------------------
+# 版本字符串
+#   上游 src/version.h 是"生成于某个日期"的静态快照(本仓库长期停在 v3.2.3,
+#   tag 早于 HEAD 45 个提交), 既不能反映发行包, 也无法在增量构建里自我更新。
+#   这里改由 CMake 生成, 保证"关于"对话框、日志、控制通道三处永远一致:
+#     IQMOL_PACKAGE_VERSION  来自 project() VERSION, 即发行包版本
+#     IQMOL_VERSION_STR      git describe --tags --abbrev=0, 没有 git 时退回包版本
+#     IQMOL_GIT_VERSION      git describe --always --tags, 用于精确定位提交
+#   从源码树构建时用 git 描述; 从解压包构建(无 .git)时自动退回包版本。
+#---------------------------------------------------------------------------
+set(IQMOL_GIT_REPO ".")
+find_package(Git QUIET)
+if(GIT_FOUND)
+  execute_process(
+    COMMAND ${GIT_EXECUTABLE} describe --tags --abbrev=0
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+    OUTPUT_VARIABLE IQMOL_VERSION_STR
+    OUTPUT_STRIP_TRAILING_WHITESPACE
+    ERROR_QUIET
+    RESULT_VARIABLE _git_rc1)
+  execute_process(
+    COMMAND ${GIT_EXECUTABLE} describe --always --tags --dirty
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+    OUTPUT_VARIABLE IQMOL_GIT_VERSION
+    OUTPUT_STRIP_TRAILING_WHITESPACE
+    ERROR_QUIET
+    RESULT_VARIABLE _git_rc2)
+  if(NOT _git_rc1 EQUAL 0 OR NOT _git_rc2 EQUAL 0)
+    set(IQMOL_VERSION_STR "")
+    set(IQMOL_GIT_VERSION "")
+  endif()
+endif()
+if(NOT IQMOL_VERSION_STR)
+  set(IQMOL_VERSION_STR "v${PROJECT_VERSION}")
+endif()
+if(NOT IQMOL_GIT_VERSION)
+  set(IQMOL_GIT_VERSION "${IQMOL_VERSION_STR}")
+endif()
+message(STATUS "[IQmol] version: ${IQMOL_VERSION_STR} (${IQMOL_GIT_VERSION}), package ${PROJECT_VERSION}")
+
+string(TIMESTAMP IQMOL_YEAR "%Y")
+add_compile_definitions(
+  IQMOL_YEAR="${IQMOL_YEAR}"
+  IQMOL_PACKAGE_VERSION="${PROJECT_VERSION}"
+  IQMOL_VERSION_STR="${IQMOL_VERSION_STR}"
+  IQMOL_GIT_VERSION="${IQMOL_GIT_VERSION}")
 
 include(FortranCInterface)
 #FortranCInterface_VERIFY(CXX)

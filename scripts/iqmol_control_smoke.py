@@ -40,11 +40,11 @@ class Client:
         self.buf = b""
         self.seq = 0
 
-    def call(self, cmd, args=None):
+    def call(self, cmd, args=None, request_id=None):
         self.seq += 1
         request = {
             "v": 1,
-            "id": "smoke-%d" % self.seq,
+            "id": "smoke-%d" % self.seq if request_id is None else request_id,
             "token": self.token,
             "cmd": cmd,
             "args": args or {},
@@ -134,6 +134,32 @@ def main(argv):
                         client.call("load", {"path": "/nonexistent.xyz"}),
                         "LOAD_FAILED")
     report.expect_error("unknown command", client.call("nope"), "BAD_COMMAND")
+
+    # id must come back with the same JSON type it was sent as.
+    for probe_id in (7, "a1"):
+        reply = client.call("ping", request_id=probe_id)
+        ok = reply.get("id") == probe_id
+        report.add(ok, "id echo %r" % (probe_id,), "id=%r" % (reply.get("id"),))
+
+    # snapshot: confined output directory + argument validation.
+    # Needs a real GL context; an offscreen instance answers SNAPSHOT_FAILED.
+    tmp_root = os.environ.get("TMPDIR") or "/tmp"
+    reply = client.call("snapshot", {"out": "../../etc/x.png", "width": 320,
+                                    "height": 240})
+    if reply.get("ok"):
+        path = reply["result"]["path"]
+        ok = os.path.dirname(path) == os.path.join(tmp_root, "iqmol-snapshots")
+        report.add(ok, "snapshot path escape", path)
+    else:
+        report.add(reply.get("error", {}).get("code") == "SNAPSHOT_FAILED",
+                   "snapshot needs GL", reply.get("error", {}).get("code"))
+
+    report.expect_error("snapshot bad name",
+                        client.call("snapshot", {"out": "-rf.png"}), "BAD_ARGS")
+    report.expect_error("snapshot bad size",
+                        client.call("snapshot", {"out": "x.png", "width": "big"}),
+                        "BAD_ARGS")
+
 
     for sample in argv:
         started = time.time()

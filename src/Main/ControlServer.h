@@ -93,6 +93,7 @@ class ControlServer : public QObject
       void reject(QLocalSocket*, const QJsonValue& id, const QString& code,
                   const QString& message);
       bool authorised(const QJsonObject&) const;
+      bool m_bound;          // did THIS instance bind the socket (see stop())
       QString runtimeDir() const;
 
       QLocalServer* m_server;
