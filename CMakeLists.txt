@@ -3,6 +3,11 @@ cmake_minimum_required(VERSION 3.14.4)
 set(targetName IQmol)
 project(${targetName} VERSION 3.2.4.1 LANGUAGES CXX C Fortran)
 
+# src/version.h 是上游生成的快照(固定为 v3.2.3 等), 与 project() 的包版本可能滞后。
+# 控制通道需要向调用方同时报告"包版本"和"上游源码版本", 故把 CMake 的
+# PROJECT_VERSION 作为编译期字符串传入, 避免在使用 dpkg -s 之外无从得知包版本。
+add_compile_definitions(IQMOL_PACKAGE_VERSION="${PROJECT_VERSION}")
+
 include(FortranCInterface)
 #FortranCInterface_VERIFY(CXX)
 

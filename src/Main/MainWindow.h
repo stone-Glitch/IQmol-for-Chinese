@@ -83,6 +83,8 @@ namespace Gmx {
 
          /// Read-only access for the local control channel (src/Main/ControlServer.C).
          ViewerModel& viewerModel() { return m_viewerModel; }
+         /// May be null until the window is fully constructed.
+         Viewer*      viewer()      { return m_viewer; }
 
       Q_SIGNALS:
          void recordingActive(bool);
