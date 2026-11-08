@@ -136,6 +136,13 @@ if [ -d "$TARBALL_DIR/samples" ]; then
   cp -a "$TARBALL_DIR/samples" "$STAGE/usr/share/doc/$PKG/samples"
 fi
 
+# man 页（`man iqmol`），按 FHS 放 /usr/share/man/man7
+if [ -f "$SRC_DIR/share/man/man7/iqmol.7.gz" ]; then
+  mkdir -p "$STAGE/usr/share/man/man7"
+  cp -a "$SRC_DIR/share/man/man7/iqmol.7.gz" "$STAGE/usr/share/man/man7/"
+  echo "     man page <- iqmol.7.gz"
+fi
+
 #--------------------------------------------------------------------
 # 5. 启动包装脚本
 #--------------------------------------------------------------------
