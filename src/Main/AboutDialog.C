@@ -21,14 +21,15 @@
 ********************************************************************************/
 
 #include "AboutDialog.h"
-#include "../version.h"
+// NOTE: deliberately NOT ../version.h -- see the comment in CMakeLists.txt
+// (IQMOL_VERSION_STR / IQMOL_GIT_VERSION are passed in by CMake).
 
 namespace IQmol {
 
 AboutDialog::AboutDialog(QWidget* parent) : QDialog(parent) 
 {
    m_aboutDialog.setupUi(this);
-   m_aboutDialog.versionLabel->setText(IQMOL_VERSION);
+   m_aboutDialog.versionLabel->setText(IQMOL_VERSION_STR);
    m_aboutDialog.yearLabel->setText(IQMOL_YEAR);
    resize(sizeHint());
 }

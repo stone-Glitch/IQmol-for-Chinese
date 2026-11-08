@@ -33,11 +33,27 @@ namespace {
    const int    kProtocolVersion = 1;
    const char*  kServerName      = "iqmol-ctrl";
    const qint64 kMaxFrameBytes   = 1 << 20;   // 1 MiB: a command is never big
+
+   // A crashed instance can leave its socket behind. Binding over it is only
+   // safe if nobody is listening, otherwise we would steal a live instance's
+   // endpoint. Note QLocalServer::listen() would remove the stale file itself,
+   // so this check has to happen first.
+   bool socketIsStale(QString const& path)
+   {
+      if (!QFile::exists(path)) return true;
+      QLocalSocket probe;
+      probe.connectToServer(path);
+      if (probe.waitForConnected(300)) {
+         probe.disconnectFromServer();
+         return false;                     // somebody is alive on it
+      }
+      return true;
+   }
 }
 
 
 ControlServer::ControlServer(QObject* parent)
-   : QObject(parent), m_server(nullptr)
+   : QObject(parent), m_server(nullptr), m_bound(false)
 {
 }
 
@@ -109,10 +125,18 @@ bool ControlServer::start(QString* error)
    const QString endpoint = m_socketPath;
 #endif
 
-   // Do not inherit a dead socket from a crashed instance.
-   if (!m_socketPath.isEmpty() && QFile::exists(m_socketPath)) {
-      QLocalServer::removeServer(m_socketPath);
+   // Never evict a socket that is still bound, even if its path is gone (the
+   // file removed by hand, or a crashed owner): QLocalServer would recreate the
+   // path and silently drop the old listener, leaving a live app unreachable.
+   // Only an unbound leftover file is safe to remove.
+   if (!socketIsStale(m_socketPath)) {
+      if (error) {
+         *error = QString("another instance is already listening on %1")
+                     .arg(m_socketPath);
+      }
+      return false;
    }
+   QLocalServer::removeServer(m_socketPath);
 
    m_server = new QLocalServer(this);
    if (!m_server->listen(m_socketPath)) {
@@ -127,6 +151,8 @@ bool ControlServer::start(QString* error)
 
    connect(m_server, &QLocalServer::newConnection,
            this, &ControlServer::onNewConnection);
+
+   m_bound = true;
 
    m_token        = QUuid::createUuid().toString(QUuid::WithoutBraces);
    m_startedAt    = QDateTime::currentDateTimeUtc().toString(Qt::ISODate);
@@ -211,6 +237,12 @@ bool ControlServer::outputAllowed(const QString& path) const
 
 void ControlServer::stop()
 {
+   // Only unlink what this instance actually bound. Without the guard a second
+   // IQmol whose listen() failed would delete the *live* instance's socket on
+   // destruction, and a hand-written client with the right token would then
+   // start connecting to us instead of to the real owner.
+   if (!m_bound) return;
+
    if (m_server) {
       m_server->close();
       delete m_server;
@@ -224,6 +256,7 @@ void ControlServer::stop()
       m_endpointPath.clear();
    }
    m_buffers.clear();
+   m_bound = false;
 }
 
 
@@ -272,7 +305,10 @@ void ControlServer::onReadyRead()
    bool gotOne = true;
    while (gotOne) {
       const QByteArray frame = takeFrame(client, gotOne);
-      if (gotOne) handleFrame(client, frame);
+      // handleFrame may disconnect (bad token) and the socket then emits
+      // disconnected(); anything queued after that must not touch it again.
+      if (!gotOne || client->state() == QLocalSocket::UnconnectedState) break;
+      handleFrame(client, frame);
    }
 }
 
@@ -308,7 +344,12 @@ void ControlServer::handleFrame(QLocalSocket* client, const QByteArray& raw)
    QJsonValue id = QJsonValue(QString());
    if (doc.isObject()) {
       const QJsonValue candidate(doc.object().value("id"));
-      if (!candidate.isUndefined()) id = candidate;
+      // An object/array id would make every reply bigger than the request;
+      // fall back to null so the client still gets a well-formed answer.
+      if (candidate.isString() || candidate.isDouble() || candidate.isBool() ||
+          candidate.isNull()) {
+         id = candidate;
+      }
    }
 
    if (parseError.error != QJsonParseError::NoError || !doc.isObject()) {

@@ -29,7 +29,6 @@
 #include "Preferences.h"
 #include "QMsgBox.h"
 #include "QsLog.h"
-#include "version.h"
 #include <QDir>
 #include <QString>
 #include <QLibrary>
@@ -39,6 +38,7 @@
 #include <QEventLoop>
 #include <QJsonArray>
 #include <QJsonObject>
+#include <QRegularExpression>
 #include <QStandardPaths>
 #include <QLocalSocket>
 #include <QSplashScreen>
@@ -178,11 +178,9 @@ void IQmolApplication::onControlCommand(QLocalSocket* client, QJsonObject const&
 
       QJsonObject result;
       result["pid"]      = (qint64)QCoreApplication::applicationPid();
-      result["version"]  = IQMOL_VERSION;        // upstream src/version.h snapshot
-      result["tag"]      = GIT_VERSION;
-#ifdef IQMOL_PACKAGE_VERSION
-      result["packageVersion"] = QString(IQMOL_PACKAGE_VERSION);  // CMake PROJECT_VERSION
-#endif
+      result["version"]  = IQMOL_VERSION_STR;
+      result["tag"]      = IQMOL_GIT_VERSION;
+      result["packageVersion"] = QString(IQMOL_PACKAGE_VERSION);
       result["startedAt"] = m_controlServer->startedAt();
       // QSet iteration order is unspecified; sort so callers can diff/assert.
       QStringList commands(m_controlServer->allowedCommands().toList());
@@ -220,12 +218,17 @@ void IQmolApplication::onControlCommand(QLocalSocket* client, QJsonObject const&
 
       bool opened(false);
       QEventLoop loop;
-      QObject::connect(&mw->viewerModel(), &ViewerModel::fileOpened,
-         &loop, [&loop, &opened]() { opened = true; loop.quit(); });
+      QMetaObject::Connection conn = QObject::connect(&mw->viewerModel(),
+         &ViewerModel::fileOpened, &loop, [&loop, &opened]() {
+            opened = true; loop.quit();
+         });
       QTimer::singleShot(kLoadTimeoutMs, &loop, SLOT(quit()));
 
       mw->open(info.absoluteFilePath());
       loop.exec();
+      // The loop can be left by the timeout with the file still parsing; drop
+      // the connection so a later success does not fire into a dead lambda.
+      QObject::disconnect(conn);
 
       m_controlBusy = false;
 
@@ -242,7 +245,7 @@ void IQmolApplication::onControlCommand(QLocalSocket* client, QJsonObject const&
       return;
    }
 
-   // Snapshot: render the current scene to a PNG inside a confined directory.
+   // Snapshot: render the current scene to an image inside a confined directory.
    // Only the file name is taken from the request, never a path - the channel
    // must not be able to write anywhere the user did not already own.
    if (cmd == "snapshot") {
@@ -252,18 +255,37 @@ void IQmolApplication::onControlCommand(QLocalSocket* client, QJsonObject const&
          return;
       }
 
-      QString name(args.value("out").toString());
-      if (name.isEmpty()) name = "snapshot.png";
-      name = QFileInfo(name).fileName();            // drop any directory part
-      if (name.isEmpty() || name == "." || name == "..") {
-         fail("BAD_ARGS", "invalid file name");
+      const QJsonValue outValue(args.value("out"));
+      if (!outValue.isUndefined() && !outValue.isString()) {
+         fail("BAD_ARGS", "out must be a string");
          return;
       }
-      if (!name.endsWith(".png", Qt::CaseInsensitive) &&
-          !name.endsWith(".jpg", Qt::CaseInsensitive)) {
+      QString name(outValue.toString());
+      if (name.isEmpty()) name = "snapshot.png";
+      name = QFileInfo(name).fileName();            // drop any directory part
+      // The channel is reachable by every process of this user; restrict the
+      // name so one of them cannot clobber files the user made by hand.
+      static const QRegularExpression allowedName(
+         QStringLiteral("^[A-Za-z0-9][A-Za-z0-9._-]{0,59}\\.(png|jpg)$"),
+         QRegularExpression::CaseInsensitiveOption);
+      if (!allowedName.match(name).hasMatch()) {
          name += ".png";
+         if (!allowedName.match(name).hasMatch()) {
+            fail("BAD_ARGS",
+                 "out must be 1-60 chars of [A-Za-z0-9._-] followed by .png or .jpg");
+            return;
+         }
       }
 
+      // A non-numeric width/height would silently fall back to 0 and then be
+      // clamped to 64, so reject it explicitly instead.
+      for (const char* key : {"width", "height"}) {
+         const QJsonValue v(args.value(key));
+         if (!v.isUndefined() && !v.isDouble()) {
+            fail("BAD_ARGS", QString("%1 must be a number").arg(key));
+            return;
+         }
+      }
       const int width (qBound(64, args.value("width").toInt(1200), 4096));
       const int height(qBound(64, args.value("height").toInt(900), 4096));
 

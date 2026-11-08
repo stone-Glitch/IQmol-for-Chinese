@@ -39,7 +39,6 @@
 #include <QSysInfo>
 #include "Util/QsLog.h"
 #include "Util/QsLogDest.h"
-#include "version.h"
 #include <iostream>
 
 #ifdef Q_OS_WIN32
@@ -218,8 +217,8 @@ int main(int argc, char *argv[])
     }
 
     QLOG_INFO() << "---------- Session Started ----------";
-    QLOG_INFO() << "IQmol Version: " << IQMOL_VERSION;
-    QLOG_INFO() << "Tag:           " << GIT_VERSION;
+    QLOG_INFO() << "IQmol Version: " << IQMOL_VERSION_STR << "(package" << IQMOL_PACKAGE_VERSION << ")";
+    QLOG_INFO() << "Tag:           " << IQMOL_GIT_VERSION;
 /*
     QLOG_INFO() << "Platform:     " << QSysInfo::prettyProductName();
     QLOG_INFO() << "              " << QSysInfo::kernelType() << QSysInfo::kernelVersion()
