@@ -6,7 +6,7 @@
 
 本目录收录 **从源码到分发包的完整构建、打包、发布流程**，面向构建者与维护者。
 
-> 维护者：@stone-Glitch ｜ 最后整理：2026-10-18
+> 维护者：@stone-Glitch ｜ 最后整理：2026-11-14
 
 ---
 
@@ -22,16 +22,40 @@
 | 文件 | 内容 | 适用对象 |
 |---|---|---|
 | [`Linux分发包.md`](Linux分发包.md) | Linux 分发包的目录布局、插件规划与瘦身策略 | 打包者 |
-| [`release_notes.md`](release_notes.md) | v3.2.3-zh_CN 发布说明（新增功能、汉化范围、已知问题）+ **发布状态与校验和实况补记**（tag/Release 对齐） | 发布者 / 使用者 |
-| [`SHA256SUMS.txt`](SHA256SUMS.txt) | v3.2.3 Release 各分发包的 SHA-256 校验和（**最新 Release 为 v3.2.4.1，其校验和以 Release 页附件为准**） | 使用者 / 发布者 |
+| [`release_notes.md`](release_notes.md) | ★ **v3.2.4.1-zh_CN-r2 发布说明**，同时是 [`release.yml`](../../.github/workflows/release.yml) 的 `--notes-file` 真源：10 个控制命令、版本与打包变化、已知限制 | 发布者 / 使用者 |
+| [`SHA256SUMS.txt`](SHA256SUMS.txt) | **v3.2.4.1-zh_CN-r2 全资产校验和汇总**（Linux deb / tar.gz + Windows zip），本地维护副本，便于 `sha256sum -c` 核对 | 使用者 / 发布者 |
+
+> ⚠️ **校验和口径**：Release 页上的 `SHA256SUMS.txt` 由 `windows-mingw.yml` 最后上传，
+> 当前**只含 Windows zip 一行**（两个工作流用同名文件互相覆盖）。本目录的
+> `SHA256SUMS.txt` 是人工汇总的三资产副本；**权威性以 Release 页附件为准**。
+> 待后续 CI 调整：让两个工作流改用不同文件名，或让 Windows 工作流追加而非覆盖。
+
+## 三、CI 与发布
+
+| 工作流 | 触发 | 产出 |
+|---|---|---|
+| [`release.yml`](../../.github/workflows/release.yml) | push tag `v*-zh_CN*` / 手动 | ubuntu-24.04 现场编译 → `package_linux.sh` + `package_linux_deb.sh` → `sha256sum` → `gh release create` 上传 deb、tar.gz、校验和 |
+| [`windows-mingw.yml`](../../.github/workflows/windows-mingw.yml) | push main / tag `v*` / 手动 | Windows zip / 7z + 同名 `SHA256SUMS.txt`，打 tag 时附加到同一 Release |
+| [`ubuntu-2404.yml`](../../.github/workflows/ubuntu-2404.yml) | push / PR | x86_64、arm64 编译 + ctest |
+| [`i18n-tqa.yml`](../../.github/workflows/i18n-tqa.yml) | push / PR | 译文六维质量门禁 |
+| [`verify-replay.yml`](../../.github/workflows/verify-replay.yml) | push / PR | 干净上游树重放校验 |
+
+发布只需打 tag 并推送，CI 完成编译、打包与 Release 创建（runner 自带
+`GITHUB_TOKEN`，本机无需保存凭证）：
+
+```bash
+git tag -a v3.2.4.1-zh_CN-r3 -m "发布说明"
+git push origin v3.2.4.1-zh_CN-r3
+```
 
 ---
 
 ## 相关目录
 
 - 构建故障的诊断记录见 [`../验证记录/README.md`](../验证记录/README.md)。
+- 控制通道（10 个命令、冒烟脚本）见 [`../控制通道/控制通道集成说明.md`](../控制通道/控制通道集成说明.md)。
 - 上游升级迁移流程见 [`../汉化工程/上游升级迁移指南.md`](../汉化工程/上游升级迁移指南.md)。
 
 ---
 
-> 维护者：@stone-Glitch ｜ 最后整理：2026-10-18
+> 维护者：@stone-Glitch ｜ 最后整理：2026-11-14
