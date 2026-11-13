@@ -37,29 +37,38 @@
 |---|---|
 | `iqmol_3.2.4.1_amd64.deb` | Debian / Ubuntu x86_64 安装包，`sudo apt install ./...` |
 | `IQmol-linux-x86_64.tar.gz` | 解压即用：`tar xzf ... && ./IQmol-linux-x86_64/run.sh` |
-| `SHA256SUMS.txt` | 上述两个包的校验和 |
+| `SHA256SUMS-linux.txt` | Linux deb / tar.gz 两个包的校验和 |
+| `SHA256SUMS-windows.txt` | Windows zip 的校验和 |
+
+> 两个工作流各写各的校验和文件，避免同名附件互相覆盖：
+> `v3.2.4.1-zh_CN-r2` 及更早版本只有一个 `SHA256SUMS.txt`，且被后完成的
+> Windows 工作流覆盖，Linux 校验和丢失。该问题已在本版 CI 中修复，
+> **下次打 tag 发版起生效**。
 
 校验：
 
 ```bash
-sha256sum -c SHA256SUMS.txt
+sha256sum -c SHA256SUMS-linux.txt
 ```
 
 ## 已知限制
 
 - `surface` 只支持三种无需外部格点数据的伪密度面；轨道 / 电子密度面需要
   cube 数据，目前返回 `BAD_ARGS`；
-- `load` 是追加语义，多次加载后 IQmol 会把先前的 system 设为不可见；
+- `load` 默认仍为追加语义；批量场景请用 `clear` 或给 `load` 传
+  `"replace": true`（两者都走 GUI 同一条 `RemoveMolecule` 命令）；
 - 离屏（offscreen）环境下 3D 视图无法创建 GL 上下文，`snapshot` 需要真实或
   虚拟显示；软件渲染（llvmpipe）下偶见一次性几何伪影；
-- 仅实测 Linux x86_64 与 Windows x64；macOS 未构建验证；
+- 仅实测 Linux x86_64 与 Windows x64；macOS 工作流草案已合入，待 runner 验证；
 - Q-Chem 是独立第三方组件，其部分对话框仍为英文，不在本仓库汉化范围。
 
 ## 验证摘要
 
-Ubuntu + Xvfb 下对 deb 安装后的版本实测：界面中文完整、冒烟 22/22 通过、
-`frame` 切帧前后两次快照 MD5 不同、`surface vdw` 生成后表面数 1→2、
-`play`/`pause`/`stop` 的计时器状态 true/false/false、双开不会抢占存活实例的
+Ubuntu + Xvfb 下对 deb 安装后的版本实测：界面中文完整、冒烟 22/22 通过；
+本轮扩展后 **31/31 通过**，新增覆盖 `clear` 清场、`load --replace` 幂等、
+`render` 三帧 PNG 序列、`movie` 合成 mp4 及各类参数校验。
+此前还验证了 `frame` 切帧前后两次快照 MD5 不同、`surface vdw` 生成后表面数
+1→2、`play`/`pause`/`stop` 计时器 true/false/false、双开不抢占存活实例的
 控制通道、`man iqmol` 命中、卸载无残留。
 
 许可证 GPL-3.0，与上游一致。

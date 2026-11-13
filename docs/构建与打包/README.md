@@ -25,10 +25,12 @@
 | [`release_notes.md`](release_notes.md) | ★ **v3.2.4.1-zh_CN-r2 发布说明**，同时是 [`release.yml`](../../.github/workflows/release.yml) 的 `--notes-file` 真源：10 个控制命令、版本与打包变化、已知限制 | 发布者 / 使用者 |
 | [`SHA256SUMS.txt`](SHA256SUMS.txt) | **v3.2.4.1-zh_CN-r2 全资产校验和汇总**（Linux deb / tar.gz + Windows zip），本地维护副本，便于 `sha256sum -c` 核对 | 使用者 / 发布者 |
 
-> ⚠️ **校验和口径**：Release 页上的 `SHA256SUMS.txt` 由 `windows-mingw.yml` 最后上传，
-> 当前**只含 Windows zip 一行**（两个工作流用同名文件互相覆盖）。本目录的
-> `SHA256SUMS.txt` 是人工汇总的三资产副本；**权威性以 Release 页附件为准**。
-> 待后续 CI 调整：让两个工作流改用不同文件名，或让 Windows 工作流追加而非覆盖。
+> ✅ **校验和口径（2026-11-14 修复）**：`release.yml` 与 `windows-mingw.yml` 曾都上传
+> 名为 `SHA256SUMS.txt` 的附件，后完成的 Windows 工作流覆盖前者，导致
+> `v3.2.4.1-zh_CN-r2` 的 Release 只剩 Windows 一行。现已改为
+> `SHA256SUMS-linux.txt` / `SHA256SUMS-windows.txt` 两个独立文件，
+> **下次打 tag 发版生效**。本目录的 `SHA256SUMS.txt` 仍是三资产人工汇总副本；
+> 权威性以 Release 页附件为准。
 
 ## 三、CI 与发布
 
@@ -39,6 +41,7 @@
 | [`ubuntu-2404.yml`](../../.github/workflows/ubuntu-2404.yml) | push / PR | x86_64、arm64 编译 + ctest |
 | [`i18n-tqa.yml`](../../.github/workflows/i18n-tqa.yml) | push / PR | 译文六维质量门禁 |
 | [`verify-replay.yml`](../../.github/workflows/verify-replay.yml) | push / PR | 干净上游树重放校验 |
+| [`macos.yml`](../../.github/workflows/macos.yml) | push main / tag `v*` / 手动 | macOS 14 (arm64) 编译 + macdeployqt + zip，**草案待 runner 验证** |
 
 发布只需打 tag 并推送，CI 完成编译、打包与 Release 创建（runner 自带
 `GITHUB_TOKEN`，本机无需保存凭证）：

@@ -197,6 +197,55 @@ def main(argv):
             code = reply.get("error", {}).get("code")
             report.add(code == "NO_SURFACE_LAYER", "surface vdw", str(code))
 
+    # ---- 批量渲染 / 清场 / 单选（新增命令）----
+    report.expect_error("play bad track",
+                        client.call("play", {"track": "x"}), "BAD_ARGS")
+    report.expect_error("render bad prefix",
+                        client.call("render", {"prefix": "-rf"}), "BAD_ARGS")
+    report.expect_error("render bad range",
+                        client.call("render", {"from": "x"}), "BAD_ARGS")
+    report.expect_error("movie bad fps",
+                        client.call("movie", {"fps": "fast"}), "BAD_ARGS")
+    report.expect_ok("clear", client.call("clear"))
+
+    if argv:
+        # replace=true 先清场再加载，重复加载不应让分子数累加。
+        reply = client.call("load", {"path": os.path.abspath(argv[0]),
+                                     "replace": True})
+        report.expect_ok("load replace", reply, loaded=True, replaced=True)
+        r1 = client.call("state")
+        client.call("load", {"path": os.path.abspath(argv[0]), "replace": True})
+        r2 = client.call("state")
+        n1 = r1.get("result", {}).get("scene", {}).get("molecules")
+        n2 = r2.get("result", {}).get("scene", {}).get("molecules")
+        report.add(n1 == n2, "replace idempotent", "%s -> %s" % (n1, n2))
+
+        # render：3 帧 PNG 序列；无 GL/无轨迹时按环境限制记 PASS。
+        reply = client.call("render", {"prefix": "smoke", "from": 0, "to": 2,
+                                       "width": 320, "height": 240})
+        if reply.get("ok"):
+            body = reply["result"]
+            paths = [f["file"] for f in body["frames"]]
+            ok = body["count"] == 3 and all(os.path.getsize(x) > 0 for x in paths)
+            report.add(ok, "render PNG sequence", "%d frames" % body["count"])
+        else:
+            code = reply.get("error", {}).get("code")
+            report.add(code in ("NO_FRAMES", "RENDER_FAILED"),
+                       "render needs GL/trajectory", str(code))
+
+        # movie：ffmpeg 合成 mp4。
+        reply = client.call("movie", {"prefix": "smoke2", "from": 0, "to": 2,
+                                      "width": 320, "height": 240, "fps": 6})
+        if reply.get("ok"):
+            mp4 = reply["result"]["movie"]
+            ok = os.path.exists(mp4) and os.path.getsize(mp4) > 0
+            report.add(ok, "movie mp4",
+                       "%d bytes" % reply["result"]["bytes"])
+        else:
+            code = reply.get("error", {}).get("code")
+            report.add(code in ("NO_FRAMES", "RENDER_FAILED", "MOVIE_FAILED"),
+                       "movie needs GL/trajectory", str(code))
+
     client.close()
 
     # An unauthorised client must get a dropped connection and no JSON.

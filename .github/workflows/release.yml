@@ -51,12 +51,15 @@ jobs:
           bash scripts/package_linux.sh
           bash scripts/package_linux_deb.sh
 
+      # 按平台分文件命名：windows-mingw.yml 也会上传自己的校验和，若两边都叫
+      # SHA256SUMS.txt，后完成的工作流会覆盖前者（v3.2.4.1-zh_CN-r2 实测踩过：
+      # Release 附件只剩 Windows 一行，Linux 双包校验和丢失）。
       - name: 生成校验和
         run: |
           cd dist
-          sha256sum iqmol_*.deb IQmol-linux-x86_64.tar.gz > SHA256SUMS.txt
-          sha256sum -c SHA256SUMS.txt
-          cat SHA256SUMS.txt
+          sha256sum iqmol_*.deb IQmol-linux-x86_64.tar.gz > SHA256SUMS-linux.txt
+          sha256sum -c SHA256SUMS-linux.txt
+          cat SHA256SUMS-linux.txt
 
       - name: 创建 Release 并上传资产
         env:
@@ -67,5 +70,5 @@ jobs:
           gh release create "$TAG" \
             --title "IQmol 中文版 $TAG（控制通道完整版）" \
             --notes-file docs/构建与打包/release_notes.md \
-            dist/iqmol_*.deb dist/IQmol-linux-x86_64.tar.gz dist/SHA256SUMS.txt
+            dist/iqmol_*.deb dist/IQmol-linux-x86_64.tar.gz dist/SHA256SUMS-linux.txt
           gh release view "$TAG"

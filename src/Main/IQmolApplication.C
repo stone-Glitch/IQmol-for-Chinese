@@ -37,6 +37,8 @@
 #include "QMsgBox.h"
 #include "QsLog.h"
 #include <QDir>
+#include <QProcess>
+#include <QCoreApplication>
 #include <QString>
 #include <QLibrary>
 #include <QMessageBox>
@@ -225,7 +227,7 @@ void IQmolApplication::onControlCommand(QLocalSocket* client, QJsonObject const&
       result["packageVersion"] = QString(IQMOL_PACKAGE_VERSION);
       result["startedAt"] = m_controlServer->startedAt();
       // QSet iteration order is unspecified; sort so callers can diff/assert.
-      QStringList commands(m_controlServer->allowedCommands().toList());
+      QStringList commands(m_controlServer->allowedCommands().values());
       commands.sort();
       result["commands"] = QJsonArray::fromStringList(commands);
       result["scene"]    = scene;
@@ -256,6 +258,19 @@ void IQmolApplication::onControlCommand(QLocalSocket* client, QJsonObject const&
          return;
       }
 
+      // replace=true clears the scene first. Native MainWindow::open() appends
+      // a System and hides the previous one, so repeated loads otherwise leave
+      // a blank blue viewport - the single most common batch-render failure.
+      const bool replace(args.value("replace").toBool(false));
+      int cleared(0);
+      if (replace) {
+         // The scene tree holds Layer::Molecule directly under the root;
+         // systemList() is usually empty, so clear by molecule instead.
+         auto molecules(mw->viewerModel().moleculeList(false));
+         for (auto m : molecules) mw->viewerModel().removeMolecule(m);
+         cleared = molecules.size();
+      }
+
       m_controlBusy = true;
 
       bool opened(false);
@@ -282,6 +297,8 @@ void IQmolApplication::onControlCommand(QLocalSocket* client, QJsonObject const&
       QJsonObject result;
       result["path"]      = info.absoluteFilePath();
       result["loaded"]    = true;
+      result["replaced"]  = replace;
+      result["cleared"]   = cleared;
       result["molecules"] = mw->viewerModel().moleculeList(false).size();
       respond(result);
       return;
@@ -370,25 +387,51 @@ void IQmolApplication::onControlCommand(QLocalSocket* client, QJsonObject const&
          return;
       }
 
+      // Optional "track" selects one GeometryList instead of driving every
+      // animation layer in the scene.
+      const QJsonValue trackValue(args.value("track"));
+      if (!trackValue.isUndefined() && !trackValue.isDouble()) {
+         fail("BAD_ARGS", "track must be an integer");
+         return;
+      }
+      const bool singleTrack(!trackValue.isUndefined());
+      const int track(trackValue.toInt(0));
+
       const bool enable(cmd == "play");
       int affected(0);
 
       QList<Layer::Frequencies*> freqLayers(
          mw->viewerModel().controlFindLayers<Layer::Frequencies>(kSceneLayers));
-      for (Layer::Frequencies* f : freqLayers) {
-         f->setPlay(enable);
-         if (cmd == "stop") f->clearActiveMode();
-         ++affected;
+      // A track selector refers to a GeometryList only; leave frequency
+      // animations alone in that case.
+      if (!singleTrack) {
+         for (Layer::Frequencies* f : freqLayers) {
+            f->setPlay(enable);
+            if (cmd == "stop") f->clearActiveMode();
+            ++affected;
+         }
       }
 
       // GeometryList::setPlay/resetGeometry are protected slots; the meta
       // object ignores access control, so invoke by name rather than casting.
       QList<Layer::GeometryList*> geomLists(
          mw->viewerModel().controlFindLayers<Layer::GeometryList>(kSceneLayers));
-      for (Layer::GeometryList* g : geomLists) {
+      if (singleTrack) {
+         if (track < 0 || track >= geomLists.size()) {
+            fail("BAD_ARGS", QString("track must be 0..%1")
+                                .arg(geomLists.size() - 1));
+            return;
+         }
+         Layer::GeometryList* g(geomLists.at(track));
          QMetaObject::invokeMethod(g, "setPlay", Q_ARG(bool, enable));
          if (cmd == "stop") QMetaObject::invokeMethod(g, "resetGeometry");
          ++affected;
+      }else {
+         for (Layer::GeometryList* g : geomLists) {
+            QMetaObject::invokeMethod(g, "setPlay", Q_ARG(bool, enable));
+            if (cmd == "stop") QMetaObject::invokeMethod(g, "resetGeometry");
+            ++affected;
+         }
       }
 
       // play is started by the layers' pushAnimators(); but QGLViewer only
@@ -397,9 +440,11 @@ void IQmolApplication::onControlCommand(QLocalSocket* client, QJsonObject const&
       if (mw->viewer() && !enable) mw->viewer()->stopAnimation();
 
       QJsonObject result;
-      result["playing"]    = enable;
-      result["animations"] = affected;
-      result["timer"]      = mw->viewer() ? mw->viewer()->animationIsStarted() : false;
+      result["playing"]     = enable;
+      result["animations"]  = affected;
+      result["timer"]       = mw->viewer() ? mw->viewer()->animationIsStarted() : false;
+      result["singleTrack"] = singleTrack;
+      if (singleTrack) result["track"] = track;
       if (affected == 0) {
          result["hint"] = "no animation data in the current scene "
                           "(needs a frequency calculation or a geometry trajectory)";
@@ -527,6 +572,188 @@ void IQmolApplication::onControlCommand(QLocalSocket* client, QJsonObject const&
       result["iso"]      = iso;
       result["count"]    = surfaces.size();
       result["surfaces"] = surfaces;
+      respond(result);
+      return;
+   }
+
+   // ------------------------------------------------------------------
+   // clear: native MainWindow::open() appends a System and hides the previous
+   // one, so repeated loads end up with a blank viewport. removeSystem() is
+   // the same Command the GUI uses, so undo and the model tree stay valid.
+   // ------------------------------------------------------------------
+   if (cmd == "clear") {
+      MainWindow* mw(findMainWindow());
+      if (!mw) {
+         fail("NOT_READY", "main window is not up yet, retry in a moment");
+         return;
+      }
+      // The scene tree holds Layer::Molecule directly under the root; there
+      // is usually no Layer::System node, so systemList() comes back empty.
+      auto molecules(mw->viewerModel().moleculeList(false));
+      for (auto m : molecules) mw->viewerModel().removeMolecule(m);
+      QJsonObject result;
+      result["cleared"]   = molecules.size();
+      result["molecules"] = mw->viewerModel().moleculeList(false).size();
+      respond(result);
+      return;
+   }
+
+   // ------------------------------------------------------------------
+   // render / movie: walk a GeometryList and save each frame with the exact
+   // same saveImage() path snapshot uses. Everything lands in a confined
+   // $TMPDIR/iqmol-renders/<prefix>/ directory; movie additionally pipes the
+   // sequence through ffmpeg (optional tool, absent -> MOVIE_FAILED).
+   // ------------------------------------------------------------------
+   if (cmd == "render" || cmd == "movie") {
+      MainWindow* mw(findMainWindow());
+      if (!mw || !mw->viewer()) {
+         fail("NOT_READY", "main window is not up yet, retry in a moment");
+         return;
+      }
+      for (const char* key : {"from", "to", "track", "width", "height", "fps"}) {
+         const QJsonValue v(args.value(key));
+         if (!v.isUndefined() && !v.isDouble()) {
+            fail("BAD_ARGS", QString("%1 must be a number").arg(key));
+            return;
+         }
+      }
+      const QJsonValue prefixValue(args.value("prefix"));
+      if (!prefixValue.isUndefined() && !prefixValue.isString()) {
+         fail("BAD_ARGS", "prefix must be a string");
+         return;
+      }
+      QString prefix(prefixValue.toString("frame"));
+      prefix = QFileInfo(prefix).fileName();
+      static const QRegularExpression allowedPrefix(
+         QStringLiteral("^[A-Za-z0-9][A-Za-z0-9_-]{0,39}$"));
+      if (!allowedPrefix.match(prefix).hasMatch()) {
+         fail("BAD_ARGS", "prefix must be 1-40 chars of [A-Za-z0-9_-]");
+         return;
+      }
+
+      const int track(qMax(0, args.value("track").toInt(0)));
+      QList<Layer::GeometryList*> geomLists(
+         mw->viewerModel().controlFindLayers<Layer::GeometryList>(kSceneLayers));
+      if (geomLists.isEmpty()) {
+         fail("NO_FRAMES", "current scene has no geometry trajectory");
+         return;
+      }
+      if (track >= geomLists.size()) {
+         fail("BAD_ARGS", QString("track must be 0..%1")
+                             .arg(geomLists.size() - 1));
+         return;
+      }
+      Layer::GeometryList* g(geomLists.at(track));
+      const int count(g->rowCount());
+      if (count == 0) {
+         fail("NO_FRAMES", "geometry trajectory is empty");
+         return;
+      }
+
+      int from(qBound(0, args.value("from").toInt(0), count - 1));
+      int to  (qBound(0, args.value("to").toInt(count - 1), count - 1));
+      if (to < from) { int t(from); from = to; to = t; }
+      if (to - from > 299) {
+         fail("BAD_ARGS", "at most 300 frames per request");
+         return;
+      }
+      const int width (qBound(64, args.value("width").toInt(800), 4096));
+      const int height(qBound(64, args.value("height").toInt(600), 4096));
+      const int fps   (qBound(1, args.value("fps").toInt(12), 60));
+
+      QDir dir(QDir(QStandardPaths::writableLocation(QStandardPaths::TempLocation))
+               .filePath("iqmol-renders/" + prefix));
+      if (!dir.exists() && !dir.mkpath(".")) {
+         fail("RENDER_FAILED", QString("cannot create %1").arg(dir.absolutePath()));
+         return;
+      }
+      for (const QString& old :
+           dir.entryList(QStringList() << (prefix + "_*.png"), QDir::Files)) {
+         QFile::remove(dir.filePath(old));
+      }
+
+      m_controlBusy = true;   // keep a second request out while we drive frames
+      QJsonArray frames;
+      int index(0);
+      for (int f = from; f <= to; ++f, ++index) {
+         g->setCurrentGeometry((unsigned)f);
+         QCoreApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
+         QString name(QString("%1_%2.png").arg(prefix)
+                      .arg(index, 4, 10, QChar('0')));
+         QString path(dir.filePath(name));
+         QFile::remove(path);
+         mw->viewer()->saveImage(path, QSize(width, height), 96, 4);
+         QFileInfo out(path);
+         if (!out.exists() || out.size() == 0) {
+            m_controlBusy = false;
+            fail("RENDER_FAILED", QString("no image for frame %1").arg(f));
+            return;
+         }
+         QJsonObject o;
+         o["frame"] = f;
+         o["index"] = index;
+         o["file"]  = out.absoluteFilePath();
+         o["bytes"] = (qint64)out.size();
+         frames.append(o);
+      }
+      g->setCurrentGeometry((unsigned)from);
+      m_controlBusy = false;
+
+      QJsonObject result;
+      result["prefix"] = prefix;
+      result["track"]  = track;
+      result["from"]   = from;
+      result["to"]     = to;
+      result["count"]  = frames.size();
+      result["width"]  = width;
+      result["height"] = height;
+      result["dir"]    = dir.absolutePath();
+      result["frames"] = frames;
+
+      if (cmd == "movie") {
+         const QString outPath(dir.filePath(prefix + ".mp4"));
+         // Minimal ffmpeg builds (containers, CI images) often ship without
+         // libx264. Try H.264 first, then fall back to the universally
+         // available MPEG-4 Part 2 codec in the same mp4 container.
+         const QStringList codecs(QStringList() << "libx264" << "mpeg4");
+         bool ok(false);
+         QString errors;
+         QString used;
+         for (const QString& codec : codecs) {
+            QFile::remove(outPath);
+            QProcess ffmpeg;
+            QStringList fargs;
+            fargs << "-y" << "-loglevel" << "error"
+                  << "-framerate" << QString::number(fps)
+                  << "-start_number" << "0"
+                  << "-i" << dir.filePath(prefix + "_%04d.png")
+                  << "-c:v" << codec << "-pix_fmt" << "yuv420p"
+                  << "-vf" << "scale=trunc(iw/2)*2:trunc(ih/2)*2"
+                  << outPath;
+            ffmpeg.start("ffmpeg", fargs);
+            const bool ran(ffmpeg.waitForStarted(5000) &&
+                           ffmpeg.waitForFinished(180000) &&
+                           ffmpeg.exitStatus() == QProcess::NormalExit &&
+                           ffmpeg.exitCode() == 0);
+            errors += QString::fromUtf8(ffmpeg.readAllStandardError());
+            QFileInfo candidate(outPath);
+            if (ran && candidate.exists() && candidate.size() > 0) {
+               ok = true;
+               used = codec;
+               break;
+            }
+         }
+         QFileInfo movie(outPath);
+         if (!ok || !movie.exists() || movie.size() == 0) {
+            fail("MOVIE_FAILED", QString("ffmpeg failed: %1")
+               .arg(errors.trimmed()));
+            return;
+         }
+         result["movie"] = movie.absoluteFilePath();
+         result["bytes"] = (qint64)movie.size();
+         result["fps"]   = fps;
+         result["codec"] = used;
+      }
       respond(result);
       return;
    }

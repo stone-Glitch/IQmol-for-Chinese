@@ -66,8 +66,8 @@ ControlServer::~ControlServer()
 
 QSet<QString> ControlServer::allowedCommands()
 {
-   // All ten commands are wired up in IQmolApplication. A future headless
-   // batch-render PR may add "render"/"movie", but nothing here is a stub.
+   // All thirteen commands are wired up in IQmolApplication; nothing here is
+   // a stub. "render"/"movie" arrived with the headless batch follow-up.
    //
    // Anything not in this set is dropped without a reply - see rule 4 in the
    // header. Note what is deliberately absent: nothing here closes the app,
@@ -83,7 +83,10 @@ QSet<QString> ControlServer::allowedCommands()
         << "frame"          // {n: int, track: int}; without n = read-only query
         << "surface"        // {type: vdw|promolecule|sid, quality, iso}
         << "listSurfaces"
-        << "snapshot";      // {out: filename, width, height} - confined dir
+        << "snapshot"       // {out: filename, width, height} - confined dir
+        << "clear"          // remove all Systems (fixes load-append blank view)
+        << "render"         // {track, from, to, prefix} -> PNG sequence
+        << "movie";         // render + ffmpeg -> mp4
    return cmds;
 }
 
@@ -168,7 +171,7 @@ bool ControlServer::start(QString* error)
    info["startedAt"] = m_startedAt;
 
    QJsonArray cmds;
-   QStringList allowed(allowedCommands().toList());
+   QStringList allowed(allowedCommands().values());
    allowed.sort();                       // stable output, QSet order is unspecified
    for (const QString& c : allowed) cmds.append(c);
    info["commands"] = cmds;

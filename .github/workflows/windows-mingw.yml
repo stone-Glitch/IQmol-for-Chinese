@@ -215,13 +215,17 @@ jobs:
       - name: 列出打包产物
         run: ls -la dist/
 
+      # 按平台分文件命名：release.yml 上传 SHA256SUMS-linux.txt，两边同名会互相
+      # 覆盖（见该文件注释）。这里用独立文件名，Release 上两个校验和文件并存。
       - name: 生成校验和
         run: |
           cd dist
+          : > SHA256SUMS-windows.txt
           for f in *.7z *.zip; do
-            [ -f "$f" ] && sha256sum "$f" >> SHA256SUMS.txt
+            [ -f "$f" ] && sha256sum "$f" >> SHA256SUMS-windows.txt
           done
-          cat SHA256SUMS.txt || true
+          sha256sum -c SHA256SUMS-windows.txt
+          cat SHA256SUMS-windows.txt
 
       - name: 上传构建产物
         uses: actions/upload-artifact@v4
@@ -230,7 +234,7 @@ jobs:
           path: |
             dist/*.7z
             dist/*.zip
-            dist/SHA256SUMS.txt
+            dist/SHA256SUMS-windows.txt
           if-no-files-found: error
           retention-days: 30
 
@@ -241,7 +245,7 @@ jobs:
           files: |
             dist/*.7z
             dist/*.zip
-            dist/SHA256SUMS.txt
+            dist/SHA256SUMS-windows.txt
           fail_on_unmatched_files: false
           draft: false
         # 包已经产出并上传 artifact 了，挂 Release 只是"顺手多一个下载入口"。
