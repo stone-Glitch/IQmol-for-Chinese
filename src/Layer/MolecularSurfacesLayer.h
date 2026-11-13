@@ -52,6 +52,12 @@ namespace Layer {
       public:
          MolecularSurfaces(Layer::Molecule& molecule);
 
+         /// Synchronous entry point for the local control channel. The GUI
+         /// normally queues a request and waits for the configurator's
+         /// accepted() signal; a headless caller has no dialog to accept, so
+         /// it drives the queue directly. Must run on the GUI thread.
+         void requestSurface(Data::SurfaceInfo const& info);
+
       Q_SIGNALS:
          void progress(double);
          void softUpdate();

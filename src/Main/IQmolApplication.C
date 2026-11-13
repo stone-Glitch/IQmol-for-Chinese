@@ -24,6 +24,13 @@
 #include "MainWindow.h"
 #include "ControlServer.h"
 #include "ViewerModel.h"
+#include "Layer/Layer.h"
+#include "Layer/FrequenciesLayer.h"
+#include "Layer/GeometryListLayer.h"
+#include "Layer/MolecularSurfacesLayer.h"
+#include "Layer/SurfaceLayer.h"
+#include "Data/SurfaceInfo.h"
+#include "Data/SurfaceType.h"
 #include "JobMonitor.h"
 #include "ServerRegistry.h"
 #include "Preferences.h"
@@ -119,6 +126,37 @@ namespace {
       return 0;
    }
 
+   // Nested: layers live several levels below the system root (Molecule ->
+   // MolecularSurfaces -> Surface), so Children alone is not enough.
+   const unsigned kSceneLayers = Layer::Children | Layer::Nested;
+
+   QJsonArray describeSurfaces(MainWindow* mw)
+   {
+      QJsonArray out;
+      QList<Layer::Surface*> surfaces(
+         mw->viewerModel().controlFindLayers<Layer::Surface>(kSceneLayers));
+      for (Layer::Surface* s : surfaces) {
+         QJsonObject o;
+         o["name"]        = s->text();                       // translated
+         o["key"]         = s->data(Qt::UserRole).toString(); // stable English key
+         o["visible"]     = (s->checkState() == Qt::Checked);
+         o["area"]        = s->surfaceArea();
+         o["signed"]      = s->surfaceSigned();
+         o["hasProperty"] = s->surfaceHasProperty();
+         out.append(o);
+      }
+      return out;
+   }
+
+   QMap<QString, Data::SurfaceType::Kind> surfaceKinds()
+   {
+      QMap<QString, Data::SurfaceType::Kind> kinds;
+      kinds["vdw"]         = Data::SurfaceType::VanDerWaals;
+      kinds["promolecule"] = Data::SurfaceType::Promolecule;
+      kinds["sid"]         = Data::SurfaceType::SID;
+      return kinds;
+   }
+
 }
 
 
@@ -172,6 +210,10 @@ void IQmolApplication::onControlCommand(QLocalSocket* client, QJsonObject const&
       MainWindow* mw(findMainWindow());
       if (mw) {
          scene["molecules"] = mw->viewerModel().moleculeList(false).size();
+         scene["surfaces"]  = describeSurfaces(mw).size();
+         scene["tracks"]    = mw->viewerModel()
+            .controlFindLayers<Layer::GeometryList>(kSceneLayers).size();
+         scene["animating"] = mw->viewer() ? mw->viewer()->animationIsStarted() : false;
       }else {
          scene["windowReady"] = false;
       }
@@ -315,7 +357,180 @@ void IQmolApplication::onControlCommand(QLocalSocket* client, QJsonObject const&
       return;
    }
 
-   // Whitelisted for the view-control PR, but no viewer wiring in this build.
+   // ------------------------------------------------------------------
+   // Animation. There is no global "animator()" - animators are pushed into
+   // Viewer::m_animatorList by Frequency/GeometryList layers through the
+   // viewerModel's pushAnimators signal. So the honest way to control them is
+   // to drive those layers, and let them start/stop the QGLViewer timer.
+   // ------------------------------------------------------------------
+   if (cmd == "play" || cmd == "pause" || cmd == "stop") {
+      MainWindow* mw(findMainWindow());
+      if (!mw) {
+         fail("NOT_READY", "main window is not up yet, retry in a moment");
+         return;
+      }
+
+      const bool enable(cmd == "play");
+      int affected(0);
+
+      QList<Layer::Frequencies*> freqLayers(
+         mw->viewerModel().controlFindLayers<Layer::Frequencies>(kSceneLayers));
+      for (Layer::Frequencies* f : freqLayers) {
+         f->setPlay(enable);
+         if (cmd == "stop") f->clearActiveMode();
+         ++affected;
+      }
+
+      // GeometryList::setPlay/resetGeometry are protected slots; the meta
+      // object ignores access control, so invoke by name rather than casting.
+      QList<Layer::GeometryList*> geomLists(
+         mw->viewerModel().controlFindLayers<Layer::GeometryList>(kSceneLayers));
+      for (Layer::GeometryList* g : geomLists) {
+         QMetaObject::invokeMethod(g, "setPlay", Q_ARG(bool, enable));
+         if (cmd == "stop") QMetaObject::invokeMethod(g, "resetGeometry");
+         ++affected;
+      }
+
+      // play is started by the layers' pushAnimators(); but QGLViewer only
+      // stops its timer when the last animator is popped. If several layers
+      // are animating, pause must stop the loop explicitly.
+      if (mw->viewer() && !enable) mw->viewer()->stopAnimation();
+
+      QJsonObject result;
+      result["playing"]    = enable;
+      result["animations"] = affected;
+      result["timer"]      = mw->viewer() ? mw->viewer()->animationIsStarted() : false;
+      if (affected == 0) {
+         result["hint"] = "no animation data in the current scene "
+                          "(needs a frequency calculation or a geometry trajectory)";
+      }
+      respond(result);
+      return;
+   }
+
+   // frame: setCurrentGeometry() indexes the GeometryList's child rows, so
+   // rowCount() (not the data list size) is the valid index space here.
+   // Without "n" this is a read-only query that reports every trajectory.
+   if (cmd == "frame") {
+      MainWindow* mw(findMainWindow());
+      if (!mw) {
+         fail("NOT_READY", "main window is not up yet, retry in a moment");
+         return;
+      }
+      const QJsonValue nValue(args.value("n"));
+      const bool setFrame(!nValue.isUndefined());
+      if (setFrame && !nValue.isDouble()) {
+         fail("BAD_ARGS", "n must be an integer");
+         return;
+      }
+      const QJsonValue trackValue(args.value("track"));
+      if (!trackValue.isUndefined() && !trackValue.isDouble()) {
+         fail("BAD_ARGS", "track must be an integer");
+         return;
+      }
+      const int track(qBound(0, trackValue.toInt(0), 10000));
+
+      QList<Layer::GeometryList*> geomLists(
+         mw->viewerModel().controlFindLayers<Layer::GeometryList>(kSceneLayers));
+      if (geomLists.isEmpty()) {
+         fail("NO_FRAMES", "current scene has no geometry trajectory");
+         return;
+      }
+
+      QJsonArray tracks;
+      for (Layer::GeometryList* gl : geomLists) tracks.append(gl->rowCount());
+
+      QJsonObject result;
+      result["tracks"] = tracks;
+      result["count"]  = tracks.size();
+      if (!setFrame) { respond(result); return; }
+
+      if (track >= geomLists.size()) {
+         fail("BAD_ARGS", QString("track must be 0..%1")
+                             .arg(geomLists.size() - 1));
+         return;
+      }
+      Layer::GeometryList* g(geomLists.at(track));
+      const int count(g->rowCount());
+      if (count == 0) {
+         fail("NO_FRAMES", "geometry trajectory is empty");
+         return;
+      }
+      const int requested(nValue.toInt());
+      const int frame(qBound(0, requested, count - 1));
+      g->setCurrentGeometry((unsigned)frame);
+
+      result["track"]     = track;
+      result["frame"]     = frame;
+      result["frames"]    = count;
+      result["requested"] = requested;
+      if (frame != requested) result["clamped"] = true;
+      respond(result);
+      return;
+   }
+
+   if (cmd == "listSurfaces") {
+      MainWindow* mw(findMainWindow());
+      if (!mw) {
+         fail("NOT_READY", "main window is not up yet, retry in a moment");
+         return;
+      }
+      QJsonArray surfaces(describeSurfaces(mw));
+      QJsonObject result;
+      result["surfaces"] = surfaces;
+      result["count"]    = surfaces.size();
+      respond(result);
+      return;
+   }
+
+   // surface: the three pseudo densities that need no external cube/grid data.
+   // Orbital/density surfaces require a Grid evaluator and stay unsupported.
+   if (cmd == "surface") {
+      MainWindow* mw(findMainWindow());
+      if (!mw) {
+         fail("NOT_READY", "main window is not up yet, retry in a moment");
+         return;
+      }
+      const QString type(args.value("type").toString().toLower());
+      const QMap<QString, Data::SurfaceType::Kind> kinds(surfaceKinds());
+      if (!kinds.contains(type)) {
+         fail("BAD_ARGS", "type must be one of vdw, promolecule, sid "
+                          "(orbital/density need grid data and are unsupported)");
+         return;
+      }
+      for (const char* key : {"quality", "iso"}) {
+         if (!args.value(key).isUndefined() && !args.value(key).isDouble()) {
+            fail("BAD_ARGS", QString("%1 must be a number").arg(key));
+            return;
+         }
+      }
+      const unsigned quality(static_cast<unsigned>(
+         qBound(0, args.value("quality").toInt(3), 5)));
+      const double iso(args.value("iso").toDouble(0.02));
+
+      QList<Layer::MolecularSurfaces*> parents(
+         mw->viewerModel().controlFindLayers<Layer::MolecularSurfaces>(kSceneLayers));
+      if (parents.isEmpty()) {
+         fail("NO_SURFACE_LAYER", "no molecule with atoms in the current scene");
+         return;
+      }
+
+      Data::SurfaceInfo info(Data::SurfaceType(kinds.value(type)), quality, iso);
+      m_controlBusy = true;
+      parents.first()->requestSurface(info);
+      m_controlBusy = false;
+
+      QJsonArray surfaces(describeSurfaces(mw));
+      QJsonObject result;
+      result["type"]     = type;
+      result["quality"]  = static_cast<int>(quality);
+      result["iso"]      = iso;
+      result["count"]    = surfaces.size();
+      result["surfaces"] = surfaces;
+      respond(result);
+      return;
+   }
+
    fail("NOT_IMPLEMENTED", "this command is not wired up in this build");
 }
 

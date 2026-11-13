@@ -66,8 +66,8 @@ ControlServer::~ControlServer()
 
 QSet<QString> ControlServer::allowedCommands()
 {
-   // PR2: view control. PR3 (headless batch render) will add "render" and
-   // "movie".
+   // All ten commands are wired up in IQmolApplication. A future headless
+   // batch-render PR may add "render"/"movie", but nothing here is a stub.
    //
    // Anything not in this set is dropped without a reply - see rule 4 in the
    // header. Note what is deliberately absent: nothing here closes the app,
@@ -77,11 +77,11 @@ QSet<QString> ControlServer::allowedCommands()
    cmds << "ping"
         << "load"
         << "state"
-        << "play"           // {what: "vibration"|"reaction"|"optimization"}
+        << "play"           // drives Frequencies / GeometryList layers
         << "pause"
         << "stop"
-        << "frame"          // {n: int}
-        << "surface"        // {type:"orbital"|"density", index, iso}
+        << "frame"          // {n: int, track: int}; without n = read-only query
+        << "surface"        // {type: vdw|promolecule|sid, quality, iso}
         << "listSurfaces"
         << "snapshot";      // {out: filename, width, height} - confined dir
    return cmds;
