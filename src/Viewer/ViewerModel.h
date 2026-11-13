@@ -85,8 +85,17 @@ namespace IQmol {
 
          Qt::DropActions supportedDropActions() const;
          QStringList mimeTypes () const;
-         bool dropMimeData(QMimeData const* data, Qt::DropAction action, int row, 
+         bool dropMimeData(QMimeData const* data, Qt::DropAction action, int row,
             int column, const QModelIndex & parent);
+
+         /// Public read-only view of the scene tree for the local control
+         /// channel. The generic findLayers() is private (GUI internals), so
+         /// expose one explicit forwarding entry point instead of a friend.
+         template <class T>
+         QList<T*> controlFindLayers(unsigned int flags)
+         {
+            return findLayers<T>(flags);
+         }
 
       public Q_SLOTS:
 		 /// Wrapper that creates a new Molecule and sets the Viewer in a 

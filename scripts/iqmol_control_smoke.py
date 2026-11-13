@@ -160,7 +160,24 @@ def main(argv):
                         client.call("snapshot", {"out": "x.png", "width": "big"}),
                         "BAD_ARGS")
 
+    # View-control commands. These checks only rely on the protocol, so they
+    # pass even when the scene is empty (no GL / no loaded structure).
+    report.expect_ok("listSurfaces", client.call("listSurfaces"))
+    report.expect_error("surface bad type",
+                        client.call("surface", {"type": "orbital"}), "BAD_ARGS")
+    report.expect_error("surface bad quality",
+                        client.call("surface", {"type": "vdw", "quality": "high"}),
+                        "BAD_ARGS")
+    report.expect_ok("play", client.call("play"))
+    report.expect_ok("pause", client.call("pause"))
+    report.expect_ok("stop", client.call("stop"))
+    report.expect_error("frame bad n",
+                        client.call("frame", {"n": "x"}), "BAD_ARGS")
+    report.expect_error("frame bad track",
+                        client.call("frame", {"n": 0, "track": "x"}), "BAD_ARGS")
 
+    # With a loaded structure, request a real vdW surface and confirm the
+    # surface list grows. TOO_SLOW on large files, so quality=0.
     for sample in argv:
         started = time.time()
         reply = client.call("load", {"path": os.path.abspath(sample)})
@@ -170,6 +187,15 @@ def main(argv):
     if argv:
         reply = client.call("state")
         report.expect_ok("state after load", reply)
+        before = reply.get("result", {}).get("scene", {}).get("surfaces", -1)
+        reply = client.call("surface", {"type": "vdw", "quality": 0, "iso": 1.0})
+        if reply.get("ok"):
+            after = reply["result"]["count"]
+            report.add(after > before, "surface vdw generated",
+                       "%d -> %d surfaces" % (before, after))
+        else:
+            code = reply.get("error", {}).get("code")
+            report.add(code == "NO_SURFACE_LAYER", "surface vdw", str(code))
 
     client.close()
 

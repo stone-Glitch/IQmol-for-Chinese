@@ -68,6 +68,12 @@ namespace IQmol {
             void setComponent(Component*);
             void setCheckStatus(Qt::CheckState const);
 
+            /// Read-only introspection for the local control channel. The
+            /// underlying Data::Surface accessors are protected here.
+            double surfaceArea()   const { return area(); }
+            bool   surfaceSigned() const { return isSigned(); }
+            bool   surfaceHasProperty() const { return hasProperty(); }
+
          protected:
             void setColors(QList<QColor> const& colors, bool const blend);
             void setColors(QColor const& negative, QColor const& positive);

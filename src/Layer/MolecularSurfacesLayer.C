@@ -59,9 +59,16 @@ MolecularSurfaces::MolecularSurfaces(Layer::Molecule& molecule) : Base(tr("Surfa
 }
 
 
-void MolecularSurfaces::addToQueue(Data::SurfaceInfo const& info) 
-{ 
-   m_surfaceInfoQueue.append(info); 
+void MolecularSurfaces::requestSurface(Data::SurfaceInfo const& info)
+{
+   addToQueue(info);
+   processSurfaceQueue();
+}
+
+
+void MolecularSurfaces::addToQueue(Data::SurfaceInfo const& info)
+{
+   m_surfaceInfoQueue.append(info);
 }
 
 
