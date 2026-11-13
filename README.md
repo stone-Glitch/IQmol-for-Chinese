@@ -5,7 +5,8 @@ IQmol version 3
 
 > 📌 **本仓库 = IQmol3 官方版 + 简体中文全面本地化**
 > 上游原版：[nutjunkie/IQmol3](https://github.com/nutjunkie/IQmol3)
-> **当前版本：v3.2.4.1-zh_CN**（2026-10-03）—— 单一权威版本号，`CMakeLists` / `sbom.json` / README / Release tag 均以此为口径。
+> **当前版本：3.2.4.1**（`CMakeLists.txt` 的 `PROJECT_VERSION` 是唯一权威口径；运行时版本由 CMake 在配置时 `git describe` 生成，见 [`docs/仓库结构.md`](docs/仓库结构.md)）。
+> **最新发布：[v3.2.4.1-zh_CN-r2](https://github.com/stone-Glitch/IQmol-for-Chinese/releases/tag/v3.2.4.1-zh_CN-r2)**（2026-11-13，控制通道完整版；Linux deb / tar.gz + Windows zip）。
 >
 > **文档导航**
 >
@@ -15,6 +16,8 @@ IQmol version 3
 > | 了解目录结构、代码模块、汉化文件在哪 | [docs/仓库结构.md](docs/仓库结构.md) |
 > | 找其它文档（汉化 / 审校 / 验证记录） | [docs/README.md](docs/README.md) |
 > | Linux 解压即用分发包 | [docs/构建与打包/Linux分发包.md](docs/构建与打包/Linux分发包.md) |
+> | 用外部程序控制 IQmol（本地控制通道 10 命令） | [docs/控制通道/控制通道集成说明.md](docs/控制通道/控制通道集成说明.md) |
+> | 查看最新发布说明 / 校验和 | [docs/构建与打包/release_notes.md](docs/构建与打包/release_notes.md) |
 > | 子模块下载不动（国内网络） | 本文「子模块离线包」章节 |
 > | 学会用这个软件 | [中文用户手册](doc/IQmolUserGuide.pdf)（34 页） |
 > | 维护/更新翻译 | 本文「简体中文本地化」章节 + `scripts/update_translations.sh` |
