@@ -1,107 +1,65 @@
-# IQmol 简体中文本地化版 v3.2.3-zh_CN
+# IQmol 中文版 3.2.4.1 — 控制通道完整版
 
-> 基于上游 [nutjunkie/IQmol3](https://github.com/nutjunkie/IQmol3) **v3.2.3**（commit `94356ab`）的简体中文本地化衍生版本。
-> 汉化仅覆盖**界面 / 帮助 / Q-Chem 关键词文案**；上游的计算功能、SSH 实现、文件解析未做改动。
+基于上游 IQmol 3.2.3 的简体中文本地化版本。本版在既有全界面汉化基础上，
+补齐了 **Linux 分发包** 与 **本地控制通道**：外部程序（例如化学可视化插件）
+无需模拟鼠标，即可查询状态、加载分子、播放动画、切换帧、生成表面并抓取快照。
 
-## ✨ 本版亮点
+## 本版变化
 
-- **界面全量汉化**：`translations/zh_CN.ts` 共 **2125 条**翻译、**155 个 context**、`0 unfinished`；构建时由 CMake 自动调用 `lrelease` 生成 `zh_CN.qm`。
-- **Windows 预编译包**：解压即用，含 `IQmol.exe`、Qt 运行库与 900+ 依赖 DLL，无需自行编译。
-- **Linux 预编译包**：`x86_64` 解压即用，自带 Qt5 / OpenBabel / OpenMesh / QGLViewer 等全部依赖，不污染系统。
-- **中文用户手册**：仓库 `doc/IQmolUserGuide.pdf`（34 页，全中文）。
-- **中文界面截图集**：`dialog_screenshots/`（顶层核心对话框 + 全量 81 个 `.ui` + 多卡片界面）。
-- **国内网络友好**：提供子模块离线包，跳过 `git submodule update` 的断连噩梦。
+### 控制通道：10 个命令全部接通
 
-## 📦 下载
+通道是本机 Unix domain socket（Windows 为命名管道），每进程随机 token 写入
+0600 发现文件，命令走白名单；token 错误的连接直接断开、不回任何内容。
 
-| 附件 | 大小 | 适用平台 | 说明 |
-|---|---|---|---|
-| `IQmol-win64-3.2.3-zh_CN.zip` | ~53 MB | Windows 64 位 | 解压即用，含全部运行库 |
-| `IQmol-linux-x86_64.tar.gz` | ~40 MB | Linux x86_64 | 解压即用（`glibc 2.35+`） |
-| `SHA256SUMS.txt` | <1 KB | — | 上述文件的 SHA256 校验和 |
+| 类别 | 命令 | 说明 |
+|---|---|---|
+| 基础 | `ping` / `state` | 状态、版本、场景分子数/表面数/轨迹数/动画状态 |
+| 加载 | `load` | 等 `fileOpened` 信号或 20 秒超时后再回复 |
+| 快照 | `snapshot` | 离屏渲染 PNG，写入受限目录，路径逃逸无效 |
+| 动画 | `play` / `pause` / `stop` | 驱动 Frequencies / GeometryList 层 |
+| 帧 | `frame` | 只读查询各轨迹帧数，或按 `track` 切帧 |
+| 表面 | `surface` / `listSurfaces` | 生成 vdW / 原分子 / SID 伪密度面并列出中文名 |
 
-> 子模块离线包（源码构建用）与更多说明见仓库 [`submodules-package/`](https://github.com/stone-Glitch/IQmol-for-Chinese/tree/main/submodules-package)。
+协议细节与真实接口适配说明见仓库 `docs/控制通道/控制通道集成说明.md`。
 
-### 校验下载完整性
+### 版本与打包
 
-```bash
-# Linux / macOS
-sha256sum -c SHA256SUMS.txt
+- 版本号由 CMake 在配置时用 `git describe` 生成，「关于」对话框、日志、
+  控制通道三处一致，不再依赖停滞的 `src/version.h` 快照；
+- deb 补装 `man iqmol`；FHS 布局 `/usr/bin/iqmol`、`/usr/lib/iqmol/`、
+  `/usr/share/iqmol/`；
+- 包内含应用与 Qt 两套中文翻译，随包运行库自收集，不依赖系统 Qt；
+- 冒烟脚本 `scripts/iqmol_control_smoke.py` 共 22 项断言。
 
-# Windows PowerShell
-Get-FileHash .\IQmol-win64-3.2.3-zh_CN.zip -Algorithm SHA256
-```
+## 下载
 
-## 🚀 快速开始
-
-**Windows**
-
-1. 解压 `IQmol-win64-3.2.3-zh_CN.zip`；
-2. 双击 `IQmol.exe` 启动。免安装，不写注册表。
-
-**Linux**
-
-```bash
-tar xzf IQmol-linux-x86_64.tar.gz
-cd IQmol-linux-x86_64
-./run.sh                 # 启动
-./run.sh 分子文件.xyz     # 启动并打开指定文件
-```
-
-## 📖 文档
-
-| 你想做什么 | 看这里 |
+| 文件 | 说明 |
 |---|---|
-| 编译（Windows / Linux / macOS）、部署、排错 | [`docs/构建与打包/构建与部署指南.md`](https://github.com/stone-Glitch/IQmol-for-Chinese/blob/main/docs/构建与打包/构建与部署指南.md) |
-| 了解目录结构、汉化文件在哪 | [`docs/仓库结构.md`](https://github.com/stone-Glitch/IQmol-for-Chinese/blob/main/docs/仓库结构.md) |
-| 全部文档索引 | [`docs/README.md`](https://github.com/stone-Glitch/IQmol-for-Chinese/blob/main/docs/README.md) |
-| 参与贡献 / 报告翻译问题 | [CONTRIBUTING.md](https://github.com/stone-Glitch/IQmol-for-Chinese/blob/main/CONTRIBUTING.md) |
-| 报告安全漏洞（请勿公开） | [SECURITY.md](https://github.com/stone-Glitch/IQmol-for-Chinese/blob/main/SECURITY.md) |
+| `iqmol_3.2.4.1_amd64.deb` | Debian / Ubuntu x86_64 安装包，`sudo apt install ./...` |
+| `IQmol-linux-x86_64.tar.gz` | 解压即用：`tar xzf ... && ./IQmol-linux-x86_64/run.sh` |
+| `SHA256SUMS.txt` | 上述两个包的校验和 |
 
-## ⚠️ 已知问题（源自上游）
+校验：
 
-> 本节所列问题**源自 IQmol 上游本身**，并非本汉化引入。完整列表见 [README](https://github.com/stone-Glitch/IQmol-for-Chinese/blob/main/README.md#已知问题源自上游)。
+```bash
+sha256sum -c SHA256SUMS.txt
+```
 
-- **部分运行期字符串仍为英文**：上游源码中未被 `tr()` 包裹的字符串无法被翻译体系识别，会保持英文显示。
-- **帮助文档部分内嵌截图为英文**：`doc/IQmolUserGuide.*` 的部分配图为上游英文截图，汉化尚未重渲染（计划下个版本处理）。
-- **MinGW-w64 为唯一验证的 Windows 工具链**：MSVC 路径未验证、未支持。
+## 已知限制
 
-## 📄 许可
+- `surface` 只支持三种无需外部格点数据的伪密度面；轨道 / 电子密度面需要
+  cube 数据，目前返回 `BAD_ARGS`；
+- `load` 是追加语义，多次加载后 IQmol 会把先前的 system 设为不可见；
+- 离屏（offscreen）环境下 3D 视图无法创建 GL 上下文，`snapshot` 需要真实或
+  虚拟显示；软件渲染（llvmpipe）下偶见一次性几何伪影；
+- 仅实测 Linux x86_64 与 Windows x64；macOS 未构建验证；
+- Q-Chem 是独立第三方组件，其部分对话框仍为英文，不在本仓库汉化范围。
 
-IQmol 遵循 **GNU General Public License v3**。本包为 GPL 衍生作品，同样遵循 **GPLv3**。
-第三方依赖许可证清单见 [`THIRD_PARTY_LICENSES.md`](https://github.com/stone-Glitch/IQmol-for-Chinese/blob/main/THIRD_PARTY_LICENSES.md)。
+## 验证摘要
 
-> Qt 静态 / 捆绑说明：Windows 包为「双击即用」采用捆绑 / 静态链接 Qt，请按 Qt LGPL-3.0 或 GPL 条款评估合规。
+Ubuntu + Xvfb 下对 deb 安装后的版本实测：界面中文完整、冒烟 22/22 通过、
+`frame` 切帧前后两次快照 MD5 不同、`surface vdw` 生成后表面数 1→2、
+`play`/`pause`/`stop` 的计时器状态 true/false/false、双开不会抢占存活实例的
+控制通道、`man iqmol` 命中、卸载无残留。
 
-## 🙏 致谢
-
-- 上游作者 **Andrew Gilbert** 及 [nutjunkie/IQmol3](https://github.com/nutjunkie/IQmol3) 项目
-- 所有第三方库作者（OpenBabel、OpenMesh、libQGLViewer、Qt 等，详见 `THIRD_PARTY_LICENSES.md`）
-
----
-
-## 📌 发布状态与校验和（2026-10-11 实况补记）
-
-> 本节为**对仓库实际发布状态的核对记录**，用于消除"文档写 3.2.3、实际发到 3.2.4.1"的口径歧义。
-
-**Git 标签（tags）**
-
-| tag | 指向提交 | 说明 |
-|---|---|---|
-| `v3.2.3-zh_CN` | `61a5cd6` | 首发版本 |
-| `v3.2.4-zh_CN` | `fdc87cb` | **含 F1 修复**（历史记录面板 / 撤销栈 9 处操作名硬编码英文）｜**无对应 Release**（仅 tag） |
-| `v3.2.4.1-zh_CN` | `63f018a` | 修 Release 403（补 `contents: write` 权限声明）+ 封面数字脚本化 |
-
-**GitHub Release（经 `api.github.com` 实测）**
-
-| Release | 状态 | 附件 |
-|---|---|---|
-| `v3.2.3-zh_CN` | 已发布 | `IQmol-linux-x86_64.tar.gz`、`IQmol-win64-3.2.3-zh_CN.zip`、`SHA256SUMS.txt` |
-| `v3.2.4.1-zh_CN` | **已发布（当前最新）** | `IQmol-win64-3.2.3-zh_CN.zip`、`IQmol-win64-3.2.3-zh_CN.7z`、`SHA256SUMS.txt` |
-
-> ⚠️ **两处口径须知**（不影响功能，属发布卫生）：
-> 1. **最新 Release 是 `v3.2.4.1-zh_CN`，但附件文件名仍叫 `...3.2.3...zip`**——包内容为最新源码所出，只是未随 tag 改名。
-> 2. 本仓库内 `SHA256SUMS.txt` 记录的是 **v3.2.3 Release** 的两个文件校验和；`v3.2.4.1` Release 的 `SHA256SUMS.txt` 以**该 Release 页附件为准**（`docs/` 内副本未同步）。
->
-> 后续若要彻底消除歧义：在 `package_windows.sh` / `package_linux.sh` 里把版本号参数化（从 tag 注入），重新发一版命名正确的 Release 即可。
-
+许可证 GPL-3.0，与上游一致。

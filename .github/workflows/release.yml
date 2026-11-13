@@ -1,0 +1,71 @@
+name: 发布 Release（Linux 包）
+
+# 与 build 工作流分开：只有打 zh_CN tag 时才打包并发布，避免每次 push 都
+# 跑一遍 40MB 的自收集流程。runner 自带 GITHUB_TOKEN，无需本地凭据。
+on:
+  push:
+    tags:
+      - 'v*-zh_CN*'
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 要发布的 tag（如 v3.2.4.1-zh_CN-r2）
+        required: true
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    name: 打包并发布 Linux 产物
+    runs-on: ubuntu-24.04
+    steps:
+      - name: 检出源码
+        uses: actions/checkout@v4.2.2
+        with:
+          fetch-depth: 0
+
+      - name: 安装 Fortran
+        uses: fortran-lang/setup-fortran@v1
+
+      - name: 安装构建与打包依赖
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gfortran libarchive-dev librust-bzip2-dev \
+            liblzma-dev libb2-dev libssh2-1-dev libqglviewer-dev-qt5 \
+            libopenmesh-dev libyaml-cpp-dev libopenbabel-dev \
+            libboost-iostreams-dev libboost-serialization-dev qtbase5-dev \
+            qttools5-dev qttools5-dev-tools libqt5opengl5-dev \
+            libqt5sql5-sqlite qttranslations5-l10n dpkg-dev
+          sudo ln -sfn /usr/include/openbabel3/openbabel /usr/include/
+          sudo ln -sfn /usr/lib/x86_64-linux-gnu/libQGLViewer-qt5.so \
+                       /usr/lib/x86_64-linux-gnu/libQGLViewer.so
+
+      - name: 编译 Release
+        run: |
+          cmake -B build -DCMAKE_BUILD_TYPE=Release
+          cmake --build build -j4
+
+      - name: 生成 Linux 分发包
+        run: |
+          bash scripts/package_linux.sh
+          bash scripts/package_linux_deb.sh
+
+      - name: 生成校验和
+        run: |
+          cd dist
+          sha256sum iqmol_*.deb IQmol-linux-x86_64.tar.gz > SHA256SUMS.txt
+          sha256sum -c SHA256SUMS.txt
+          cat SHA256SUMS.txt
+
+      - name: 创建 Release 并上传资产
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TAG="${{ github.event.inputs.tag || github.ref_name }}"
+          echo "发布 tag: $TAG"
+          gh release create "$TAG" \
+            --title "IQmol 中文版 $TAG（控制通道完整版）" \
+            --notes-file docs/构建与打包/release_notes.md \
+            dist/iqmol_*.deb dist/IQmol-linux-x86_64.tar.gz dist/SHA256SUMS.txt
+          gh release view "$TAG"
