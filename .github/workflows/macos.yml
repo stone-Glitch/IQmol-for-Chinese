@@ -135,6 +135,174 @@ jobs:
           fi
           grep -n 'NOT TARGET uninstall' "$OB"
 
+      - name: 应用 Darwin C++17 兼容补丁（std::binary_function）
+        # OpenBabel 3.1.1 的 CharPtrLess(plugin.h:41)、InchiLess(inchiformat.h:134)、
+        # Order(src/ops/sort.cpp:32) 均继承 std::binary_function。该模板在 C++17 已
+        # 被标准移除：Linux 的 libstdc++ 仍以 deprecated 形式保留，而 libc++（macOS）
+        # 严格执行移除，故 plugin.h:41 报
+        #   error: no template named 'binary_function' in namespace 'std'
+        # 这三个 functor 只提供 operator()，被 std::map / std::set / std::sort 使用，
+        # 不依赖 binary_function 的 first_argument_type 等 typedef
+        # （已全仓核对无引用），因此删除继承子句即可，无任何语义变化。
+        # 补丁只作用于 CI 解包出的临时 modules/ 源码，不回写仓库。
+        run: |
+          set -e
+          python3 - <<'PY'
+          import pathlib
+          import sys
+
+          KEY = "std::binary_function<"
+          TARGETS = [
+              "modules/openbabel/include/openbabel/plugin.h",
+              "modules/openbabel/include/openbabel/inchiformat.h",
+              "modules/openbabel/src/ops/sort.cpp",
+          ]
+
+
+          def strip(src):
+              """删除 `: public std::binary_function<...>`，按尖括号配对定位。"""
+              out, i, n = [], 0, 0
+              while True:
+                  j = src.find(KEY, i)
+                  if j < 0:
+                      out.append(src[i:])
+                      break
+                  start = j
+                  left = src.rfind("public", i, j)
+                  if left >= 0 and src[left + 6:j].strip() == "":
+                      start = left
+                      colon = src.rfind(":", i, left)
+                      if colon >= 0:
+                          start = colon
+                  k = j + len(KEY)
+                  depth = 1
+                  while k < len(src) and depth:
+                      if src[k] == "<":
+                          depth += 1
+                      elif src[k] == ">":
+                          depth -= 1
+                      k += 1
+                  while k < len(src) and src[k] in " \t":
+                      k += 1
+                  out.append(src[i:start])
+                  n += 1
+                  i = k
+              return "".join(out), n
+
+
+          total = 0
+          for t in TARGETS:
+              p = pathlib.Path(t)
+              if not p.is_file():
+                  sys.exit("::error::缺少补丁目标 %s" % t)
+              s = p.read_text(encoding="utf-8")
+              s2, n = strip(s)
+              if n:
+                  p.write_text(s2, encoding="utf-8")
+              total += n
+              print("  %-56s %d 处" % (t, n))
+              if n == 0 and "binary_function" in s:
+                  sys.exit("::error::%s 仍含 binary_function 但未被替换" % t)
+
+          if total == 0:
+              print("::warning::未匹配到 std::binary_function（上游可能已修复），跳过")
+          else:
+              print("合计修补 %d 处" % total)
+          PY
+          echo "--- 复核：不再有 std::binary_function 继承 ---"
+          ! grep -rn 'public std::binary_function' modules/openbabel/ --include='*.h' --include='*.cpp'
+
+      - name: 应用 Darwin C++17 兼容补丁（bind1st / bind2nd / binder1st）
+        # 与上一步同类问题：OpenBabel 3.1.1 的 C++03 写法依赖 std::bind1st /
+        # std::bind2nd / std::binder1st，这三个在 C++17 已被标准移除。
+        # libstdc++（Linux/Windows CI）仍以 deprecated 形式保留，libc++（macOS）
+        # 严格执行移除，故 libc++ 下逐个文件报：
+        #   error: no member named 'bind2nd' in namespace 'std'
+        #   error: no template named 'binder1st' in namespace 'std'
+        # 受影响 5 个文件共 12 处（fchk/povray/vasp 三个格式、stereo/perception、
+        # 以及仅在找到 Eigen 时才编译的 confsearch）。逐处替换为语义等价的
+        # C++11 lambda，不做任何额外重构。
+        # 每一处都校验期望命中次数：上游若改动导致不匹配即显式失败，避免静默漂移。
+        run: |
+          set -e
+          python3 - <<'PY'
+          import pathlib
+          import sys
+
+          # (文件, 原文, 新文, 期望命中次数)
+          RULES = [
+              ("modules/openbabel/src/formats/fchkformat.cpp",
+               "bind2nd(less_equal<int>(), 0)",
+               "[](int _v){ return _v <= 0; }", 1),
+              ("modules/openbabel/src/formats/fchkformat.cpp",
+               "bind2nd(greater<int>(), MxBond)",
+               "[=](int _v){ return _v > MxBond; }", 1),
+              ("modules/openbabel/src/formats/fchkformat.cpp",
+               "bind2nd(less<int>(), 0)",
+               "[](int _v){ return _v < 0; }", 1),
+              ("modules/openbabel/src/formats/fchkformat.cpp",
+               "bind2nd(greater<int>(), Natoms)",
+               "[=](int _v){ return _v > Natoms; }", 1),
+              ("modules/openbabel/src/formats/povrayformat.cpp",
+               "bind1st(equal_to<char>(), '.')",
+               "[](char _c){ return '.' == _c; }", 2),
+              ("modules/openbabel/src/formats/vaspformat.cpp",
+               "std::bind2nd(std::not_equal_to<double>(), 0.0)",
+               "[](double _v){ return _v != 0.0; }", 1),
+              ("modules/openbabel/src/formats/vaspformat.cpp",
+               "std::bind2nd(std::divides<double>(), max / 100.0)",
+               "[=](double _v){ return _v / (max / 100.0); }", 1),
+              ("modules/openbabel/src/stereo/perception.cpp",
+               "const std::binder1st<std::equal_to<OBStereo::Ref> > equal_to_atomId = std::bind1st (equal_to<OBStereo::Ref>(), atomId);",
+               "auto equal_to_atomId = [atomId](OBStereo::Ref _r){ return _r == atomId; };", 1),
+              ("modules/openbabel/src/stereo/perception.cpp",
+               "const std::binder1st<std::equal_to<OBStereo::Ref> > equal_to_implicitRef = std::bind1st (equal_to<OBStereo::Ref>(), (OBStereo::Ref) OBStereo::ImplicitRef);",
+               "auto equal_to_implicitRef = [](OBStereo::Ref _r){ return _r == (OBStereo::Ref) OBStereo::ImplicitRef; };", 1),
+              ("modules/openbabel/src/confsearch.cpp",
+               "std::bind2nd(std::less<double>(), (cutoff + 0.1) )",
+               "[=](double _v){ return _v < (cutoff + 0.1); }", 1),
+              ("modules/openbabel/src/confsearch.cpp",
+               "bind2nd(std::plus<double>(), energy_offset)",
+               "[=](double _v){ return _v + energy_offset; }", 1),
+          ]
+
+          cache = {}
+          applied = 0
+          failed = []
+          for path, old, new, want in RULES:
+              p = pathlib.Path(path)
+              if path not in cache:
+                  if not p.is_file():
+                      failed.append("%s: 文件不存在" % path)
+                      continue
+                  cache[path] = p.read_text(encoding="utf-8")
+              if path not in cache:
+                  continue
+              got = cache[path].count(old)
+              if got != want:
+                  failed.append("%s: 期望 %d 处 [%s]，实际 %d 处"
+                                % (path, want, old[:48], got))
+                  continue
+              cache[path] = cache[path].replace(old, new)
+              applied += want
+              print("  %-24s %d 处  %s" % (p.name, want, old[:52]))
+
+          for path, s in cache.items():
+              pathlib.Path(path).write_text(s, encoding="utf-8")
+
+          print("合计替换 %d 处" % applied)
+          if failed:
+              for f in failed:
+                  print("::error::C++17 补丁未按预期命中：%s" % f)
+              sys.exit(1)
+          if applied == 0:
+              print("::warning::未匹配到 bind1st/bind2nd（上游可能已修复），跳过")
+          PY
+          echo "--- 复核：构建相关源码不再使用已移除的 bind 设施 ---"
+          ! grep -rn -E 'std::bind1st|std::bind2nd|std::binder1st|<bind1st|<bind2nd' \
+              modules/openbabel/src modules/openbabel/include \
+              --include='*.h' --include='*.cpp'
+
       - name: 子模块版本漂移校验
         run: scripts/check_submodules_drift.sh
 

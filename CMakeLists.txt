@@ -170,7 +170,13 @@ else()
    set(HAVE_SHARED_POINTER 1)
    set(HAVE_STD_SHARED_PTR 1)
    set(HAVE_GCC_VISIBILITY 1)
-   set(HAVE_CONIO_H 1)
+   # conio.h 是 Windows 专有头（MinGW/MSVC 提供），OpenBabel 的 obutil.cpp:30 与
+   # tools/obabel.cpp:34 在 HAVE_CONIO_H 下用它读取键盘输入。
+   # 本分支同时覆盖 WIN32 与 APPLE（见上方 if (LINUX) / else() 划分），此前无条件
+   # 置 1，导致 macOS 上 obutil.cpp 包含 <conio.h> 直接编译失败。故仅在 WIN32 下开启。
+   if (WIN32)
+      set(HAVE_CONIO_H 1)
+   endif()
    set(HAVE_SYS_TIME_H 1)
    set(HAVE_TIME_H 1)
    set(HAVE_SSTREAM 1)
