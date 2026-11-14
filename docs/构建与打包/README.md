@@ -41,7 +41,7 @@
 | [`ubuntu-2404.yml`](../../.github/workflows/ubuntu-2404.yml) | push / PR | x86_64、arm64 编译 + ctest |
 | [`i18n-tqa.yml`](../../.github/workflows/i18n-tqa.yml) | push / PR | 译文六维质量门禁 |
 | [`verify-replay.yml`](../../.github/workflows/verify-replay.yml) | push / PR | 干净上游树重放校验 |
-| [`macos.yml`](../../.github/workflows/macos.yml) | push main / tag `v*` / 手动 | macOS 15 (arm64) 编译 + macdeployqt + zip，**草案待 runner 验证**（`macos-14` 镜像已于 2026-11-02 退役，见工作流头注释） |
+| [`macos.yml`](../../.github/workflows/macos.yml) | push main / tag `v*` / 手动 | macOS 15 (arm64) 编译 + macdeployqt + zip，**2026-11-14 起 16 步全绿**（run #43547123194，产物 36.6 MB）；未签名/公证 |
 
 发布只需打 tag 并推送，CI 完成编译、打包与 Release 创建（runner 自带
 `GITHUB_TOKEN`，本机无需保存凭证）：
