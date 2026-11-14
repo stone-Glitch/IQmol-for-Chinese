@@ -8,7 +8,7 @@
 |---|---|---|
 | Linux x86_64 + arm64（Debug/Release + ctest） | `.github/workflows/ubuntu-2404.yml` | ✅ 有 |
 | Windows MinGW x64（构建 + 打包） | `.github/workflows/windows-mingw.yml` | ✅ 有 |
-| macOS 15 (arm64) | `.github/workflows/macos.yml` | ⚠️ **有草案工作流，尚无成功运行记录**：2026-11-14 首次推送时 job 在调度阶段被取消（`macos-14` 托管镜像已于 2026-11-02 退役，报错 `The configuration 'macos-14-arm64-us-default' is not supported`），已改 `macos-15` 并补齐内嵌子模块解包，仍待 runner 实测 |
+| macOS 15 (arm64) | `.github/workflows/macos.yml` | ✅ **构建 + 打包通过**：2026-11-14 run [#43547123194](https://github.com/stone-Glitch/IQmol-for-Chinese/actions/runs/43547123194)（commit `095a049`）在 `macos-15` 上 16 步全绿，产出 `IQmol.app` 经 `macdeployqt` 捆绑 Qt 框架、`ditto` 打包为 `IQmol-macOS-zh_CN.zip`（36.6 MB，artifact 保留 30 天）。**尚未做真机 GUI 启动验证**，也未签名/公证 |
 
 ## 平台成熟度表
 
@@ -19,7 +19,7 @@
 | Ubuntu 24.04 | 待验证 | 未验证 | 未验证 | 未验证 | 未验证 | 未验证 | 实验性 |
 | Debian 12 | 待验证 | 未验证 | 未验证 | 未验证 | 未验证 | 未验证 | 未验证 |
 | Fedora | 待验证 | 未验证 | 未验证 | 未验证 | 未验证 | 未验证 | 未验证 |
-| macOS 14+ | 待验证 | 未验证 | 未验证 | 未验证 | 未验证 | 未验证 | 未验证 |
+| macOS 15 (arm64) | 构建产物为 `.app`（zip 分发） | 未验证 | 未验证 | 未验证 | 未验证 | 未验证 | 实验性（仅 CI 构建证据） |
 
 > 说明：CI 仅证明「可构建/可打包」，不等于「真机可稳定启动与完成核心任务」。真机闭环（F-05）尚缺，不应提前宣传跨平台成熟。
 >
