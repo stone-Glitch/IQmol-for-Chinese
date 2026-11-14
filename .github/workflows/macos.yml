@@ -341,7 +341,22 @@ jobs:
           # NAMES pthread) 会返回 NOTFOUND，被 append 进 obabel 链接列表后
           # CMake Generate 直接失败。预设为库名 pthread（生成 -lpthread，
           # clang 在 Darwin 上可解析）即可让 find_library 跳过搜索。
-          if ! ./configure --release -DPTHREAD_LIBRARY=pthread; then
+          #
+          # 禁用 Cairo：macos-15 镜像预装了 cairo，OpenBabel 的
+          # src/formats/formats.cmake:165 会在 CAIRO_FOUND 时把 png2format 加入
+          # formats 列表，并把 cairopainter.cpp 登记为 png2format_additional_sources。
+          # 但静态构建分支（src/CMakeLists.txt 的 foreach(format ${formats})）只取
+          # formats/${format}.cpp，**忽略 _additional_sources**，于是 cairopainter.cpp
+          # 从未编入 libopenbabel.a，而 png2format.cpp 又引用了
+          # OpenBabel::CairoPainter::{CairoPainter,SetPenWidth,WriteImage,~CairoPainter}
+          # → 链接期整组未定义（2026-11-14 CI #11 实测）。
+          # 根 CMakeLists.txt 的"补齐静态构建漏编格式附加源"一节本就写明
+          # 「本构建默认不带 Cairo」，Linux/Windows 均如此；这里显式禁用，
+          # 使 macOS 与二者行为一致。IQmol 自身出图走 Viewer::saveImage，
+          # 不依赖 OpenBabel 的 png2format。
+          if ! ./configure --release \
+                 -DPTHREAD_LIBRARY=pthread \
+                 -DCMAKE_DISABLE_FIND_PACKAGE_Cairo=TRUE; then
             echo "::group::configure.log 末尾 60 行"
             tail -n 60 configure.log
             echo "::endgroup::"
