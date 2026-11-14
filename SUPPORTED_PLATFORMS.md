@@ -8,7 +8,7 @@
 |---|---|---|
 | Linux x86_64 + arm64（Debug/Release + ctest） | `.github/workflows/ubuntu-2404.yml` | ✅ 有 |
 | Windows MinGW x64（构建 + 打包） | `.github/workflows/windows-mingw.yml` | ✅ 有 |
-| macOS | — | ❌ **无工作流**（文档曾宣称「三平台」，属口径偏差，待补 `macos-latest`） |
+| macOS 15 (arm64) | `.github/workflows/macos.yml` | ⚠️ **有草案工作流，尚无成功运行记录**：2026-11-14 首次推送时 job 在调度阶段被取消（`macos-14` 托管镜像已于 2026-11-02 退役，报错 `The configuration 'macos-14-arm64-us-default' is not supported`），已改 `macos-15` 并补齐内嵌子模块解包，仍待 runner 实测 |
 
 ## 平台成熟度表
 

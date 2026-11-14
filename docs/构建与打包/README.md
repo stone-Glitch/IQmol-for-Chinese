@@ -36,12 +36,12 @@
 
 | 工作流 | 触发 | 产出 |
 |---|---|---|
-| [`release.yml`](../../.github/workflows/release.yml) | push tag `v*-zh_CN*` / 手动 | ubuntu-24.04 现场编译 → `package_linux.sh` + `package_linux_deb.sh` → `sha256sum` → `gh release create` 上传 deb、tar.gz、校验和 |
-| [`windows-mingw.yml`](../../.github/workflows/windows-mingw.yml) | push main / tag `v*` / 手动 | Windows zip / 7z + 同名 `SHA256SUMS.txt`，打 tag 时附加到同一 Release |
+| [`release.yml`](../../.github/workflows/release.yml) | push tag `v*-zh_CN*` / 手动 | ubuntu-24.04 现场编译 → `package_linux.sh` + `package_linux_deb.sh` → `sha256sum` → `gh release create` 上传 deb、tar.gz、`SHA256SUMS-linux.txt` |
+| [`windows-mingw.yml`](../../.github/workflows/windows-mingw.yml) | push main / tag `v*` / 手动 | Windows zip / 7z + `SHA256SUMS-windows.txt`，打 tag 时附加到同一 Release（分平台命名，避免覆盖 Linux 校验和） |
 | [`ubuntu-2404.yml`](../../.github/workflows/ubuntu-2404.yml) | push / PR | x86_64、arm64 编译 + ctest |
 | [`i18n-tqa.yml`](../../.github/workflows/i18n-tqa.yml) | push / PR | 译文六维质量门禁 |
 | [`verify-replay.yml`](../../.github/workflows/verify-replay.yml) | push / PR | 干净上游树重放校验 |
-| [`macos.yml`](../../.github/workflows/macos.yml) | push main / tag `v*` / 手动 | macOS 14 (arm64) 编译 + macdeployqt + zip，**草案待 runner 验证** |
+| [`macos.yml`](../../.github/workflows/macos.yml) | push main / tag `v*` / 手动 | macOS 15 (arm64) 编译 + macdeployqt + zip，**草案待 runner 验证**（`macos-14` 镜像已于 2026-11-02 退役，见工作流头注释） |
 
 发布只需打 tag 并推送，CI 完成编译、打包与 Release 创建（runner 自带
 `GITHUB_TOKEN`，本机无需保存凭证）：

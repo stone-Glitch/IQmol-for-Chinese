@@ -4,9 +4,12 @@ name: Build on macOS
 #       在 GitHub 原生 macOS runner 上用 Homebrew 依赖编译 IQmol 中文版，
 #       产出可分发 DMG 前的 .app 包（签名/公证需 Apple 开发者证书，CI 不做）。
 #
-# ⚠️ 本文件为【草案】，未经真实 runner 运行验证（本机 gh 未登录，无法拉取 CI 记录）。
-#   需授权后由 `gh run list --repo stone-Glitch/IQmol-for-Chinese` 复核至少一次成功运行，
-#   再据报错微调依赖/路径，方可视为「三平台证据」正式成立。
+# ⚠️ 本文件仍属【草案】：编译/依赖链尚未在真实 macOS runner 上跑通。
+#   2026-11-14 首次随 0b9eb9b 推送即被取消（2s、0 steps），Annotation 为
+#   "The configuration 'macos-14-arm64-us-default' is not supported"。原因是 GitHub
+#   已于 2026-11-02 退役 macOS 14 (Sonoma) 托管镜像，pinned 到 macos-14 的 job 在
+#   调度阶段就被拒绝、根本拿不到 runner。故改用 macos-15（Apple Silicon 最近替代）。
+#   后续仍需按 runner 实际报错微调依赖/路径，方可视为「三平台证据」正式成立。
 #
 # 关键坑（已据 configure 脚本与构建指南预判，供复核时对照）：
 #   1) configure 在 Darwin 下【硬编码】QT=/opt/homebrew/Cellar/qt@5/5.15.13_1，
@@ -16,8 +19,18 @@ name: Build on macOS
 #   2) qt@5 是 keg-only，不会自动进 PATH；需把其 bin 加入 PATH 以拿到 lrelease/macdeployqt。
 #   3) mac_deploy.sh 内含 codesign + notarytool（需证书/密码），CI 无证书，故本工作流
 #      只跑 macdeployqt 做框架捆绑 + zip，签名/dmg/公证留作发版手动步骤。
-#   4) 与 Windows 不同，macOS 用 Homebrew 系统级 OpenBabel（非 submodules-package 内嵌），
-#      故无需「解包子模块」这一步（见 docs/构建与打包/构建与部署指南.md 第五节）。
+#   4)【已纠正】原注释称「macOS 用 Homebrew 系统级 OpenBabel、无需解包子模块」是错的。
+#      CMakeLists.txt 第 132/141/150 行的 if (LINUX) / else() 中，APPLE 与 WIN32 同属
+#      else() 分支，走 add_subdirectory(modules/...) 内嵌编译 QGLViewer / OpenBabel /
+#      yaml-cpp / libarchive / libssh2 / libxml2 / hdf5（与 windows-mingw.yml 第 74-76
+#      行结论一致）。而 actions/checkout 默认 submodules: false，故必须解包
+#      submodules-package/IQmol-submodules.tar.gz，否则 configure 直接找不到源码。
+#   5)【已纠正】原 brew 清单有 3 个 formula 在 Homebrew 中根本不存在（2026-11-14 逐一
+#      核对 formulae.brew.sh API）：openbabel(404)、libqglviewer(404)、gfortran(404)。
+#      OpenBabel/QGLViewer 由 4) 的内嵌源码提供；Fortran 编译器由 gcc formula 提供。
+#      docs/构建与打包/构建与部署指南.md 第五节里同样的错误命令已同步修正。
+#   6) 根 CMakeLists.txt 第 4 行 project(... LANGUAGES CXX C Fortran)，缺 Fortran
+#      编译器会在 configure 阶段就失败，故下面显式探测 gfortran 并写入 FC。
 
 on:
   push:
@@ -45,24 +58,52 @@ permissions:
 jobs:
   build-macos:
     name: 编译 + 打包 (macOS)
-    runs-on: macos-14   # Apple Silicon (arm64)。若 arm64 下出现依赖/编译问题，可回退 macos-13 (Intel x86_64)。
+    # macos-14 已于 2026-11-02 退役，pinned 到它的 job 会在调度阶段被取消（见文件头注释）。
+    # macos-15 = Apple Silicon (arm64) 托管镜像；确需 Intel x86_64 时请改用 macos-15-large，
+    # 不要回退到 macos-13——该镜像同样已停止供应。
+    runs-on: macos-15
     steps:
       - name: 检出代码
         uses: actions/checkout@v4.2.2
 
       - name: 安装依赖（Homebrew）
-        # 依赖清单据 docs/构建与打包/构建与部署指南.md 第五节 macOS 构建。
-        #   qt@5        —— 含 Qt5 框架与 lrelease/macdeployqt（keg-only，需 CMAKE_PREFIX_PATH）
-        #   boost / openbabel / libarchive / yaml-cpp / libssh2 / hdf5 / libxml2 —— 系统级依赖
-        #   libqglviewer —— IQmol 链接的 3D 视图库（若 Homebrew 无此 formula，需改为源码内嵌或 find_package 调优）
-        #   libomp      —— OpenMP（configure 会检测 /opt/homebrew/opt/libomp）
-        #   gfortran    —— OpenBabel 部分格式编译需要
+        # 只装真正的系统级依赖。OpenBabel / QGLViewer / yaml-cpp / libarchive /
+        # libssh2 / libxml2 / hdf5 由下一步解包的内嵌 modules/ 源码编译（见文件头坑 4）。
+        #   qt@5   —— Qt5 框架 + lrelease/macdeployqt（keg-only）
+        #   boost  —— IQmol 直接依赖
+        #   libomp —— OpenMP（configure 探测 /opt/homebrew/opt/libomp）
+        #   gcc    —— 提供 gfortran（根 CMakeLists 的 Fortran 语言，见文件头坑 6）
         run: |
           brew update || true
-          brew install qt@5 boost openbabel libarchive yaml-cpp libssh2 hdf5 libxml2 libqglviewer libomp gfortran
+          brew install qt@5 boost libomp gcc
 
-      - name: 暴露 Qt5 工具链
+      - name: 解包子模块源码
+        # actions/checkout 默认 submodules: false，而非 Linux 分支必须内嵌 modules/ 源码。
+        # BSD tar 支持 symlink，无需像 windows-mingw.yml 那样逐项排除；但仍校验关键文件。
+        run: |
+          set -e
+          PKG=submodules-package/IQmol-submodules.tar.gz
+          test -f "$PKG" || { echo "::error::缺少 $PKG"; exit 1; }
+          tar -xzf "$PKG"
+          for f in modules/libarchive/tar/test/CMakeLists.txt \
+                   modules/libarchive/libarchive/test/CMakeLists.txt \
+                   modules/libssh2/tests/CMakeLists.txt \
+                   modules/yaml-cpp/test/CMakeLists.txt; do
+            test -f "$f" || { echo "::error::缺失 $f"; exit 1; }
+          done
+          ls -d modules/*/ >/dev/null || { echo "::error::modules/ 为空"; exit 1; }
+          echo "== 解包结果 =="
+          for d in modules/*/; do
+            printf "  %-28s %s\n" "$d" "$(find "$d" -type f 2>/dev/null | wc -l)"
+          done
+
+      - name: 子模块版本漂移校验
+        run: scripts/check_submodules_drift.sh
+
+      - name: 暴露 Qt5 工具链与 Fortran 编译器
         # 关键：覆盖 configure 的硬编码 Cellar 路径，使其版本无关；并把 lrelease/macdeployqt 加入 PATH。
+        # 另需显式给出 FC：Homebrew gcc 的 gfortran 常带版本后缀（gfortran-14），
+        # CMake 自动探测可能找不到，而 project(... LANGUAGES ... Fortran) 缺它即 configure 失败。
         run: |
           QT_PREFIX="$(brew --prefix qt@5)"
           echo "QT_PREFIX=$QT_PREFIX"
@@ -70,6 +111,13 @@ jobs:
           echo "PATH=$QT_PREFIX/bin:$PATH" >> "$GITHUB_ENV"
           "$QT_PREFIX/bin/qmake" --version || true
           command -v lrelease && command -v macdeployqt
+          if command -v gfortran >/dev/null 2>&1; then
+            echo "FC=$(command -v gfortran)" >> "$GITHUB_ENV"
+          else
+            GFORTRAN="$(ls "$(brew --prefix gcc)"/bin/gfortran-* 2>/dev/null | sort -V | tail -1)"
+            test -n "$GFORTRAN" || { echo "::error::未找到 gfortran"; exit 1; }
+            echo "FC=$GFORTRAN" >> "$GITHUB_ENV"
+          fi
 
       - name: 配置（./configure --release，自动走 Darwin 分支）
         run: |
