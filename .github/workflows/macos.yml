@@ -365,8 +365,14 @@ jobs:
             echo "::group::build.log 末尾 60 行"
             tail -n 60 ../build.log
             echo "::endgroup::"
-            ERRS="$(grep -iE 'error:|fatal error|undefined symbols|ld: |killed|signal 9' ../build.log | head -14 | tr '\n' ' ' | cut -c1-1400)"
-            echo "::error::编译失败：${ERRS:-（build.log 无匹配错误行，请查看 run 日志）}"
+            # Apple ld 把未定义符号列在 "Undefined symbols for architecture arm64:"
+            # 之后，每行形如 `  "_gfortran_xxx", referenced from:` —— 既不以 "ld: "
+            # 也不以 "error:" 开头，早先的 grep 模式会把它们整体漏掉，只剩
+            # "ld: symbol(s) not found"（2026-11-14 #9 即如此，无法定位根因）。
+            # 故单独按段落抽取，最多 50 行。
+            UNDEF="$(sed -n '/Undefined symbols for architecture/,/^ld: symbol/p' ../build.log | head -50 | tr '\n' ' ' | cut -c1-2600)"
+            ERRS="$(grep -iE 'error:|fatal error|undefined symbols|ld: |killed|signal 9|duplicate symbol' ../build.log | head -10 | tr '\n' ' ' | cut -c1-500)"
+            echo "::error::编译失败：${UNDEF:-${ERRS:-（build.log 无匹配错误行，请查看 run 日志）}}"
             exit 1
           fi
 
