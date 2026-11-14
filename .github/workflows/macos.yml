@@ -168,7 +168,12 @@ jobs:
           set -x
           # 未登录 gh 时无法拉取匿名 run 日志，故失败时把 configure.log 的关键报错
           # 回写成一条 annotation，便于从 check-runs annotations 端点定位。
-          if ! ./configure --release; then
+          # macOS 的 pthread 由 libSystem 提供，没有独立 libpthread.dylib；
+          # modules/openbabel/tools/CMakeLists.txt:96 的 find_library(PTHREAD_LIBRARY
+          # NAMES pthread) 会返回 NOTFOUND，被 append 进 obabel 链接列表后
+          # CMake Generate 直接失败。预设为库名 pthread（生成 -lpthread，
+          # clang 在 Darwin 上可解析）即可让 find_library 跳过搜索。
+          if ! ./configure --release -DPTHREAD_LIBRARY=pthread; then
             echo "::group::configure.log 末尾 60 行"
             tail -n 60 configure.log
             echo "::endgroup::"
