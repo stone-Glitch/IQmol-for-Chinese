@@ -59,7 +59,8 @@ sha256sum -c SHA256SUMS-linux.txt
   `"replace": true`（两者都走 GUI 同一条 `RemoveMolecule` 命令）；
 - 离屏（offscreen）环境下 3D 视图无法创建 GL 上下文，`snapshot` 需要真实或
   虚拟显示；软件渲染（llvmpipe）下偶见一次性几何伪影；
-- 仅实测 Linux x86_64 与 Windows x64；macOS 工作流草案已合入，待 runner 验证；
+- 仅实测 Linux x86_64 与 Windows x64；macOS 工作流（`macos-15`）仍为草案，首次运行因
+  `macos-14` 托管镜像退役在调度阶段被取消，已修正 runner 标签与内嵌子模块解包，待实测；
 - Q-Chem 是独立第三方组件，其部分对话框仍为英文，不在本仓库汉化范围。
 
 ## 验证摘要
