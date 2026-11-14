@@ -120,13 +120,20 @@ jobs:
           fi
 
       - name: 配置（./configure --release，自动走 Darwin 分支）
+        env:
+          # CMake 4.x 已移除对 < 3.5 的兼容；内嵌子模块 openbabel(3.1)、
+          # HighFive(3.1)、openmesh(3.1.0)、yaml-cpp(3.4) 仍写老式
+          # cmake_minimum_required，在 macOS-15 runner 预装的新 CMake 上会直接
+          # 报 "Compatibility with CMake < 3.5 has been removed"。Ubuntu 24.04
+          # (3.28) / MSYS2 未受影响，故只需在 macOS 侧设此下限。
+          CMAKE_POLICY_VERSION_MINIMUM: "3.5"
         run: |
           set -x
           # 未登录 gh 时无法拉取匿名 run 日志，故失败时把 configure.log 的关键报错
           # 回写成一条 annotation，便于从 check-runs annotations 端点定位。
           if ! ./configure --release; then
-            grep -n -iE 'CMake Error|Could NOT find|error:|fatal error|No such file|not found|unsupported' configure.log | tail -60 || true
-            KEY="$(grep -iE 'CMake Error|Could NOT find|error:|fatal error|No such file' configure.log | tail -12 | tr '\n' ' ' | cut -c1-800)"
+            grep -n -A 8 -iE 'CMake Error|Could NOT find|fatal error|No such file' configure.log | tail -80 || true
+            KEY="$(grep -A 6 -iE 'CMake Error|Could NOT find|fatal error' configure.log | tail -16 | tr '\n' ' ' | cut -c1-900)"
             echo "::error::configure 失败：${KEY:-（configure.log 无匹配错误行，请查看 run 日志）}"
             exit 1
           fi
