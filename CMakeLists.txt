@@ -544,6 +544,41 @@ target_link_libraries (${targetName}
 )
 
 #-------------------------------------------------------------------
+# Fortran 运行时补链 (src/Fortran/symmol.f90 → libFort.a → _gfortran_*)
+#
+#   symmol.f90 被编成静态库 libFort.a，其中对 Fortran 运行库的调用
+#   (_gfortran_st_write / _gfortran_concat_string / _gfortran_transfer_* /
+#    _gfortran_os_error_at 等) 必须由 libgfortran 提供。
+#
+#   上方链接列表里的 ${FORTRAN_LIBRARIES} 是 CMake 早已废弃的 FindFortranLibs
+#   模块所定义的变量，本项目从未 include 该模块，故它恒为空：
+#     - Linux 上恰好因为 CMake 的 language-runtime 机制另外补了 -lgfortran，
+#       且系统路径本身可见，所以从未暴露（本地实测 link.txt 末尾确有 -lgfortran）；
+#     - Darwin 上 Homebrew gcc 的 libgfortran 不在 ld 默认搜索路径，于是链接期
+#       整批 _gfortran_* 报 undefined symbols（2026-11-14 macOS CI #9 实测）。
+#
+#   这里改用 CMake 从 Fortran 编译器探测得到的 CMAKE_Fortran_IMPLICIT_LINK_LIBRARIES
+#   （Linux 实测为 gfortran;m;gcc_s;gcc;quadmath;...）。为免把 Homebrew 的 -L 目录
+#   塞进全局搜索路径、误命中其 libstdc++，优先用 find_library 拿到 libgfortran 的
+#   绝对路径单独链接；找不到才回退到整份隐式列表 + 对应 -L。
+#-------------------------------------------------------------------
+if (APPLE AND CMAKE_Fortran_IMPLICIT_LINK_LIBRARIES)
+   find_library(IQMOL_GFORTRAN_RUNTIME
+      NAMES gfortran
+      PATHS ${CMAKE_Fortran_IMPLICIT_LINK_DIRECTORIES}
+      NO_DEFAULT_PATH)
+   if (IQMOL_GFORTRAN_RUNTIME)
+      target_link_libraries(${targetName} "${IQMOL_GFORTRAN_RUNTIME}")
+      message(STATUS "Fortran 运行时: ${IQMOL_GFORTRAN_RUNTIME}")
+   else()
+      target_link_directories(${targetName} PRIVATE
+         ${CMAKE_Fortran_IMPLICIT_LINK_DIRECTORIES})
+      target_link_libraries(${targetName} ${CMAKE_Fortran_IMPLICIT_LINK_LIBRARIES})
+      message(STATUS "Fortran 运行时: 未找到 libgfortran，回退到隐式链接列表")
+   endif()
+endif()
+
+#-------------------------------------------------------------------
 # 静态链接 OpenBabel 插件整体保留 (Windows/MinGW 必需):
 #
 #   OpenBabel 的插件(力场/格式/描述符/指纹等)不是通过显式函数调用注册的,
