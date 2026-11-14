@@ -8,6 +8,35 @@
 
 ## [Unreleased]
 
+### CI：macOS 构建打通（2026-11-14）
+
+三平台证据补齐的最后一块：`.github/workflows/macos.yml` 从「草案」走到「16 步全绿」，
+[run #43547123194](https://github.com/stone-Glitch/IQmol-for-Chinese/actions/runs/43547123194)
+（commit `095a049`，`macos-15` / arm64，8m 6s）产出 `IQmol.app` → `macdeployqt` 捆绑 Qt 框架
+→ `IQmol-macOS-zh_CN.zip`（34.9 MB）。12 轮排障的关键根因：
+
+- **runner 退役**：`macos-14` 托管镜像 2026-11-02 停供，pinned job 在调度阶段被拒 → 改 `macos-15`；
+- **CMake 4 不兼容**：内嵌 OpenBabel 3.1.1 写死 `cmake_policy(SET CMP0042 OLD)`（CMake 4 已移除）
+  且 `uninstall` target 与 yaml-cpp 撞名 → 固定 CMake 3.31.6 + 复用 `scripts/openbabel_CMakeLists.txt` 补丁；
+- **libc++ 严格执行 C++17**：`std::binary_function`（3 处）与 `bind1st/bind2nd/binder1st`（12 处）
+  在 libstdc++ 下只是 deprecated、在 libc++ 下直接报错，这正是「Windows/Linux 能过、只有 macOS 失败」的
+  根本原因 → 全部替换为语义等价的 C++11 lambda；
+- **`conio.h`**：`HAVE_CONIO_H` 此前在 `else()` 分支（含 APPLE）无条件置 1 → 改为仅 `WIN32`；
+- **`_gfortran_*`**：`${FORTRAN_LIBRARIES}` 属于早已废弃的 `FindFortranLibs` 模块、本项目从未 `include`，
+  故恒为空（Linux 上侥幸由 CMake language-runtime 机制另补了 `-lgfortran`）→ 改用
+  `CMAKE_Fortran_IMPLICIT_LINK_LIBRARIES` 定位 libgfortran；
+- **`CairoPainter::*`**：静态构建分支忽略 `formats.cmake` 的 `_additional_sources`，
+  `cairopainter.cpp` 从未编入；macOS 只因镜像预装 cairo 才暴露 → `-DCMAKE_DISABLE_FIND_PACKAGE_Cairo=TRUE`，与 Linux/Windows 对齐；
+- **`_libiconv*`**：`modules/openbabel/include/iconv.h` 是 GNU 版，未定义 `LIBICONV_PLUG` 时把符号
+  重命名为 `libiconv_*`，而 Darwin 只导出 `iconv_*` → APPLE 分支 `add_compile_definitions(LIBICONV_PLUG)` + 补链。
+
+配套改动：`macos.yml` 补 `SHA256SUMS-macos.txt`（与 Linux/Windows 分平台命名对齐，避免同名覆盖），
+`paths-ignore` 对齐 `windows-mingw.yml`；文档口径同步（`SUPPORTED_PLATFORMS.md`、`docs/构建与打包/README.md`、
+`docs/仓库结构.md`、`release_notes.md`、Wiki `Build.md`），新增
+[`docs/验证记录/2026-11-14-macOS构建打通.md`](docs/验证记录/2026-11-14-macOS构建打通.md) 归档全过程。
+
+**仍未覆盖**：Apple 签名与公证（需证书）、真机 GUI 启动验证，故 macOS 成熟度仍记「实验性」。
+
 ### 参考文档改进（2026-10-24）
 
 基于 IQmol 汉化交付包（2026-10-22）的参考文档体系，对仓库贡献/翻译参考做整体升级（先交叉核对、后挑拣并入，避免死链与重复 CI）：
