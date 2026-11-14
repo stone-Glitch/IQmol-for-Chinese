@@ -31,6 +31,12 @@ name: Build on macOS
 #      docs/构建与打包/构建与部署指南.md 第五节里同样的错误命令已同步修正。
 #   6) 根 CMakeLists.txt 第 4 行 project(... LANGUAGES CXX C Fortran)，缺 Fortran
 #      编译器会在 configure 阶段就失败，故下面显式探测 gfortran 并写入 FC。
+#   7)【已纠正】CMake 4 与内嵌 OpenBabel 3.1.1 硬不兼容：
+#      openbabel/CMakeLists.txt:14 写死 cmake_policy(SET CMP0042 OLD)（CMake 4 已移除
+#      该 OLD 行为），:774 的 uninstall target 又与 yaml-cpp 撞名。
+#      CMAKE_POLICY_VERSION_MINIMUM 只能越过 cmake_minimum_required，绕不过策略移除。
+#      故固定 CMake 3.31.6（Windows CI 已验证同一套内嵌源码可跑通），并复用
+#      scripts/openbabel_CMakeLists.txt 的 if(NOT TARGET uninstall) 补丁。
 
 on:
   push:
@@ -77,6 +83,23 @@ jobs:
           brew update || true
           brew install qt@5 boost libomp gcc
 
+      - name: 安装 CMake 3.x（内嵌 OpenBabel 不兼容 CMake 4）
+        # macOS-15 runner 预装 CMake 4.x，已移除 CMP0042 的 OLD 行为，而
+        # modules/openbabel/CMakeLists.txt:14 硬写 cmake_policy(SET CMP0042 OLD)，
+        # 用 CMAKE_POLICY_VERSION_MINIMUM 也绕不过（策略本身被移除）。Windows CI
+        # 用 MSYS2 的 CMake 3.x 走同一套内嵌源码能成功，故此处固定 3.31.6。
+        run: |
+          set -e
+          CMAKE_VER=3.31.6
+          curl -fsSL -o /tmp/cmake3.tar.gz \
+            "https://github.com/Kitware/CMake/releases/download/v${CMAKE_VER}/cmake-${CMAKE_VER}-macos-universal.tar.gz"
+          mkdir -p /tmp/cmake3
+          tar -xzf /tmp/cmake3.tar.gz -C /tmp/cmake3
+          CMAKE_BIN="$(find /tmp/cmake3 -type f -name cmake -path '*/bin/*' | head -1)"
+          test -n "$CMAKE_BIN" || { echo "::error::未找到 cmake 二进制"; exit 1; }
+          echo "$(dirname "$CMAKE_BIN")" >> "$GITHUB_PATH"
+          "$CMAKE_BIN" --version
+
       - name: 解包子模块源码
         # actions/checkout 默认 submodules: false，而非 Linux 分支必须内嵌 modules/ 源码。
         # BSD tar 支持 symlink，无需像 windows-mingw.yml 那样逐项排除；但仍校验关键文件。
@@ -96,6 +119,21 @@ jobs:
           for d in modules/*/; do
             printf "  %-28s %s\n" "$d" "$(find "$d" -type f 2>/dev/null | wc -l)"
           done
+
+      - name: 应用 OpenBabel CMake 补丁（uninstall 目标冲突）
+        # yaml-cpp 先定义 uninstall，OpenBabel 第 774 行再定义即撞车（CMP0002）。
+        # 复用 scripts/build_windows.sh 2b 步的同一补丁；该文件与原版只差
+        # if(NOT TARGET uninstall) 两行，不含任何 Windows 专属内容。
+        run: |
+          set -e
+          OB=modules/openbabel/CMakeLists.txt
+          if ! grep -q 'NOT TARGET uninstall' "$OB"; then
+            cp scripts/openbabel_CMakeLists.txt "$OB"
+            echo "已应用 uninstall 目标保护"
+          else
+            echo "补丁已存在，跳过"
+          fi
+          grep -n 'NOT TARGET uninstall' "$OB"
 
       - name: 子模块版本漂移校验
         run: scripts/check_submodules_drift.sh
@@ -121,11 +159,10 @@ jobs:
 
       - name: 配置（./configure --release，自动走 Darwin 分支）
         env:
-          # CMake 4.x 已移除对 < 3.5 的兼容；内嵌子模块 openbabel(3.1)、
-          # HighFive(3.1)、openmesh(3.1.0)、yaml-cpp(3.4) 仍写老式
-          # cmake_minimum_required，在 macOS-15 runner 预装的新 CMake 上会直接
-          # 报 "Compatibility with CMake < 3.5 has been removed"。Ubuntu 24.04
-          # (3.28) / MSYS2 未受影响，故只需在 macOS 侧设此下限。
+          # 上一步已固定 CMake 3.31.6；此下限用于抑制子模块老式
+          # cmake_minimum_required(3.1/3.4) 的弃用告警，并兼容万一回落到
+          # runner 预装 CMake 4 时的最低版本检查。真正的 CMP0042 移除问题
+          # 只能靠 CMake 3.x 解决（见文件头坑 7）。
           CMAKE_POLICY_VERSION_MINIMUM: "3.5"
         run: |
           set -x
