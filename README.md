@@ -6,7 +6,7 @@ IQmol version 3
 > 📌 **本仓库 = IQmol3 官方版 + 简体中文全面本地化**
 > 上游原版：[nutjunkie/IQmol3](https://github.com/nutjunkie/IQmol3)
 > **当前版本：3.2.4.1**（`CMakeLists.txt` 的 `PROJECT_VERSION` 是唯一权威口径；运行时版本由 CMake 在配置时 `git describe` 生成，见 [`docs/仓库结构.md`](docs/仓库结构.md)）。
-> **最新发布：[v3.2.4.1-zh_CN-r2](https://github.com/stone-Glitch/IQmol-for-Chinese/releases/tag/v3.2.4.1-zh_CN-r2)**（2026-11-13，控制通道完整版；Linux deb / tar.gz + Windows zip）。
+> **最新发布：[v3.2.4.1-zh_CN-r3](https://github.com/stone-Glitch/IQmol-for-Chinese/releases/tag/v3.2.4.1-zh_CN-r3)**（2026-11-14，控制通道完整版；**Linux deb / tar.gz + Windows zip + macOS .app**，三平台各附独立校验和）。
 >
 > **文档导航**
 >
