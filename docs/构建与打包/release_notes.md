@@ -1,12 +1,15 @@
-# IQmol 中文版 3.2.4.1 — 控制通道完整版
+# IQmol 中文版 3.2.4.1 — 控制通道完整版（三平台分发）
 
 基于上游 IQmol 3.2.3 的简体中文本地化版本。本版在既有全界面汉化基础上，
-补齐了 **Linux 分发包** 与 **本地控制通道**：外部程序（例如化学可视化插件）
+补齐了 **三平台分发包** 与 **本地控制通道**：外部程序（例如化学可视化插件）
 无需模拟鼠标，即可查询状态、加载分子、播放动画、切换帧、生成表面并抓取快照。
+
+从 `v3.2.4.1-zh_CN-r3` 起，Linux / Windows / macOS 三个平台首次同时提供可分发包，
+每个平台各有独立的校验和文件（`SHA256SUMS-linux.txt` / `-windows.txt` / `-macos.txt`）。
 
 ## 本版变化
 
-### 控制通道：10 个命令全部接通
+### 控制通道：13 个命令全部接通
 
 通道是本机 Unix domain socket（Windows 为命名管道），每进程随机 token 写入
 0600 发现文件，命令走白名单；token 错误的连接直接断开、不回任何内容。
@@ -36,20 +39,27 @@
 | 文件 | 说明 |
 |---|---|
 | `iqmol_3.2.4.1_amd64.deb` | Debian / Ubuntu x86_64 安装包，`sudo apt install ./...` |
-| `IQmol-linux-x86_64.tar.gz` | 解压即用：`tar xzf ... && ./IQmol-linux-x86_64/run.sh` |
+| `IQmol-linux-x86_64.tar.gz` | Linux 解压即用：`tar xzf ... && ./IQmol-linux-x86_64/run.sh` |
+| `IQmol-win64-3.2.4.1-zh_CN.zip` | Windows x64 解压即用（无需安装） |
+| `IQmol-macOS-zh_CN.zip` | macOS 15 (arm64) `.app`，解压后拖入「应用程序」 |
 | `SHA256SUMS-linux.txt` | Linux deb / tar.gz 两个包的校验和 |
 | `SHA256SUMS-windows.txt` | Windows zip 的校验和 |
-| `SHA256SUMS-macos.txt` | macOS zip 的校验和（由 `macos.yml` 在打 tag 时上传） |
+| `SHA256SUMS-macos.txt` | macOS zip 的校验和 |
 
-> 两个工作流各写各的校验和文件，避免同名附件互相覆盖：
+> 三个工作流各写各的校验和文件，避免同名附件互相覆盖。
 > `v3.2.4.1-zh_CN-r2` 及更早版本只有一个 `SHA256SUMS.txt`，且被后完成的
-> Windows 工作流覆盖，Linux 校验和丢失。该问题已在本版 CI 中修复，
-> **下次打 tag 发版起生效**。
+> Windows 工作流覆盖，Linux 校验和丢失。该问题在 `r3` 已实测修复：
+> 三份校验和全部随附件发布，且与 GitHub 记录的资产摘要逐一核对一致。
 
 校验：
 
 ```bash
+# Linux
 sha256sum -c SHA256SUMS-linux.txt
+# Windows（Git Bash / WSL）
+sha256sum -c SHA256SUMS-windows.txt
+# macOS
+shasum -a 256 -c SHA256SUMS-macos.txt
 ```
 
 ## 已知限制
