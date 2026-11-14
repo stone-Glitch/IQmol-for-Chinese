@@ -39,6 +39,7 @@
 | `IQmol-linux-x86_64.tar.gz` | 解压即用：`tar xzf ... && ./IQmol-linux-x86_64/run.sh` |
 | `SHA256SUMS-linux.txt` | Linux deb / tar.gz 两个包的校验和 |
 | `SHA256SUMS-windows.txt` | Windows zip 的校验和 |
+| `SHA256SUMS-macos.txt` | macOS zip 的校验和（由 `macos.yml` 在打 tag 时上传） |
 
 > 两个工作流各写各的校验和文件，避免同名附件互相覆盖：
 > `v3.2.4.1-zh_CN-r2` 及更早版本只有一个 `SHA256SUMS.txt`，且被后完成的
@@ -59,8 +60,10 @@ sha256sum -c SHA256SUMS-linux.txt
   `"replace": true`（两者都走 GUI 同一条 `RemoveMolecule` 命令）；
 - 离屏（offscreen）环境下 3D 视图无法创建 GL 上下文，`snapshot` 需要真实或
   虚拟显示；软件渲染（llvmpipe）下偶见一次性几何伪影；
-- 仅实测 Linux x86_64 与 Windows x64；macOS 工作流（`macos-15`）仍为草案，首次运行因
-  `macos-14` 托管镜像退役在调度阶段被取消，已修正 runner 标签与内嵌子模块解包，待实测；
+- 仅实测 Linux x86_64 与 Windows x64；macOS 侧 `.app` 构建链路已于
+  2026-11-14 打通（[run #43547123194](https://github.com/stone-Glitch/IQmol-for-Chinese/actions/runs/43547123194)，
+  `macos-15` / arm64，16 步全绿，产物 34.9 MB），但**尚未做真机 GUI 启动验证**，
+  也未做 Apple 签名与公证，暂不随 Release 分发；
 - Q-Chem 是独立第三方组件，其部分对话框仍为英文，不在本仓库汉化范围。
 
 ## 验证摘要
