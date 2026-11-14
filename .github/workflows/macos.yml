@@ -50,10 +50,15 @@ on:
   push:
     branches: [ main ]
     tags: [ 'v*' ]
-    # paths-ignore：纯文档改动（md / docs/）不影响 macOS 产物，跳过省 runner。
+    # paths-ignore 与 windows-mingw.yml 对齐：纯文档 / 校验和口径 / 冒烟脚本改动
+    # 不影响 .app 产物，跳过省 ~8 分钟 macOS runner。
+    # ⚠️ 与 Windows 一致，paths-ignore 对 tag 推送同样生效；正常发版 tag 前必有
+    #    代码/脚本改动，不会被误跳过；极端情况用 workflow_dispatch 手动补跑。
     paths-ignore:
       - '**.md'
       - 'docs/**'
+      - 'SUPPORTED_PLATFORMS.md'
+      - 'scripts/iqmol_control_smoke.py'
   pull_request:
     branches: [ main ]
     paths-ignore:
