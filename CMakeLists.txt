@@ -369,6 +369,17 @@ elseif (APPLE)
    if (EXISTS /opt/homebrew/lib/)
       link_directories(/opt/homebrew/lib/)
    endif()
+   # Darwin 的 libiconv 只导出 iconv_* 接口，没有 GNU 的 libiconv_* 前缀符号。
+   # 而上面 include_directories(modules/openbabel/include) 排在最前，其中的
+   # iconv.h 是 GNU libiconv 附带的那份：它在未定义 LIBICONV_PLUG 时会把
+   # iconv_open / iconv / iconv_close 宏重命名为 libiconv_open / libiconv /
+   # libiconv_close。于是 libarchive 的 archive_string.c 编出来引用一批 Darwin
+   # 上根本不存在的符号，链接期报未定义（2026-11-14 macOS CI #11 实测：
+   # _libiconv_open / _libiconv_close / _libiconv）。
+   # 定义 LIBICONV_PLUG 即关闭该重命名，改用系统 iconv_*（macOS 由 libSystem
+   # 提供）。只在本分支（APPLE）设置，Linux/Windows 行为不变；openbabel 目标
+   # 已在上方 add_subdirectory 完成，不受此目录级定义影响。
+   add_compile_definitions(LIBICONV_PLUG)
    include_directories(modules/libarchive/libarchive)
    add_subdirectory(modules/libarchive EXCLUDE_FROM_ALL)
    set(ARCHIVE_LIBRARY archive_static)
@@ -542,6 +553,25 @@ target_link_libraries (${targetName}
    ${FORTRAN_LIBRARIES}
    ${ARCHIVE_LIBRARY}
 )
+
+#-------------------------------------------------------------------
+# libiconv 补链 (libarchive → archive_string.c → libiconv_*)
+#
+#   libarchive 的 archive_string.c 直接调用 libiconv_open / libiconv_close /
+#   libiconv，而 libarchive 以 PRIVATE 方式依赖 Iconv —— 静态库的 PRIVATE 依赖
+#   不会传播到最终可执行文件，故顶层必须显式补链（与上方 OpenSSL 同源问题）。
+#   Linux 上 glibc 的 iconv 在 libc 内，不会暴露；Darwin 上由 SDK 的
+#   /usr/lib/libiconv.tbd 提供，需显式 -liconv，否则链接期报
+#   _libiconv_open / _libiconv_close / _libiconv 未定义
+#   （2026-11-14 macOS CI #11 实测）。
+#-------------------------------------------------------------------
+if (APPLE)
+   find_library(IQMOL_ICONV_LIBRARY NAMES iconv)
+   if (IQMOL_ICONV_LIBRARY)
+      target_link_libraries(${targetName} "${IQMOL_ICONV_LIBRARY}")
+      message(STATUS "iconv: ${IQMOL_ICONV_LIBRARY}")
+   endif()
+endif()
 
 #-------------------------------------------------------------------
 # Fortran 运行时补链 (src/Fortran/symmol.f90 → libFort.a → _gfortran_*)
