@@ -122,7 +122,14 @@ jobs:
       - name: 配置（./configure --release，自动走 Darwin 分支）
         run: |
           set -x
-          ./configure --release
+          # 未登录 gh 时无法拉取匿名 run 日志，故失败时把 configure.log 的关键报错
+          # 回写成一条 annotation，便于从 check-runs annotations 端点定位。
+          if ! ./configure --release; then
+            grep -n -iE 'CMake Error|Could NOT find|error:|fatal error|No such file|not found|unsupported' configure.log | tail -60 || true
+            KEY="$(grep -iE 'CMake Error|Could NOT find|error:|fatal error|No such file' configure.log | tail -12 | tr '\n' ' ' | cut -c1-800)"
+            echo "::error::configure 失败：${KEY:-（configure.log 无匹配错误行，请查看 run 日志）}"
+            exit 1
+          fi
           test -f build/CMakeCache.txt || { echo "::error::configure 未生成 CMakeCache.txt"; exit 1; }
 
       - name: 编译
