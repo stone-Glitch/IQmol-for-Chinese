@@ -8,6 +8,21 @@
 
 ## [Unreleased]
 
+### 发布：v3.2.4.1-zh_CN-r3 — 三平台首次齐备（2026-11-14）
+
+在 r2 之后 20 个提交的基础上发布 `v3.2.4.1-zh_CN-r3`，GitHub 标记为 Latest：
+
+- **三平台首次同时提供可分发包**：Linux deb / tar.gz（40.6 / 53.5 MB）、
+  Windows zip（55.3 MB）、macOS `.app` zip（35.2 MB），资产合计 184.6 MB；
+- **分平台校验和实测生效**：`SHA256SUMS-linux.txt` / `-windows.txt` / `-macos.txt`
+  三份全部随附件发布，且与 GitHub 记录的资产摘要逐一核对一致——彻底解决 r2 及更早
+  版本「同名 `SHA256SUMS.txt` 被 Windows 覆盖、Linux 校验和丢失」的缺陷；
+- 三条 tag 工作流（release / windows-mingw / macos）一次全绿，无重试；
+- 仓库内 `docs/构建与打包/SHA256SUMS.txt` 更新为四资产汇总副本，摘要直接从
+  Release API 取，非手工抄录；根 README / 文档索引 / 仓库结构 / Wiki 口径同步到 r3。
+
+详见 [`r3发布报告`](../../r3发布报告-2026-11-14.md)（工作区交付物）。
+
 ### CI：macOS 构建打通（2026-11-14）
 
 三平台证据补齐的最后一块：`.github/workflows/macos.yml` 从「草案」走到「16 步全绿」，
