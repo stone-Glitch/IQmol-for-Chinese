@@ -90,14 +90,16 @@ jobs:
         with:
           msystem: MINGW64
           update: false
-          # 复用 runner 镜像自带的稳定 MSYS2，而非每次全新拉最新 installer。
-          # 依据：2026-11-14 全绿；MSYS2 于 11-17 重建 qt5 包、runner 镜像 11-16
-          # 更新；11-21 起全新安装（setup-msys2 默认 release:true）连续三次在
-          # 本步 cmd.exe exit 1。锁定镜像自带版本可消除「新 installer 快照」变量。
-          release: false
           # MINGW64 已被 setup-msys2 标记 deprecated（会打 warning），但本项目
           # 的 DLL 闭包扫描依赖 /mingw64 布局，暂不迁移，先消除警告噪音。
           suppress-deprecation-warnings: msystem-mingw64
+          # 关于 2026-11 本步连续 exit 1（已于 2026-11-22 定位，非本项目代码问题）：
+          #   根因 = MSYS2 签名密钥轮换过渡期，全新安装的 gnupg 信任库对新数据库报
+          #   "signature ... is unknown trust / invalid or corrupted database (PGP
+          #   signature)"，pacman -Syuu 失败 → cmd.exe exit 1。见 msys2/setup-msys2
+          #   issue #615（官方确认：重启 job 数小时后自愈，无稳定配置 workaround，
+          #   与 x86_64 同样适用）。11-14 全绿、11-21 起连红即此因。
+          #   处置 = 等 MSYS2 侧修复后手动 rerun；不要为此改代码/降级 SigLevel。
           install: >-
             mingw-w64-x86_64-gcc
             mingw-w64-x86_64-gcc-libs
@@ -119,31 +121,6 @@ jobs:
             mingw-w64-x86_64-7zip
             mingw-w64-x86_64-make
             git
-
-      # 安装步失败时（2026-11 连续三次 cmd.exe exit 1，匿名拿不到日志正文），
-      # 主动把诊断回写成 ::error:: annotation——这是无 token 也能从
-      # check-runs/{id}/annotations 端点读到的通道。同时尝试一次自愈：
-      # 新 MSYS2 安装 + update:false 最常见的失败是包数据库/keyring 不同步，
-      # 一次 pacman -Syu 通常即可恢复。if: failure() 保证只在安装步失败时运行。
-      - name: 安装失败自诊断与自愈
-        if: failure()
-        continue-on-error: true
-        shell: msys2 {0}
-        run: |
-          echo "== current msystem =="; echo "${MSYSTEM:-<unset>}"
-          COUNT=$(pacman -Q 2>/dev/null | wc -l)
-          echo "installed packages: $COUNT"
-          MISSING=""
-          for p in mingw-w64-x86_64-gcc mingw-w64-x86_64-cmake mingw-w64-x86_64-qt5-base; do
-            pacman -Q "$p" 2>/dev/null || MISSING="$MISSING $p"
-          done
-          echo "== try pacman -Syu (self-heal) =="
-          OUT=$(pacman -Syu --noconfirm 2>&1 | tail -25); echo "$OUT"
-          # Keep the annotation pure ASCII + short: GitHub drops workflow-command
-          # lines containing some multibyte/control chars. Use printf with %s and
-          # a fixed ascii marker so the check-runs annotations API can read it.
-          ERR=$(printf '%s' "$OUT" | grep -iE 'error|failed|conflict|signature|invalid' | head -4 | tr '\n' ' ' | cut -c1-300)
-          printf '::warning::MSYS2_DIAG installed=%s missing=[%s] pacman_err=[%s]\n' "$COUNT" "$MISSING" "$ERR"
 
       - name: 环境自检（便于失败时定位）
         run: |
