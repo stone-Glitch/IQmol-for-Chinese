@@ -90,6 +90,11 @@ jobs:
         with:
           msystem: MINGW64
           update: false
+          # 复用 runner 镜像自带的稳定 MSYS2，而非每次全新拉最新 installer。
+          # 依据：2026-11-14 全绿；MSYS2 于 11-17 重建 qt5 包、runner 镜像 11-16
+          # 更新；11-21 起全新安装（setup-msys2 默认 release:true）连续三次在
+          # 本步 cmd.exe exit 1。锁定镜像自带版本可消除「新 installer 快照」变量。
+          release: false
           # MINGW64 已被 setup-msys2 标记 deprecated（会打 warning），但本项目
           # 的 DLL 闭包扫描依赖 /mingw64 布局，暂不迁移，先消除警告噪音。
           suppress-deprecation-warnings: msystem-mingw64
