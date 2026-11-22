@@ -90,6 +90,9 @@ jobs:
         with:
           msystem: MINGW64
           update: false
+          # MINGW64 已被 setup-msys2 标记 deprecated（会打 warning），但本项目
+          # 的 DLL 闭包扫描依赖 /mingw64 布局，暂不迁移，先消除警告噪音。
+          suppress-deprecation-warnings: msystem-mingw64
           install: >-
             mingw-w64-x86_64-gcc
             mingw-w64-x86_64-gcc-libs
@@ -111,6 +114,27 @@ jobs:
             mingw-w64-x86_64-7zip
             mingw-w64-x86_64-make
             git
+
+      # 安装步失败时（2026-11 连续三次 cmd.exe exit 1，匿名拿不到日志正文），
+      # 主动把诊断回写成 ::error:: annotation——这是无 token 也能从
+      # check-runs/{id}/annotations 端点读到的通道。同时尝试一次自愈：
+      # 新 MSYS2 安装 + update:false 最常见的失败是包数据库/keyring 不同步，
+      # 一次 pacman -Syu 通常即可恢复。if: failure() 保证只在安装步失败时运行。
+      - name: 安装失败自诊断与自愈
+        if: failure()
+        continue-on-error: true
+        shell: msys2 {0}
+        run: |
+          echo "== 当前 msystem =="; echo "${MSYSTEM:-<unset>}"
+          echo "== 已安装包数 =="; pacman -Q 2>/dev/null | wc -l
+          echo "== 关键包是否就位 =="
+          for p in mingw-w64-x86_64-gcc mingw-w64-x86_64-cmake mingw-w64-x86_64-qt5-base; do
+            pacman -Q "$p" 2>/dev/null || echo "MISSING: $p"
+          done
+          echo "== 尝试刷新包数据库并重装（自愈）=="
+          OUT=$(pacman -Syu --noconfirm 2>&1 | tail -25); echo "$OUT"
+          ERR=$(echo "$OUT" | grep -iE 'error|failed|conflict|signature|invalid' | head -8 | tr '\n' ' ' | cut -c1-500)
+          echo "::error::MSYS2 安装步失败｜pacman 诊断：${ERR:-（无 error 行，可能是网络/installer 层）}｜已安装包数 $(pacman -Q 2>/dev/null | wc -l)"
 
       - name: 环境自检（便于失败时定位）
         run: |
