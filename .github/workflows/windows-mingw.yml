@@ -12,6 +12,11 @@ name: Build & Package Windows (MinGW-w64)
 #   scripts/deploy_windows.sh 的 DLL 闭包扫描基于 MSYS2 的 /mingw64 布局，
 #   Qt 官方包无 pacman 依赖树，windeployqt 之外的运行库需手工凑齐。
 #   两者产物等价（都是 MinGW-w64 x86_64），MSYS2 更省心。
+#
+# 技术债（2026-11-22）：GitHub runner 已对 msystem-mingw64 发出 deprecated
+#   警告，后续应迁到 UCRT64 / CLANG64（改 setup-msys2 的 msystem 参数）。
+#   迁移前需重跑全套打包 + 冒烟，确认 scripts/deploy_windows.sh 的 DLL 闭包
+#   扫描在新 sysroot 下仍成立；本次先保留 MinGW64 以维持与历史产物一致。
 
 on:
   push:
