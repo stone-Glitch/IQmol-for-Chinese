@@ -125,16 +125,20 @@ jobs:
         continue-on-error: true
         shell: msys2 {0}
         run: |
-          echo "== 当前 msystem =="; echo "${MSYSTEM:-<unset>}"
-          echo "== 已安装包数 =="; pacman -Q 2>/dev/null | wc -l
-          echo "== 关键包是否就位 =="
+          echo "== current msystem =="; echo "${MSYSTEM:-<unset>}"
+          COUNT=$(pacman -Q 2>/dev/null | wc -l)
+          echo "installed packages: $COUNT"
+          MISSING=""
           for p in mingw-w64-x86_64-gcc mingw-w64-x86_64-cmake mingw-w64-x86_64-qt5-base; do
-            pacman -Q "$p" 2>/dev/null || echo "MISSING: $p"
+            pacman -Q "$p" 2>/dev/null || MISSING="$MISSING $p"
           done
-          echo "== 尝试刷新包数据库并重装（自愈）=="
+          echo "== try pacman -Syu (self-heal) =="
           OUT=$(pacman -Syu --noconfirm 2>&1 | tail -25); echo "$OUT"
-          ERR=$(echo "$OUT" | grep -iE 'error|failed|conflict|signature|invalid' | head -8 | tr '\n' ' ' | cut -c1-500)
-          echo "::error::MSYS2 安装步失败｜pacman 诊断：${ERR:-（无 error 行，可能是网络/installer 层）}｜已安装包数 $(pacman -Q 2>/dev/null | wc -l)"
+          # Keep the annotation pure ASCII + short: GitHub drops workflow-command
+          # lines containing some multibyte/control chars. Use printf with %s and
+          # a fixed ascii marker so the check-runs annotations API can read it.
+          ERR=$(printf '%s' "$OUT" | grep -iE 'error|failed|conflict|signature|invalid' | head -4 | tr '\n' ' ' | cut -c1-300)
+          printf '::warning::MSYS2_DIAG installed=%s missing=[%s] pacman_err=[%s]\n' "$COUNT" "$MISSING" "$ERR"
 
       - name: 环境自检（便于失败时定位）
         run: |
