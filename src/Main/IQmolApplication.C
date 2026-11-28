@@ -212,7 +212,13 @@ void IQmolApplication::onControlCommand(QLocalSocket* client, QJsonObject const&
       MainWindow* mw(findMainWindow());
       if (mw) {
          scene["molecules"] = mw->viewerModel().moleculeList(false).size();
-         scene["surfaces"]  = describeSurfaces(mw).size();
+         // "state" is a polling command; only the count is needed here. Going
+         // through describeSurfaces() would build a full 8-field JSON object per
+         // surface (incl. surfaceArea()/surfaceSigned() computations) just to
+         // discard it. Count the layers directly; describeSurfaces() stays the
+         // source of truth for "listSurfaces"/"surface".
+         scene["surfaces"]  = mw->viewerModel()
+            .controlFindLayers<Layer::Surface>(kSceneLayers).size();
          scene["tracks"]    = mw->viewerModel()
             .controlFindLayers<Layer::GeometryList>(kSceneLayers).size();
          scene["animating"] = mw->viewer() ? mw->viewer()->animationIsStarted() : false;

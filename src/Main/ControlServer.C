@@ -23,6 +23,7 @@
 #include <QLocalSocket>
 #include <QProcessEnvironment>
 #include <QStandardPaths>
+#include <QTemporaryFile>
 #include <QUuid>
 
 #include <cstdio>
@@ -73,8 +74,11 @@ QSet<QString> ControlServer::allowedCommands()
    // header. Note what is deliberately absent: nothing here closes the app,
    // changes preferences, submits a job, or writes outside a whitelisted
    // directory. Those are user actions and stay that way.
-   QSet<QString> cmds;
-   cmds << "ping"
+   //
+   // This is consulted on every inbound frame (and again by "state"), so build
+   // the immutable set once. Function-local statics are thread-safe since C++11.
+   static const QSet<QString> cmds = QSet<QString>()
+        << "ping"
         << "load"
         << "state"
         << "play"           // drives Frequencies / GeometryList layers
@@ -179,25 +183,48 @@ bool ControlServer::start(QString* error)
    const QByteArray body =
       QJsonDocument(info).toJson(QJsonDocument::Compact);
 
-   const QString tmp = m_endpointPath + ".tmp";
-   {
-      QFile f(tmp);
-      if (!f.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
-         if (error) *error = QString("cannot write %1").arg(tmp);
-         return false;   // listening, but unpublished - treat as failure
-      }
-      f.write(body);
-      f.write("\n");
-      f.close();
-      f.setPermissions(QFile::ReadOwner | QFile::WriteOwner);
-   }
-   QFile::remove(m_endpointPath);
-   if (!QFile::rename(tmp, m_endpointPath)) {
-      if (error) *error = QString("cannot rename to %1").arg(m_endpointPath);
+   // Publish discovery info atomically. A fixed "<endpoint>.tmp" name is a
+   // local symlink target: a hostile same-user process could pre-place a link
+   // there and have us truncate a file it chose, and the window between
+   // write() and setPermissions() left the token briefly world-readable.
+   // QTemporaryFile gives us an unpredictable name and 0600 from creation;
+   // creating it in the same directory keeps the rename on one filesystem
+   // (atomic), so the endpoint is never observed half-written.
+   const QFile::Permissions ownerOnly(QFile::ReadOwner | QFile::WriteOwner);
+   QTemporaryFile f(m_endpointPath + ".XXXXXX");
+   f.setAutoRemove(true);
+   if (!f.open()) {
+      if (error) *error = QString("cannot create discovery file in %1")
+                             .arg(dir);
+      stop();                       // bound but unpublished - do not half-start
       return false;
    }
-   QFile::setPermissions(m_endpointPath,
-                         QFile::ReadOwner | QFile::WriteOwner);
+   // Do not rely on the template's default mode: tighten it explicitly before
+   // any secret bytes hit disk.
+   f.setPermissions(ownerOnly);
+   if (f.write(body) != body.size() || f.write("\n") != 1 || !f.flush()) {
+      if (error) *error = QString("cannot write discovery file in %1").arg(dir);
+      stop();
+      return false;
+   }
+   f.close();
+   // Drop a stale endpoint left by a crashed instance so a normal restart is
+   // not blocked. remove() unlinks the path itself; if it is a symlink planted
+   // by a hostile peer, only the link is removed, never its target.
+   QFile::remove(m_endpointPath);
+   // rename() is atomic within the same directory. Keep autoRemove effective
+   // for the temp name in case rename fails; on success the temp path no
+   // longer exists so autoRemove is a no-op.
+   if (!f.rename(m_endpointPath)) {
+      if (error) {
+         *error = QString("cannot rename discovery file to %1: %2")
+                     .arg(m_endpointPath).arg(f.errorString());
+      }
+      stop();
+      return false;
+   }
+   f.setAutoRemove(false);           // rename succeeded: we moved the file
+   QFile::setPermissions(m_endpointPath, ownerOnly);
 
    return true;
 }
