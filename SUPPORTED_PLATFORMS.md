@@ -8,7 +8,7 @@
 |---|---|---|
 | Linux x86_64 + arm64（Debug/Release + ctest） | `.github/workflows/ubuntu-2404.yml` | ✅ 有 |
 | Windows MinGW x64（构建 + 打包） | `.github/workflows/windows-mingw.yml` | ✅ 有 |
-| macOS 15 (arm64) | `.github/workflows/macos.yml` | ✅ **构建 + 打包通过**：2026-11-14 run [#43547123194](https://github.com/stone-Glitch/IQmol-for-Chinese/actions/runs/43547123194)（commit `095a049`）在 `macos-15` 上 16 步全绿，产出 `IQmol.app` 经 `macdeployqt` 捆绑 Qt 框架、`ditto` 打包为 `IQmol-macOS-zh_CN.zip`（36.6 MB，artifact 保留 30 天）。**尚未做真机 GUI 启动验证**，也未签名/公证 |
+| macOS 15 (arm64) | `.github/workflows/macos.yml` | ✅ **构建 + 打包通过**：2026-11-14 run [#43547123194](https://github.com/stone-Glitch/IQmol-for-Chinese/actions/runs/43547123194)（commit `095a049`）在 `macos-15` 上 16 步全绿，产出 `IQmol.app` 经 `macdeployqt` 捆绑 Qt 框架、`ditto` 打包为 `IQmol-macOS-zh_CN.zip`（r3 Release 资产 35.2 MB / 36.9 MB 十进制，artifact 保留 30 天）。**尚未做真机 GUI 启动验证**，也未签名/公证 |
 
 ## 平台成熟度表
 

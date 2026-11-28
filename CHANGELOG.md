@@ -21,7 +21,7 @@
 - 仓库内 `docs/构建与打包/SHA256SUMS.txt` 更新为四资产汇总副本，摘要直接从
   Release API 取，非手工抄录；根 README / 文档索引 / 仓库结构 / Wiki 口径同步到 r3。
 
-详见 [`r3发布报告`](../../r3发布报告-2026-11-14.md)（工作区交付物）。
+发布资产清单与校验和口径见 [`release_notes.md`](docs/构建与打包/release_notes.md)。
 
 ### CI：macOS 构建打通（2026-11-14）
 

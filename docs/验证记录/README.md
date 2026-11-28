@@ -56,6 +56,10 @@
 关键判定：启动日志出现 `[i18n] Loaded translation: "zh_CN"` 即中文翻译加载成功
 （该日志走 **stderr**，排查时记得 `2>&1`）。
 
+两个校验脚本（`check_translations.sh` / `verify_replay.sh`）在构造的最小仓库上的
+真实输出示例见 [`verify_replay-示例输出.md`](verify_replay-示例输出.md)，可作为
+解读日常门禁与发布前重放校验输出的参考。
+
 ## 四、翻译对照与术语
 
 - 逐条译法、修改理由、责任人见 [`../汉化对照表/README.md`](../汉化对照表/README.md)。
@@ -64,4 +68,4 @@
 
 ---
 
-> 维护者：@stone-Glitch ｜ 最后整理：2026-10-18
+> 维护者：@stone-Glitch ｜ 最后整理：2026-11-28
