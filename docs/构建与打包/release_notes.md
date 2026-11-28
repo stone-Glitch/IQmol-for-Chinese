@@ -18,10 +18,12 @@
 |---|---|---|
 | 基础 | `ping` / `state` | 状态、版本、场景分子数/表面数/轨迹数/动画状态 |
 | 加载 | `load` | 等 `fileOpened` 信号或 20 秒超时后再回复 |
+| 清场 | `clear` | 移除场景内全部分子与表面，批量加载前清场 |
 | 快照 | `snapshot` | 离屏渲染 PNG，写入受限目录，路径逃逸无效 |
 | 动画 | `play` / `pause` / `stop` | 驱动 Frequencies / GeometryList 层 |
 | 帧 | `frame` | 只读查询各轨迹帧数，或按 `track` 切帧 |
 | 表面 | `surface` / `listSurfaces` | 生成 vdW / 原分子 / SID 伪密度面并列出中文名 |
+| 渲染 | `render` / `movie` | 离屏渲染多帧 PNG 序列、合成 mp4 动画 |
 
 协议细节与真实接口适配说明见仓库 `docs/控制通道/控制通道集成说明.md`。
 
@@ -32,7 +34,7 @@
 - deb 补装 `man iqmol`；FHS 布局 `/usr/bin/iqmol`、`/usr/lib/iqmol/`、
   `/usr/share/iqmol/`；
 - 包内含应用与 Qt 两套中文翻译，随包运行库自收集，不依赖系统 Qt；
-- 冒烟脚本 `scripts/iqmol_control_smoke.py` 共 22 项断言。
+- 冒烟脚本 `scripts/iqmol_control_smoke.py` 共 31 项断言。
 
 ## 下载
 
@@ -70,10 +72,11 @@ shasum -a 256 -c SHA256SUMS-macos.txt
   `"replace": true`（两者都走 GUI 同一条 `RemoveMolecule` 命令）；
 - 离屏（offscreen）环境下 3D 视图无法创建 GL 上下文，`snapshot` 需要真实或
   虚拟显示；软件渲染（llvmpipe）下偶见一次性几何伪影；
-- 仅实测 Linux x86_64 与 Windows x64；macOS 侧 `.app` 构建链路已于
-  2026-11-14 打通（[run #43547123194](https://github.com/stone-Glitch/IQmol-for-Chinese/actions/runs/43547123194)，
-  `macos-15` / arm64，16 步全绿，产物 34.9 MB），但**尚未做真机 GUI 启动验证**，
-  也未做 Apple 签名与公证，暂不随 Release 分发；
+- 控制通道运行时行为仅在 Linux x86_64 实测；Windows x64 与 macOS 15 (arm64)
+  的构建与打包链路均已打通并随 r3 分发（macOS 见
+  [run #43547123194](https://github.com/stone-Glitch/IQmol-for-Chinese/actions/runs/43547123194)，
+  `macos-15` / arm64，16 步全绿，r3 资产 35.2 MB），但**尚未做真机 GUI 启动验证**，
+  也未做 Apple 签名与公证；
 - Q-Chem 是独立第三方组件，其部分对话框仍为英文，不在本仓库汉化范围。
 
 ## 验证摘要
